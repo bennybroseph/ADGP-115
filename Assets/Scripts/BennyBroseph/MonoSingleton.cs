@@ -1,19 +1,14 @@
 ﻿//////////////////////
-//     Singleton    //
+//   MonoSingleton  //
 //////////////////////
 
 using UnityEngine;
 
-namespace BennyBroseph.Contextual
+namespace BennyBroseph
 {
-#if UNITY_EDITOR
-    public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
+    public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
         private static bool s_IsQuitting;
-#else
-        public abstract class Singleton<T> where T : class, new()
-        {
-#endif
 
         private static T s_Self;
 
@@ -25,26 +20,16 @@ namespace BennyBroseph.Contextual
                     return null;
 
                 if (s_Self == null)
-#if UNITY_EDITOR
                     s_Self = FindObjectOfType<T>();
-#else
-                        s_Self = new T();
-#endif
                 return s_Self;
             }
         }
 
-        protected Singleton()
-        {
+        protected MonoSingleton() { }
 
-        }
-
-#if UNITY_EDITOR
         public void OnDestroy()
         {
             s_IsQuitting = true;
         }
-#endif
     }
 }
-
