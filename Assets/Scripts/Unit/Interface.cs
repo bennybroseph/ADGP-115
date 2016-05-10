@@ -2,12 +2,12 @@
 
 namespace Unit
 {
-    public interface IControl
+    public interface IControlable
     {
         //Can be used to check if Wave is 
     }
 
-    public interface IAttack
+    public interface IAttackable
     {
         //Function for combat
         void Fight();

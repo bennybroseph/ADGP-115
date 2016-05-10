@@ -3,7 +3,7 @@
 namespace Unit
 {
     //Public unit class that takes in IStats and IAttack
-    public class Unit : IStats, IAttack
+    public class Player : IStats, IAttackable
     {
         //Private int and string memorable variables
         private int m_Health;
@@ -15,12 +15,12 @@ namespace Unit
         private string m_Name;
         
         //Default Constructor
-        public Unit()
+        public Player()
         {
 
         }
         //Unit class that stores Health, Defense, Exp, Level, Speed, Mana, Name
-        public Unit(int a_Health, int a_Defense, int a_Exp,int a_Lvl, int a_Speed, int a_Mana, string a_Name)
+        public Player(int a_Health, int a_Defense, int a_Exp,int a_Lvl, int a_Speed, int a_Mana, string a_Name)
         {
             //sets memoorial varial to equal its a
             m_Health = a_Health;
