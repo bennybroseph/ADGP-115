@@ -6,6 +6,7 @@ namespace Define
 {
     public enum Event
     {
+        // Used for testing purposes
         Test,
         //There is no parameters
         NewGame,
