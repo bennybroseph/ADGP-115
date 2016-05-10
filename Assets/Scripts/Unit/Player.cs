@@ -1,6 +1,6 @@
 ﻿//Unit class used for storing Player and Enemy Data.
 
-namespace Donte
+namespace Unit
 {
     //Public unit class that takes in IStats and IAttack
     public class Unit : IStats, IAttack
@@ -40,8 +40,7 @@ namespace Donte
         }
 
         //Defense int property
-        public int Defense
-        {
+        public int Defense{
             get { return m_Defense; }
             set { m_Defense = value; }
         }

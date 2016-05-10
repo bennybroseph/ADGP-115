@@ -88,15 +88,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 192648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a936111dec9f36d4eb71cbef2e806379, type: 3}
+  m_Script: {fileID: 11500000, guid: 48944ef61a3a98b41b6d3500a073ce3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Following: {fileID: 0}
-  m_Offset: {x: 0, y: -9.5, z: 0}
-  m_CloseEnough: 0.1
+  m_Offset: {x: 0, y: 0, z: 0}
+  m_CloseEnough: 0
   m_ScreenBorders:
-    m_Min: {x: -10, y: 0, z: -10}
-    m_Max: {x: 10, y: 10, z: 10}
+    m_Min: {x: 0, y: 0, z: 0}
+    m_Max: {x: 0, y: 0, z: 0}
 --- !u!124 &12422792
 Behaviour:
   m_ObjectHideFlags: 1

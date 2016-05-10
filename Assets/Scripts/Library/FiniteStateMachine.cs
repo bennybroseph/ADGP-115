@@ -1,8 +1,9 @@
-﻿using System;                           // Required for the type 'Enum'
-using System.Collections.Generic;       // Required to use 'List<T>' and 'Dictionary<T, T>'
-using BennyBroseph.Contextual;
+﻿using System;   // Required for the type 'Enum'
+using System.Collections.Generic;   // Required to use 'List<T>' and 'Dictionary<T, T>'
 
-namespace BennyBroseph
+
+
+namespace Library
 {
     // Usage:
     // enum MyStates { Init, Idle };

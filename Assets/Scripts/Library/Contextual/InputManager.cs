@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
+using Library;
 using UnityEngine;
 
-namespace BennyBroseph.Contextual
+namespace Library.Contextual
 {
     /// <summary>
     /// <para> Hope you wanted to use Windows Forms or Unity

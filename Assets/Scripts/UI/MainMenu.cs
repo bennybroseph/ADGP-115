@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using BennyBroseph;
+using Library;
 
 using Event = Define.Event;
 
-namespace Donte
+namespace UI
 {
     public class MainMenu : MonoBehaviour
     {
