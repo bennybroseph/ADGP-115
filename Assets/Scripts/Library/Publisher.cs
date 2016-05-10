@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-using Collections;
+﻿using System.Collections.Generic;   // Used for 'List<T>'
+using Library.Contextual;           // Used for 'Debug'
 
 using Event = Define.Event;
 
@@ -26,16 +25,29 @@ namespace Library
         /// </summary>
         private readonly Dictionary<Event, Subscription> m_Subscriptions;
 
+        private struct DelayedBroadcastData
+        {
+            public readonly Subscription m_Subscription;
+            public readonly Event m_Event;
+            public readonly object[] m_Params;
+
+            public DelayedBroadcastData(Subscription a_Subscription, Event a_Event, object[] a_Params)
+            {
+                m_Subscription = a_Subscription;
+                m_Event = a_Event;
+                m_Params = a_Params;
+            }
+        }
         /// <summary>
         /// A collection which holds the data for firing an event after a delay
         /// </summary>
-        private List<Tuple<Subscription, Event, object[]>>  m_DelayedCallbacks;
+        private List<DelayedBroadcastData>  m_DelayedBroadcasts;
 
         public Publisher()
         {
             m_Subscriptions = new Dictionary<Event, Subscription>();
 
-            m_DelayedCallbacks = new List<Tuple<Subscription, Event, object[]>>();
+            m_DelayedBroadcasts = new List<DelayedBroadcastData>();
         }
 
         /// <summary>
@@ -61,7 +73,7 @@ namespace Library
             if (m_Subscriptions.ContainsKey(a_Event))
                 m_Subscriptions[a_Event] -= a_Delegate;
             else
-                DebugError("The message '" + a_Event + "' does not exist. You cannot unsubscribe from it.");
+                Debug.Error("The message '" + a_Event + "' does not exist. You cannot unsubscribe from it.");
         }
 
         /// <summary>
@@ -98,7 +110,7 @@ namespace Library
             {
                 if (a_Params.Length == 0)
                     a_Params = null;
-                m_DelayedCallbacks.Add(new Tuple<Subscription, Event, object[]>(callback, a_Event, a_Params));
+                m_DelayedBroadcasts.Add(new DelayedBroadcastData(callback, a_Event, a_Params));
             }
         }
 
@@ -108,47 +120,11 @@ namespace Library
         /// </summary>
         public void Update()
         {
-            foreach (var tuple in m_DelayedCallbacks)
-                tuple.Item1(tuple.Item2, tuple.Item3);
+            foreach (var delayedBroadcastData in m_DelayedBroadcasts)
+                delayedBroadcastData.m_Subscription(delayedBroadcastData.m_Event, delayedBroadcastData.m_Params);
 
-            if(m_DelayedCallbacks.Count != 0)
-                m_DelayedCallbacks = new List<Tuple<Subscription, Event, object[]>>();
-        }
-        /// <summary>
-        /// Attempts to access a debugging messenger. Will do nothing if it cannot be found
-        /// </summary>
-        /// <param name="a_Message">The message to display</param>
-        private void DebugMessage(object a_Message)
-        {
-#if CONTEXT_DEBUG   // Only compiles if the build is using the 'ContextualDebug' by defining it in the build options
-            Debug.Message(a_Message);
-#elif (!UNITY_EDITOR && DEBUG) // Only compiles when in debug mode and not in unity
-            Console.WriteLine(a_Message);
-#endif
-        }
-        /// <summary>
-        /// Attempts to access a debugging messenger at a warning level. Will do nothing if it cannot be found
-        /// </summary>
-        /// <param name="a_Message">The message to display</param>
-        private void DebugWarning(object a_Message)
-        {
-#if CONTEXT_DEBUG   // Only compiles if the build is using the 'ContextualDebug' by defining it in the build options
-            Debug.Warning(a_Message);
-#elif (!UNITY_EDITOR && DEBUG) // Only compiles when in debug mode and not in unity
-            Console.WriteLine(a_Message);
-#endif
-        }
-        /// <summary>
-        /// Attempts to access a debugging messenger at an error level. Will do nothing if it cannot be found
-        /// </summary>
-        /// <param name="a_Message">The message to display</param>
-        private void DebugError(object a_Message)
-        {
-#if CONTEXT_DEBUG   // Only compiles if the build is using the 'ContextualDebug' by defining it in the build options
-            Debug.Error(a_Message);
-#elif (!UNITY_EDITOR && DEBUG) // Only compiles when in debug mode and not in unity
-            Console.WriteLine(a_Message);
-#endif
+            if(m_DelayedBroadcasts.Count != 0)
+                m_DelayedBroadcasts = new List<DelayedBroadcastData>();
         }
     }
 }

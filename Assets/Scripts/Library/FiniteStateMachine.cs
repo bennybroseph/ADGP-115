@@ -1,7 +1,6 @@
-﻿using System;   // Required for the type 'Enum'
+﻿using System;                       // Required for the type 'Enum'
 using System.Collections.Generic;   // Required to use 'List<T>' and 'Dictionary<T, T>'
-
-
+using Library.Contextual;
 
 namespace Library
 {
@@ -69,7 +68,7 @@ namespace Library
             // if 'a_From' and 'a_To' are the same state
             if (a_From.Equals(a_To))
             {
-                DebugWarning("'" + a_From + "'" + " is the same state as " + "'" + a_To + "'");
+                Debug.Warning("'" + a_From + "'" + " is the same state as " + "'" + a_To + "'");
                 return false;
             }
 
@@ -82,7 +81,7 @@ namespace Library
                 else
                     invalidKey = a_To;
 
-                DebugWarning("'" + invalidKey + "' does not exist in '" + typeof(T) + "'");
+                Debug.Warning("'" + invalidKey + "' does not exist in '" + typeof(T) + "'");
                 return false;
             }
 
@@ -93,14 +92,14 @@ namespace Library
             {
                 // if the user did not pass in a delegate to check the transition
                 if (a_IsValidTransition == null)
-                    m_Transitions[key] = delegate () { return true; };  // Set a default one that always allows the transition
+                    m_Transitions[key] = () => true;            // Set a default one that always allows the transition
                 else
-                    m_Transitions[key] = a_IsValidTransition;           // Otherwise use the one they passed in
+                    m_Transitions[key] = a_IsValidTransition;   // Otherwise use the one they passed in
                 return true;
             }
             else
             {
-                DebugWarning("'" + key + "' already exists as a transition key");
+                Debug.Warning("'" + key + "' already exists as a transition key");
                 return false;
             }
         }
@@ -128,7 +127,7 @@ namespace Library
         /// Grabs each state from the type of enumeration and caches it into a list
         /// </summary>
         /// <returns>Returns true if the type is an enumeration and false if it is not</returns>
-        private bool StoreStates()
+        private void StoreStates()
         {
             // if 'T' is an enumeration type
             if (typeof(T).IsEnum)
@@ -138,11 +137,10 @@ namespace Library
                     m_States.Add((T)iState);    // Cache it
 
                 currentState = m_States[0];   // Set the current state to the first found state
-                return true;
+                return;
             }
 
-            DebugError("Incorrect type '" + typeof(T) + "'");
-            return false;
+            Debug.Error("Incorrect type '" + typeof(T) + "'");
         }
 
         /// <summary>
@@ -152,7 +150,7 @@ namespace Library
         public void PrintStates()
         {
             for (var i = 0; i < m_States.Count; ++i)
-                DebugMessage(i + " - " + m_States[i].ToString());
+                Debug.Message(i + " - " + m_States[i].ToString());
         }
         /// <summary>
         /// Prints the currently defined transitions int the format:
@@ -163,46 +161,9 @@ namespace Library
             var i = 0;
             foreach (var iPair in m_Transitions)
             {
-                DebugMessage(i + " - " + iPair.Key.ToString());
+                Debug.Message(i + " - " + iPair.Key);
                 i++;
             }
-        }
-
-        /// <summary>
-        /// Attempts to access a debugging messenger. Will do nothing if it cannot be found
-        /// </summary>
-        /// <param name="a_Message">The message to display</param>
-        private void DebugMessage(object a_Message)
-        {
-#if CONTEXT_DEBUG   // Only compiles if the build is using the 'ContextualDebug' by defining it in the build options
-            Debug.Message(a_Message);
-#elif (!UNITY_EDITOR && DEBUG) // Only compiles when in debug mode and not in unity
-            Console.WriteLine(a_Message);
-#endif
-        }
-        /// <summary>
-        /// Attempts to access a debugging messenger at a warning level. Will do nothing if it cannot be found
-        /// </summary>
-        /// <param name="a_Message">The message to display</param>
-        private void DebugWarning(object a_Message)
-        {
-#if CONTEXT_DEBUG   // Only compiles if the build is using the 'ContextualDebug' by defining it in the build options
-            Debug.Warning(a_Message);
-#elif (!UNITY_EDITOR && DEBUG) // Only compiles when in debug mode and not in unity
-            Console.WriteLine(a_Message);
-#endif
-        }
-        /// <summary>
-        /// Attempts to access a debugging messenger at an error level. Will do nothing if it cannot be found
-        /// </summary>
-        /// <param name="a_Message">The message to display</param>
-        private void DebugError(object a_Message)
-        {
-#if CONTEXT_DEBUG   // Only compiles if the build is using the 'ContextualDebug' by defining it in the build options
-            Debug.Error(a_Message);
-#elif (!UNITY_EDITOR && DEBUG) // Only compiles when in debug mode and not in unity
-            Console.WriteLine(a_Message);
-#endif
         }
     }
 }
