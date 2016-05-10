@@ -8,8 +8,8 @@ public class MyCamera : MonoBehaviour
     [SerializeField]
     protected Vector3 m_Offset;
 
-    [SerializeField, Tooltip("How close the camera should get before it decides that it should stop trying to be more accurate")]
-    protected float m_CloseEnough;
+    //[SerializeField, Tooltip("How close the camera should get before it decides that it should stop trying to be more accurate")]
+    //protected float m_CloseEnough;
 
     [System.Serializable]
     protected class Box

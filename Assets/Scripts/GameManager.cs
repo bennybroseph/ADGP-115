@@ -3,7 +3,7 @@ using System.Collections;
 using Library;
 
 
-public class GameController : MonoSingleton<GameController>
+public class GameManager : MonoSingleton<GameManager>
 {
 
     // Use this for initialization
