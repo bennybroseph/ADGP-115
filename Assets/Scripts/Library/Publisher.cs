@@ -1,9 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
 
-using System.Collections.Generic;
-
-using Library.Contextual;
-using Define;
 using Collections;
 
 using Event = Define.Event;
@@ -14,6 +10,7 @@ namespace Library
     /// <summary>
     /// Singleton class which will allow you to subscribe to events and then broadcast those eventts which call delegates automatically.
     /// Assists in creating tightly coupled functions through an outside event system.
+    /// <para>In order to use the 'DelayedBroadcast' function, you must call 'Update' in an update loop</para>
     /// </summary>
     public sealed class Publisher : Singleton<Publisher>
     {
@@ -79,7 +76,11 @@ namespace Library
             m_Subscriptions.TryGetValue(a_Event, out callback);
 
             if (callback != null)
+            {
+                if (a_Params.Length == 0)
+                    a_Params = null;
                 callback(a_Event, a_Params);
+            }
         }
 
         /// <summary>
@@ -94,7 +95,11 @@ namespace Library
             m_Subscriptions.TryGetValue(a_Event, out callback);
 
             if (callback != null)
+            {
+                if (a_Params.Length == 0)
+                    a_Params = null;
                 m_DelayedCallbacks.Add(new Tuple<Subscription, Event, object[]>(callback, a_Event, a_Params));
+            }
         }
 
         /// <summary>

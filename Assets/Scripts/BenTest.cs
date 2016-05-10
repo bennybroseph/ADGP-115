@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
 
 using Library;
-using Library.Contextual;
-using Define;
-using Library;
+
 using Event = Define.Event;
 using UnityDebug = UnityEngine.Debug;
 
@@ -21,14 +19,13 @@ public class BenTest : MonoBehaviour
         testStateMachine.Transition(TestStates.Idle);
 
         Publisher.self.Subscribe(Event.Test, TestEvent);
-        Publisher.self.Broadcast(Event.Test, 4);
-        Publisher.self.DelayedBroadcast(Event.Test, 5);
+        Publisher.self.Broadcast(Event.Test);
+        Publisher.self.DelayedBroadcast(Event.Test);
     }
 
     private void TestEvent(Event a_Message, params object[] a_Params)
     {
-        int i = (int)a_Params[0];
-        UnityDebug.Log("Event Fired , " + i);
+        UnityDebug.Log("Event Fired");
     }
     
     // Update is called once per frame
