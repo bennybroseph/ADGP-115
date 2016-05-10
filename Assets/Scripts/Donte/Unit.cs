@@ -40,8 +40,7 @@ namespace Donte
         }
 
         //Defense int property
-        public int Defense
-        {
+        public int Defense{
             get { return m_Defense; }
             set { m_Defense = value; }
         }
