@@ -1,7 +1,7 @@
 ﻿using System; // Require for 'Console'
 using UnityDebug = UnityEngine.Debug;
 
-namespace BennyBroseph.Contextual
+namespace Library.Contextual
 {
     internal static class Debug
     {

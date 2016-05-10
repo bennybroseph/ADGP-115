@@ -2,14 +2,14 @@
 
 using System.Collections.Generic;
 
-using BennyBroseph.Contextual;
+using Library.Contextual;
 using Define;
 using Collections;
 
 using Event = Define.Event;
 
 
-namespace BennyBroseph
+namespace Library
 {
     /// <summary>
     /// Singleton class which will allow you to subscribe to events and then broadcast those eventts which call delegates automatically.

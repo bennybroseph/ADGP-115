@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using BennyBroseph;
+using Library;
+using Library;
 
 
 public class GameController : MonoSingleton<GameController>
