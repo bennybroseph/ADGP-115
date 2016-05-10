@@ -24,18 +24,18 @@ namespace BennyBroseph
         /// <summary>
         /// Cached list of all states in the enumeration
         /// </summary>
-        private List<T> m_States;
+        private readonly List<T> m_States;
 
         /// <summary>
         /// Dynamic dictionary of all transitions as dictated by the user
         /// </summary>
-        private Dictionary<string, ValidateTransition> m_Transitions;
+        private readonly Dictionary<string, ValidateTransition> m_Transitions;
 
         /// <summary>
         /// Read-Only property for the current state 'm_CurrentState'.
         /// Look at me. I'm the captain now.
         /// </summary>
-        public T CurrentState { get; private set; }
+        public T currentState { get; private set; }
 
         /// <summary>
         /// Default constructor which will initialize the list and dictionary
@@ -51,9 +51,9 @@ namespace BennyBroseph
         /// Parameterized constructor which allows a state other than 'm_States[0]' to initialize 'm_CurrentState'
         /// </summary>
         /// <param name="a_InitialState">Used as the current state 'm_CurrentState' on creation</param>
-        public FiniteStateMachine(T a_InitialState) : base()
+        public FiniteStateMachine(T a_InitialState)
         {
-            CurrentState = a_InitialState;
+            currentState = a_InitialState;
         }
 
         /// <summary>
@@ -112,11 +112,11 @@ namespace BennyBroseph
         public bool Transition(T a_To)
         {
             // Converts the current state and the state to transition to into a valid key
-            string key = CurrentState + "->" + a_To;
+            string key = currentState + "->" + a_To;
             // if they key exists in the transition dictionary
             if (m_Transitions.ContainsKey(key) && m_Transitions[key]())
             {
-                CurrentState = a_To;    // Set the state
+                currentState = a_To;    // Set the state
                 return true;            // Success
             }
 
@@ -136,7 +136,7 @@ namespace BennyBroseph
                 foreach (var iState in Enum.GetValues(typeof(T)))
                     m_States.Add((T)iState);    // Cache it
 
-                CurrentState = m_States[0];   // Set the current state to the first found state
+                currentState = m_States[0];   // Set the current state to the first found state
                 return true;
             }
 

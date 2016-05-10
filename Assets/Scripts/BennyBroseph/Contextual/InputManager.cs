@@ -1,58 +1,158 @@
 ﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace BennyBroseph.Contextual
 {
     /// <summary>
-    /// Hope you wanted to use Windows Forms or Unity
-    /// Does not support standard C# because it would be less efficient to try to stream-line it.
-    /// If using a Windows Form you MUST  call 'Init' and pass the main 'Form' object
+    /// <para> Hope you wanted to use Windows Forms or Unity
+    /// Does not support standard C# because it would be less efficient to try to stream-line it. </para>
+    /// WINDOWS FORM: You MUST call 'Init' and pass the main 'Form' object
+    /// <para> UNITY: You MUST create an object which uses this script. Everything else will happen automatically</para>
     /// </summary>
-    public sealed class InputManager : Singleton<InputManager>
+    public sealed class InputManager : MonoSingleton<InputManager>
     {
         private static bool s_Initialized;
 
         public delegate void OnKeyDelegate(Keys a_Key);
+        public delegate void OnMouseDelegate(int a_Button, Vector2 a_Position);
 
         private OnKeyDelegate m_OnKeyDown;
         private OnKeyDelegate m_OnKeyUp;
+
+        private OnMouseDelegate m_OnMouseDown;
+        private OnMouseDelegate m_OnMouseUp;
+        private OnMouseDelegate m_OnMouseMove;
+
+        private Vector2 m_PrevMousePosition;
+
+        public List<Keys> heldKeys { get; private set; }
+        public List<int> heldMouseButtons { get; private set; }
+
 #if !UNITY_EDITOR && FORMS
-            private List<System.Windows.Forms.Keys> m_HeldKeys;
+        public InputManager()
+        {
+            s_Initialized = false;
 
-            public InputManager()
+            m_HeldKeys = new List<Keys>();
+        }
+
+        public void Init(System.Windows.Forms.Form a_Form)
+        {
+            if (!s_Initialized)
             {
-                s_Initialized = false;
+                m_OnKeyUp = null;
+                m_OnKeyDown = null;
 
-                m_HeldKeys = new List<System.Windows.Forms.Keys>();
+                m_OnMouseDown = null;
+                m_OnMouseUp = null;
+
+                a_Form.KeyDown += KeyDownHandler;
+                a_Form.KeyUp += KeyUpHandler;
+                
+                m_PrevMousePosition = new Vector2();
+                
+                heldKeys = new List<Keys>();
+                heldMouseButtons = new List<int>();        
+
+                s_Initialized = true;
+            }
+        }
+
+        public void KeyDownHandler(object a_Sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (!m_HeldKeys.Contains((Keys)e.KeyCode))
+            {
+                m_HeldKeys.Add((Keys)e.KeyCode);
+
+                if (m_OnKeyDown != null)
+                    m_OnKeyDown((Keys)e.KeyCode);
+            }
+        }
+        public void KeyUpHandler(object a_Sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            m_HeldKeys.Remove((Keys)e.KeyCode);
+
+            if (m_OnKeyUp != null)
+                m_OnKeyUp((Keys)e.KeyCode);
+        }
+#elif UNITY_EDITOR
+        private void Start()
+        {
+            if (!s_Initialized)
+            {
+                m_OnKeyUp = null;
+                m_OnKeyDown = null;
+
+                m_OnMouseDown = null;
+                m_OnMouseUp = null;
+
+                m_PrevMousePosition = new Vector2();
+
+                heldKeys = new List<Keys>();
+                heldMouseButtons = new List<int>();
+
+                s_Initialized = true;
+            }
+        }
+
+        private void OnGUI()
+        {
+            var e = Event.current;
+
+            switch (e.type)
+            {
+                case EventType.KeyDown:
+                    {
+                        if (e.keyCode != KeyCode.None && !heldKeys.Contains((Keys)e.keyCode))
+                        {
+                            heldKeys.Add((Keys)e.keyCode);
+
+                            if (m_OnKeyDown != null)
+                                m_OnKeyDown((Keys)e.keyCode);
+                        }
+                    }
+                    break;
+                case EventType.KeyUp:
+                    {
+                        if (e.keyCode != KeyCode.None)
+                        {
+                            heldKeys.Remove((Keys)e.keyCode);
+
+                            if (m_OnKeyUp != null)
+                                m_OnKeyUp((Keys)e.keyCode);
+                        }
+                    }
+                    break;
+
+                case EventType.MouseDown:
+                    {
+                        heldMouseButtons.Add(e.button);
+
+                        if (m_OnMouseDown != null)
+                            m_OnMouseDown(e.button, e.mousePosition);
+                    }
+                    break;
+                case EventType.MouseUp:
+                    {
+                        heldMouseButtons.Remove(e.button);
+
+                        if (m_OnMouseUp != null)
+                            m_OnMouseUp(e.button, e.mousePosition);
+                    }
+                    break;
             }
 
-            public void Init(System.Windows.Forms.Form a_Form)
+            if (m_PrevMousePosition != e.mousePosition)
             {
-                if (!s_Initialized)
-                {
-                    a_Form.KeyDown += KeyDownHandler;
-                    a_Form.KeyUp += KeyUpHandler;
+                if(heldMouseButtons.Count == 0)
+                    m_OnMouseMove(-1, e.mousePosition);
+                else
+                    m_OnMouseMove(e.button, e.mousePosition);
 
-                    s_Initialized = true;
-                }
+                m_PrevMousePosition = e.mousePosition;
             }
+        }
 
-            public void KeyDownHandler(object a_Sender, System.Windows.Forms.KeyEventArgs e)
-            {
-                if (!m_HeldKeys.Contains(e.KeyCode))
-                {
-                    m_HeldKeys.Add(e.KeyCode);
-
-                    if (m_OnKeyDown != null)
-                        m_OnKeyDown((Keys)e.KeyCode);
-                }
-            }
-            public void KeyUpHandler(object a_Sender, System.Windows.Forms.KeyEventArgs e)
-            {
-                m_HeldKeys.Remove(e.KeyCode);
-
-                if (m_OnKeyUp != null)
-                    m_OnKeyUp((Keys)e.KeyCode);
-            }
 #endif
         public void AddOnKeyDown(OnKeyDelegate a_Delegate)
         {
@@ -63,10 +163,23 @@ namespace BennyBroseph.Contextual
             m_OnKeyUp += a_Delegate;
         }
 
+        public void AddOnMouseDown(OnMouseDelegate a_Delegate)
+        {
+            m_OnMouseDown += a_Delegate;
+        }
+        public void AddOnMouseUp(OnMouseDelegate a_Delegate)
+        {
+            m_OnMouseUp += a_Delegate;
+        }
+
+        public void AddOnMouseMove(OnMouseDelegate a_Delegate)
+        {
+            m_OnMouseMove += a_Delegate;
+        }
+
         /// <summary>
         /// Attempts to access a debugging messenger. Will do nothing if it cannot be found
         /// </summary>
-        /// <param name="a_Type">The string representing the type of message to display</param>
         /// <param name="a_Message">The message to display</param>
         private void DebugMessage(object a_Message)
         {
@@ -79,7 +192,6 @@ namespace BennyBroseph.Contextual
         /// <summary>
         /// Attempts to access a debugging messenger at a warning level. Will do nothing if it cannot be found
         /// </summary>
-        /// <param name="a_Type">The string representing the type of message to display</param>
         /// <param name="a_Message">The message to display</param>
         private void DebugWarning(object a_Message)
         {
@@ -92,7 +204,6 @@ namespace BennyBroseph.Contextual
         /// <summary>
         /// Attempts to access a debugging messenger at an error level. Will do nothing if it cannot be found
         /// </summary>
-        /// <param name="a_Type">The string representing the type of message to display</param>
         /// <param name="a_Message">The message to display</param>
         private void DebugError(object a_Message)
         {
