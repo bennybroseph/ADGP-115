@@ -18,7 +18,10 @@ public class BenTest : MonoBehaviour
 
         testStateMachine.Transition(TestStates.Idle);
 
+        testStateMachine.PrintStates();
+        
         Publisher.self.Subscribe(Event.Test, TestEvent);
+
         Publisher.self.Broadcast(Event.Test);
         Publisher.self.DelayedBroadcast(Event.Test);
     }
