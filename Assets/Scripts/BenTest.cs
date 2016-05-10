@@ -1,6 +1,10 @@
-﻿using BennyBroseph;
-using UnityEngine;
+﻿using UnityEngine;
+
+using BennyBroseph;
 using BennyBroseph.Contextual;
+using Define;
+
+using Event = Define.Event;
 using UnityDebug = UnityEngine.Debug;
 
 public class BenTest : MonoBehaviour
@@ -16,30 +20,17 @@ public class BenTest : MonoBehaviour
 
         testStateMachine.Transition(TestStates.Idle);
 
-        InputManager.self.AddOnKeyDown(OnKeyDown);
-        InputManager.self.AddOnKeyUp(OnKeyUp);
-
-        InputManager.self.AddOnMouseDown(OnMouseDown);
-        InputManager.self.AddOnMouseMove(OnMouseMove);
+        Publisher.self.Subscribe(Event.Test, TestEvent);
+        Publisher.self.Broadcast(Event.Test, 4);
+        Publisher.self.DelayedBroadcast(Event.Test, 5);
     }
 
-    private void OnKeyDown(Keys a_Key)
+    private void TestEvent(Event a_Message, params object[] a_Params)
     {
-        UnityDebug.Log("Pressed: " + a_Key);
+        int i = (int)a_Params[0];
+        UnityDebug.Log("Event Fired , " + i);
     }
-    private void OnKeyUp(Keys a_Key)
-    {
-        UnityDebug.Log("Released: " + a_Key);
-    }
-
-    private void OnMouseDown(int a_Button, Vector2 a_Position)
-    {
-        UnityDebug.Log(a_Button + " " + a_Position.ToString());
-    }
-    private void OnMouseMove(int a_Button, Vector2 a_Position)
-    {
-        UnityDebug.Log(a_Button + " " + a_Position.ToString());
-    }
+    
     // Update is called once per frame
     private void Update()
     {
