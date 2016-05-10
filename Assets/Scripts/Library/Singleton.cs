@@ -2,7 +2,7 @@
 //     Singleton    //
 //////////////////////
 
-namespace BennyBroseph
+namespace Library
 {
     public abstract class Singleton<T> where T : class, new()
     {

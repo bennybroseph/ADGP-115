@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace BennyBroseph
+namespace Library
 {
     public class MonoSingleton<T> : MonoBehaviour where T : MonoBehaviour
     {
