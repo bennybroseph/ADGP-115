@@ -8,14 +8,24 @@ namespace Define
     {
         // Used for testing purposes
         Test,
-        //There is no parameters
+        //There are no parameters
         NewGame,
-        //There is no parameters
+        //There are no parameters
         LoadGame,
-        //There is no parameters
+        //There are no parameters
         Instructions,
-        //There is no parameters
+        //There are no parameters
         QuitGame,
+        //There are no parameters
+        PauseGame,
+        //There are no paramters
+        UnPauseGame,
+        /// <param name="Skill Index"> int: which skill to upgrade</param>
+        UpgradeSkill,
+        /// <param name="Skill Index"> int: which skill to use</param>
+        UseSkill,
+        //There are no parameters
+        SpawnWave,
     }
 
 }
