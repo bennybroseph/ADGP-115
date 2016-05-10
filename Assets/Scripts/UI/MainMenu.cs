@@ -8,36 +8,32 @@ namespace UI
 {
     public class MainMenu : MonoBehaviour
     {
+
         //Function for NewGame button
         public void NewGame()
         {
-            //Loads the first scene.
-            SceneManager.LoadScene(1);
-            //Publisher Subscriber for NewGame / Broadcast null
-            Publisher.self.Broadcast(Event.NewGame, null);
+            //Publisher Subscriber for NewGame / Broadcast
+            Publisher.self.Broadcast(Event.NewGame);
 
         }
         //Function for LoadGame button
         public void LoadGame()
         {
             //Load Game Function
-            //Publisher Subscriber for LoadGame/ Broadcast null
-            Publisher.self.Broadcast(Event.LoadGame, null);
+            //Publisher Subscriber for LoadGame/ Broadcast
+            Publisher.self.Broadcast(Event.LoadGame);
         }
         //Function for Instructions
         public void Instructions()
         {
-            //Instructions Function.
-            //Publisher Subscriber for Instructions / Broadcast null
-            Publisher.self.Broadcast(Event.Instructions, null);
+            //Publisher Subscriber for Instructions / Broadcast 
+            Publisher.self.Broadcast(Event.Instructions);
         }
         //Function for QuitGame button
         public void QuitGame()
         {
-            //Used to Quit Application
-            Application.Quit();
-            //Publisher Subscriber or QuitGame / Broadcast null
-            Publisher.self.Broadcast(Event.QuitGame, null);
+            //Publisher Subscriber or QuitGame / Broadcast 
+            Publisher.self.Broadcast(Event.QuitGame);
         }
     }
 }
