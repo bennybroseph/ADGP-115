@@ -16,18 +16,18 @@ namespace Unit
     public interface IStats
     {
         //Health property
-        int Health { get; set; }
+        int health { get; set; }
         //Mana(currency) property
-        int Mana { get; set; }
+        int mana { get; set; }
         //Speed property
-        int Speed { get; set; }
+        int speed { get; set; }
         //Defense property
-        int Defense { get; set; }
+        int defense { get; set; }
         //Experience property
-        int Experience { get; set; }
+        int experience { get; set; }
         //Level property
-        int Lvl { get; set; }
+        int level { get; set; }
         //String Name property
-        string Name { get; set; }
+        string name { get; set; }
     }
 }

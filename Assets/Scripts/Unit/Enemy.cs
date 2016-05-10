@@ -31,43 +31,43 @@ namespace Unit
             m_Name = a_Name;
         }
         //Public int health property
-        public int Health
+        public int health
         {
             get { return m_Health;}
             set { m_Health = value; }
         }
         //Public int Defense property
-        public int Defense
+        public int defense
         {
             get { return m_Defense;}
             set { m_Defense = value; }
         }
         //Public int Experience property
-        public int Experience
+        public int experience
         {
             get { return m_Exp; }
             set { m_Exp = value; }
         }
         //Public int Level property
-        public int Lvl
+        public int level
         {
             get { return m_Lvl;}
             set { m_Lvl = value; }
         }
         //Public int Speed property
-        public int Speed
+        public int speed
         {
             get { return m_Speed;}
             set { m_Speed = value; }
         }
         //Public int Mana property
-        public int Mana
+        public int mana
         {
             get { return m_Mana;}
             set { m_Mana = value; }
         }
         //Public string Name property
-        public string Name
+        public string name
         {
             get { return m_Name;}
             set { m_Name = value; }

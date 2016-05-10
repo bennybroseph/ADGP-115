@@ -1,9 +1,11 @@
 ﻿//Unit class used for storing Player and Enemy Data.
 
+using UnityEngine;
+
 namespace Unit
 {
     //Public unit class that takes in IStats and IAttack
-    public class Player : IStats, IAttackable
+    public class Player : MonoBehaviour, IStats, IAttackable, IControlable
     {
         //Private int and string memorable variables
         private int m_Health;
@@ -22,6 +24,7 @@ namespace Unit
         //Unit class that stores Health, Defense, Exp, Level, Speed, Mana, Name
         public Player(int a_Health, int a_Defense, int a_Exp,int a_Lvl, int a_Speed, int a_Mana, string a_Name)
         {
+            
             //sets memoorial varial to equal its a
             m_Health = a_Health;
             m_Defense = a_Defense;
@@ -33,44 +36,44 @@ namespace Unit
         }
 
         //Health int property
-        public int Health
+        public int health
         {
             get { return m_Health; }
             set { m_Health = value; } 
         }
 
         //Defense int property
-        public int Defense{
+        public int defense{
             get { return m_Defense; }
             set { m_Defense = value; }
         }
         //Experience int property
-        public int Experience
+        public int experience
         {
             get { return m_Exp; }
             set { m_Exp = value; }
         }
         //Speed int property
-        public int Speed
+        public int speed
         {
             get { return m_Speed;}
             set { m_Speed = value; }
         }
         //Level int property
-        public int Lvl
+        public int level
         {
             get { return m_Lvl; }
             set { m_Lvl = value; }
         }
        //Mana/Currency int property
-        public int Mana
+        public int mana
         {
             get { return m_Mana;}
             set { m_Mana = value; }
         }
 
         //String name property
-        public string Name
+        public string name
         {
             get { return m_Name; }
             set { m_Name = value; }
