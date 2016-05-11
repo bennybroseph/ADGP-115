@@ -24,7 +24,7 @@ namespace Unit
 
         public static Moving Nowhere = new Moving(false, false, false, false);
     }
-    
+
     /// <summary>
     ///  Ensures the object can move using input or other stimulus 
     /// </summary>
@@ -38,6 +38,11 @@ namespace Unit
         bool canMoveWithInput { get; set; }
 
         void Move();
+    }
+
+    public interface IParentable
+    {
+        GameObject parent { get; set; }
     }
 
     public interface IAttackable
@@ -58,7 +63,7 @@ namespace Unit
 
         // Speed property
         int speed { get; set; }
-        
+
         // Experience property
         int experience { get; set; }
         // Level property

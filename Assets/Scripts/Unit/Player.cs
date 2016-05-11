@@ -1,6 +1,7 @@
 ﻿// Unit class used for storing Player and Enemy Data.
 
 using System;
+using System.Collections.Generic;
 using Library;
 using UnityEngine;
 
@@ -13,6 +14,9 @@ namespace Unit
     {
         #region -- VARIABLES --
         // Private int and string memorable variables
+        [SerializeField]
+        private List<GameObject> m_SkillPrefabs;
+
         [SerializeField]
         private string m_UnitName;
 
@@ -108,6 +112,9 @@ namespace Unit
         // Unit class that stores Health, Defense, Exp, Level, Speed, Mana, Name
         private void Start()
         {
+            if(m_SkillPrefabs == null)
+                m_SkillPrefabs = new List<GameObject>();
+
             Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
         }
 
@@ -147,7 +154,7 @@ namespace Unit
 
             if ((m_Velocity.x < 0.0f && m_Velocity.z < 0.0f) ||
                 (m_Velocity.x > 0.0f && m_Velocity.z < 0.0f) ||
-               (m_Velocity.x == 0.0f && m_Velocity.z < 0.0f))
+                (m_Velocity.x == 0.0f && m_Velocity.z < 0.0f))
                 rotationY -= 180;
 
             if (float.IsNaN(rotationY))
@@ -166,6 +173,19 @@ namespace Unit
             int skillIndex = (int)a_Params[0];
 
             Debug.Log("Use Skill " + skillIndex);
+            if (m_SkillPrefabs.Count >= skillIndex - 1)
+            {
+                GameObject newObject = Instantiate(m_SkillPrefabs[skillIndex - 1]);
+                
+                newObject.transform.position = transform.position;
+
+                newObject.GetComponent<IParentable>().parent = gameObject;
+
+                newObject.GetComponent<IControlable>().velocity = new Vector3(
+                    -Mathf.Cos(transform.rotation.eulerAngles.y * (Mathf.PI / 180)),
+                    0, 
+                    Mathf.Sin(transform.rotation.eulerAngles.y * (Mathf.PI / 180)));
+            }
         }
     }
 }
