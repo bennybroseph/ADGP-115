@@ -1,16 +1,21 @@
 ﻿using Library;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 using Event = Define.Event;
 
 namespace Unit
 {
 //Currently Working on Fortress.
-    public class Fortress : MonoBehaviour
+    public class Fortress : MonoBehaviour, IAttackable
     {
+        private int m_Health = 100;
+
+        private int m_Defense;
+
+        private string m_Unitname;
+
         //Sets a private int for health = 100
-        private int m_FortHealth = 100;
+        //private int m_FortHealth = 100;
         //Sets a private int for max health = 100
         private int m_MaxfortHealth = 100;
 
@@ -23,22 +28,39 @@ namespace Unit
         private void Update()
         {
             //If Fort Health greater than Fort Max health
-            if (m_FortHealth > m_MaxfortHealth)
+            if (m_Health > m_MaxfortHealth)
             {
                 //Set Fort Health to equal max fort health
-                m_FortHealth = m_MaxfortHealth;
+                m_Health = m_MaxfortHealth;
             }
             //If Fort Helth is less or equal to zero
-            if (m_FortHealth <= 0)
+            if (m_Health <= 0)
             {
                 //If forthealth = 0
-                m_FortHealth = 0;
+                m_Health = 0;
                 //Broadcast the Event GameOver
                 Publisher.self.Broadcast(Event.GameOver);
 
             }
         }
 
+        public int health
+        {
+            get { return m_Health;}
+            set { m_Health = value; }
+        }
+
+        public int defense
+        {
+            get { return m_Defense;}
+            set { m_Defense = value; }
+        }
+
+        public string unitName
+        {
+            get { return m_Unitname; }
+            set { m_Unitname = value; }
+        }
       
 
         private void OnTriggerEnter(Collider a_Col)
