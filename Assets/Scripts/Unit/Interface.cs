@@ -42,25 +42,26 @@ namespace Unit
 
     public interface IAttackable
     {
-        // Function for combat
-        void Fight();
-    }
+        // String Name property
+        string unitName { get; set; }
 
-    public interface IStats
-    {
         // Health property
         int health { get; set; }
-        // Mana(currency) property
-        int mana { get; set; }
-        // Speed property
-        int speed { get; set; }
         // Defense property
         int defense { get; set; }
+    }
+
+    public interface IStats : IAttackable
+    {
+        // Mana(currency) property
+        int mana { get; set; }
+
+        // Speed property
+        int speed { get; set; }
+        
         // Experience property
         int experience { get; set; }
         // Level property
         int level { get; set; }
-        // String Name property
-        string unitName { get; set; }
     }
 }
