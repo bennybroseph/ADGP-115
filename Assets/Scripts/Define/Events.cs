@@ -26,6 +26,8 @@ namespace Define
         UseSkill,
         //There are no parameters
         SpawnWave,
+        
+        GameOver
     }
 
 }
