@@ -7,6 +7,10 @@ using UnityDebug = UnityEngine.Debug;
 
 public class BenTest : MonoBehaviour
 {
+    public static void TestOnClick()
+    {
+        UnityDebug.Log("Yeah");
+    }
     public enum TestStates { Init, Idle, State1 }
 
     // Use this for initialization

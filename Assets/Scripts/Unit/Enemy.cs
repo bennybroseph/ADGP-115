@@ -10,7 +10,7 @@ namespace Unit
         private int m_Lvl; //wont be displayed for Enemy
         private int m_Speed;
         private int m_Mana;
-        private string m_Name;
+        private string m_UnitName;
 
         //Default Constructor for Enemy class
         public Enemy()
@@ -19,7 +19,7 @@ namespace Unit
         }
 
         //Enemy class that stores Health, Defense, Exp, Level, Speed, Mana, Name
-        public Enemy(int a_Health, int a_Defense, int a_Exp, int a_Lvl, int a_Speed, int a_Mana, string a_Name)
+        public Enemy(int a_Health, int a_Defense, int a_Exp, int a_Lvl, int a_Speed, int a_Mana, string a_UnitName)
         {
             //sets memoorial varial to equal its a
             m_Health = a_Health;
@@ -28,7 +28,7 @@ namespace Unit
             m_Lvl = a_Lvl;
             m_Speed = a_Speed;
             m_Mana = a_Mana;
-            m_Name = a_Name;
+            m_UnitName = a_UnitName;
         }
         //Public int health property
         public int health
@@ -67,10 +67,10 @@ namespace Unit
             set { m_Mana = value; }
         }
         //Public string Name property
-        public string name
+        public string unitName
         {
-            get { return m_Name;}
-            set { m_Name = value; }
+            get { return m_UnitName;}
+            set { m_UnitName = value; }
         }
         //Enemy Fight Function in herited from IAttackable
         public void Fight()
