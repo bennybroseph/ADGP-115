@@ -29,7 +29,7 @@ namespace Library.Contextual
         public List<Keys> heldKeys { get; private set; }
         public List<int> heldMouseButtons { get; private set; }
 
-#if !UNITY_EDITOR && FORMS
+#if !UNITY_5_3_OR_NEWER && FORMS
         public InputManager()
         {
             s_Initialized = false;
@@ -76,7 +76,7 @@ namespace Library.Contextual
             if (m_OnKeyUp != null)
                 m_OnKeyUp((Keys)e.KeyCode);
         }
-#elif UNITY_EDITOR
+#elif UNITY_5_3_OR_NEWER
         private void Start()
         {
             if (!s_Initialized)
@@ -186,7 +186,7 @@ namespace Library.Contextual
         {
 #if CONTEXT_DEBUG   // Only compiles if the build is using the 'ContextualDebug' by defining it in the build options
             Debug.Message(a_Message);
-#elif (!UNITY_EDITOR && DEBUG) // Only compiles when in debug mode and not in unity
+#elif (!UNITY_5_3_OR_NEWER && DEBUG) // Only compiles when in debug mode and not in unity
             Console.WriteLine(a_Message);
 #endif
         }
@@ -198,7 +198,7 @@ namespace Library.Contextual
         {
 #if CONTEXT_DEBUG   // Only compiles if the build is using the 'ContextualDebug' by defining it in the build options
             Debug.Warning(a_Message);
-#elif (!UNITY_EDITOR && DEBUG) // Only compiles when in debug mode and not in unity
+#elif (!UNITY_5_3_OR_NEWER && DEBUG) // Only compiles when in debug mode and not in unity
             Console.WriteLine(a_Message);
 #endif
         }
@@ -210,7 +210,7 @@ namespace Library.Contextual
         {
 #if CONTEXT_DEBUG   // Only compiles if the build is using the 'ContextualDebug' by defining it in the build options
             Debug.Error(a_Message);
-#elif (!UNITY_EDITOR && DEBUG) // Only compiles when in debug mode and not in unity
+#elif (!UNITY_5_3_OR_NEWER && DEBUG) // Only compiles when in debug mode and not in unity
             Console.WriteLine(a_Message);
 #endif
         }
@@ -219,7 +219,7 @@ namespace Library.Contextual
     /// <summary>
     /// Very Important part of code. One of these must compile or you can't use this file
     /// </summary>
-#if (UNITY_EDITOR && !FORMS)
+#if (UNITY_5_3_OR_NEWER && !FORMS)
     /// <summary>
     /// Specifies key codes when using unity
     /// </summary>
