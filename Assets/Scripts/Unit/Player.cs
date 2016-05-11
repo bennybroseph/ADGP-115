@@ -146,8 +146,11 @@ namespace Unit
             float rotationY = Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180 / Mathf.PI) + 90;
             if (float.IsNaN(rotationY))
                 rotationY = transform.rotation.eulerAngles.y;
+<<<<<<< HEAD
+=======
             else if (rotationY == 90.0f)
                 rotationY = (m_Velocity.z > 0.0f)? 90 : 270;
+>>>>>>> bennybroseph-master
 
             transform.rotation = Quaternion.Euler(
                 transform.rotation.eulerAngles.x,

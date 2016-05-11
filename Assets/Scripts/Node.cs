@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 
 public class Node
@@ -28,24 +27,27 @@ public class Node
         get { return m_AdjacentNodes; }
         set { m_AdjacentNodes = value; }
     }
+
     //Property For accessing Parent Node outside of class
     public Node parent
     {
         get { return m_Parent; }
         set { m_Parent = value; }
     }
+
     //Property for accessing traversable variable outside of class
     public bool traversable
     {
         get { return m_Traversable;}
         set { m_Traversable = value; }
     }
+
     //Property for accessing the id outside of class
     public int id
     {
         get { return m_Id;}
-        set { m_Id = value; }
     }
+
     //Property for accessing the GScore outside of class
     public int gScore
     {
@@ -56,6 +58,7 @@ public class Node
             m_FScore = m_GScore + m_HScore;
         }
     }
+
     //Property for accessing the HScore outside of class
     public int hScore
     {
@@ -66,6 +69,7 @@ public class Node
             m_FScore = m_GScore + m_HScore;
         }
     }
+
     //Property for accessing the FScore outside of class
     public int fScore
     {
@@ -85,14 +89,15 @@ public class Node
         get { return m_YPos; }
 
     }
+
     //Constructor to construct Node object
     public Node(int a_X, int a_Y, int a_Id)
     {//Create an empty list for node to have
         m_AdjacentNodes = new List<Node>();
         //Set its parent node to null
         m_Parent = null;
-		//Set traversable by default to true
-		m_Traversable = true;
+        //Set each node to traversable
+        m_Traversable = true;
         //Set X Pos
         m_XPos = a_X;
         //Set Y Pos
