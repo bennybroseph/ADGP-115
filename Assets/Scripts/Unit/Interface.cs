@@ -9,15 +9,15 @@ namespace Unit
     [Serializable]
     public struct Moving
     {
-        public bool forward { get; set; }
-        public bool back { get; set; }
+        public bool up { get; set; }
+        public bool down { get; set; }
         public bool left { get; set; }
         public bool right { get; set; }
 
         public Moving(bool a_Forward, bool a_Back, bool a_Left, bool a_Right) : this()
         {
-            forward = a_Forward;
-            back = a_Back;
+            up = a_Forward;
+            down = a_Back;
             left = a_Left;
             right = a_Right;
         }

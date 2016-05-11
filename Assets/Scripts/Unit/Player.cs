@@ -42,6 +42,9 @@ namespace Unit
 
         [SerializeField]
         private bool m_CanMoveWithInput;
+
+        [SerializeField]
+        private Vector3 m_OriginalRotation;
         #endregion
 
         #region -- PROPERTIES --
@@ -112,8 +115,10 @@ namespace Unit
         // Unit class that stores Health, Defense, Exp, Level, Speed, Mana, Name
         private void Start()
         {
-            if(m_SkillPrefabs == null)
+            if (m_SkillPrefabs == null)
                 m_SkillPrefabs = new List<GameObject>();
+
+            m_OriginalRotation = transform.eulerAngles;
 
             Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
         }
@@ -129,16 +134,16 @@ namespace Unit
 
             if (m_CanMoveWithInput)
             {
-                m_IsMoving.forward = Input.GetKey(KeyCode.W);
-                m_IsMoving.back = Input.GetKey(KeyCode.S);
+                m_IsMoving.up = Input.GetKey(KeyCode.W);
+                m_IsMoving.down = Input.GetKey(KeyCode.S);
                 m_IsMoving.left = Input.GetKey(KeyCode.A);
                 m_IsMoving.right = Input.GetKey(KeyCode.D);
             }
 
-            if (m_IsMoving.forward)
-                m_Velocity += Vector3.forward * m_Speed;
-            if (m_IsMoving.back)
-                m_Velocity += Vector3.back * m_Speed;
+            if (m_IsMoving.up)
+                m_Velocity += Vector3.up * m_Speed;
+            if (m_IsMoving.down)
+                m_Velocity += Vector3.down * m_Speed;
             if (m_IsMoving.left)
                 m_Velocity += Vector3.left * m_Speed;
             if (m_IsMoving.right)
@@ -147,25 +152,30 @@ namespace Unit
 
         public void Move()
         {
+            transform.position += m_Velocity * Time.deltaTime;
+        }
 
-            transform.position = transform.position + (m_Velocity * Time.deltaTime);
+        public void LateUpdate()
+        {
+            CalculateRotation();
+        }
 
-            float rotationY = Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180.0f / Mathf.PI);
+        private void CalculateRotation()
+        {
+            if (m_Velocity == Vector3.zero)
+                return;
 
-            if ((m_Velocity.x < 0.0f && m_Velocity.z < 0.0f) ||
-                (m_Velocity.x > 0.0f && m_Velocity.z < 0.0f) ||
-                (m_Velocity.x == 0.0f && m_Velocity.z < 0.0f))
-                rotationY -= 180;
+            float rotationX = Mathf.Atan(m_Velocity.x / m_Velocity.y) * (180.0f / Mathf.PI);
 
-            if (float.IsNaN(rotationY))
-                rotationY = transform.rotation.eulerAngles.y;
-            else
-                rotationY += 90.0f;
+            if ((m_Velocity.x < 0.0f && m_Velocity.y < 0.0f) ||
+                (m_Velocity.x > 0.0f && m_Velocity.y < 0.0f) ||
+                (m_Velocity.x == 0.0f && m_Velocity.y < 0.0f))
+                rotationX = rotationX + 180;
 
             transform.rotation = Quaternion.Euler(
-                transform.rotation.eulerAngles.x,
-                rotationY,
-                transform.rotation.eulerAngles.z);
+                rotationX,
+                m_OriginalRotation.y,
+                m_OriginalRotation.z);
         }
 
         private void OnUseSkill(Event a_Event, params object[] a_Params)
@@ -176,15 +186,15 @@ namespace Unit
             if (m_SkillPrefabs.Count >= skillIndex - 1)
             {
                 GameObject newObject = Instantiate(m_SkillPrefabs[skillIndex - 1]);
-                
+
                 newObject.transform.position = transform.position;
 
                 newObject.GetComponent<IParentable>().parent = gameObject;
 
                 newObject.GetComponent<IControlable>().velocity = new Vector3(
-                    -Mathf.Cos(transform.rotation.eulerAngles.y * (Mathf.PI / 180)),
-                    0, 
-                    Mathf.Sin(transform.rotation.eulerAngles.y * (Mathf.PI / 180)));
+                    -Mathf.Cos(transform.rotation.eulerAngles.x * (Mathf.PI / 180)),
+                    0,
+                    Mathf.Sin(transform.rotation.eulerAngles.x * (Mathf.PI / 180)));
             }
         }
     }
