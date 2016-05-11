@@ -188,6 +188,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11468738, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
+      propertyPath: m_SkillPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 154216, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
       propertyPath: m_Name
       value: Player
@@ -196,6 +200,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 11468738, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
+      propertyPath: m_SkillPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 167634, guid: e4edc7fe0341b644c835f75acf8dad64, type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
   m_IsPrefabParent: 0
