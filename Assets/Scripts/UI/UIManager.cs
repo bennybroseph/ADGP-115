@@ -19,25 +19,35 @@ namespace UI
         private GameObject m_Skill1Upgrade;
         [SerializeField]
         private GameObject m_Skill2Upgrade;
+        [SerializeField]
+        private GameObject m_Player;
+        [SerializeField]
+        private GameObject m_PlayerUI;
+        [SerializeField]
+        private Vector3 m_PlayerUIOffset;
 
         // Use this for initialization
         void Start()
         {
             Publisher.self.Subscribe(Event.Instructions, OnInstructions);
 
-            if(m_InstructionMenu != null)
+            if (m_InstructionMenu != null)
                 m_InstructionMenu.SetActive(false);
-            if(m_Skill1Upgrade != null)
+            if (m_Skill1Upgrade != null)
                 m_Skill1Upgrade.SetActive(false);
-            if(m_Skill2Upgrade != null)
+            if (m_Skill2Upgrade != null)
                 m_Skill2Upgrade.SetActive(false);
-            if(m_QuitMenu != null)
+            if (m_QuitMenu != null)
                 m_QuitMenu.SetActive(false);
+
+
         }
 
-        // Update is called once per frame
-        void Update()
+        //LateUpdate is called once per frame
+        void LateUpdate()
         {
+            if (m_PlayerUI != null && m_Player != null)
+                m_PlayerUI.transform.position = m_Player.transform.position + m_PlayerUIOffset;
         }
 
         private void OnInstructions(Event a_Event, params object[] a_Params)

@@ -44,6 +44,9 @@ MonoBehaviour:
   m_InstructionMenu: {fileID: 0}
   m_Skill1Upgrade: {fileID: 0}
   m_Skill2Upgrade: {fileID: 0}
+  m_Player: {fileID: 0}
+  m_PlayerUI: {fileID: 0}
+  m_PlayerUIOffset: {x: 0, y: 0, z: -1}
 --- !u!114 &11487786
 MonoBehaviour:
   m_ObjectHideFlags: 1
