@@ -13,7 +13,7 @@ GameObject:
   - 23: {fileID: 2391116}
   - 114: {fileID: 11467890}
   m_Layer: 0
-  m_Name: Fortress
+  m_Name: Fortress_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
