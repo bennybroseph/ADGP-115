@@ -1,14 +1,19 @@
 ﻿using Library;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 using Event = Define.Event;
 
 namespace Unit
 {
 //Currently Working on Fortress.
-    public class Fortress : MonoBehaviour
+    public class Fortress : MonoBehaviour, IAttackable
     {
+        private int m_Health;
+
+        private int m_Defense;
+
+        private string m_Unitname;
+
         //Sets a private int for health = 100
         private int m_FortHealth = 100;
         //Sets a private int for max health = 100
@@ -39,6 +44,23 @@ namespace Unit
             }
         }
 
+        public int health
+        {
+            get { return m_Health;}
+            set { m_Health = value; }
+        }
+
+        public int defense
+        {
+            get { return m_Defense;}
+            set { m_Defense = value; }
+        }
+
+        public string unitName
+        {
+            get { return m_Unitname; }
+            set { m_Unitname = value; }
+        }
       
 
         private void OnTriggerEnter(Collider a_Col)
