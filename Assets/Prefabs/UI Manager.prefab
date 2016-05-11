@@ -37,10 +37,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 192944}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 378f3371a8874d8418f3913653b26b63, type: 3}
+  m_Script: {fileID: 11500000, guid: c7849023009a36f4b818cbad4a712cc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_InstructionsMenu: {fileID: 0}
+  m_QuitMenu: {fileID: 0}
+  m_InstructionMenu: {fileID: 0}
+  m_Skill1Upgrade: {fileID: 0}
+  m_Skill2Upgrade: {fileID: 0}
 --- !u!114 &11487786
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -49,13 +52,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 192944}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 92128b612d481d945885f8b5cc9756ac, type: 3}
+  m_Script: {fileID: 11500000, guid: 08142a4b89df02c4f9b50dae6a9ad63f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_QuitMenu: {fileID: 0}
-  m_InstructionMenu: {fileID: 0}
-  m_Skill1Upgrade: {fileID: 0}
-  m_Skill2Upgrade: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

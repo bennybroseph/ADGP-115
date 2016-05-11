@@ -11,19 +11,28 @@ namespace UI
 {
     public class UIManager : MonoBehaviour
     {
-        [SerializeField] private GameObject m_QuitMenu;
-        [SerializeField] private GameObject m_InstructionMenu;
-        [SerializeField] private GameObject m_Skill1Upgrade;
-        [SerializeField] private GameObject m_Skill2Upgrade;
+        [SerializeField]
+        private GameObject m_QuitMenu;
+        [SerializeField]
+        private GameObject m_InstructionMenu;
+        [SerializeField]
+        private GameObject m_Skill1Upgrade;
+        [SerializeField]
+        private GameObject m_Skill2Upgrade;
 
         // Use this for initialization
         void Start()
         {
             Publisher.self.Subscribe(Event.Instructions, OnInstructions);
-            m_InstructionMenu.SetActive(false);
-            m_Skill1Upgrade.SetActive(false);
-            m_Skill2Upgrade.SetActive(false);
-            m_QuitMenu.SetActive(false);
+
+            if(m_InstructionMenu != null)
+                m_InstructionMenu.SetActive(false);
+            if(m_Skill1Upgrade != null)
+                m_Skill1Upgrade.SetActive(false);
+            if(m_Skill2Upgrade != null)
+                m_Skill2Upgrade.SetActive(false);
+            if(m_QuitMenu != null)
+                m_QuitMenu.SetActive(false);
         }
 
         // Update is called once per frame
@@ -48,7 +57,7 @@ namespace UI
             m_InstructionMenu.SetActive(false);
         }
 
-        public void OnExitMenuClick()
+        public void OnResumeClick()
         {
             m_QuitMenu.SetActive(false);
             Time.timeScale = 1;
@@ -74,7 +83,6 @@ namespace UI
         public void OnUseSkill1()
         {
             Publisher.self.Broadcast(Event.UseSkill, 1);
-
         }
 
         public void OnUseSkill2()

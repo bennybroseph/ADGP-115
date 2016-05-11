@@ -171,7 +171,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 11450170, guid: 2128e3219ddf6ad4fa965a7a80931949, type: 2}
         m_MethodName: OnInstructionsCloseClick
         m_Mode: 1
         m_Arguments:
