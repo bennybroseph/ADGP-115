@@ -143,21 +143,26 @@ namespace Unit
 
             transform.position = transform.position + (m_Velocity * Time.deltaTime);
 
-            float rotationY = Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180 / Mathf.PI) + 90;
-            if (float.IsNaN(rotationY))
-                rotationY = transform.rotation.eulerAngles.y;
-<<<<<<< HEAD
-=======
-            else if (rotationY == 90.0f)
-                rotationY = (m_Velocity.z > 0.0f)? 90 : 270;
->>>>>>> bennybroseph-master
+            //float rotationY = Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180.0f / Mathf.PI);
+            
 
-            transform.rotation = Quaternion.Euler(
-                transform.rotation.eulerAngles.x,
-                rotationY,
-                transform.rotation.eulerAngles.z);
+            //if (rotationY <= 0.0f)
+            //{
+            //    rotationY = (m_Velocity.z > 0.0f && m_Velocity.x == 0.0f) ? 0.0f : 180.0f;
+            //}
+            //else if (float.IsNaN(rotationY))
+            //    rotationY = transform.rotation.eulerAngles.y;
+            //else
+            //    rotationY += 90.0f;
 
-            Debug.Log(transform.rotation.eulerAngles.ToString());
+
+
+            //transform.rotation = Quaternion.Euler(
+            //    transform.rotation.eulerAngles.x,
+            //    rotationY,
+            //    transform.rotation.eulerAngles.z);
+
+            //Debug.Log(transform.rotation.eulerAngles.ToString());
         }
 
         private void OnUseSkill(Event a_Event, params object[] a_Params)
