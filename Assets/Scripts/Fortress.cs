@@ -15,19 +15,20 @@ public class Fortress : MonoBehaviour
         m_Name = a_Name;
     }
 
+    //Health int property
     public int Health
     {
         get { return m_Health;}
         set { m_Health = value; }
     }
-
+    //Defense int property
     public int Defense
     {
         get { return m_Defense; }
         set { m_Defense = value; }
 
     }
-
+    //String name property
     public string Name
     {
         get { return m_Name; }
