@@ -1,11 +1,15 @@
 ﻿// Unit class used for storing Player and Enemy Data.
 
+using System;
+using Library;
 using UnityEngine;
+
+using Event = Define.Event;
 
 namespace Unit
 {
     // Public unit class that takes in IStats and IAttack
-    public class Player : MonoBehaviour, IStats, IAttackable, IControlable
+    public class Player : MonoBehaviour, IStats, IControlable
     {
         #region -- VARIABLES --
         // Private int and string memorable variables
@@ -104,12 +108,7 @@ namespace Unit
         // Unit class that stores Health, Defense, Exp, Level, Speed, Mana, Name
         private void Start()
         {
-
-        }
-        // Function used to detect Fight
-        public void Fight()
-        {
-            // Implement as project goes on. 
+            Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
         }
 
         private void FixedUpdate()
@@ -119,6 +118,8 @@ namespace Unit
 
         private void Update()
         {
+            m_Velocity = Vector3.zero;
+
             if (m_CanMoveWithInput)
             {
                 m_IsMoving.forward = Input.GetKey(KeyCode.W);
@@ -139,9 +140,28 @@ namespace Unit
 
         public void Move()
         {
-            transform.position = transform.position + (m_Velocity * Time.fixedDeltaTime);
-            
-            m_Velocity = Vector3.zero;
+
+            transform.position = transform.position + (m_Velocity * Time.deltaTime);
+
+            float rotationY = Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180 / Mathf.PI) + 90;
+            if (float.IsNaN(rotationY))
+                rotationY = transform.rotation.eulerAngles.y;
+            else if (rotationY == 90.0f)
+                rotationY = (m_Velocity.z > 0.0f)? 90 : 270;
+
+            transform.rotation = Quaternion.Euler(
+                transform.rotation.eulerAngles.x,
+                rotationY,
+                transform.rotation.eulerAngles.z);
+
+            Debug.Log(transform.rotation.eulerAngles.ToString());
+        }
+
+        private void OnUseSkill(Event a_Event, params object[] a_Params)
+        {
+            int skillIndex = (int)a_Params[0];
+
+            Debug.Log("Use Skill " + skillIndex);
         }
     }
 }

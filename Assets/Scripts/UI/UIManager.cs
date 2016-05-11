@@ -60,7 +60,6 @@ namespace UI
         public void OnResumeClick()
         {
             m_QuitMenu.SetActive(false);
-            Time.timeScale = 1;
             Publisher.self.Broadcast(Event.UnPauseGame);
         }
 
@@ -72,7 +71,6 @@ namespace UI
         public void OnUpgradeSkill1()
         {
             Publisher.self.Broadcast(Event.UpgradeSkill, 1);
-
         }
 
         public void OnUpgradeSkill2()
