@@ -1,9 +1,8 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
-using UnityEngine.Networking.NetworkSystem;
+
 
 public class AStar
 {
@@ -15,7 +14,7 @@ public class AStar
     private List<Node> m_Grid;
     //Rows In Grid
     private int m_Rows;
-    //Columns In Columns
+    //Columns In Grid
     private int m_Columns;
     //Reference to Start Node
     private Node m_StartNode;
@@ -33,18 +32,20 @@ public class AStar
 
         set { m_CurrentNode = value; }
     }
+
     //Property for accessing the OpenList outside of class
     public List<Node> OpenList
     {
         get { return m_OpenList; }
     }
+
     //Property for accessing the ClosedList outside of class
     public List<Node> ClosedList
     {
         get { return m_ClosedList; }
     }
 
-    //Property for accessing the ClosedList outside of class
+    //Property for accessing the Path outside of class
     public List<Node> Path
     {
         get { return m_ReturnedPath; }
@@ -68,8 +69,8 @@ public class AStar
         m_Rows = a_Rows;
         //Set The Columns
         m_Columns = a_Columns;
-		//Setup Nodes
-		SetUp();
+        //Setup Adjacents and HScores
+        SetUp();
     }
 
     //Function for returning the path that was taken from start to goal
@@ -77,18 +78,18 @@ public class AStar
     {//Local Variable used to store the path that was taken from start to goal
         List<Node> path = new List<Node>();
         //Set the Current Node to the passed in node
-        CurrentNode = a_Node;
+        m_CurrentNode = a_Node;
         //While the current node is not equal to the start node
         while (m_CurrentNode != m_StartNode)
         {//Add the current nodes parent to the path list
             path.Add(m_CurrentNode.parent);
             //Set the current node to the current nodes parent
             m_CurrentNode = m_CurrentNode.parent;
-
         }
         //Return the path
         return path;
     }
+    
     //Set the adjacents of the passed in node
     private void SetAdjacents(Node a_Node)
     {//If the adjacents count is not equal to 0
@@ -110,30 +111,16 @@ public class AStar
             //Integer that will be used as reference to bottom left node from current passed in node
             int botLeft = bot - 1;
             //Create a List of integers which will be used to reference the index of surrounding nodes
-            List<int> surroundingNodes = new List<int>();
-            //Add bot Node to List
-            surroundingNodes.Add(bot);
-            //Add top Node to List
-            surroundingNodes.Add(top);
-            //Add right Node to List
-            surroundingNodes.Add(right);
-            //Add left Node to List
-            surroundingNodes.Add(left);
-            //Add top right Node to List
-            surroundingNodes.Add(topRight);
-            //Add top left Node to List
-            surroundingNodes.Add(topLeft);
-            //Add bot right Node to List
-            surroundingNodes.Add(botRight);
-            //Add bot left Node to List
-            surroundingNodes.Add(botLeft);
+            List<int> surroundingNodes = new List<int> {bot, top ,right, left, topRight, topLeft, botRight, botLeft};
+ 
             //Loop through the adjacents
             foreach (int number in surroundingNodes)
-            {//Check if the number is less than or equal to the length of the grid minus 1
+            {//Check if the number is less than or equal to the length of the grid minus 1 and that the number is greater than or equal to 0
                 if (number <= m_Grid.Count - 1 && number >= 0)
                 {//If the current node is traversable
                     if (m_Grid[number].traversable)
-                    {//Add the node to the adjacents list for this specific node
+                    {
+                     //Add the node to the adjacents list for this specific node
                         a_Node.adjacents.Add(m_Grid[number]);
                     }
                     
@@ -153,24 +140,26 @@ public class AStar
         int Sum = XDifference + YDifference;
         //Set the H Score of the current node equal to the Sum variable multiplied by 10
         a_Node.hScore = (Sum * 10);
+
     }
 
     //Set up the Nodes with adjacents and H Scores
     private void SetUp()
     {//Loop through the grid
         foreach (Node node in m_Grid)
-        {//Pass the node in to check for adjacents to that node
-            SetAdjacents(node);
-            //Set the H Score for the node
+        {//Set the H Score for the node
             SetHScores(node);
+            //Pass the node in to check for adjacents to that node
+            SetAdjacents(node);
+            
         }
     }
+
     //Function used to Sort the list by the F Score
-    private Node Sort(List<Node> a_NodeList)
+    private List<Node> Sort(List<Node> a_NodeList)
     {//Return the new sorted list into a new variable
-        List<Node> sortedList = a_NodeList.OrderByDescending(n => n.fScore).ToList();
-        //Return the first node in the list
-        return sortedList[0];
+        List<Node> s = a_NodeList.OrderByDescending(n => n.fScore).ToList();
+        return s;
     }
 
     //Function that will run the algorithm
@@ -179,12 +168,14 @@ public class AStar
         m_OpenList.Add(m_StartNode);
         //While the open list is not empty
         while (m_OpenList.Count != 0)
-        {//Sort the open list by f value and set the current node to the returned Node
-          m_CurrentNode = Sort(m_OpenList);
-          //If the goal node is in the open list
+        {//Sort the open list by f value and set the current node to the first index of the returned list
+          List<Node> sort = Sort(m_OpenList);
+            m_CurrentNode = sort[0];
+            //If the goal node is in the open list
             if (m_OpenList.Contains(m_GoalNode))
-            {//Set the path list with the returned list
-                m_ReturnedPath = GetPath(m_CurrentNode);
+            {//Set the path list with the returned list            
+                m_ReturnedPath = GetPath(m_GoalNode);
+                Console.Write(m_GoalNode.id);
                 return false;
             }
             
@@ -195,6 +186,7 @@ public class AStar
             //Create an index variable that will be used to loop through adjacent nodes
             int index = 0;
 
+           
             //Loop through the nodes in the current nodes adjacents list
             foreach (Node node in m_CurrentNode.adjacents)
             {//If the current adjacent node is traversable and not in the closed list
@@ -229,7 +221,7 @@ public class AStar
                 index += 1;
             }
         }
-
+        //Return true to continue looping
         return true;
     }
 }
