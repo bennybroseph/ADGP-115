@@ -39,8 +39,9 @@ namespace UI
                 m_Skill2Upgrade.SetActive(false);
             if (m_QuitMenu != null)
                 m_QuitMenu.SetActive(false);
-
-
+            if(m_Player == null)
+                m_Player = GameObject.FindGameObjectWithTag("Player");
+            
         }
 
         //LateUpdate is called once per frame
@@ -101,6 +102,33 @@ namespace UI
         public void OnSpawnWaveClick()
         {
             Publisher.self.Broadcast(Event.SpawnWave);
+        }
+
+        //Function for NewGame button
+        public void NewGame()
+        {
+            //Publisher Subscriber for NewGame / Broadcast
+            Publisher.self.Broadcast(Event.NewGame);
+
+        }
+        //Function for LoadGame button
+        public void LoadGame()
+        {
+            //Load Game Function
+            //Publisher Subscriber for LoadGame/ Broadcast
+            Publisher.self.Broadcast(Event.LoadGame);
+        }
+        //Function for Instructions
+        public void Instructions()
+        {
+            //Publisher Subscriber for Instructions / Broadcast 
+            Publisher.self.Broadcast(Event.Instructions);
+        }
+        //Function for QuitGame button
+        public void QuitGame()
+        {
+            //Publisher Subscriber or QuitGame / Broadcast 
+            Publisher.self.Broadcast(Event.QuitGame);
         }
     }
 }
