@@ -4,7 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Library;
-using UnityEditor;
 using UnityEngine.SceneManagement;
 using Event = Define.Event;
 
