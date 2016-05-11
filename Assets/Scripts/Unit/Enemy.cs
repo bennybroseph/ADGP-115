@@ -10,7 +10,7 @@ namespace Unit
         private int m_Lvl; //wont be displayed for Enemy
         private int m_Speed;
         private int m_Mana;
-        private string m_Name;
+        private string m_UnitName;
 
         //Default Constructor for Enemy class
         public Enemy()
@@ -19,7 +19,7 @@ namespace Unit
         }
 
         //Enemy class that stores Health, Defense, Exp, Level, Speed, Mana, Name
-        public Enemy(int a_Health, int a_Defense, int a_Exp, int a_Lvl, int a_Speed, int a_Mana, string a_Name)
+        public Enemy(int a_Health, int a_Defense, int a_Exp, int a_Lvl, int a_Speed, int a_Mana, string a_UnitName)
         {
             //sets memoorial varial to equal its a
             m_Health = a_Health;
@@ -28,49 +28,49 @@ namespace Unit
             m_Lvl = a_Lvl;
             m_Speed = a_Speed;
             m_Mana = a_Mana;
-            m_Name = a_Name;
+            m_UnitName = a_UnitName;
         }
         //Public int health property
-        public int Health
+        public int health
         {
             get { return m_Health;}
             set { m_Health = value; }
         }
         //Public int Defense property
-        public int Defense
+        public int defense
         {
             get { return m_Defense;}
             set { m_Defense = value; }
         }
         //Public int Experience property
-        public int Experience
+        public int experience
         {
             get { return m_Exp; }
             set { m_Exp = value; }
         }
         //Public int Level property
-        public int Lvl
+        public int level
         {
             get { return m_Lvl;}
             set { m_Lvl = value; }
         }
         //Public int Speed property
-        public int Speed
+        public int speed
         {
             get { return m_Speed;}
             set { m_Speed = value; }
         }
         //Public int Mana property
-        public int Mana
+        public int mana
         {
             get { return m_Mana;}
             set { m_Mana = value; }
         }
         //Public string Name property
-        public string Name
+        public string unitName
         {
-            get { return m_Name;}
-            set { m_Name = value; }
+            get { return m_UnitName;}
+            set { m_UnitName = value; }
         }
         //Enemy Fight Function in herited from IAttackable
         public void Fight()
