@@ -1,7 +1,10 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using Library;
+using UnityEditor;
 using UnityEngine.SceneManagement;
 using Event = Define.Event;
 
@@ -14,9 +17,14 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField]
     private float m_PreviousTimeScale;
 
+    private List<Node> m_SearchSpace;
+
+    private GameObject m_Background;
+
     // Use this for initialization
     private void Start()
     {
+        m_SearchSpace = SetUpSearchSpace();
         m_PreviousTimeScale = Time.timeScale;
 
         Application.targetFrameRate = -1;
@@ -62,8 +70,39 @@ public class GameManager : MonoSingleton<GameManager>
         m_PreviousTimeScale = Time.timeScale;
         Time.timeScale = 0;
     }
+
     private void OnUnPauseGame(Event a_Event, params object[] a_Params)
     {
         Time.timeScale = m_PreviousTimeScale;
     }
+
+    private List<Node> SetUpSearchSpace()
+    {
+        List<Node> searchSpace = new List<Node>();
+
+        m_Background = GameObject.FindGameObjectWithTag("Background");
+
+        Vector3 grid = new Vector3(m_Background.transform.localScale.x, m_Background.transform.localScale.y, m_Background.transform.localScale.z);
+
+        int id = 0;
+        
+        //Base off x and z position
+        int rows = 10;
+        int columns = 10;
+
+        for (int x = 0; x < rows; x++)
+        {
+            for (int y = 0; y < columns; y++)
+            {
+                Node node = new Node(x, y, id);
+
+                searchSpace.Add(node);
+
+                id += 1;
+            }
+        }
+
+        return searchSpace;
+    }
+
 }
