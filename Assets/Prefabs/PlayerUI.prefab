@@ -45,6 +45,7 @@ GameObject:
   - 223: {fileID: 22311882}
   - 114: {fileID: 11483732}
   - 114: {fileID: 11479986}
+  - 114: {fileID: 11440620}
   m_Layer: 5
   m_Name: PlayerUI
   m_TagString: Untagged
@@ -190,6 +191,22 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 'Level:'
+--- !u!114 &11440620
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 155688}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 920dd1c6cfdd6894fbba6ae1a7e5fcba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HealthBar: {fileID: 22401660}
+  m_ManaBar: {fileID: 22430596}
+  m_HealthText: {fileID: 11498842}
+  m_ManaText: {fileID: 11443314}
+  m_LevelText: {fileID: 11424842}
 --- !u!114 &11443314
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -394,8 +411,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 32.409748, y: -0.99999917}
-  m_SizeDelta: {x: 64.521, y: 15.4}
+  m_AnchoredPosition: {x: 51.5, y: -0.99999917}
+  m_SizeDelta: {x: 106, y: 15.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22430596
 RectTransform:
@@ -430,7 +447,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0.0000038146973}
-  m_SizeDelta: {x: 100, y: 14.5}
+  m_SizeDelta: {x: 106, y: 14.5}
   m_Pivot: {x: 0, y: 0}
 --- !u!224 &22486908
 RectTransform:
@@ -447,7 +464,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -0.0000038146973, y: 0}
-  m_SizeDelta: {x: 100, y: 14.7}
+  m_SizeDelta: {x: 106, y: 14.7}
   m_Pivot: {x: 0, y: 1}
 --- !u!1001 &100100000
 Prefab:
