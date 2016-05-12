@@ -141,6 +141,7 @@ namespace Unit
         }
         #endregion
 
+        #region -- UNITY FUNCTIONS --
         // Unit class that stores Health, Defense, Exp, Level, Speed, Mana, Name
         private void Start()
         {
@@ -176,20 +177,23 @@ namespace Unit
             Move();
         }
 
-        public MovementState watch;
         private void Update()
         {
-            watch = m_MovementFSM.currentState;
             for (int i = 0; i < m_Skills.Count; ++i)
             {
-                float remainingCooldown = m_Skills[i].remainingCooldown - Time.deltaTime;
-                if (remainingCooldown < 0.0f)
-                    remainingCooldown = 0.0f;
+                if (m_Skills[i].remainingCooldown != 0.0f)
+                {
+                    float remainingCooldown = m_Skills[i].remainingCooldown - Time.deltaTime;
+                    if (remainingCooldown < 0.0f)
+                        remainingCooldown = 0.0f;
 
-                m_Skills[i] = new SkillData(
-                    m_Skills[i].skillPrefab,
-                    m_Skills[i].cooldown,
-                    remainingCooldown);
+                    m_Skills[i] = new SkillData(
+                        m_Skills[i].skillPrefab,
+                        m_Skills[i].cooldown,
+                        remainingCooldown);
+
+                    Publisher.self.Broadcast(Event.SkillCooldownChanged, i, m_Skills[i].remainingCooldown);
+                }
             }
 
             //m_Velocity = Vector3.zero;
@@ -223,7 +227,7 @@ namespace Unit
                     GameManager.self.state.ThumbSticks.Left.Y != 0.0f)
                 {
                     m_Velocity = new Vector3(
-                        GameManager.self.state.ThumbSticks.Left.X * m_Speed, 
+                        GameManager.self.state.ThumbSticks.Left.X * m_Speed,
                         m_Velocity.y,
                         GameManager.self.state.ThumbSticks.Left.Y * m_Speed);
                 }
@@ -234,6 +238,13 @@ namespace Unit
             if (Input.GetKeyDown(KeyCode.E) || GameManager.self.state.Triggers.Left > 0.0f)
                 Publisher.self.Broadcast(Event.UseSkill, 2);
         }
+
+        public void LateUpdate()
+        {
+            SetRotation();
+            SetMovementFSM();
+        }
+        #endregion
 
         public void Move()
         {
@@ -248,11 +259,7 @@ namespace Unit
             }
         }
 
-        public void LateUpdate()
-        {
-            SetRotation();
-            SetMovementFSM();
-        }
+
 
         private void SetRotation()
         {

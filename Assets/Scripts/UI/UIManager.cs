@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-
+using System.Collections.Generic;
 using Library;
 using Define;
 
@@ -15,6 +15,10 @@ namespace UI
         private GameObject m_QuitMenu;
         [SerializeField]
         private GameObject m_InstructionMenu;
+
+        [SerializeField]
+        private List<GameObject> m_SkillButtons;
+
         [SerializeField]
         private GameObject m_Skill1Upgrade;
         [SerializeField]
@@ -29,19 +33,23 @@ namespace UI
         // Use this for initialization
         void Start()
         {
-            Publisher.self.Subscribe(Event.Instructions, OnInstructions);
-
             if (m_InstructionMenu != null)
                 m_InstructionMenu.SetActive(false);
+
             if (m_Skill1Upgrade != null)
                 m_Skill1Upgrade.SetActive(false);
             if (m_Skill2Upgrade != null)
                 m_Skill2Upgrade.SetActive(false);
+
             if (m_QuitMenu != null)
                 m_QuitMenu.SetActive(false);
-            if(m_Player == null)
+
+            if (m_Player == null)
                 m_Player = GameObject.FindGameObjectWithTag("Player");
-            
+
+            Publisher.self.Subscribe(Event.Instructions, OnInstructions);
+
+            Publisher.self.Subscribe(Event.SkillCooldownChanged, OnSkillCooldownChanged);
         }
 
         //LateUpdate is called once per frame
@@ -129,6 +137,26 @@ namespace UI
         {
             //Publisher Subscriber or QuitGame / Broadcast 
             Publisher.self.Broadcast(Event.QuitGame);
+        }
+
+        private void OnSkillCooldownChanged(Event a_Event, params object[] a_Params)
+        {
+            int skillIndex = (int)a_Params[0];
+            float remainingCooldown = (float)a_Params[1];
+
+            string parsedCooldown;
+            if (remainingCooldown == 0.0f)
+            {
+                parsedCooldown = "";
+                m_SkillButtons[skillIndex].GetComponent<Image>().color = Color.white;
+            }
+            else
+            {
+                parsedCooldown = ((int) Mathf.Ceil(remainingCooldown)).ToString();
+                m_SkillButtons[skillIndex].GetComponent<Image>().color = Color.gray;
+            }
+
+            m_SkillButtons[skillIndex].GetComponentInChildren<Text>().text = parsedCooldown;
         }
     }
 }

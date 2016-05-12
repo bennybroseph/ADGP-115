@@ -27,7 +27,10 @@ namespace Define
         // There are no parameters
         SpawnWave,
         // There are no parameters
-        GameOver
+        GameOver,
+        /// <param name="Skill Index"> int: which skill's cooldown changed</param>
+        /// <param name="New Value"> float: new value of the skill's cooldown</param> 
+        SkillCooldownChanged,
     }
 
 }
