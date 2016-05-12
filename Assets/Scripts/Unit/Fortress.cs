@@ -1,4 +1,5 @@
-﻿using Library;
+﻿using System;
+using Library;
 using UnityEngine;
 
 using Event = Define.Event;
@@ -61,7 +62,14 @@ namespace Unit
             get { return m_Unitname; }
             set { m_Unitname = value; }
         }
-      
+
+        public FiniteStateMachine<DamageState> damageFSM
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         private void OnTriggerEnter(Collider a_Col)
         {

@@ -19,7 +19,7 @@ namespace Library
         /// Returns true or false and takes no parameters
         /// </summary>
         /// <returns> Whether or not the transition is valid based on the user's specification</returns>
-        public delegate bool ValidateTransition();
+        public delegate bool IsValidateTransition();
 
         /// <summary>
         /// Cached list of all states in the enumeration
@@ -29,7 +29,11 @@ namespace Library
         /// <summary>
         /// Dynamic dictionary of all transitions as dictated by the user
         /// </summary>
-        private readonly Dictionary<string, ValidateTransition> m_Transitions;
+        private readonly Dictionary<string, IsValidateTransition> m_Transitions;
+        /// <summary>
+        /// Dictionary
+        /// </summary>
+        private readonly Dictionary<T, IsValidateTransition> m_TransitionsFromAny;
 
         /// <summary>
         /// Read-Only property for the current state 'm_CurrentState'.
@@ -43,7 +47,8 @@ namespace Library
         public FiniteStateMachine()
         {
             m_States = new List<T>();
-            m_Transitions = new Dictionary<string, ValidateTransition>();
+            m_Transitions = new Dictionary<string, IsValidateTransition>();
+            m_TransitionsFromAny = new Dictionary<T, IsValidateTransition>();
 
             StoreStates();
         }
@@ -51,7 +56,7 @@ namespace Library
         /// Parameterized constructor which allows a state other than 'm_States[0]' to initialize 'm_CurrentState'
         /// </summary>
         /// <param name="a_InitialState">Used as the current state 'm_CurrentState' on creation</param>
-        public FiniteStateMachine(T a_InitialState)
+        public FiniteStateMachine(T a_InitialState) : this()
         {
             currentState = a_InitialState;
         }
@@ -63,7 +68,7 @@ namespace Library
         /// <param name="a_To">The state to go to</param>
         /// <param name="a_IsValidTransition">An optional delegate with no parameters that returns true when the state change is valid and false when it is not</param>
         /// <returns>Returns true if the transition was able to be added and false otherwise</returns>
-        public bool AddTransition(T a_From, T a_To, ValidateTransition a_IsValidTransition = null)
+        public bool AddTransition(T a_From, T a_To, IsValidateTransition a_IsValidTransition = null)
         {
             // if 'a_From' and 'a_To' are the same state
             if (a_From.Equals(a_To))
@@ -103,6 +108,34 @@ namespace Library
                 return false;
             }
         }
+        /// <summary>
+        /// Attempts to add a new transition to the current list which is able to be transitioned to from any other state
+        /// </summary>
+        /// <param name="a_To">The state to transition to from any other state</param>
+        /// <param name="a_IsValidateTransition">An optional delegate with no parameters that returns true when the state change is valid and false when it is not</param>
+        /// <returns>Returns true if the transition was able to be added and false otherwise</returns>
+        public bool AddTransitionFromAny(T a_To, IsValidateTransition a_IsValidateTransition = null)
+        {
+            if (!m_States.Contains(a_To))
+            {
+                Debug.Warning("'" + a_To + "'does not exist in '" + typeof(T) + "'");
+                return false;
+            }
+
+            if (!m_TransitionsFromAny.ContainsKey(a_To))
+            {
+                if (a_IsValidateTransition == null)
+                    m_TransitionsFromAny[a_To] = () => true;
+                else
+                    m_TransitionsFromAny[a_To] = a_IsValidateTransition;
+                return true;
+            }
+            else
+            {
+                Debug.Warning("'" + a_To + "' already exists as a transition key");
+                return false;
+            }
+        }
 
         /// <summary>
         /// Attempts to transition from the current state to the passed parameter
@@ -114,7 +147,8 @@ namespace Library
             // Converts the current state and the state to transition to into a valid key
             string key = currentState + "->" + a_To;
             // if they key exists in the transition dictionary
-            if (m_Transitions.ContainsKey(key) && m_Transitions[key]())
+            if (m_Transitions.ContainsKey(key) && m_Transitions[key]() ||
+                m_TransitionsFromAny.ContainsKey(a_To) && m_TransitionsFromAny[a_To]())
             {
                 currentState = a_To;    // Set the state
                 return true;            // Success
@@ -126,7 +160,6 @@ namespace Library
         /// <summary>
         /// Grabs each state from the type of enumeration and caches it into a list
         /// </summary>
-        /// <returns>Returns true if the type is an enumeration and false if it is not</returns>
         private void StoreStates()
         {
             // if 'T' is an enumeration type
