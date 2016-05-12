@@ -25,7 +25,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 154216}
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071067}
+  m_LocalRotation: {x: 0.6532814, y: 0.2705979, z: -0.6532817, w: -0.27059805}
   m_LocalPosition: {x: -0, y: 0, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -87,8 +87,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f944c61a53426674db03c701eb3babb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SkillPrefabs:
-  - {fileID: 167634, guid: e4edc7fe0341b644c835f75acf8dad64, type: 2}
+  m_Skills:
+  - skillPrefab: {fileID: 167634, guid: e4edc7fe0341b644c835f75acf8dad64, type: 2}
+    cooldown: 5
+    remainingCooldown: 0
   m_UnitName: 
   m_Health: 0
   m_Mana: 0
@@ -96,8 +98,15 @@ MonoBehaviour:
   m_Exp: 0
   m_Level: 0
   m_Speed: 5
+  m_IsMoving:
+    up: 0
+    down: 0
+    left: 0
+    right: 0
   m_Velocity: {x: 0, y: 0, z: 0}
   m_CanMoveWithInput: 1
+  m_GameManager: {fileID: 0}
+  m_CurrentRotation: {x: 0, y: 0, z: 0}
   m_OriginalRotation: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Unit.Skill
 {
-    public class Fireball : MonoBehaviour, IControlable, IParentable
+    public class Fireball : MonoBehaviour, IControlable, ICastable
     {
         [SerializeField]
         private float m_CurrentLifetime;
@@ -17,6 +17,22 @@ namespace Unit.Skill
 
         [SerializeField]
         private GameObject m_Parent;
+
+        [SerializeField]
+        private Vector3 m_CurrentRotation;
+        [SerializeField]
+        private Vector3 m_OriginalRotation;
+
+        public float currentLifetime
+        {
+            get { return m_CurrentLifetime; }
+        }
+
+        public float maxLifetime
+        {
+            get { return m_MaxLifetime; }
+            set { m_MaxLifetime = value; }
+        }
 
         public Moving isMoving
         {
@@ -37,12 +53,15 @@ namespace Unit.Skill
         }
 
         // Use this for initialization
-        private void Start() { }
+        private void Start()
+        {
+            m_OriginalRotation = transform.eulerAngles;
+            m_CurrentRotation = m_OriginalRotation;
+        }
 
         private void FixedUpdate()
         {
             Move();
-            transform.rotation = Quaternion.identity;
         }
 
         // Update is called once per frame
@@ -52,6 +71,30 @@ namespace Unit.Skill
 
             if (m_CurrentLifetime >= m_MaxLifetime)
                 Destroy(gameObject);
+        }
+
+        private void LateUpdate()
+        {
+            CalculateRotation();
+        }
+        private void CalculateRotation()
+        {
+            if (m_Velocity == Vector3.zero)
+                return;
+
+            float rotationX = 270 - (Mathf.Atan(m_Velocity.x / m_Velocity.y) * (180.0f / Mathf.PI));
+
+            if ((m_Velocity.x < 0.0f && m_Velocity.y < 0.0f) ||
+                (m_Velocity.x > 0.0f && m_Velocity.y < 0.0f) ||
+                (m_Velocity.x == 0.0f && m_Velocity.y < 0.0f))
+                rotationX += 180;
+
+            m_CurrentRotation = new Vector3(
+                m_OriginalRotation.y,
+                m_OriginalRotation.z,
+                rotationX);
+
+            transform.rotation = Quaternion.Euler(m_CurrentRotation);
         }
 
         private void OnCollisionEnter(Collision a_Collision)

@@ -11,7 +11,7 @@ GameObject:
   - 114: {fileID: 11418778}
   m_Layer: 0
   m_Name: Game_Manager_Prefab
-  m_TagString: Untagged
+  m_TagString: Game Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40,6 +40,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_QuitMenu: {fileID: 0}
+  m_PreviousTimeScale: 0
+  m_PlayerIndex: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

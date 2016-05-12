@@ -4,18 +4,18 @@ using System;
 using System.Collections.Generic;
 using Library;
 using UnityEngine;
-
+using XInputDotNetPure;
 using Event = Define.Event;
 
 namespace Unit
 {
     // Public unit class that takes in IStats and IAttack
-    public class Player : MonoBehaviour, IStats, IControlable
+    public class Player : MonoBehaviour, IUsesSkills, IControlable
     {
         #region -- VARIABLES --
         // Private int and string memorable variables
         [SerializeField]
-        private List<GameObject> m_SkillPrefabs;
+        private List<SkillData> m_Skills;
 
         [SerializeField]
         private string m_UnitName;
@@ -43,6 +43,11 @@ namespace Unit
         [SerializeField]
         private bool m_CanMoveWithInput;
 
+        [SerializeField]
+        private GameManager m_GameManager;
+
+        [SerializeField]
+        private Vector3 m_CurrentRotation;
         [SerializeField]
         private Vector3 m_OriginalRotation;
         #endregion
@@ -110,15 +115,24 @@ namespace Unit
             get { return m_CanMoveWithInput; }
             set { m_CanMoveWithInput = value; }
         }
+
+        public List<SkillData> skills
+        {
+            get { return m_Skills; }
+            set { m_Skills = value; }
+        }
         #endregion
 
         // Unit class that stores Health, Defense, Exp, Level, Speed, Mana, Name
         private void Start()
         {
-            if (m_SkillPrefabs == null)
-                m_SkillPrefabs = new List<GameObject>();
+            if (m_Skills == null)
+                m_Skills = new List<SkillData>();
+            if (m_GameManager == null)
+                m_GameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
 
             m_OriginalRotation = transform.eulerAngles;
+            m_CurrentRotation = m_OriginalRotation;
 
             Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
         }
@@ -130,24 +144,49 @@ namespace Unit
 
         private void Update()
         {
+            for (int i = 0; i < m_Skills.Count; ++i)
+            {
+                float remainingCooldown = m_Skills[i].remainingCooldown - Time.deltaTime;
+                if (remainingCooldown < 0.0f)
+                    remainingCooldown = 0.0f;
+
+                m_Skills[i] = new SkillData(
+                    m_Skills[i].skillPrefab, 
+                    m_Skills[i].cooldown, 
+                    remainingCooldown);
+            }
+
             m_Velocity = Vector3.zero;
 
             if (m_CanMoveWithInput)
             {
-                m_IsMoving.up = Input.GetKey(KeyCode.W);
-                m_IsMoving.down = Input.GetKey(KeyCode.S);
-                m_IsMoving.left = Input.GetKey(KeyCode.A);
-                m_IsMoving.right = Input.GetKey(KeyCode.D);
+                m_IsMoving.up = Input.GetKey(KeyCode.W) | (m_GameManager.state.DPad.Up == ButtonState.Pressed);
+                m_IsMoving.down = Input.GetKey(KeyCode.S) | (m_GameManager.state.DPad.Down == ButtonState.Pressed);
+                m_IsMoving.left = Input.GetKey(KeyCode.A) | (m_GameManager.state.DPad.Left == ButtonState.Pressed);
+                m_IsMoving.right = Input.GetKey(KeyCode.D) | (m_GameManager.state.DPad.Right == ButtonState.Pressed);
+
+                if (m_IsMoving.up)
+                    m_Velocity += Vector3.up * m_Speed;
+                if (m_IsMoving.down)
+                    m_Velocity += Vector3.down * m_Speed;
+                if (m_IsMoving.left)
+                    m_Velocity += Vector3.left * m_Speed;
+                if (m_IsMoving.right)
+                    m_Velocity += Vector3.right * m_Speed;
+
+                if (m_GameManager.state.ThumbSticks.Left.X != 0.0f ||
+                    m_GameManager.state.ThumbSticks.Left.Y != 0.0f)
+                {
+                    m_Velocity = new Vector3(
+                        m_GameManager.state.ThumbSticks.Left.X * m_Speed,
+                        m_GameManager.state.ThumbSticks.Left.Y * m_Speed);
+                }
             }
 
-            if (m_IsMoving.up)
-                m_Velocity += Vector3.up * m_Speed;
-            if (m_IsMoving.down)
-                m_Velocity += Vector3.down * m_Speed;
-            if (m_IsMoving.left)
-                m_Velocity += Vector3.left * m_Speed;
-            if (m_IsMoving.right)
-                m_Velocity += Vector3.right * m_Speed;
+            if (Input.GetKeyDown(KeyCode.Q) || m_GameManager.state.Triggers.Right > 0.0f)
+                Publisher.self.Broadcast(Event.UseSkill, 1);
+            if (Input.GetKeyDown(KeyCode.E) || m_GameManager.state.Triggers.Left > 0.0f)
+                Publisher.self.Broadcast(Event.UseSkill, 2);
         }
 
         public void Move()
@@ -165,36 +204,46 @@ namespace Unit
             if (m_Velocity == Vector3.zero)
                 return;
 
-            float rotationX = Mathf.Atan(m_Velocity.x / m_Velocity.y) * (180.0f / Mathf.PI);
+            float rotationX = -(Mathf.Atan(m_Velocity.x / m_Velocity.y) * (180.0f / Mathf.PI));
 
             if ((m_Velocity.x < 0.0f && m_Velocity.y < 0.0f) ||
                 (m_Velocity.x > 0.0f && m_Velocity.y < 0.0f) ||
                 (m_Velocity.x == 0.0f && m_Velocity.y < 0.0f))
-                rotationX = rotationX + 180;
+                rotationX += 180;
 
-            transform.rotation = Quaternion.Euler(
+            m_CurrentRotation = new Vector3(
                 rotationX,
                 m_OriginalRotation.y,
                 m_OriginalRotation.z);
+
+            transform.rotation = Quaternion.Euler(m_CurrentRotation);
         }
 
         private void OnUseSkill(Event a_Event, params object[] a_Params)
         {
             int skillIndex = (int)a_Params[0];
-
-            Debug.Log("Use Skill " + skillIndex);
-            if (m_SkillPrefabs.Count >= skillIndex - 1)
+            
+            if (m_Skills.Count >= skillIndex && m_Skills[skillIndex - 1].remainingCooldown <= 0.0f)
             {
-                GameObject newObject = Instantiate(m_SkillPrefabs[skillIndex - 1]);
+                Debug.Log("Use Skill " + skillIndex);
+
+                skillIndex -= 1;
+
+                GameObject newObject = Instantiate(m_Skills[skillIndex].skillPrefab);
 
                 newObject.transform.position = transform.position;
 
                 newObject.GetComponent<IParentable>().parent = gameObject;
 
                 newObject.GetComponent<IControlable>().velocity = new Vector3(
-                    -Mathf.Cos(transform.rotation.eulerAngles.x * (Mathf.PI / 180)),
-                    0,
-                    Mathf.Sin(transform.rotation.eulerAngles.x * (Mathf.PI / 180)));
+                    Mathf.Cos((m_CurrentRotation.x + 90) * (Mathf.PI / 180)),
+                    Mathf.Sin((m_CurrentRotation.x + 90) * (Mathf.PI / 180)),
+                    0);
+
+                m_Skills[skillIndex] = new SkillData(
+                    m_Skills[skillIndex].skillPrefab, 
+                    m_Skills[skillIndex].cooldown, 
+                    m_Skills[skillIndex].cooldown);
             }
         }
     }

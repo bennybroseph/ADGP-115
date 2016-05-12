@@ -13,7 +13,7 @@ GameObject:
   - 23: {fileID: 2306250}
   m_Layer: 0
   m_Name: Background_Prefab
-  m_TagString: Player
+  m_TagString: Background
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -40,7 +40,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_Materials:
-  - {fileID: 2100000, guid: 9cdf6f70ebbf0454986f5fd67d0b2132, type: 2}
+  - {fileID: 2100000, guid: 8f51ef2acb96b974b8b9ef166411a96a, type: 2}
   m_SubsetIndices: 
   m_StaticBatchRoot: {fileID: 0}
   m_UseLightProbes: 1
