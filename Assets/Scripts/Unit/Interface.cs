@@ -1,6 +1,7 @@
 ﻿// Interface
 
 using System;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 
@@ -9,10 +10,10 @@ namespace Unit
     [Serializable]
     public struct Moving
     {
-        public bool up { get; set; }
-        public bool down { get; set; }
-        public bool left { get; set; }
-        public bool right { get; set; }
+        public bool up;
+        public bool down;
+        public bool left;
+        public bool right;
 
         public Moving(bool a_Forward, bool a_Back, bool a_Left, bool a_Right) : this()
         {
@@ -45,6 +46,12 @@ namespace Unit
         GameObject parent { get; set; }
     }
 
+    public interface ICastable : IParentable
+    {
+        float currentLifetime { get; }
+        float maxLifetime { get; set; }
+    }
+
     public interface IAttackable
     {
         // String Name property
@@ -68,5 +75,25 @@ namespace Unit
         int experience { get; set; }
         // Level property
         int level { get; set; }
+    }
+
+    [Serializable]
+    public struct SkillData
+    {
+        public GameObject skillPrefab;
+        public float cooldown;
+        public float remainingCooldown;
+
+        public SkillData(GameObject a_SkillPrefab, float a_Cooldown, float a_RemainingCooldown = 0.0f) : this()
+        {
+            skillPrefab = a_SkillPrefab;
+            cooldown = a_Cooldown;
+            remainingCooldown = a_RemainingCooldown;
+        }
+    }
+
+    public interface IUsesSkills : IStats
+    {
+        List<SkillData> skills { get; set; }
     }
 }

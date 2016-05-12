@@ -1,10 +1,10 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using Library;
+using XInputDotNetPure; // Required in C#
 using UnityEngine.SceneManagement;
+
+using Library;
+
 using Event = Define.Event;
 
 
@@ -16,9 +16,28 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField]
     private float m_PreviousTimeScale;
 
+    private bool m_PlayerIndexSet = false;
+    [SerializeField]
+    private PlayerIndex m_PlayerIndex;
+    private GamePadState m_State;
+    private GamePadState m_PrevState;
+
     private List<Node> m_SearchSpace;
 
     private GameObject m_Background;
+
+    public PlayerIndex playerIndex
+    {
+        get { return m_PlayerIndex; }
+    }
+    public GamePadState state
+    {
+        get { return m_State; }
+    }
+    public GamePadState prevState
+    {
+        get { return m_PrevState; }
+    }
 
     // Use this for initialization
     private void Start()
@@ -40,16 +59,32 @@ public class GameManager : MonoSingleton<GameManager>
     {
         Publisher.self.Update();
 
+        // Find a PlayerIndex, for a single player game
+        // Will find the first controller that is connected ans use it
+        if (!m_PlayerIndexSet || !m_PrevState.IsConnected)
+        {
+            for (int i = 0; i < 4; ++i)
+            {
+                PlayerIndex testPlayerIndex = (PlayerIndex)i;
+                GamePadState testState = GamePad.GetState(testPlayerIndex);
+                if (testState.IsConnected)
+                {
+                    Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
+                    m_PlayerIndex = testPlayerIndex;
+                    m_PlayerIndexSet = true;
+                }
+            }
+        }
+
+        m_PrevState = m_State;
+        m_State = GamePad.GetState(m_PlayerIndex);
+
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             m_QuitMenu.SetActive(!m_QuitMenu.activeInHierarchy);
 
             Publisher.self.Broadcast((m_QuitMenu.activeInHierarchy) ? Event.PauseGame : Event.UnPauseGame);
         }
-        if(Input.GetKeyDown(KeyCode.Q))
-            Publisher.self.Broadcast(Event.UseSkill, 1);
-        if(Input.GetKeyDown(KeyCode.E))
-            Publisher.self.Broadcast(Event.UseSkill, 2);
     }
 
     private void OnNewGame(Event a_Event, params object[] a_Params)
