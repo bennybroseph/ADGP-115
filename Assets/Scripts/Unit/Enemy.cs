@@ -15,6 +15,7 @@ namespace Unit
         private float m_Speed;
         private int m_Mana;
         private string m_UnitName;
+        private Pathfinding m_Pathfinding;
 
         #region -- PROPERTIES --
         //Public int health property
@@ -69,10 +70,19 @@ namespace Unit
         }
         #endregion
 
-        //Enemy Fight Function in herited from IAttackable
-        public void Fight()
+        void Start()
         {
+            if (m_Pathfinding == null)
+            {
+                m_Pathfinding = new Pathfinding(
+                    GameObject.FindGameObjectWithTag("Player"),
+                    GetComponent<NavMeshAgent>());
+            }
+        }
 
+        void Update()
+        {
+            m_Pathfinding.Search();
         }
     }
 

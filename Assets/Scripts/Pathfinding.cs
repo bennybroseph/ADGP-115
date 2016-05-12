@@ -1,32 +1,21 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEditor;
 
-public class Pathfinding : MonoBehaviour
+public class Pathfinding
 {
-    public Transform player1;
+
+    private GameObject m_Following;
+
     private NavMeshAgent NavMesh;
 
 
-	// Use this for initialization
-	void Start ()
-	{
-	    player1 = GameObject.FindGameObjectWithTag("Player").transform;
-	    NavMesh = GetComponent<NavMeshAgent>();
-
-	}
-	
-	// Update is called once per frame
-	void Update ()
+    public Pathfinding(GameObject a_Following, NavMeshAgent a_Agent)
     {
-	   Search();
-	}
+        m_Following = a_Following;
+        NavMesh = a_Agent;
+    }
 
-    private void Search()
+    public void Search()
     {
-       NavMesh.SetDestination(player1.position);
-
-        
-
+        NavMesh.SetDestination(m_Following.transform.position);
     }
 }
