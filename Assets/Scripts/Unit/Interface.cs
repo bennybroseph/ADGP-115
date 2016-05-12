@@ -11,8 +11,8 @@ namespace Unit
     [Serializable]
     public struct Moving
     {
-        public bool up;
-        public bool down;
+        public bool forward;
+        public bool back;
         public bool left;
         public bool right;
 
@@ -20,16 +20,16 @@ namespace Unit
 
         public Moving(bool a_Forward, bool a_Back, bool a_Left, bool a_Right) : this()
         {
-            up = a_Forward;
-            down = a_Back;
+            forward = a_Forward;
+            back = a_Back;
             left = a_Left;
             right = a_Right;
         }
 
         public static bool operator ==(Moving a_Left, Moving a_Right)
         {
-            if (a_Left.up == a_Right.up &&
-                a_Left.down == a_Right.down &&
+            if (a_Left.forward == a_Right.forward &&
+                a_Left.back == a_Right.back &&
                 a_Left.left == a_Right.left &&
                 a_Left.right == a_Right.right)
                 return true;

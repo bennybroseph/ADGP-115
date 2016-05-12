@@ -25,7 +25,7 @@ namespace Unit
         public static void Brake(IMovable a_Movable)
         {
             if (Mathf.Abs(a_Movable.velocity.x) <= 0.01f &&
-                Mathf.Abs(a_Movable.velocity.y) <= 0.01f)
+                Mathf.Abs(a_Movable.velocity.z) <= 0.01f)
             {
                 a_Movable.velocity = Vector3.zero;
             }
@@ -35,34 +35,38 @@ namespace Unit
                 {
                     a_Movable.velocity -= new Vector3(
                         20f * Time.deltaTime,
+                        0.0f,
                         0.0f);
                     if (a_Movable.velocity.x < 0.0f)
-                        a_Movable.velocity = new Vector3(0.0f, a_Movable.velocity.y);
+                        a_Movable.velocity = new Vector3(0.0f, a_Movable.velocity.y, a_Movable.velocity.z);
                 }
                 if (a_Movable.velocity.x < 0.0f)
                 {
                     a_Movable.velocity += new Vector3(
                         20f * Time.deltaTime,
+                        0.0f,
                         0.0f);
                     if (a_Movable.velocity.x > 0.0f)
-                        a_Movable.velocity = new Vector3(0.0f, a_Movable.velocity.y);
+                        a_Movable.velocity = new Vector3(0.0f, a_Movable.velocity.y, a_Movable.velocity.z);
                 }
 
-                if (a_Movable.velocity.y > 0.0f)
+                if (a_Movable.velocity.z > 0.0f)
                 {
                     a_Movable.velocity -= new Vector3(
                         0.0f,
+                        0.0f,
                         20f * Time.deltaTime);
-                    if (a_Movable.velocity.y < 0.0f)
-                        a_Movable.velocity = new Vector3(a_Movable.velocity.x, 0.0f);
+                    if (a_Movable.velocity.z < 0.0f)
+                        a_Movable.velocity = new Vector3(a_Movable.velocity.x, a_Movable.velocity.y, 0.0f);
                 }
-                if (a_Movable.velocity.y < 0.0f)
+                if (a_Movable.velocity.z < 0.0f)
                 {
                     a_Movable.velocity += new Vector3(
                         0.0f,
+                        0.0f,
                         20f * Time.deltaTime);
-                    if (a_Movable.velocity.y > 0.0f)
-                        a_Movable.velocity = new Vector3(a_Movable.velocity.x, 0.0f);
+                    if (a_Movable.velocity.z > 0.0f)
+                        a_Movable.velocity = new Vector3(a_Movable.velocity.x, a_Movable.velocity.y, 0.0f);
                 }
             }
         }
