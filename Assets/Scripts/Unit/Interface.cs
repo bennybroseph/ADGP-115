@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Library;
 using UnityEngine;
 
 namespace Unit
@@ -15,6 +16,8 @@ namespace Unit
         public bool left;
         public bool right;
 
+        public static Moving Nowhere = new Moving(false, false, false, false);
+
         public Moving(bool a_Forward, bool a_Back, bool a_Left, bool a_Right) : this()
         {
             up = a_Forward;
@@ -23,20 +26,40 @@ namespace Unit
             right = a_Right;
         }
 
-        public static Moving Nowhere = new Moving(false, false, false, false);
+        public static bool operator ==(Moving a_Left, Moving a_Right)
+        {
+            if (a_Left.up == a_Right.up &&
+                a_Left.down == a_Right.down &&
+                a_Left.left == a_Right.left &&
+                a_Left.right == a_Right.right)
+                return true;
+            return false;
+        }
+
+        public static bool operator !=(Moving a_Left, Moving a_Right)
+        {
+            return !(a_Left == a_Right);
+        }
+    }
+
+    public enum MovementState
+    {
+        Init,
+        Idle,
+        Walking,
+        Running,
     }
 
     /// <summary>
     ///  Ensures the object can move using input or other stimulus 
     /// </summary>
-    public interface IControlable
+    public interface IControlable : IMovable
     {
         /// <summary> Which directions the object is moving in. </summary>
         Moving isMoving { get; set; }
-        /// <summary> The speed at which the object is moving. </summary>
-        Vector3 velocity { get; set; }
-
         bool canMoveWithInput { get; set; }
+
+        FiniteStateMachine<MovementState> movementFSM { get; }
 
         void Move();
     }
@@ -52,6 +75,14 @@ namespace Unit
         float maxLifetime { get; set; }
     }
 
+    public enum DamageState
+    {
+        Init,
+        Idle,
+        TakingDamge,
+        Dead,
+    }
+
     public interface IAttackable
     {
         // String Name property
@@ -61,15 +92,14 @@ namespace Unit
         int health { get; set; }
         // Defense property
         int defense { get; set; }
+
+        FiniteStateMachine<DamageState> damageFSM { get; }
     }
 
     public interface IStats : IAttackable
     {
         // Mana(currency) property
         int mana { get; set; }
-
-        // Speed property
-        int speed { get; set; }
 
         // Experience property
         int experience { get; set; }

@@ -15,6 +15,11 @@ namespace Unit
         #region -- VARIABLES --
         // Private int and string memorable variables
         [SerializeField]
+        private FiniteStateMachine<MovementState> m_MovementFSM;
+        [SerializeField]
+        private FiniteStateMachine<DamageState> m_DamageFSM;
+
+        [SerializeField]
         private List<SkillData> m_Skills;
 
         [SerializeField]
@@ -33,18 +38,17 @@ namespace Unit
         private int m_Level;
 
         [SerializeField]
-        private int m_Speed;
+        private Vector3 m_TotalVelocity;
+        [SerializeField]
+        private Vector3 m_Velocity;
+        [SerializeField]
+        private float m_Speed;
 
         [SerializeField]
         private Moving m_IsMoving;
-        [SerializeField]
-        private Vector3 m_Velocity;
 
         [SerializeField]
         private bool m_CanMoveWithInput;
-
-        [SerializeField]
-        private GameManager m_GameManager;
 
         [SerializeField]
         private Vector3 m_CurrentRotation;
@@ -53,6 +57,15 @@ namespace Unit
         #endregion
 
         #region -- PROPERTIES --
+        public FiniteStateMachine<MovementState> movementFSM
+        {
+            get { return m_MovementFSM; }
+        }
+        public FiniteStateMachine<DamageState> damageFSM
+        {
+            get { return m_DamageFSM; }
+        }
+
         // Health int property
         public int health
         {
@@ -73,7 +86,7 @@ namespace Unit
             set { m_Exp = value; }
         }
         // Speed int property
-        public int speed
+        public float speed
         {
             get { return m_Speed; }
             set { m_Speed = value; }
@@ -104,6 +117,11 @@ namespace Unit
             set { m_IsMoving = value; }
         }
 
+        public Vector3 totalVelocity
+        {
+            get { return m_TotalVelocity; }
+            set { m_TotalVelocity = value; }
+        }
         public Vector3 velocity
         {
             get { return m_Velocity; }
@@ -128,11 +146,27 @@ namespace Unit
         {
             if (m_Skills == null)
                 m_Skills = new List<SkillData>();
-            if (m_GameManager == null)
-                m_GameManager = GameObject.FindGameObjectWithTag("Game Manager").GetComponent<GameManager>();
 
             m_OriginalRotation = transform.eulerAngles;
             m_CurrentRotation = m_OriginalRotation;
+
+            m_MovementFSM = new FiniteStateMachine<MovementState>();
+
+            m_MovementFSM.AddTransition(MovementState.Init, MovementState.Idle);
+            m_MovementFSM.AddTransition(MovementState.Idle, MovementState.Walking);
+            m_MovementFSM.AddTransition(MovementState.Walking, MovementState.Running);
+
+            m_MovementFSM.AddTransition(MovementState.Running, MovementState.Walking);
+            m_MovementFSM.AddTransition(MovementState.Walking, MovementState.Idle);
+
+            m_DamageFSM = new FiniteStateMachine<DamageState>();
+
+            m_DamageFSM.AddTransition(DamageState.Init, DamageState.Idle);
+            m_DamageFSM.AddTransitionFromAny(DamageState.Dead);
+
+            m_MovementFSM.Transition(MovementState.Idle);
+
+            m_DamageFSM.Transition(DamageState.Idle);
 
             Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
         }
@@ -142,8 +176,10 @@ namespace Unit
             Move();
         }
 
+        public MovementState watch;
         private void Update()
         {
+            watch = m_MovementFSM.currentState;
             for (int i = 0; i < m_Skills.Count; ++i)
             {
                 float remainingCooldown = m_Skills[i].remainingCooldown - Time.deltaTime;
@@ -151,55 +187,73 @@ namespace Unit
                     remainingCooldown = 0.0f;
 
                 m_Skills[i] = new SkillData(
-                    m_Skills[i].skillPrefab, 
-                    m_Skills[i].cooldown, 
+                    m_Skills[i].skillPrefab,
+                    m_Skills[i].cooldown,
                     remainingCooldown);
             }
 
-            m_Velocity = Vector3.zero;
+            //m_Velocity = Vector3.zero;
 
             if (m_CanMoveWithInput)
             {
-                m_IsMoving.up = Input.GetKey(KeyCode.W) | (m_GameManager.state.DPad.Up == ButtonState.Pressed);
-                m_IsMoving.down = Input.GetKey(KeyCode.S) | (m_GameManager.state.DPad.Down == ButtonState.Pressed);
-                m_IsMoving.left = Input.GetKey(KeyCode.A) | (m_GameManager.state.DPad.Left == ButtonState.Pressed);
-                m_IsMoving.right = Input.GetKey(KeyCode.D) | (m_GameManager.state.DPad.Right == ButtonState.Pressed);
+                m_IsMoving.up = Input.GetKey(KeyCode.W) | (GameManager.self.state.DPad.Up == ButtonState.Pressed);
+                m_IsMoving.down = Input.GetKey(KeyCode.S) | (GameManager.self.state.DPad.Down == ButtonState.Pressed);
+                m_IsMoving.left = Input.GetKey(KeyCode.A) | (GameManager.self.state.DPad.Left == ButtonState.Pressed);
+                m_IsMoving.right = Input.GetKey(KeyCode.D) | (GameManager.self.state.DPad.Right == ButtonState.Pressed);
 
                 if (m_IsMoving.up)
-                    m_Velocity += Vector3.up * m_Speed;
+                    m_Velocity = new Vector3(0, m_Speed);
                 if (m_IsMoving.down)
-                    m_Velocity += Vector3.down * m_Speed;
+                    m_Velocity = new Vector3(0, -m_Speed);
                 if (m_IsMoving.left)
-                    m_Velocity += Vector3.left * m_Speed;
+                    m_Velocity = new Vector3(-m_Speed, 0);
                 if (m_IsMoving.right)
-                    m_Velocity += Vector3.right * m_Speed;
+                    m_Velocity = new Vector3(m_Speed, 0);
 
-                if (m_GameManager.state.ThumbSticks.Left.X != 0.0f ||
-                    m_GameManager.state.ThumbSticks.Left.Y != 0.0f)
+                if (m_IsMoving.up && m_IsMoving.left)
+                    m_Velocity = new Vector3(-Mathf.Sqrt(m_Speed * 2), Mathf.Sqrt(m_Speed * 2));
+                if (m_IsMoving.up && m_IsMoving.right)
+                    m_Velocity = new Vector3(Mathf.Sqrt(m_Speed * 2), Mathf.Sqrt(m_Speed * 2));
+                if (m_IsMoving.down && m_IsMoving.left)
+                    m_Velocity = new Vector3(-Mathf.Sqrt(m_Speed * 2), -Mathf.Sqrt(m_Speed * 2));
+                if (m_IsMoving.down && m_IsMoving.right)
+                    m_Velocity = new Vector3(Mathf.Sqrt(m_Speed * 2), -Mathf.Sqrt(m_Speed * 2));
+
+                if (GameManager.self.state.ThumbSticks.Left.X != 0.0f ||
+                    GameManager.self.state.ThumbSticks.Left.Y != 0.0f)
                 {
                     m_Velocity = new Vector3(
-                        m_GameManager.state.ThumbSticks.Left.X * m_Speed,
-                        m_GameManager.state.ThumbSticks.Left.Y * m_Speed);
+                        GameManager.self.state.ThumbSticks.Left.X * m_Speed,
+                        GameManager.self.state.ThumbSticks.Left.Y * m_Speed);
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Q) || m_GameManager.state.Triggers.Right > 0.0f)
+            if (Input.GetKeyDown(KeyCode.Q) || GameManager.self.state.Triggers.Right > 0.0f)
                 Publisher.self.Broadcast(Event.UseSkill, 1);
-            if (Input.GetKeyDown(KeyCode.E) || m_GameManager.state.Triggers.Left > 0.0f)
+            if (Input.GetKeyDown(KeyCode.E) || GameManager.self.state.Triggers.Left > 0.0f)
                 Publisher.self.Broadcast(Event.UseSkill, 2);
         }
 
         public void Move()
         {
-            transform.position += m_Velocity * Time.deltaTime;
+            transform.position += (m_Velocity + m_TotalVelocity) * Time.deltaTime;
+
+            if (m_Velocity != Vector3.zero &&
+               (m_IsMoving == Moving.Nowhere ||
+                    (GameManager.self.state.ThumbSticks.Left.X == 0.0f &&
+                     GameManager.self.state.ThumbSticks.Left.Y == 0.0f)))
+            {
+                Movable.Brake(this);
+            }
         }
 
         public void LateUpdate()
         {
-            CalculateRotation();
+            SetRotation();
+            SetMovementFSM();
         }
 
-        private void CalculateRotation()
+        private void SetRotation()
         {
             if (m_Velocity == Vector3.zero)
                 return;
@@ -219,10 +273,21 @@ namespace Unit
             transform.rotation = Quaternion.Euler(m_CurrentRotation);
         }
 
+        private void SetMovementFSM()
+        {
+            if (m_Velocity == Vector3.zero)
+                m_MovementFSM.Transition(MovementState.Idle);
+            else
+                m_MovementFSM.Transition(MovementState.Walking);
+
+            if (m_Velocity.magnitude >= m_Speed / 2.0f)
+                m_MovementFSM.Transition(MovementState.Running);
+        }
+
         private void OnUseSkill(Event a_Event, params object[] a_Params)
         {
             int skillIndex = (int)a_Params[0];
-            
+
             if (m_Skills.Count >= skillIndex && m_Skills[skillIndex - 1].remainingCooldown <= 0.0f)
             {
                 Debug.Log("Use Skill " + skillIndex);
@@ -235,14 +300,14 @@ namespace Unit
 
                 newObject.GetComponent<IParentable>().parent = gameObject;
 
-                newObject.GetComponent<IControlable>().velocity = new Vector3(
-                    Mathf.Cos((m_CurrentRotation.x + 90) * (Mathf.PI / 180)),
-                    Mathf.Sin((m_CurrentRotation.x + 90) * (Mathf.PI / 180)),
+                newObject.GetComponent<IMovable>().velocity = new Vector3(
+                    Mathf.Cos((m_CurrentRotation.x + 90) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
+                    Mathf.Sin((m_CurrentRotation.x + 90) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
                     0);
 
                 m_Skills[skillIndex] = new SkillData(
-                    m_Skills[skillIndex].skillPrefab, 
-                    m_Skills[skillIndex].cooldown, 
+                    m_Skills[skillIndex].skillPrefab,
+                    m_Skills[skillIndex].cooldown,
                     m_Skills[skillIndex].cooldown);
             }
         }
