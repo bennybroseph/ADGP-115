@@ -70,7 +70,7 @@ namespace Unit
         public int health
         {
             get { return m_Health; }
-            set { m_Health = value; }
+            set { m_Health = value; Publisher.self.DelayedBroadcast(Event.UnitHealthChanged, this); }
         }
 
         // Defense int property
@@ -95,13 +95,13 @@ namespace Unit
         public int level
         {
             get { return m_Level; }
-            set { m_Level = value; }
+            set { m_Level = value; Publisher.self.DelayedBroadcast(Event.UnitLevelChanged, this); }
         }
         // Mana/Currency int property
         public int mana
         {
             get { return m_Mana; }
-            set { m_Mana = value; }
+            set { m_Mana = value; Publisher.self.DelayedBroadcast(Event.UnitManaChanged, this); }
         }
 
         // String name property
@@ -179,6 +179,10 @@ namespace Unit
 
         private void Update()
         {
+            health = 100;
+            level = 1;
+            mana = 100;
+
             for (int i = 0; i < m_Skills.Count; ++i)
             {
                 if (m_Skills[i].remainingCooldown != 0.0f)
