@@ -196,34 +196,35 @@ namespace Unit
 
             if (m_CanMoveWithInput)
             {
-                m_IsMoving.up = Input.GetKey(KeyCode.W) | (GameManager.self.state.DPad.Up == ButtonState.Pressed);
-                m_IsMoving.down = Input.GetKey(KeyCode.S) | (GameManager.self.state.DPad.Down == ButtonState.Pressed);
+                m_IsMoving.forward = Input.GetKey(KeyCode.W) | (GameManager.self.state.DPad.Up == ButtonState.Pressed);
+                m_IsMoving.back = Input.GetKey(KeyCode.S) | (GameManager.self.state.DPad.Down == ButtonState.Pressed);
                 m_IsMoving.left = Input.GetKey(KeyCode.A) | (GameManager.self.state.DPad.Left == ButtonState.Pressed);
                 m_IsMoving.right = Input.GetKey(KeyCode.D) | (GameManager.self.state.DPad.Right == ButtonState.Pressed);
 
-                if (m_IsMoving.up)
-                    m_Velocity = new Vector3(0, m_Speed);
-                if (m_IsMoving.down)
-                    m_Velocity = new Vector3(0, -m_Speed);
+                if (m_IsMoving.forward)
+                    m_Velocity = new Vector3(0, m_Velocity.y, m_Speed);
+                if (m_IsMoving.back)
+                    m_Velocity = new Vector3(0, m_Velocity.y, -m_Speed);
                 if (m_IsMoving.left)
-                    m_Velocity = new Vector3(-m_Speed, 0);
+                    m_Velocity = new Vector3(-m_Speed, m_Velocity.y, 0);
                 if (m_IsMoving.right)
-                    m_Velocity = new Vector3(m_Speed, 0);
+                    m_Velocity = new Vector3(m_Speed, m_Velocity.y, 0);
 
-                if (m_IsMoving.up && m_IsMoving.left)
-                    m_Velocity = new Vector3(-Mathf.Sqrt(m_Speed * 2), Mathf.Sqrt(m_Speed * 2));
-                if (m_IsMoving.up && m_IsMoving.right)
-                    m_Velocity = new Vector3(Mathf.Sqrt(m_Speed * 2), Mathf.Sqrt(m_Speed * 2));
-                if (m_IsMoving.down && m_IsMoving.left)
-                    m_Velocity = new Vector3(-Mathf.Sqrt(m_Speed * 2), -Mathf.Sqrt(m_Speed * 2));
-                if (m_IsMoving.down && m_IsMoving.right)
-                    m_Velocity = new Vector3(Mathf.Sqrt(m_Speed * 2), -Mathf.Sqrt(m_Speed * 2));
+                if (m_IsMoving.forward && m_IsMoving.left)
+                    m_Velocity = new Vector3(-Mathf.Sqrt(m_Speed * 2), m_Velocity.y, Mathf.Sqrt(m_Speed * 2));
+                if (m_IsMoving.forward && m_IsMoving.right)
+                    m_Velocity = new Vector3(Mathf.Sqrt(m_Speed * 2), m_Velocity.y, Mathf.Sqrt(m_Speed * 2));
+                if (m_IsMoving.back && m_IsMoving.left)
+                    m_Velocity = new Vector3(-Mathf.Sqrt(m_Speed * 2), m_Velocity.y, -Mathf.Sqrt(m_Speed * 2));
+                if (m_IsMoving.back && m_IsMoving.right)
+                    m_Velocity = new Vector3(Mathf.Sqrt(m_Speed * 2), m_Velocity.y, -Mathf.Sqrt(m_Speed * 2));
 
                 if (GameManager.self.state.ThumbSticks.Left.X != 0.0f ||
                     GameManager.self.state.ThumbSticks.Left.Y != 0.0f)
                 {
                     m_Velocity = new Vector3(
-                        GameManager.self.state.ThumbSticks.Left.X * m_Speed,
+                        GameManager.self.state.ThumbSticks.Left.X * m_Speed, 
+                        m_Velocity.y,
                         GameManager.self.state.ThumbSticks.Left.Y * m_Speed);
                 }
             }
@@ -258,16 +259,16 @@ namespace Unit
             if (m_Velocity == Vector3.zero)
                 return;
 
-            float rotationX = -(Mathf.Atan(m_Velocity.x / m_Velocity.y) * (180.0f / Mathf.PI));
+            float rotationY = (Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180.0f / Mathf.PI)) - 90;
 
-            if ((m_Velocity.x < 0.0f && m_Velocity.y < 0.0f) ||
-                (m_Velocity.x > 0.0f && m_Velocity.y < 0.0f) ||
-                (m_Velocity.x == 0.0f && m_Velocity.y < 0.0f))
-                rotationX += 180;
+            if ((m_Velocity.x < 0.0f && m_Velocity.z < 0.0f) ||
+                (m_Velocity.x > 0.0f && m_Velocity.z < 0.0f) ||
+                (m_Velocity.x == 0.0f && m_Velocity.z < 0.0f))
+                rotationY += 180;
 
             m_CurrentRotation = new Vector3(
-                rotationX,
-                m_OriginalRotation.y,
+                m_OriginalRotation.x,
+                rotationY,
                 m_OriginalRotation.z);
 
             transform.rotation = Quaternion.Euler(m_CurrentRotation);
@@ -301,9 +302,9 @@ namespace Unit
                 newObject.GetComponent<IParentable>().parent = gameObject;
 
                 newObject.GetComponent<IMovable>().velocity = new Vector3(
-                    Mathf.Cos((m_CurrentRotation.x + 90) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
-                    Mathf.Sin((m_CurrentRotation.x + 90) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
-                    0);
+                    Mathf.Cos((-m_CurrentRotation.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
+                    0,
+                    Mathf.Sin((-m_CurrentRotation.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed);
 
                 m_Skills[skillIndex] = new SkillData(
                     m_Skills[skillIndex].skillPrefab,

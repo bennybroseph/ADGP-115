@@ -42,7 +42,7 @@ namespace Unit.Skill
             get { return m_MaxLifetime; }
             set { m_MaxLifetime = value; }
         }
-        
+
         public Vector3 totalVelocity
         {
             get { return m_TotalVelocity; }
@@ -104,17 +104,17 @@ namespace Unit.Skill
             if (m_Velocity == Vector3.zero)
                 return;
 
-            float rotationX = 270 - (Mathf.Atan(m_Velocity.x / m_Velocity.y) * (180.0f / Mathf.PI));
+            float rotationY = 90 + (Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180.0f / Mathf.PI));
 
-            if ((m_Velocity.x < 0.0f && m_Velocity.y < 0.0f) ||
-                (m_Velocity.x > 0.0f && m_Velocity.y < 0.0f) ||
-                (m_Velocity.x == 0.0f && m_Velocity.y < 0.0f))
-                rotationX += 180;
+            if ((m_Velocity.x < 0.0f && m_Velocity.z < 0.0f) ||
+                (m_Velocity.x > 0.0f && m_Velocity.z < 0.0f) ||
+                (m_Velocity.x == 0.0f && m_Velocity.z < 0.0f))
+                rotationY += 180;
 
             m_CurrentRotation = new Vector3(
-                m_OriginalRotation.y,
-                m_OriginalRotation.z,
-                rotationX);
+                m_OriginalRotation.x,
+                rotationY,
+                m_OriginalRotation.z);
 
             transform.rotation = Quaternion.Euler(m_CurrentRotation);
         }
