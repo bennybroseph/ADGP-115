@@ -84,7 +84,7 @@ public class GameManager : MonoSingleton<GameManager>
         m_PrevState = m_State;
         m_State = GamePad.GetState(m_PlayerIndex);
 
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.P))
             Publisher.self.Broadcast(Event.ToggleQuitMenu);
     }
 

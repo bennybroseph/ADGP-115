@@ -39,7 +39,18 @@ namespace Unit
         {
             return !(a_Left == a_Right);
         }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        } 
     }
+
 
     public enum MovementState
     {
