@@ -1,16 +1,21 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using Library;
-using Define;
+﻿using System.Collections.Generic;
 
+using UnityEngine;
+
+using Library;
+using Unit;
 using Event = Define.Event;
 
 namespace UI
 {
-    public class UIManager : MonoBehaviour
+    public class UIManager : MonoSingleton<UIManager>
     {
+        [SerializeField]
+        private List<Player> m_Players;
+
+        [SerializeField]
+        private SkillButton m_SkillButtonPrefab;
+
         [SerializeField]
         private GameObject m_QuitMenu;
         [SerializeField]
@@ -23,16 +28,55 @@ namespace UI
         private GameObject m_Skill1Upgrade;
         [SerializeField]
         private GameObject m_Skill2Upgrade;
-        [SerializeField]
-        private GameObject m_Player;
-        [SerializeField]
-        private GameObject m_PlayerUI;
-        [SerializeField]
-        private Vector3 m_PlayerUIOffset;
+
+        private void Awake()
+        {
+            foreach (Player player in FindObjectsOfType<Player>())
+            {
+                if (player.parent != null) continue;
+
+                player.parent = this;
+                m_Players.Add(player);
+            }
+
+            if (m_SkillButtonPrefab.GetComponent<RectTransform>() == null)
+                return;
+
+            int numOfSkills = 0;
+            foreach (Player player in m_Players) { numOfSkills += player.skills.Count; }
+            if (numOfSkills == 0) return;
+
+            List<SkillButton> skillButtons = new List<SkillButton>();
+
+            for (int j = 0; j < numOfSkills; j++)
+            {
+                skillButtons.Add(InstantiateRectTransform(
+                    m_SkillButtonPrefab,
+                    new Vector3(
+                        j * 70 - numOfSkills * 70 / 2 + 70 / 2,
+                        0,
+                        0)));
+            }
+
+            int i = 0;
+            foreach (Player player in m_Players)
+            {
+                for (int j = 0; j < player.skills.Count; j++)
+                {
+                    skillButtons[i].parent = player;
+                    skillButtons[i].skillIndex = j;
+                    i++;
+                }
+            }
+
+            Publisher.self.Subscribe(Event.Instructions, OnInstructions);
+        }
 
         // Use this for initialization
-        void Start()
+        private void Start()
         {
+            m_Players = new List<Player>();
+
             if (m_InstructionMenu != null)
                 m_InstructionMenu.SetActive(false);
 
@@ -43,27 +87,18 @@ namespace UI
 
             if (m_QuitMenu != null)
                 m_QuitMenu.SetActive(false);
-
-            if (m_Player == null)
-                m_Player = GameObject.FindGameObjectWithTag("Player");
-
-            Publisher.self.Subscribe(Event.Instructions, OnInstructions);
-
-            Publisher.self.Subscribe(Event.SkillCooldownChanged, OnSkillCooldownChanged);
         }
 
         //LateUpdate is called once per frame
-        void LateUpdate()
+        private void LateUpdate()
         {
-            if (m_PlayerUI != null && m_Player != null)
-                m_PlayerUI.transform.position = m_Player.transform.position + m_PlayerUIOffset;
+
         }
 
         private void OnInstructions(Event a_Event, params object[] a_Params)
         {
             // Do stuff...
             m_InstructionMenu.SetActive(true);
-
         }
 
         public void OnInstructionsClick()
@@ -139,24 +174,15 @@ namespace UI
             Publisher.self.Broadcast(Event.QuitGame);
         }
 
-        private void OnSkillCooldownChanged(Event a_Event, params object[] a_Params)
+        private SkillButton InstantiateRectTransform(SkillButton a_RectTransform, Vector3 a_Position)
         {
-            int skillIndex = (int)a_Params[0];
-            float remainingCooldown = (float)a_Params[1];
+            SkillButton skillButton = Instantiate(a_RectTransform);
+            skillButton.GetComponent<RectTransform>().SetParent(transform, false);
 
-            string parsedCooldown;
-            if (remainingCooldown == 0.0f)
-            {
-                parsedCooldown = "";
-                m_SkillButtons[skillIndex].GetComponent<Image>().color = Color.white;
-            }
-            else
-            {
-                parsedCooldown = ((int) Mathf.Ceil(remainingCooldown)).ToString();
-                m_SkillButtons[skillIndex].GetComponent<Image>().color = Color.gray;
-            }
+            skillButton.transform.localPosition += a_Position;
 
-            m_SkillButtons[skillIndex].GetComponentInChildren<Text>().text = parsedCooldown;
+            return skillButton;
         }
+        
     }
 }

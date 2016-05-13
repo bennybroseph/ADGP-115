@@ -7,6 +7,12 @@ TagManager:
   - Background
   - Game Manager
   - Fortress
+  - Health Bar
+  - Mana Bar
+  - Level Text
+  - HUD
+  - Quit Menu
+  - Instructions Menu
   layers:
   - Default
   - TransparentFX

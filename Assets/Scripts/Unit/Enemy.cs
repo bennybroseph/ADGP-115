@@ -8,57 +8,88 @@ namespace Unit
     public class Enemy : MonoBehaviour, IStats
     {
         //Private int and string memorable variables
-        private int m_Health;
-        private int m_Defense;
-        private int m_Exp;  //Total experience each monster drops
-        private int m_Lvl; //wont be displayed for Enemy
-        private float m_Speed;
-        private int m_Mana;
         private string m_UnitName;
+        private string m_UnitNickname;
+
+        private float m_MaxHealth;
+        private float m_Health;
+        private float m_MaxDefense;
+        private float m_Defense;
+
+        private float m_MaxMana;
+        private float m_Mana;
+        private float m_Experience;  //Total experience each monster drops
+        private int m_Level; //wont be displayed for Enemy
+        private float m_Speed;
+
+
         private Pathfinding m_Pathfinding;
 
         #region -- PROPERTIES --
+        //Public string Name property
+        public string unitName
+        {
+            get { return m_UnitName; }
+            private set { m_UnitName = value; }
+        }
+
+        public string unitNickname
+        {
+            get { return m_UnitNickname; }
+            set { m_UnitNickname = value; }
+        }
+
+        public float maxHealth
+        {
+            get { return m_MaxHealth; }
+            private set { m_MaxHealth = value; }
+        }
         //Public int health property
-        public int health
+        public float health
         {
             get { return m_Health; }
             set { m_Health = value; }
         }
+        public float maxDefense
+        {
+            get { return m_MaxDefense; }
+            private set { m_MaxDefense = value; }
+        }
         //Public int Defense property
-        public int defense
+        public float defense
         {
             get { return m_Defense; }
             set { m_Defense = value; }
         }
-        //Public int Experience property
-        public int experience
+
+        public float maxMana
         {
-            get { return m_Exp; }
-            set { m_Exp = value; }
+            get { return m_MaxMana; }
+            private set { m_MaxMana = value; }
+        }
+        //Public int Mana property
+        public float mana
+        {
+            get { return m_Mana; }
+            set { m_Mana = value; }
+        }
+        //Public int Experience property
+        public float experience
+        {
+            get { return m_Experience; }
+            set { m_Experience = value; }
         }
         //Public int Level property
         public int level
         {
-            get { return m_Lvl; }
-            set { m_Lvl = value; }
+            get { return m_Level; }
+            set { m_Level = value; }
         }
         //Public int Speed property
         public float speed
         {
             get { return m_Speed; }
             set { m_Speed = value; }
-        }
-        //Public int Mana property
-        public int mana
-        {
-            get { return m_Mana; }
-            set { m_Mana = value; }
-        }
-        //Public string Name property
-        public string unitName
-        {
-            get { return m_UnitName; }
-            set { m_UnitName = value; }
         }
 
         public FiniteStateMachine<DamageState> damageFSM

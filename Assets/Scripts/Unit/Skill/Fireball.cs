@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Unit.Skill
 {
-    public class Fireball : MonoBehaviour, IMovable, ICastable
+    public class Fireball : MonoBehaviour, IMovable, ICastable<GameObject>
     {
         #region -- VARIABLES --
         [SerializeField]
