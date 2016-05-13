@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 using Library;
 using UI;
+using Unit;
 using Event = Define.Event;
 
 
@@ -13,6 +14,8 @@ public class GameManager : MonoSingleton<GameManager>
     [SerializeField]
     private UIManager m_UIManager;
     [SerializeField]
+    private SpawnWaves m_WaveSpawner;
+    [SerializeField]
     private float m_PreviousTimeScale;
 
     private bool m_PlayerIndexSet = false;
@@ -20,8 +23,6 @@ public class GameManager : MonoSingleton<GameManager>
     private PlayerIndex m_PlayerIndex;
     private GamePadState m_State;
     private GamePadState m_PrevState;
-
-    private List<Node> m_SearchSpace;
 
     private GameObject m_Background;
 
@@ -40,12 +41,13 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Awake()
     {
+        Instantiate(m_WaveSpawner);
         Instantiate(m_UIManager);
     }
     // Use this for initialization
     private void Start()
     {
-        m_SearchSpace = SetUpSearchSpace();
+
         m_PreviousTimeScale = Time.timeScale;
 
         Application.targetFrameRate = -1;
@@ -56,7 +58,7 @@ public class GameManager : MonoSingleton<GameManager>
         Publisher.self.Subscribe(Event.PauseGame, OnPauseGame);
         Publisher.self.Subscribe(Event.UnPauseGame, OnUnPauseGame);
 
-        
+
     }
 
     // Update is called once per frame
@@ -109,35 +111,6 @@ public class GameManager : MonoSingleton<GameManager>
     private void OnUnPauseGame(Event a_Event, params object[] a_Params)
     {
         Time.timeScale = m_PreviousTimeScale;
-    }
-
-    private List<Node> SetUpSearchSpace()
-    {
-        List<Node> searchSpace = new List<Node>();
-
-        m_Background = GameObject.FindGameObjectWithTag("Background");
-
-        Vector3 grid = new Vector3(m_Background.transform.localScale.x, m_Background.transform.localScale.y, m_Background.transform.localScale.z);
-
-        int id = 0;
-
-        //Base off x and z position
-        int rows = 10;
-        int columns = 10;
-
-        for (int x = 0; x < rows; x++)
-        {
-            for (int y = 0; y < columns; y++)
-            {
-                Node node = new Node(x, y, id);
-
-                searchSpace.Add(node);
-
-                id += 1;
-            }
-        }
-
-        return searchSpace;
     }
 
 }
