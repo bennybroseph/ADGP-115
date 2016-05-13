@@ -15,7 +15,7 @@ namespace Unit
         public bool left;
         public bool right;
 
-        public static Moving Nowhere = new Moving(false, false, false, false);
+        public static Moving nowhere = new Moving(false, false, false, false);
 
         public Moving(bool a_Forward, bool a_Back, bool a_Left, bool a_Right) : this()
         {
@@ -120,13 +120,17 @@ namespace Unit
 
         public float cost;
 
-        public SkillData(GameObject a_SkillPrefab, float a_Cooldown, float a_RemainingCooldown, float a_Cost) : this()
+        public Sprite sprite;
+
+        public SkillData(GameObject a_SkillPrefab, float a_Cooldown, float a_RemainingCooldown, float a_Cost, Sprite a_Sprite) : this()
         {
             skillPrefab = a_SkillPrefab;
             cooldown = a_Cooldown;
             remainingCooldown = a_RemainingCooldown;
 
             cost = a_Cost;
+
+            sprite = a_Sprite;
         }
     }
 

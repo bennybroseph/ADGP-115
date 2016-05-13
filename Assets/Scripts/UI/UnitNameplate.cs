@@ -29,7 +29,7 @@ namespace UI
         public GameObject parent
         {
             get { return m_Parent; }
-            set { m_Parent = value; }
+            set { m_Parent = value; Awake(); }
         }
 
         public void Awake()
@@ -39,8 +39,8 @@ namespace UI
                 gameObject.SetActive(false);
                 return;
             }
-            
-            if(!gameObject.activeInHierarchy)
+
+            if (!gameObject.activeInHierarchy)
                 gameObject.SetActive(true);
 
             GetComponents();

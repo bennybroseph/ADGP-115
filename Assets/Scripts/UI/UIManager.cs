@@ -1,73 +1,74 @@
 ﻿using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 using Library;
 using Unit;
+
 using Event = Define.Event;
 
 namespace UI
 {
     public class UIManager : MonoSingleton<UIManager>
     {
-        [SerializeField]
-        private List<Player> m_Players;
-
+        #region -- VARIABLES --
         [SerializeField]
         private SkillButton m_SkillButtonPrefab;
 
         [SerializeField]
-        private GameObject m_QuitMenu;
+        private RectTransform m_HUD;
         [SerializeField]
-        private GameObject m_InstructionMenu;
+        private RectTransform m_QuitMenu;
+        [SerializeField]
+        private RectTransform m_InstructionMenu;
+        #endregion
 
-        [SerializeField]
-        private List<GameObject> m_SkillButtons;
-
-        [SerializeField]
-        private GameObject m_Skill1Upgrade;
-        [SerializeField]
-        private GameObject m_Skill2Upgrade;
-
+        #region -- UNITY FUNCTIONS --
         private void Awake()
         {
+            List<Player> players = new List<Player>();
+
             foreach (Player player in FindObjectsOfType<Player>())
             {
                 if (player.parent != null) continue;
 
                 player.parent = this;
-                m_Players.Add(player);
+                players.Add(player);
             }
 
             if (m_SkillButtonPrefab.GetComponent<RectTransform>() == null)
                 return;
 
+            players.Sort(
+                (a, b) => a.unitName.CompareTo(b.unitName));
+
             int numOfSkills = 0;
-            foreach (Player player in m_Players) { numOfSkills += player.skills.Count; }
+            foreach (Player player in players) { numOfSkills += player.skills.Count - 1; }
             if (numOfSkills == 0) return;
 
-            List<SkillButton> skillButtons = new List<SkillButton>();
-
-            for (int j = 0; j < numOfSkills; j++)
+            int k = 0;
+            for (int i = 0; i < players.Count; i++)
             {
-                skillButtons.Add(InstantiateRectTransform(
-                    m_SkillButtonPrefab,
-                    new Vector3(
-                        j * 70 - numOfSkills * 70 / 2 + 70 / 2,
-                        0,
-                        0)));
-            }
-
-            int i = 0;
-            foreach (Player player in m_Players)
-            {
-                for (int j = 0; j < player.skills.Count; j++)
+                for (int j = 0; j < players[i].skills.Count; j++)
                 {
-                    skillButtons[i].parent = player;
-                    skillButtons[i].skillIndex = j;
-                    i++;
+                    SkillButton skillButton = InstantiateRectTransform(
+                        m_SkillButtonPrefab,
+                        new Vector3(
+                            k * 70 + i * 100 - (numOfSkills * 70 + (players.Count - 1) * 100) / 2,
+                            0,
+                            0));
+
+                    skillButton.parent = players[i];
+                    skillButton.skillIndex = j;
+                    skillButton.sprite = players[i].skills[j].sprite;
+
+                    k++;
                 }
+                k--;
             }
+
+            GetComponents();
 
             Publisher.self.Subscribe(Event.Instructions, OnInstructions);
         }
@@ -75,18 +76,7 @@ namespace UI
         // Use this for initialization
         private void Start()
         {
-            m_Players = new List<Player>();
 
-            if (m_InstructionMenu != null)
-                m_InstructionMenu.SetActive(false);
-
-            if (m_Skill1Upgrade != null)
-                m_Skill1Upgrade.SetActive(false);
-            if (m_Skill2Upgrade != null)
-                m_Skill2Upgrade.SetActive(false);
-
-            if (m_QuitMenu != null)
-                m_QuitMenu.SetActive(false);
         }
 
         //LateUpdate is called once per frame
@@ -94,11 +84,61 @@ namespace UI
         {
 
         }
+        #endregion
 
+        private void GetComponents()
+        {
+            foreach (Transform child in transform)
+            {
+                switch (child.tag)
+                {
+                    case "HUD":
+                        {
+                            if (m_HUD == null)
+                                m_HUD = child.GetComponent<RectTransform>();
+
+                            Button spawnWaveButton = m_HUD.GetComponentsInChildren<Button>()[0];
+                            Button instructionsButton = m_HUD.GetComponentsInChildren<Button>()[1];
+
+                            spawnWaveButton.onClick.AddListener(OnSpawnWaveClick);
+                            instructionsButton.onClick.AddListener(OnInstructionsClick);
+                        }
+                        break;
+                    case "Quit Menu":
+                        {
+                            if (m_QuitMenu == null)
+                                m_QuitMenu = child.GetComponent<RectTransform>();
+
+                            Button quitButton = m_QuitMenu.GetComponentsInChildren<Button>()[0];
+                            Button resumeButton = m_QuitMenu.GetComponentsInChildren<Button>()[1];
+
+                            quitButton.onClick.AddListener(OnQuitGameClick);
+                            resumeButton.onClick.AddListener(OnResumeClick);
+
+                            m_QuitMenu.gameObject.SetActive(false);
+                        }
+                        break;
+                    case "Instructions Menu":
+                        {
+                            if (m_InstructionMenu == null)
+                                m_InstructionMenu = child.GetComponent<RectTransform>();
+
+                            Button closeButton = m_InstructionMenu.GetComponentInChildren<Button>();
+
+                            closeButton.onClick.AddListener(OnInstructionsCloseClick);
+
+                            m_InstructionMenu.gameObject.SetActive(false);
+                        }
+                        break;
+                }
+            }
+        }
+
+        #region -- EVENT FUNCTIONS --
         private void OnInstructions(Event a_Event, params object[] a_Params)
         {
             // Do stuff...
-            m_InstructionMenu.SetActive(true);
+            m_InstructionMenu.gameObject.SetActive(true);
         }
 
         public void OnInstructionsClick()
@@ -108,38 +148,18 @@ namespace UI
 
         public void OnInstructionsCloseClick()
         {
-            m_InstructionMenu.SetActive(false);
+            m_InstructionMenu.gameObject.SetActive(false);
         }
 
         public void OnResumeClick()
         {
-            m_QuitMenu.SetActive(false);
+            m_QuitMenu.gameObject.SetActive(false);
             Publisher.self.Broadcast(Event.UnPauseGame);
         }
 
         public void OnQuitGameClick()
         {
             Publisher.self.Broadcast(Event.QuitGame);
-        }
-
-        public void OnUpgradeSkill1()
-        {
-            Publisher.self.Broadcast(Event.UpgradeSkill, 1);
-        }
-
-        public void OnUpgradeSkill2()
-        {
-            Publisher.self.Broadcast(Event.UpgradeSkill, 2);
-        }
-
-        public void OnUseSkill1()
-        {
-            Publisher.self.Broadcast(Event.UseSkill, 1);
-        }
-
-        public void OnUseSkill2()
-        {
-            Publisher.self.Broadcast(Event.UseSkill, 2);
         }
 
         public void OnSpawnWaveClick()
@@ -173,6 +193,7 @@ namespace UI
             //Publisher Subscriber or QuitGame / Broadcast 
             Publisher.self.Broadcast(Event.QuitGame);
         }
+        #endregion
 
         private SkillButton InstantiateRectTransform(SkillButton a_RectTransform, Vector3 a_Position)
         {
@@ -183,6 +204,6 @@ namespace UI
 
             return skillButton;
         }
-        
+
     }
 }
