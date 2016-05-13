@@ -71,6 +71,7 @@ namespace UI
             GetComponents();
 
             Publisher.self.Subscribe(Event.Instructions, OnInstructions);
+            Publisher.self.Subscribe(Event.ToggleQuitMenu, OnToggleQuitMenu);
         }
 
         // Use this for initialization
@@ -135,6 +136,13 @@ namespace UI
         }
 
         #region -- EVENT FUNCTIONS --
+
+        private void OnToggleQuitMenu(Event a_Event, params object[] a_Params)
+        {
+            m_QuitMenu.gameObject.SetActive(!m_QuitMenu.gameObject.activeInHierarchy);
+            Publisher.self.Broadcast(m_QuitMenu.gameObject.activeInHierarchy ? Event.PauseGame : Event.UnPauseGame);
+        }
+
         private void OnInstructions(Event a_Event, params object[] a_Params)
         {
             // Do stuff...
