@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using Library;
 using UnityEngine;
 
@@ -64,12 +63,12 @@ namespace Unit
         void Move();
     }
 
-    public interface IParentable
+    public interface IParentable<TParentType>
     {
-        GameObject parent { get; set; }
+        TParentType parent { get; set; }
     }
 
-    public interface ICastable : IParentable
+    public interface ICastable<TParentType> : IParentable<TParentType>
     {
         float currentLifetime { get; }
         float maxLifetime { get; set; }
@@ -86,25 +85,30 @@ namespace Unit
     public interface IAttackable
     {
         // String Name property
-        string unitName { get; set; }
+        string unitName { get; }
+        string unitNickname { get; set; }
 
+        float maxHealth { get; }
         // Health property
-        int health { get; set; }
+        float health { get; set; }
+        // Max Defense property
+        float maxDefense { get; }
         // Defense property
-        int defense { get; set; }
+        float defense { get; set; }
 
         FiniteStateMachine<DamageState> damageFSM { get; }
     }
 
     public interface IStats : IAttackable
     {
+        float maxMana { get; }
         // Mana(currency) property
-        int mana { get; set; }
+        float mana { get; set; }
 
         // Experience property
-        int experience { get; set; }
+        float experience { get; set; }
         // Level property
-        int level { get; set; }
+        int level { get; }
     }
 
     [Serializable]
@@ -114,11 +118,15 @@ namespace Unit
         public float cooldown;
         public float remainingCooldown;
 
-        public SkillData(GameObject a_SkillPrefab, float a_Cooldown, float a_RemainingCooldown = 0.0f) : this()
+        public float cost;
+
+        public SkillData(GameObject a_SkillPrefab, float a_Cooldown, float a_RemainingCooldown, float a_Cost) : this()
         {
             skillPrefab = a_SkillPrefab;
             cooldown = a_Cooldown;
             remainingCooldown = a_RemainingCooldown;
+
+            cost = a_Cost;
         }
     }
 

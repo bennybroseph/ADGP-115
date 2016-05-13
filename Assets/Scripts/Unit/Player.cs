@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Library;
+using UI;
 using UnityEngine;
 using XInputDotNetPure;
 using Event = Define.Event;
@@ -10,10 +11,13 @@ using Event = Define.Event;
 namespace Unit
 {
     // Public unit class that takes in IStats and IAttack
-    public class Player : MonoBehaviour, IUsesSkills, IControlable
+    public class Player : MonoBehaviour, IUsesSkills, IControlable, IParentable<UIManager>
     {
         #region -- VARIABLES --
         // Private int and string memorable variables
+        [SerializeField]
+        private UnitNameplate m_Nameplate;
+
         [SerializeField]
         private FiniteStateMachine<MovementState> m_MovementFSM;
         [SerializeField]
@@ -24,16 +28,24 @@ namespace Unit
 
         [SerializeField]
         private string m_UnitName;
+        [SerializeField]
+        private string m_UnitNickname;
 
         [SerializeField]
-        private int m_Health;
+        private float m_MaxHealth;
         [SerializeField]
-        private int m_Mana;
+        private float m_Health;
         [SerializeField]
-        private int m_Defense;
+        private float m_MaxMana;
+        [SerializeField]
+        private float m_Mana;
+        [SerializeField]
+        private float m_MaxDefense;
+        [SerializeField]
+        private float m_Defense;
 
         [SerializeField]
-        private int m_Exp;
+        private float m_Exp;
         [SerializeField]
         private int m_Level;
 
@@ -51,6 +63,9 @@ namespace Unit
         private bool m_CanMoveWithInput;
 
         [SerializeField]
+        private UIManager m_Parent;
+
+        [SerializeField]
         private Vector3 m_CurrentRotation;
         [SerializeField]
         private Vector3 m_OriginalRotation;
@@ -60,27 +75,64 @@ namespace Unit
         public FiniteStateMachine<MovementState> movementFSM
         {
             get { return m_MovementFSM; }
+            private set { m_MovementFSM = value; }
         }
         public FiniteStateMachine<DamageState> damageFSM
         {
             get { return m_DamageFSM; }
+            private set { m_DamageFSM = value; }
         }
 
+        // String name property
+        public string unitName
+        {
+            get { return m_UnitName; }
+            private set { m_UnitName = value; }
+        }
+
+        public string unitNickname
+        {
+            get { return m_UnitNickname; }
+            set { m_UnitNickname = value; }
+        }
+
+        public float maxHealth
+        {
+            get { return m_MaxHealth; }
+            private set { m_MaxHealth = value; }
+        }
         // Health int property
-        public int health
+        public float health
         {
             get { return m_Health; }
             set { m_Health = value; Publisher.self.DelayedBroadcast(Event.UnitHealthChanged, this); }
         }
 
+        public float maxDefense
+        {
+            get { return m_MaxDefense; }
+            private set { m_MaxDefense = value; }
+        }
         // Defense int property
-        public int defense
+        public float defense
         {
             get { return m_Defense; }
             set { m_Defense = value; }
         }
+
+        public float maxMana
+        {
+            get { return m_MaxMana; }
+            private set { m_MaxMana = value; }
+        }
+        // Mana/Currency int property
+        public float mana
+        {
+            get { return m_Mana; }
+            set { m_Mana = value; Publisher.self.DelayedBroadcast(Event.UnitManaChanged, this); }
+        }
         // Experience int property
-        public int experience
+        public float experience
         {
             get { return m_Exp; }
             set { m_Exp = value; }
@@ -95,20 +147,7 @@ namespace Unit
         public int level
         {
             get { return m_Level; }
-            set { m_Level = value; Publisher.self.DelayedBroadcast(Event.UnitLevelChanged, this); }
-        }
-        // Mana/Currency int property
-        public int mana
-        {
-            get { return m_Mana; }
-            set { m_Mana = value; Publisher.self.DelayedBroadcast(Event.UnitManaChanged, this); }
-        }
-
-        // String name property
-        public string unitName
-        {
-            get { return m_UnitName; }
-            set { m_UnitName = value; }
+            private set { m_Level = value; Publisher.self.DelayedBroadcast(Event.UnitLevelChanged, this); }
         }
 
         public Moving isMoving
@@ -139,10 +178,28 @@ namespace Unit
             get { return m_Skills; }
             set { m_Skills = value; }
         }
+
+        public UIManager parent
+        {
+            get { return m_Parent; }
+            set { m_Parent = value; }
+        }
         #endregion
 
         #region -- UNITY FUNCTIONS --
-        // Unit class that stores Health, Defense, Exp, Level, Speed, Mana, Name
+
+        private void Awake()
+        {
+            if (m_Nameplate != null)
+            {
+                UnitNameplate nameplate = Instantiate(m_Nameplate);
+                nameplate.parent = gameObject;
+                nameplate.Awake();
+            }
+
+            Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
+        }
+
         private void Start()
         {
             if (m_Skills == null)
@@ -151,25 +208,13 @@ namespace Unit
             m_OriginalRotation = transform.eulerAngles;
             m_CurrentRotation = m_OriginalRotation;
 
-            m_MovementFSM = new FiniteStateMachine<MovementState>();
+            InitFSM();
 
-            m_MovementFSM.AddTransition(MovementState.Init, MovementState.Idle);
-            m_MovementFSM.AddTransition(MovementState.Idle, MovementState.Walking);
-            m_MovementFSM.AddTransition(MovementState.Walking, MovementState.Running);
+            m_Health = m_MaxHealth;
+            m_Mana = m_MaxMana;
+            m_Defense = m_MaxDefense;
 
-            m_MovementFSM.AddTransition(MovementState.Running, MovementState.Walking);
-            m_MovementFSM.AddTransition(MovementState.Walking, MovementState.Idle);
-
-            m_DamageFSM = new FiniteStateMachine<DamageState>();
-
-            m_DamageFSM.AddTransition(DamageState.Init, DamageState.Idle);
-            m_DamageFSM.AddTransitionFromAny(DamageState.Dead);
-
-            m_MovementFSM.Transition(MovementState.Idle);
-
-            m_DamageFSM.Transition(DamageState.Idle);
-
-            Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
+            Publisher.self.Broadcast(Event.UnitInitialized, this);
         }
 
         private void FixedUpdate()
@@ -179,10 +224,6 @@ namespace Unit
 
         private void Update()
         {
-            health = 100;
-            level = 1;
-            mana = 100;
-
             for (int i = 0; i < m_Skills.Count; ++i)
             {
                 if (m_Skills[i].remainingCooldown != 0.0f)
@@ -194,9 +235,10 @@ namespace Unit
                     m_Skills[i] = new SkillData(
                         m_Skills[i].skillPrefab,
                         m_Skills[i].cooldown,
-                        remainingCooldown);
+                        remainingCooldown,
+                        m_Skills[i].cost);
 
-                    Publisher.self.Broadcast(Event.SkillCooldownChanged, i, m_Skills[i].remainingCooldown);
+                    Publisher.self.Broadcast(Event.SkillCooldownChanged, this, i);
                 }
             }
 
@@ -250,6 +292,28 @@ namespace Unit
         }
         #endregion
 
+        #region -- OTHER PRIVATE FUNCTIONS --
+        private void InitFSM()
+        {
+            m_MovementFSM = new FiniteStateMachine<MovementState>();
+
+            m_MovementFSM.AddTransition(MovementState.Init, MovementState.Idle);
+            m_MovementFSM.AddTransition(MovementState.Idle, MovementState.Walking);
+            m_MovementFSM.AddTransition(MovementState.Walking, MovementState.Running);
+
+            m_MovementFSM.AddTransition(MovementState.Running, MovementState.Walking);
+            m_MovementFSM.AddTransition(MovementState.Walking, MovementState.Idle);
+
+            m_DamageFSM = new FiniteStateMachine<DamageState>();
+
+            m_DamageFSM.AddTransition(DamageState.Init, DamageState.Idle);
+            m_DamageFSM.AddTransitionFromAny(DamageState.Dead);
+
+            m_MovementFSM.Transition(MovementState.Idle);
+
+            m_DamageFSM.Transition(DamageState.Idle);
+        }
+
         public void Move()
         {
             transform.position += (m_Velocity + m_TotalVelocity) * Time.deltaTime;
@@ -262,8 +326,6 @@ namespace Unit
                 Movable.Brake(this);
             }
         }
-
-
 
         private void SetRotation()
         {
@@ -300,7 +362,9 @@ namespace Unit
         {
             int skillIndex = (int)a_Params[0];
 
-            if (m_Skills.Count >= skillIndex && m_Skills[skillIndex - 1].remainingCooldown <= 0.0f)
+            if (m_Skills.Count >= skillIndex &&
+                m_Skills[skillIndex - 1].remainingCooldown <= 0.0f &&
+                m_Skills[skillIndex - 1].cost <= m_Mana)
             {
                 Debug.Log("Use Skill " + skillIndex);
 
@@ -310,19 +374,23 @@ namespace Unit
 
                 newObject.transform.position = transform.position;
 
-                newObject.GetComponent<IParentable>().parent = gameObject;
+                newObject.GetComponent<IParentable<GameObject>>().parent = gameObject;
 
                 newObject.GetComponent<IMovable>().velocity = new Vector3(
                     Mathf.Cos((-m_CurrentRotation.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
                     0,
                     Mathf.Sin((-m_CurrentRotation.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed);
 
+                mana -= m_Skills[skillIndex].cost;
+
                 m_Skills[skillIndex] = new SkillData(
                     m_Skills[skillIndex].skillPrefab,
                     m_Skills[skillIndex].cooldown,
-                    m_Skills[skillIndex].cooldown);
+                    m_Skills[skillIndex].cooldown,
+                    m_Skills[skillIndex].cost);
             }
         }
+        #endregion
     }
 }
 

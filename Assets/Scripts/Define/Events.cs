@@ -28,10 +28,11 @@ namespace Define
         SpawnWave,
         // There are no parameters
         GameOver,
+        /// <param name="Unit"> IStats: which player's cooldown changed</param> 
         /// <param name="Skill Index"> int: which skill's cooldown changed</param>
-        /// <param name="New Value"> float: new value of the skill's cooldown</param> 
         SkillCooldownChanged,
 
+        UnitInitialized,
         /// <param name="Unit"> IStats: which unit's health changed</param>
         UnitHealthChanged,
         /// <param name="Unit"> IStats: which unit's mana changed</param>
