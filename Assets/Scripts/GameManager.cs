@@ -12,8 +12,6 @@ using Event = Define.Event;
 public class GameManager : MonoSingleton<GameManager>
 {
     [SerializeField]
-    private GameObject m_QuitMenu;
-    [SerializeField]
     private UIManager m_UIManager;
     [SerializeField]
     private float m_PreviousTimeScale;
@@ -88,11 +86,7 @@ public class GameManager : MonoSingleton<GameManager>
         m_State = GamePad.GetState(m_PlayerIndex);
 
         if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            m_QuitMenu.SetActive(!m_QuitMenu.activeInHierarchy);
-
-            Publisher.self.Broadcast((m_QuitMenu.activeInHierarchy) ? Event.PauseGame : Event.UnPauseGame);
-        }
+            Publisher.self.Broadcast(Event.ToggleQuitMenu);
     }
 
     private void OnNewGame(Event a_Event, params object[] a_Params)

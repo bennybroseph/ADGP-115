@@ -17,6 +17,8 @@ namespace Define
         // There are no parameters
         QuitGame,
         // There are no parameters
+        ToggleQuitMenu,
+        // There are no parameters
         PauseGame,
         // There are no paramters
         UnPauseGame,
