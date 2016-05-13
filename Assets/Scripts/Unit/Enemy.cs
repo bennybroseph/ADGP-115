@@ -1,25 +1,38 @@
 ﻿
 using System;
 using Library;
+using UI;
 using UnityEngine;
+using Event = Define.Event;
 
 namespace Unit
 {   //Public Enemy class that inherits IStats and IAttackable from interfaces 
     public class Enemy : MonoBehaviour, IStats
     {
+        [SerializeField]
+        private UnitNameplate m_Nameplate;
         //Private int and string memorable variables
+        [SerializeField]
         private string m_UnitName;
+        [SerializeField]
         private string m_UnitNickname;
-
+        [SerializeField]
         private float m_MaxHealth;
+        [SerializeField]
         private float m_Health;
+        [SerializeField]
         private float m_MaxDefense;
+        [SerializeField]
         private float m_Defense;
-
+        [SerializeField]
         private float m_MaxMana;
+        [SerializeField]
         private float m_Mana;
+        [SerializeField]
         private float m_Experience;  //Total experience each monster drops
+        [SerializeField]
         private int m_Level; //wont be displayed for Enemy
+        [SerializeField]
         private float m_Speed;
 
 
@@ -48,7 +61,7 @@ namespace Unit
         public float health
         {
             get { return m_Health; }
-            set { m_Health = value; }
+            set { m_Health = value; Publisher.self.DelayedBroadcast(Event.UnitHealthChanged, this); }
         }
         public float maxDefense
         {
@@ -71,7 +84,7 @@ namespace Unit
         public float mana
         {
             get { return m_Mana; }
-            set { m_Mana = value; }
+            set { m_Mana = value; Publisher.self.DelayedBroadcast(Event.UnitManaChanged, this); }
         }
         //Public int Experience property
         public float experience
@@ -83,7 +96,7 @@ namespace Unit
         public int level
         {
             get { return m_Level; }
-            set { m_Level = value; }
+            set { m_Level = value; Publisher.self.DelayedBroadcast(Event.UnitLevelChanged, this); }
         }
         //Public int Speed property
         public float speed
@@ -101,14 +114,31 @@ namespace Unit
         }
         #endregion
 
+        void Awake()
+        {
+            if (m_Nameplate != null)
+            {
+                UnitNameplate nameplate = Instantiate(m_Nameplate);
+                nameplate.parent = gameObject;
+                nameplate.Awake();
+            }
+
+        }
+
         void Start()
         {
+            m_Health = m_MaxHealth;
+            m_Mana = m_MaxMana;
+            m_Defense = m_MaxDefense;
+
             if (m_Pathfinding == null)
             {
                 m_Pathfinding = new Pathfinding(
-                    GameObject.FindGameObjectWithTag("Player"),
+                    GameObject.FindGameObjectWithTag("Fortress"),
                     GetComponent<NavMeshAgent>());
             }
+
+            Publisher.self.Broadcast(Event.UnitInitialized, this);
         }
 
         void Update()

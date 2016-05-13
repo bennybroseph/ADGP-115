@@ -1,42 +1,43 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &147792
+--- !u!1 &123888
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 445938}
-  - 33: {fileID: 3328996}
-  - 65: {fileID: 6519412}
-  - 23: {fileID: 2391116}
-  - 114: {fileID: 11467890}
+  - 4: {fileID: 481958}
+  - 33: {fileID: 3361790}
+  - 65: {fileID: 6525018}
+  - 23: {fileID: 2367304}
+  - 195: {fileID: 19599386}
+  - 114: {fileID: 11465432}
   m_Layer: 0
-  m_Name: Fortress_Prefab
-  m_TagString: Fortress
+  m_Name: Enemy_Prefab
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &445938
+--- !u!4 &481958
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 147792}
+  m_GameObject: {fileID: 123888}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 14, y: 0.5, z: 0}
-  m_LocalScale: {x: 2, y: 1, z: 2}
+  m_LocalPosition: {x: -8, y: 0.5, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!23 &2391116
+--- !u!23 &2367304
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 147792}
+  m_GameObject: {fileID: 123888}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -57,36 +58,68 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &3328996
+--- !u!33 &3361790
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 147792}
+  m_GameObject: {fileID: 123888}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &6519412
+--- !u!65 &6525018
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 147792}
+  m_GameObject: {fileID: 123888}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &11467890
+--- !u!114 &11465432
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 147792}
+  m_GameObject: {fileID: 123888}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97ab43767e94f1140904eda84a31421e, type: 3}
+  m_Script: {fileID: 11500000, guid: 0e5b675dab655ca40931cbdf9b201b6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Nameplate: {fileID: 11440620, guid: aae1dcd7cda646243899db62ca949502, type: 2}
+  m_UnitName: 
+  m_UnitNickname: 
+  m_MaxHealth: 5
+  m_Health: 0
+  m_MaxDefense: 1
+  m_Defense: 1
+  m_MaxMana: 5
+  m_Mana: 0
+  m_Experience: 0
+  m_Level: 1
+  m_Speed: 4
+--- !u!195 &19599386
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 123888}
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -96,5 +129,5 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 147792}
+  m_RootGameObject: {fileID: 123888}
   m_IsPrefabParent: 1

@@ -40,6 +40,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_QuitMenu: {fileID: 0}
+  m_UIManager: {fileID: 11432312, guid: 759adda1d136a054eb1fed226093f08b, type: 2}
   m_PreviousTimeScale: 0
   m_PlayerIndex: 0
 --- !u!1001 &100100000

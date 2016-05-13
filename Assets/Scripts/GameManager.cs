@@ -4,7 +4,8 @@ using XInputDotNetPure; // Required in C#
 using UnityEngine.SceneManagement;
 
 using Library;
-
+using UI;
+using UnityEditor;
 using Event = Define.Event;
 
 
@@ -12,7 +13,8 @@ public class GameManager : MonoSingleton<GameManager>
 {
     [SerializeField]
     private GameObject m_QuitMenu;
-
+    [SerializeField]
+    private UIManager m_UIManager;
     [SerializeField]
     private float m_PreviousTimeScale;
 
@@ -39,6 +41,10 @@ public class GameManager : MonoSingleton<GameManager>
         get { return m_PrevState; }
     }
 
+    private void Awake()
+    {
+        Instantiate(m_UIManager);
+    }
     // Use this for initialization
     private void Start()
     {
@@ -49,9 +55,11 @@ public class GameManager : MonoSingleton<GameManager>
 
         Publisher.self.Subscribe(Event.NewGame, OnNewGame);
         Publisher.self.Subscribe(Event.QuitGame, OnQuitGame);
-        
+
         Publisher.self.Subscribe(Event.PauseGame, OnPauseGame);
         Publisher.self.Subscribe(Event.UnPauseGame, OnUnPauseGame);
+
+        
     }
 
     // Update is called once per frame
@@ -119,7 +127,7 @@ public class GameManager : MonoSingleton<GameManager>
         Vector3 grid = new Vector3(m_Background.transform.localScale.x, m_Background.transform.localScale.y, m_Background.transform.localScale.z);
 
         int id = 0;
-        
+
         //Base off x and z position
         int rows = 10;
         int columns = 10;
