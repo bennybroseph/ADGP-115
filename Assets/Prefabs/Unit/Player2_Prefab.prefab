@@ -93,6 +93,7 @@ MonoBehaviour:
     cooldown: 4
     remainingCooldown: 0
     cost: 1
+    sprite: {fileID: 21300000, guid: 04c6b09ab8e07464c838aaed8d220c73, type: 3}
   m_UnitName: Player2
   m_UnitNickname: Player 2
   m_MaxHealth: 10

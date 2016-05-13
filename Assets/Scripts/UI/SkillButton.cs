@@ -13,15 +13,25 @@ public class SkillButton : MonoBehaviour, IParentable<IUsesSkills>
     [SerializeField]
     private int m_SkillIndex;
 
+    [SerializeField]
+    private Sprite m_Sprite;
+
     public IUsesSkills parent
     {
         get { return m_Parent; }
         set { m_Parent = value; }
     }
+
     public int skillIndex
     {
         get { return m_SkillIndex; }
         set { m_SkillIndex = value; }
+    }
+
+    public Sprite sprite
+    {
+        get { return m_Sprite; }
+        set { m_Sprite = value; }
     }
 
     private void Awake()
@@ -32,7 +42,8 @@ public class SkillButton : MonoBehaviour, IParentable<IUsesSkills>
     // Use this for initialization
     void Start()
     {
-        Debug.Log(m_Parent);
+        GetComponentInChildren<Text>().text = "";
+        GetComponent<Image>().sprite = m_Sprite;
     }
 
     // Update is called once per frame
@@ -43,7 +54,7 @@ public class SkillButton : MonoBehaviour, IParentable<IUsesSkills>
 
     private void OnSkillCooldownChanged(Event a_Event, params object[] a_Params)
     {
-        IUsesSkills skillUser  = a_Params[0] as IUsesSkills;
+        IUsesSkills skillUser = a_Params[0] as IUsesSkills;
         int parsedSkillIndex = (int)a_Params[1];
 
         if (skillUser == null || skillUser != m_Parent || parsedSkillIndex != m_SkillIndex)

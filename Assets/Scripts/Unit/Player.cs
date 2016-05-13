@@ -194,7 +194,6 @@ namespace Unit
             {
                 UnitNameplate nameplate = Instantiate(m_Nameplate);
                 nameplate.parent = gameObject;
-                nameplate.Awake();
             }
 
             Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
@@ -236,7 +235,8 @@ namespace Unit
                         m_Skills[i].skillPrefab,
                         m_Skills[i].cooldown,
                         remainingCooldown,
-                        m_Skills[i].cost);
+                        m_Skills[i].cost,
+                        m_Skills[i].sprite);
 
                     Publisher.self.Broadcast(Event.SkillCooldownChanged, this, i);
                 }
@@ -319,7 +319,7 @@ namespace Unit
             transform.position += (m_Velocity + m_TotalVelocity) * Time.deltaTime;
 
             if (m_Velocity != Vector3.zero &&
-               (m_IsMoving == Moving.Nowhere ||
+               (m_IsMoving == Moving.nowhere ||
                     (GameManager.self.state.ThumbSticks.Left.X == 0.0f &&
                      GameManager.self.state.ThumbSticks.Left.Y == 0.0f)))
             {
@@ -387,7 +387,8 @@ namespace Unit
                     m_Skills[skillIndex].skillPrefab,
                     m_Skills[skillIndex].cooldown,
                     m_Skills[skillIndex].cooldown,
-                    m_Skills[skillIndex].cost);
+                    m_Skills[skillIndex].cost,
+                    m_Skills[skillIndex].sprite);
             }
         }
         #endregion

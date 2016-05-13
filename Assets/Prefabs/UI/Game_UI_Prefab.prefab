@@ -174,7 +174,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &157648
 GameObject:
   m_ObjectHideFlags: 1
@@ -548,11 +548,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7849023009a36f4b818cbad4a712cc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Players: []
   m_SkillButtonPrefab: {fileID: 11444974, guid: d95a9a2a8113b4743a15a902df0f9e28,
     type: 2}
-  m_QuitMenu: {fileID: 146344}
-  m_InstructionMenu: {fileID: 168120}
+  m_QuitMenu: {fileID: 22461588}
+  m_InstructionMenu: {fileID: 22425672}
   m_SkillButtons: []
   m_Skill1Upgrade: {fileID: 0}
   m_Skill2Upgrade: {fileID: 0}
