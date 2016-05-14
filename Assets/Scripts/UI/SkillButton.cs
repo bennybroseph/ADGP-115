@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 using Event = Define.Event;
 
-public class SkillButton : MonoBehaviour, IParentable<IUsesSkills>
+public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
 {
     [SerializeField]
     private IUsesSkills m_Parent;

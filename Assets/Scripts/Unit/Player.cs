@@ -1,4 +1,6 @@
 ﻿// Unit class used for storing Player and Enemy Data.
+
+using System;
 using System.Collections.Generic;
 
 using UI;
@@ -9,18 +11,23 @@ using XInputDotNetPure;
 #endif
 
 using Library;
-
+using Unit.Controller;
 using Event = Define.Event;
 
 namespace Unit
 {
     // Public unit class that takes in IStats and IAttack
-    public class Player : MonoBehaviour, IUsesSkills, IControlable, IParentable<UIManager>
+    public class Player : MonoBehaviour, IUsesSkills, IControlable, IChildable<UIManager>
     {
         #region -- VARIABLES --
-        // Private int and string memorable variables
+        // Private member variables
         [SerializeField]
         private UnitNameplate m_Nameplate;
+
+        [SerializeField]
+        private ControllerType m_ControllerType;
+        [SerializeField]
+        private IController m_Controller;
 
         [SerializeField]
         private FiniteStateMachine<MovementState> m_MovementFSM;
@@ -76,6 +83,17 @@ namespace Unit
         #endregion
 
         #region -- PROPERTIES --
+        public ControllerType controllerType
+        {
+            get { return m_ControllerType; }
+            set { m_ControllerType = value; }
+        }
+        public IController controller
+        {
+            get { return m_Controller; }
+            set { m_Controller = value; }
+        }
+
         public FiniteStateMachine<MovementState> movementFSM
         {
             get { return m_MovementFSM; }
@@ -197,7 +215,7 @@ namespace Unit
             if (m_Nameplate != null)
             {
                 UnitNameplate nameplate = Instantiate(m_Nameplate);
-                nameplate.parent = gameObject;
+                nameplate.parent = this;
             }
 
             Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
@@ -207,6 +225,8 @@ namespace Unit
         {
             if (m_Skills == null)
                 m_Skills = new List<SkillData>();
+
+            m_Controller = UserController.self;
 
             m_OriginalRotation = transform.eulerAngles;
             m_CurrentRotation = m_OriginalRotation;
@@ -222,7 +242,7 @@ namespace Unit
 
         private void FixedUpdate()
         {
-            Move();
+            
         }
 
         private void Update()
@@ -245,86 +265,6 @@ namespace Unit
                     Publisher.self.Broadcast(Event.SkillCooldownChanged, this, i);
                 }
             }
-
-            //m_Velocity = Vector3.zero;
-
-            if (m_CanMoveWithInput)
-            {
-                Moving dPad = Moving.nowhere;
-#if !UNITY_WEBGL
-                dPad.forward = GameManager.self.state.DPad.Up == ButtonState.Pressed;
-                dPad.back = GameManager.self.state.DPad.Down == ButtonState.Pressed;
-                dPad.left = GameManager.self.state.DPad.Left == ButtonState.Pressed;
-                dPad.right = GameManager.self.state.DPad.Right == ButtonState.Pressed;
-#else
-                dPad.forward = Input.GetAxisRaw("POV Vertical") > 0.0f;
-                dPad.back = Input.GetAxisRaw("POV Vertical") < 0.0f;
-                dPad.left = Input.GetAxisRaw("POV Horizontal") < 0.0f;
-                dPad.right = Input.GetAxisRaw("POV Horizontal") > 0.0f;
-#endif
-
-                m_IsMoving.forward = Input.GetKey(KeyCode.W) | dPad.forward;
-                m_IsMoving.back = Input.GetKey(KeyCode.S) | dPad.back;
-                m_IsMoving.left = Input.GetKey(KeyCode.A) | dPad.left;
-                m_IsMoving.right = Input.GetKey(KeyCode.D) | dPad.right;
-
-                if (m_IsMoving.forward)
-                    m_Velocity = new Vector3(0, m_Velocity.y, m_Speed);
-                if (m_IsMoving.back)
-                    m_Velocity = new Vector3(0, m_Velocity.y, -m_Speed);
-                if (m_IsMoving.left)
-                    m_Velocity = new Vector3(-m_Speed, m_Velocity.y, 0);
-                if (m_IsMoving.right)
-                    m_Velocity = new Vector3(m_Speed, m_Velocity.y, 0);
-
-                if (m_IsMoving.forward && m_IsMoving.left)
-                    m_Velocity = new Vector3(-Mathf.Sqrt(m_Speed * 2), m_Velocity.y, Mathf.Sqrt(m_Speed * 2));
-                if (m_IsMoving.forward && m_IsMoving.right)
-                    m_Velocity = new Vector3(Mathf.Sqrt(m_Speed * 2), m_Velocity.y, Mathf.Sqrt(m_Speed * 2));
-                if (m_IsMoving.back && m_IsMoving.left)
-                    m_Velocity = new Vector3(-Mathf.Sqrt(m_Speed * 2), m_Velocity.y, -Mathf.Sqrt(m_Speed * 2));
-                if (m_IsMoving.back && m_IsMoving.right)
-                    m_Velocity = new Vector3(Mathf.Sqrt(m_Speed * 2), m_Velocity.y, -Mathf.Sqrt(m_Speed * 2));
-
-                Vector2 leftStick;
-#if !UNITY_WEBGL
-                leftStick.x = GameManager.self.state.ThumbSticks.Left.X;
-                leftStick.y = GameManager.self.state.ThumbSticks.Left.Y;
-#else
-                leftStick.x = Input.GetAxisRaw("Horizontal");
-                leftStick.y = Input.GetAxisRaw("Vertical");
-#endif
-                if (leftStick.x != 0.0f ||
-                    leftStick.y != 0.0f)
-                {
-                    m_Velocity = new Vector3(
-                        leftStick.x * m_Speed,
-                        m_Velocity.y,
-                        leftStick.y * m_Speed);
-                }
-            }
-
-            bool[] isPressed;
-#if !UNITY_WEBGL
-            isPressed = new[]
-            {
-                GameManager.self.state.Triggers.Right > 0.0f,
-                GameManager.self.state.Triggers.Left > 0.0f
-            };
-#else
-            isPressed = new[]
-            {
-                Input.GetAxisRaw("Skill 1") != 0.0f,
-                Input.GetAxisRaw("Skill 2") != 0.0f,
-                Input.GetAxisRaw("Skill 3") != 0.0f,
-                Input.GetAxisRaw("Skill 4") != 0.0f
-            };
-#endif
-
-            if (Input.GetKeyDown(KeyCode.Q) || isPressed[0])
-                    Publisher.self.Broadcast(Event.UseSkill, 1);
-                if (Input.GetKeyDown(KeyCode.E) || isPressed[1])
-                    Publisher.self.Broadcast(Event.UseSkill, 2);
         }
 
 
@@ -333,19 +273,20 @@ namespace Unit
             SetRotation();
             SetMovementFSM();
         }
-#endregion
+        #endregion
 
-#region -- OTHER PRIVATE FUNCTIONS --
+        #region -- OTHER PRIVATE FUNCTIONS --
         private void InitFSM()
         {
             m_MovementFSM = new FiniteStateMachine<MovementState>();
 
-            m_MovementFSM.AddTransition(MovementState.Init, MovementState.Idle);
-            m_MovementFSM.AddTransition(MovementState.Idle, MovementState.Walking);
-            m_MovementFSM.AddTransition(MovementState.Walking, MovementState.Running);
-
-            m_MovementFSM.AddTransition(MovementState.Running, MovementState.Walking);
-            m_MovementFSM.AddTransition(MovementState.Walking, MovementState.Idle);
+            switch (m_ControllerType)
+            {
+                default:
+                    m_Controller = UserController.self;
+                    m_Controller.Register(this);
+                    break;
+            }
 
             m_DamageFSM = new FiniteStateMachine<DamageState>();
 
@@ -355,24 +296,6 @@ namespace Unit
             m_MovementFSM.Transition(MovementState.Idle);
 
             m_DamageFSM.Transition(DamageState.Idle);
-        }
-
-        public void Move()
-        {
-            transform.position += (m_Velocity + m_TotalVelocity) * Time.deltaTime;
-
-            if (m_Velocity != Vector3.zero &&
-               (m_IsMoving == Moving.nowhere ||
-#if !UNITY_WEBGL
-                    (GameManager.self.state.ThumbSticks.Left.X == 0.0f &&
-                     GameManager.self.state.ThumbSticks.Left.Y == 0.0f)))
-#else
-                    (Input.GetAxisRaw("Horizontal") == 0.0f &&
-                    Input.GetAxisRaw("Vertical") == 0.0f)))
-#endif
-            {
-                Movable.Brake(this);
-            }
         }
 
         private void SetRotation()
@@ -422,7 +345,7 @@ namespace Unit
 
                 newObject.transform.position = transform.position;
 
-                newObject.GetComponent<IParentable<GameObject>>().parent = gameObject;
+                newObject.GetComponent<IChildable<IUsesSkills>>().parent = this;
 
                 newObject.GetComponent<IMovable>().velocity = new Vector3(
                     Mathf.Cos((-m_CurrentRotation.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
@@ -439,7 +362,7 @@ namespace Unit
                     m_Skills[skillIndex].sprite);
             }
         }
-#endregion
+        #endregion
     }
 }
 

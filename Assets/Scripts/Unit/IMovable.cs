@@ -11,6 +11,7 @@ namespace Unit
     /// </summary>
     public interface IMovable
     {
+        Transform transform { get; }
         Vector3 totalVelocity { get; set; }
 
         /// <summary> The speed and direction at which the object is moving. </summary>

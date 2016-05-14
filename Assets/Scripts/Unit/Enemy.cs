@@ -119,10 +119,9 @@ namespace Unit
             if (m_Nameplate != null)
             {
                 UnitNameplate nameplate = Instantiate(m_Nameplate);
-                nameplate.parent = gameObject;
+                nameplate.parent = this;
                 nameplate.Awake();
             }
-
         }
 
         void Start()

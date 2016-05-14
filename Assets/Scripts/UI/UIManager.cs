@@ -10,7 +10,7 @@ using Event = Define.Event;
 
 namespace UI
 {
-    public class UIManager : MonoSingleton<UIManager>
+    public class UIManager : MonoSingleton<UIManager>, IParentable
     {
         #region -- VARIABLES --
         [SerializeField]

@@ -48,7 +48,7 @@ namespace Unit
         public override int GetHashCode()
         {
             return base.GetHashCode();
-        } 
+        }
     }
 
 
@@ -60,6 +60,12 @@ namespace Unit
         Running,
     }
 
+    public enum ControllerType
+    {
+        User,
+        Fortress,
+        Enemy,
+    }
     /// <summary>
     ///  Ensures the object can move using input or other stimulus 
     /// </summary>
@@ -71,15 +77,22 @@ namespace Unit
 
         FiniteStateMachine<MovementState> movementFSM { get; }
 
-        void Move();
+        ControllerType controllerType { get; set; }
+        IController controller { get; set; }
     }
 
-    public interface IParentable<TParentType>
+    public interface IParentable
+    {
+        Transform transform { get; }
+        GameObject gameObject { get; }
+    }
+
+    public interface IChildable<TParentType> where TParentType : IParentable
     {
         TParentType parent { get; set; }
     }
 
-    public interface ICastable<TParentType> : IParentable<TParentType>
+    public interface ICastable<TParentType> : IChildable<TParentType> where TParentType : IParentable
     {
         float currentLifetime { get; }
         float maxLifetime { get; set; }
@@ -110,7 +123,7 @@ namespace Unit
         FiniteStateMachine<DamageState> damageFSM { get; }
     }
 
-    public interface IStats : IAttackable
+    public interface IStats : IAttackable, IParentable
     {
         float maxMana { get; }
         // Mana(currency) property
