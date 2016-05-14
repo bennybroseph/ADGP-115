@@ -1,11 +1,15 @@
 ﻿// Unit class used for storing Player and Enemy Data.
-
-using System;
 using System.Collections.Generic;
-using Library;
+
 using UI;
 using UnityEngine;
+
+#if !UNITY_WEBGL
 using XInputDotNetPure;
+#endif
+
+using Library;
+
 using Event = Define.Event;
 
 namespace Unit
@@ -246,10 +250,23 @@ namespace Unit
 
             if (m_CanMoveWithInput)
             {
-                m_IsMoving.forward = Input.GetKey(KeyCode.W) | (GameManager.self.state.DPad.Up == ButtonState.Pressed);
-                m_IsMoving.back = Input.GetKey(KeyCode.S) | (GameManager.self.state.DPad.Down == ButtonState.Pressed);
-                m_IsMoving.left = Input.GetKey(KeyCode.A) | (GameManager.self.state.DPad.Left == ButtonState.Pressed);
-                m_IsMoving.right = Input.GetKey(KeyCode.D) | (GameManager.self.state.DPad.Right == ButtonState.Pressed);
+                Moving dPad = Moving.nowhere;
+#if !UNITY_WEBGL
+                dPad.forward = GameManager.self.state.DPad.Up == ButtonState.Pressed;
+                dPad.back = GameManager.self.state.DPad.Down == ButtonState.Pressed;
+                dPad.left = GameManager.self.state.DPad.Left == ButtonState.Pressed;
+                dPad.right = GameManager.self.state.DPad.Right == ButtonState.Pressed;
+#else
+                dPad.forward = Input.GetAxisRaw("POV Vertical") > 0.0f;
+                dPad.back = Input.GetAxisRaw("POV Vertical") < 0.0f;
+                dPad.left = Input.GetAxisRaw("POV Horizontal") < 0.0f;
+                dPad.right = Input.GetAxisRaw("POV Horizontal") > 0.0f;
+#endif
+
+                m_IsMoving.forward = Input.GetKey(KeyCode.W) | dPad.forward;
+                m_IsMoving.back = Input.GetKey(KeyCode.S) | dPad.back;
+                m_IsMoving.left = Input.GetKey(KeyCode.A) | dPad.left;
+                m_IsMoving.right = Input.GetKey(KeyCode.D) | dPad.right;
 
                 if (m_IsMoving.forward)
                     m_Velocity = new Vector3(0, m_Velocity.y, m_Speed);
@@ -269,30 +286,56 @@ namespace Unit
                 if (m_IsMoving.back && m_IsMoving.right)
                     m_Velocity = new Vector3(Mathf.Sqrt(m_Speed * 2), m_Velocity.y, -Mathf.Sqrt(m_Speed * 2));
 
-                if (GameManager.self.state.ThumbSticks.Left.X != 0.0f ||
-                    GameManager.self.state.ThumbSticks.Left.Y != 0.0f)
+                Vector2 leftStick;
+#if !UNITY_WEBGL
+                leftStick.x = GameManager.self.state.ThumbSticks.Left.X;
+                leftStick.y = GameManager.self.state.ThumbSticks.Left.Y;
+#else
+                leftStick.x = Input.GetAxisRaw("Horizontal");
+                leftStick.y = Input.GetAxisRaw("Vertical");
+#endif
+                if (leftStick.x != 0.0f ||
+                    leftStick.y != 0.0f)
                 {
                     m_Velocity = new Vector3(
-                        GameManager.self.state.ThumbSticks.Left.X * m_Speed,
+                        leftStick.x * m_Speed,
                         m_Velocity.y,
-                        GameManager.self.state.ThumbSticks.Left.Y * m_Speed);
+                        leftStick.y * m_Speed);
                 }
             }
 
-            if (Input.GetKeyDown(KeyCode.Q) || GameManager.self.state.Triggers.Right > 0.0f)
-                Publisher.self.Broadcast(Event.UseSkill, 1);
-            if (Input.GetKeyDown(KeyCode.E) || GameManager.self.state.Triggers.Left > 0.0f)
-                Publisher.self.Broadcast(Event.UseSkill, 2);
+            bool[] isPressed;
+#if !UNITY_WEBGL
+            isPressed = new[]
+            {
+                GameManager.self.state.Triggers.Right > 0.0f,
+                GameManager.self.state.Triggers.Left > 0.0f
+            };
+#else
+            isPressed = new[]
+            {
+                Input.GetAxisRaw("Skill 1") != 0.0f,
+                Input.GetAxisRaw("Skill 2") != 0.0f,
+                Input.GetAxisRaw("Skill 3") != 0.0f,
+                Input.GetAxisRaw("Skill 4") != 0.0f
+            };
+#endif
+
+            if (Input.GetKeyDown(KeyCode.Q) || isPressed[0])
+                    Publisher.self.Broadcast(Event.UseSkill, 1);
+                if (Input.GetKeyDown(KeyCode.E) || isPressed[1])
+                    Publisher.self.Broadcast(Event.UseSkill, 2);
         }
+
 
         public void LateUpdate()
         {
             SetRotation();
             SetMovementFSM();
         }
-        #endregion
+#endregion
 
-        #region -- OTHER PRIVATE FUNCTIONS --
+#region -- OTHER PRIVATE FUNCTIONS --
         private void InitFSM()
         {
             m_MovementFSM = new FiniteStateMachine<MovementState>();
@@ -320,8 +363,13 @@ namespace Unit
 
             if (m_Velocity != Vector3.zero &&
                (m_IsMoving == Moving.nowhere ||
+#if !UNITY_WEBGL
                     (GameManager.self.state.ThumbSticks.Left.X == 0.0f &&
                      GameManager.self.state.ThumbSticks.Left.Y == 0.0f)))
+#else
+                    (Input.GetAxisRaw("Horizontal") == 0.0f &&
+                    Input.GetAxisRaw("Vertical") == 0.0f)))
+#endif
             {
                 Movable.Brake(this);
             }
@@ -391,7 +439,7 @@ namespace Unit
                     m_Skills[skillIndex].sprite);
             }
         }
-        #endregion
+#endregion
     }
 }
 
