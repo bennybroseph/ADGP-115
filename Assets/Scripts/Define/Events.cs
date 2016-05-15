@@ -22,15 +22,17 @@ namespace Define
         PauseGame,
         // There are no paramters
         UnPauseGame,
+        /// <param name="Unit"> IStats: which unit's skill should be upgraded per user input</param> 
         /// <param name="Skill Index"> int: which skill to upgrade</param>
         UpgradeSkill,
+        /// <param name="Unit"> IStats: which unit's skill should be used per user input</param> 
         /// <param name="Skill Index"> int: which skill to use</param>
         UseSkill,
         // There are no parameters
         SpawnWave,
         // There are no parameters
         GameOver,
-        /// <param name="Unit"> IStats: which player's cooldown changed</param> 
+        /// <param name="Unit"> IStats: which unit's cooldown changed</param> 
         /// <param name="Skill Index"> int: which skill's cooldown changed</param>
         SkillCooldownChanged,
 

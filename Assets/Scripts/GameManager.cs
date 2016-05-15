@@ -83,7 +83,7 @@ public class GameManager : MonoSingleton<GameManager>
                 GamePadState testState = GamePad.GetState(testPlayerIndex);
                 if (testState.IsConnected)
                 {
-                    Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
+                    //Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
                     m_PlayerIndex = testPlayerIndex;
                     m_PlayerIndexSet = true;
                 }

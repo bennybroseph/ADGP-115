@@ -76,9 +76,11 @@ namespace Unit
         bool canMoveWithInput { get; set; }
 
         FiniteStateMachine<MovementState> movementFSM { get; }
-
+        
         ControllerType controllerType { get; set; }
         IController controller { get; set; }
+
+        GameObject gameObject { get; }
     }
 
     public interface IParentable

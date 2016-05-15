@@ -2,16 +2,25 @@
 using System;
 using Library;
 using UI;
+using Unit.Controller;
 using UnityEngine;
 using Event = Define.Event;
 
 namespace Unit
 {   //Public Enemy class that inherits IStats and IAttackable from interfaces 
-    public class Enemy : MonoBehaviour, IStats
+    public class Enemy : MonoBehaviour, IStats, IControlable
     {
         [SerializeField]
         private UnitNameplate m_Nameplate;
-        //Private int and string memorable variables
+
+        [SerializeField]
+        private ControllerType m_ControllerType;
+        [SerializeField]
+        private IController m_Controller;
+
+        [SerializeField]
+        private FiniteStateMachine<MovementState> m_MovementFSM;
+
         [SerializeField]
         private string m_UnitName;
         [SerializeField]
@@ -32,13 +41,41 @@ namespace Unit
         private float m_Experience;  //Total experience each monster drops
         [SerializeField]
         private int m_Level; //wont be displayed for Enemy
+
+        [SerializeField]
+        private Vector3 m_TotalVelocity;
+        [SerializeField]
+        private Vector3 m_Velocity;
         [SerializeField]
         private float m_Speed;
+
+        [SerializeField]
+        private Moving m_IsMoving;
+
+        [SerializeField]
+        private bool m_CanMoveWithInput;
 
 
         private Pathfinding m_Pathfinding;
 
         #region -- PROPERTIES --
+        public ControllerType controllerType
+        {
+            get { return m_ControllerType; }
+            set { m_ControllerType = value; }
+        }
+        public IController controller
+        {
+            get { return m_Controller; }
+            set { m_Controller = value; }
+        }
+
+        public FiniteStateMachine<MovementState> movementFSM
+        {
+            get { return m_MovementFSM; }
+            private set { m_MovementFSM = value; }
+        }
+
         //Public string Name property
         public string unitName
         {
@@ -105,6 +142,29 @@ namespace Unit
             set { m_Speed = value; }
         }
 
+        public Moving isMoving
+        {
+            get { return m_IsMoving; }
+            set { m_IsMoving = value; }
+        }
+
+        public Vector3 totalVelocity
+        {
+            get { return m_TotalVelocity; }
+            set { m_TotalVelocity = value; }
+        }
+        public Vector3 velocity
+        {
+            get { return m_Velocity; }
+            set { m_Velocity = value; }
+        }
+
+        public bool canMoveWithInput
+        {
+            get { return m_CanMoveWithInput; }
+            set { m_CanMoveWithInput = value; }
+        }
+
         public FiniteStateMachine<DamageState> damageFSM
         {
             get
@@ -130,6 +190,8 @@ namespace Unit
             m_Mana = m_MaxMana;
             m_Defense = m_MaxDefense;
 
+            SetController();
+
             if (m_Pathfinding == null)
             {
                 m_Pathfinding = new Pathfinding(
@@ -144,6 +206,18 @@ namespace Unit
         {
             m_Pathfinding.Search();
         }
-    }
 
+        private void SetController()
+        {
+            m_MovementFSM = new FiniteStateMachine<MovementState>();
+
+            switch (m_ControllerType)
+            {
+                default:
+                    m_Controller = UserController.self;
+                    m_Controller.Register(this);
+                    break;
+            }
+        }
+    }
 }

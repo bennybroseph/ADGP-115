@@ -2,10 +2,18 @@
 //   IMovable   //
 //////////////////
 
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 namespace Unit
 {
+    public static partial class Movable
+    {
+        private static class Globals
+        {
+            public const float FRICTION = 50.0f;
+        }
+    }
     /// <summary>
     /// Guarantees that the object can move using velocity
     /// </summary>
@@ -21,7 +29,7 @@ namespace Unit
         float speed { get; set; }
     }
 
-    public static class Movable
+    public static partial class Movable
     {
         public static void Brake(IMovable a_Movable)
         {
@@ -35,7 +43,7 @@ namespace Unit
                 if (a_Movable.velocity.x > 0.0f)
                 {
                     a_Movable.velocity -= new Vector3(
-                        20f * Time.deltaTime,
+                        Globals.FRICTION * Time.deltaTime,
                         0.0f,
                         0.0f);
                     if (a_Movable.velocity.x < 0.0f)
@@ -44,7 +52,7 @@ namespace Unit
                 if (a_Movable.velocity.x < 0.0f)
                 {
                     a_Movable.velocity += new Vector3(
-                        20f * Time.deltaTime,
+                        Globals.FRICTION * Time.deltaTime,
                         0.0f,
                         0.0f);
                     if (a_Movable.velocity.x > 0.0f)
@@ -56,7 +64,7 @@ namespace Unit
                     a_Movable.velocity -= new Vector3(
                         0.0f,
                         0.0f,
-                        20f * Time.deltaTime);
+                        Globals.FRICTION * Time.deltaTime);
                     if (a_Movable.velocity.z < 0.0f)
                         a_Movable.velocity = new Vector3(a_Movable.velocity.x, a_Movable.velocity.y, 0.0f);
                 }
@@ -65,7 +73,7 @@ namespace Unit
                     a_Movable.velocity += new Vector3(
                         0.0f,
                         0.0f,
-                        20f * Time.deltaTime);
+                        Globals.FRICTION * Time.deltaTime);
                     if (a_Movable.velocity.z > 0.0f)
                         a_Movable.velocity = new Vector3(a_Movable.velocity.x, a_Movable.velocity.y, 0.0f);
                 }

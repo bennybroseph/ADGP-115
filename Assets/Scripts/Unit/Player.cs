@@ -226,12 +226,12 @@ namespace Unit
             if (m_Skills == null)
                 m_Skills = new List<SkillData>();
 
-            m_Controller = UserController.self;
+            GetComponent<NavMeshAgent>().updateRotation = false;
 
             m_OriginalRotation = transform.eulerAngles;
             m_CurrentRotation = m_OriginalRotation;
 
-            InitFSM();
+            SetController();
 
             m_Health = m_MaxHealth;
             m_Mana = m_MaxMana;
@@ -242,7 +242,7 @@ namespace Unit
 
         private void FixedUpdate()
         {
-            
+
         }
 
         private void Update()
@@ -267,7 +267,6 @@ namespace Unit
             }
         }
 
-
         public void LateUpdate()
         {
             SetRotation();
@@ -276,7 +275,7 @@ namespace Unit
         #endregion
 
         #region -- OTHER PRIVATE FUNCTIONS --
-        private void InitFSM()
+        private void SetController()
         {
             m_MovementFSM = new FiniteStateMachine<MovementState>();
 
@@ -331,36 +330,38 @@ namespace Unit
 
         private void OnUseSkill(Event a_Event, params object[] a_Params)
         {
-            int skillIndex = (int)a_Params[0];
+            IUsesSkills unit = a_Params[0] as IUsesSkills;
+            int skillIndex = (int)a_Params[1];
 
-            if (m_Skills.Count >= skillIndex &&
-                m_Skills[skillIndex - 1].remainingCooldown <= 0.0f &&
-                m_Skills[skillIndex - 1].cost <= m_Mana)
-            {
-                Debug.Log("Use Skill " + skillIndex);
+            if ((Player)unit != this ||
+                m_Skills.Count < skillIndex ||
+                !(m_Skills[skillIndex - 1].remainingCooldown <= 0.0f) ||
+                !(m_Skills[skillIndex - 1].cost <= m_Mana))
+                return;
 
-                skillIndex -= 1;
+            Debug.Log("Use Skill " + skillIndex);
 
-                GameObject newObject = Instantiate(m_Skills[skillIndex].skillPrefab);
+            skillIndex -= 1;
 
-                newObject.transform.position = transform.position;
+            GameObject newObject = Instantiate(m_Skills[skillIndex].skillPrefab);
 
-                newObject.GetComponent<IChildable<IUsesSkills>>().parent = this;
+            newObject.transform.position = transform.position;
 
-                newObject.GetComponent<IMovable>().velocity = new Vector3(
-                    Mathf.Cos((-m_CurrentRotation.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
-                    0,
-                    Mathf.Sin((-m_CurrentRotation.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed);
+            newObject.GetComponent<IChildable<IUsesSkills>>().parent = this;
 
-                mana -= m_Skills[skillIndex].cost;
+            newObject.GetComponent<IMovable>().velocity = new Vector3(
+                Mathf.Cos((-m_CurrentRotation.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
+                0,
+                Mathf.Sin((-m_CurrentRotation.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed);
 
-                m_Skills[skillIndex] = new SkillData(
-                    m_Skills[skillIndex].skillPrefab,
-                    m_Skills[skillIndex].cooldown,
-                    m_Skills[skillIndex].cooldown,
-                    m_Skills[skillIndex].cost,
-                    m_Skills[skillIndex].sprite);
-            }
+            mana -= m_Skills[skillIndex].cost;
+
+            m_Skills[skillIndex] = new SkillData(
+                m_Skills[skillIndex].skillPrefab,
+                m_Skills[skillIndex].cooldown,
+                m_Skills[skillIndex].cooldown,
+                m_Skills[skillIndex].cost,
+                m_Skills[skillIndex].sprite);
         }
         #endregion
     }
