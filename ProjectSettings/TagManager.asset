@@ -13,6 +13,7 @@ TagManager:
   - HUD
   - Quit Menu
   - Instructions Menu
+  - Cooldown Indicator
   layers:
   - Default
   - TransparentFX
