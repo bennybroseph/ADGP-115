@@ -18,20 +18,17 @@ namespace Library
         /// Delegate that will be used to determine if a state change is valid by the user.
         /// Returns true or false and takes no parameters
         /// </summary>
-        /// <returns> Whether or not the transition is valid based on the user's specification</returns>
+        /// <returns> Whether or not the transition is valid based on the user's specification </returns>
         public delegate bool IsValidateTransition();
 
-        /// <summary>
-        /// Cached list of all states in the enumeration
-        /// </summary>
+        /// <summary> Cached list of all states in the enumeration </summary>
         private readonly List<T> m_States;
 
-        /// <summary>
-        /// Dynamic dictionary of all transitions as dictated by the user
-        /// </summary>
+        /// <summary> Dynamic dictionary of all transitions as dictated by the user </summary>
         private readonly Dictionary<string, IsValidateTransition> m_Transitions;
         /// <summary>
-        /// Dictionary
+        /// Dictionary which holds all of the transitions which are valid from any other state
+        /// ex. Going from any state to 'Dead' would be a common use
         /// </summary>
         private readonly Dictionary<T, IsValidateTransition> m_TransitionsFromAny;
 
@@ -41,9 +38,7 @@ namespace Library
         /// </summary>
         public T currentState { get; private set; }
 
-        /// <summary>
-        /// Default constructor which will initialize the list and dictionary
-        /// </summary>
+        /// <summary> Default constructor which will initialize the list and dictionary </summary>
         public FiniteStateMachine()
         {
             m_States = new List<T>();

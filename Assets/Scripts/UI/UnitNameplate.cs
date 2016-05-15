@@ -8,10 +8,10 @@ using Event = Define.Event;
 
 namespace UI
 {
-    public class UnitNameplate : MonoBehaviour, IParentable<GameObject>
+    public class UnitNameplate : MonoBehaviour, IChildable<IStats>
     {
         [SerializeField]
-        private GameObject m_Parent;
+        private IStats m_Parent;
 
         [SerializeField]
         private Vector3 m_Offset;
@@ -26,7 +26,7 @@ namespace UI
         private Vector2 m_HealthBarOriginalSize;
         private Vector2 m_ManaBarOriginalSize;
 
-        public GameObject parent
+        public IStats parent
         {
             get { return m_Parent; }
             set { m_Parent = value; Awake(); }
@@ -34,7 +34,7 @@ namespace UI
 
         public void Awake()
         {
-            if (m_Parent == null || m_Parent.GetComponent<IStats>() == null)
+            if (m_Parent == null)
             {
                 gameObject.SetActive(false);
                 return;
@@ -53,10 +53,7 @@ namespace UI
         }
 
         // Use this for initialization
-        void Start()
-        {
-
-        }
+        void Start() { }
 
         private void LateUpdate()
         {
@@ -100,8 +97,7 @@ namespace UI
         {
             IStats unit = a_Params[0] as IStats;
 
-            if (unit == null ||
-                unit != m_Parent.GetComponent<IStats>())
+            if (unit == null || unit != m_Parent)
                 return;
 
             SetBar(m_HealthBar, m_HealthBarOriginalSize, unit.health, unit.maxHealth);
@@ -112,8 +108,7 @@ namespace UI
         {
             IStats unit = a_Params[0] as IStats;
 
-            if (unit == null ||
-                unit != m_Parent.GetComponent<IStats>())
+            if (unit == null || unit != m_Parent)
                 return;
 
             switch (a_Event)
@@ -138,6 +133,9 @@ namespace UI
             float proportion = a_CurrentValue / a_MaxValue;
 
             a_Bar.sizeDelta = new Vector2(proportion * a_OriginalSize.x, a_Bar.sizeDelta.y);
+
+            if (a_Bar.GetComponentInChildren<Text>() == null)
+                return;
             a_Bar.GetComponentInChildren<Text>().text = a_CurrentValue + "/" + a_MaxValue;
         }
 

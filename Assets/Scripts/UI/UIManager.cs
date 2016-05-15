@@ -6,11 +6,12 @@ using UnityEngine.UI;
 using Library;
 using Unit;
 
+using Button = UnityEngine.UI.Button;
 using Event = Define.Event;
 
 namespace UI
 {
-    public class UIManager : MonoSingleton<UIManager>
+    public class UIManager : MonoSingleton<UIManager>, IParentable
     {
         #region -- VARIABLES --
         [SerializeField]

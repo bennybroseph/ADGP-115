@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Unit.Skill
 {
-    public class Fireball : MonoBehaviour, IMovable, ICastable<GameObject>
+    public class Fireball : MonoBehaviour, IMovable, ICastable<IUsesSkills>
     {
         #region -- VARIABLES --
         [SerializeField]
@@ -23,7 +23,7 @@ namespace Unit.Skill
         private Moving m_IsMoving;
 
         [SerializeField]
-        private GameObject m_Parent;
+        private IUsesSkills m_Parent;
 
         [SerializeField]
         private Vector3 m_CurrentRotation;
@@ -61,7 +61,7 @@ namespace Unit.Skill
         }
         public bool canMoveWithInput { get; set; }
 
-        public GameObject parent
+        public IUsesSkills parent
         {
             get { return m_Parent; }
             set { m_Parent = value; }
@@ -121,7 +121,7 @@ namespace Unit.Skill
 
         private void OnCollisionEnter(Collision a_Collision)
         {
-            if (a_Collision.transform.gameObject != m_Parent)
+            if (a_Collision.transform.gameObject != m_Parent.gameObject)
             {
                 IAttackable attackableObject = a_Collision.transform.gameObject.GetComponent<IAttackable>();
                 if (attackableObject != null)
