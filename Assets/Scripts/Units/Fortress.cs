@@ -1,5 +1,6 @@
 ﻿using System;
 using Library;
+using UI;
 using UnityEngine;
 
 using Event = Define.Event;
@@ -7,8 +8,11 @@ using Event = Define.Event;
 namespace Units
 {
     //Currently Working on Fortress.
-    public class Fortress : MonoBehaviour, IAttackable
+    public class Fortress : MonoBehaviour, IAttackable, IParentable
     {
+        [SerializeField]
+        private FortressNameplate m_NameplatePrefab;
+
         [SerializeField]
         private string m_UnitName;
         [SerializeField]
@@ -23,6 +27,8 @@ namespace Units
         private float m_MaxDefense;
         [SerializeField, ReadOnly]
         private float m_Defense;
+
+        private FiniteStateMachine<DamageState> m_DamageFSM;
 
         #region -- PROPERTIES --
         public string unitName
@@ -44,7 +50,7 @@ namespace Units
         public float health
         {
             get { return m_Health; }
-            set { m_Health = value; }
+            set { m_Health = value; Publisher.self.DelayedBroadcast(Event.FortressHealthChanged, this);}
         }
 
         public float maxDefense
@@ -60,16 +66,26 @@ namespace Units
 
         public FiniteStateMachine<DamageState> damageFSM
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return m_DamageFSM; }
         }
         #endregion
 
+        private void Awake()
+        {
+            m_DamageFSM = new FiniteStateMachine<DamageState>();
+
+            if (m_NameplatePrefab != null)
+            {
+                FortressNameplate nameplate = Instantiate(m_NameplatePrefab);
+                nameplate.parent = this;
+            }
+        }
+
         private void Start()
         {
-            //Empty for now
+            m_Health = m_MaxHealth;
+
+            Publisher.self.Broadcast(Event.FortressInitialized, this);
         }
 
         private void Update()
@@ -85,10 +101,13 @@ namespace Units
             {
                 //If forthealth = 0
                 m_Health = 0;
-                //Broadcast the Event GameOver
-                Publisher.self.Broadcast(Event.GameOver);
-
+                Destroy(gameObject);
             }
+        }
+
+        private void OnDestroy()
+        {
+            Publisher.self.Broadcast(Event.FortressDied, this);
         }
     }
 }

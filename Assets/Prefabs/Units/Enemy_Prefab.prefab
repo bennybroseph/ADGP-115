@@ -88,28 +88,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e5b675dab655ca40931cbdf9b201b6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Nameplate: {fileID: 11440620, guid: aae1dcd7cda646243899db62ca949502, type: 2}
-  m_NaveMeshAgent: {fileID: 19599386}
   m_ControllerType: 2
+  m_Skills: []
   m_UnitName: Enemy
-  m_UnitNickname: 
-  m_MaxHealth: 5
-  m_Health: 0
-  m_MaxDefense: 1
-  m_Defense: 1
   m_MaxMana: 5
-  m_Mana: 0
-  m_Experience: 0
-  m_Level: 1
-  m_TotalVelocity: {x: 0, y: 0, z: 0}
-  m_Velocity: {x: 0, y: 0, z: 0}
-  m_Speed: 4
-  m_IsMoving:
-    forward: 0
-    back: 0
-    left: 0
-    right: 0
-  m_CanMoveWithInput: 1
+  m_MaxDefense: 1
+  m_MaxHealth: 5
+  m_Speed: 0
+  m_Nameplate: {fileID: 11440620, guid: aae1dcd7cda646243899db62ca949502, type: 2}
 --- !u!195 &19599386
 NavMeshAgent:
   m_ObjectHideFlags: 1

@@ -12,10 +12,13 @@ namespace Units
         protected NavMeshAgent m_NavMeshAgent;
         protected GameObject m_Following;
         protected IController m_Controller;
+        [SerializeField]
         protected ControllerType m_ControllerType;
         protected FiniteStateMachine<DamageState> m_DamageFSM;
         protected FiniteStateMachine<MovementState> m_MovementFSM;
+        [SerializeField]
         protected List<Skill> m_Skills;
+        [SerializeField]
         protected string m_UnitName;
         protected string m_UnitNickname;
         [SerializeField]
@@ -34,6 +37,7 @@ namespace Units
         protected Vector3 m_TotalVelocity;
         protected Vector3 m_Velocity;
 
+        [SerializeField]
         protected float m_Speed;
         protected Moving m_IsMoving;
 
@@ -42,13 +46,13 @@ namespace Units
 
         public NavMeshAgent navMashAgent
         {
-            get { return m_NavMeshAgent;}
-            set { m_NavMeshAgent = value; }  
+            get { return m_NavMeshAgent; }
+            set { m_NavMeshAgent = value; }
         }
 
         public GameObject following
         {
-            get { return m_Following;}
+            get { return m_Following; }
             set { m_Following = value; }
         }
 
@@ -105,7 +109,7 @@ namespace Units
         public float mana
         {
             get { return m_Mana; }
-            set {m_Mana = value; Publisher.self.DelayedBroadcast(Event.UnitManaChanged, this); }
+            set { m_Mana = value; Publisher.self.DelayedBroadcast(Event.UnitManaChanged, this); }
         }
 
         //Max defense int property
@@ -132,7 +136,7 @@ namespace Units
         public float health
         {
             get { return m_Health; }
-            set { m_Health = value; }
+            set { m_Health = value; Publisher.self.DelayedBroadcast(Event.UnitHealthChanged, this); }
         }
         //Experience int property
         public float experience
@@ -145,7 +149,7 @@ namespace Units
         public int level
         {
             get { return m_Level; }
-            set { m_Level = value; Publisher.self.DelayedBroadcast(Event.UnitLevelChanged, this);}
+            set { m_Level = value; Publisher.self.DelayedBroadcast(Event.UnitLevelChanged, this); }
         }
 
         //totalVelecotiy Vector3 property 
