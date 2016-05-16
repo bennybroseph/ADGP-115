@@ -19,7 +19,11 @@ namespace Define
         QuitGame,
 
         // There are no parameters
+        SpawnWaveClicked,
+
+        /// <param name ="Wave Counter"> int: Wave counter</param> 
         SpawnWave,
+
         // There are no parameters
         ToggleQuitMenu,
         // There are no parameters

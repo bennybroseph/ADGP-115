@@ -89,7 +89,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Nameplate: {fileID: 11440620, guid: aae1dcd7cda646243899db62ca949502, type: 2}
-  m_ControllerType: 0
+  m_NaveMeshAgent: {fileID: 19599386}
+  m_ControllerType: 2
   m_UnitName: Enemy
   m_UnitNickname: 
   m_MaxHealth: 5

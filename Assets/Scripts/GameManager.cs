@@ -15,8 +15,8 @@ public class GameManager : MonoSingleton<GameManager>
 {
     [SerializeField]
     private UIManager m_UIManager;
-    [SerializeField]
-    private SpawnWaves m_WaveSpawner;
+    //[SerializeField]
+    //private SpawnWaves m_WaveSpawner;
     [SerializeField]
     private float m_PreviousTimeScale;
 
@@ -47,7 +47,7 @@ public class GameManager : MonoSingleton<GameManager>
 
     private void Awake()
     {
-        Instantiate(m_WaveSpawner);
+        //Instantiate(m_WaveSpawner);
         Instantiate(m_UIManager);
     }
     // Use this for initialization
@@ -63,7 +63,6 @@ public class GameManager : MonoSingleton<GameManager>
 
         Publisher.self.Subscribe(Event.PauseGame, OnPauseGame);
         Publisher.self.Subscribe(Event.UnPauseGame, OnUnPauseGame);
-
 
     }
 

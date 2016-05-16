@@ -12,6 +12,7 @@ using Library;
 using Units.Controller;
 using Units.Skills;
 using Event = Define.Event;
+using System;
 
 namespace Units
 {
@@ -22,6 +23,9 @@ namespace Units
         // Private member variables
         [SerializeField]
         private UnitNameplate m_Nameplate;
+
+        private NavMeshAgent m_NaveMeshAgent;
+        private GameObject m_following;
 
         [SerializeField]
         private ControllerType m_ControllerType;
@@ -204,6 +208,27 @@ namespace Units
         {
             get { return m_Parent; }
             set { m_Parent = value; }
+        }
+
+        public NavMeshAgent navMashAgent
+        {
+            get
+            {
+                return m_NaveMeshAgent;
+            }
+        }
+
+        public GameObject following
+        {
+            get
+            {
+                return m_following;
+            }
+
+            set
+            {
+                m_following = value;
+            }
         }
         #endregion
 
