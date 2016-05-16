@@ -5,7 +5,7 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace Unit
+namespace Units
 {
     public static partial class Movable
     {

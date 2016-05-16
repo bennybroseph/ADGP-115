@@ -11,6 +11,8 @@ GameObject:
   - 114: {fileID: 11466274}
   - 212: {fileID: 21248620}
   - 95: {fileID: 9516522}
+  - 65: {fileID: 6525382}
+  - 54: {fileID: 5442912}
   m_Layer: 0
   m_Name: Fireball_Prefab
   m_TagString: Untagged
@@ -30,6 +32,33 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!54 &5442912
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 167634}
+  serializedVersion: 2
+  m_Mass: 0.0000001
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &6525382
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 167634}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.64, y: 0.6399999, z: 0.19999997}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!95 &9516522
 Animator:
   serializedVersion: 3
@@ -58,6 +87,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52ecf9d3053f3804abe4c80a229889a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SkillData:
+    maxCooldown: 5
+    damage: 1
+    cost: 1
+    sprite: {fileID: 21300000, guid: 04c6b09ab8e07464c838aaed8d220c73, type: 3}
   m_CurrentLifetime: 0
   m_MaxLifetime: 2
   m_TotalVelocity: {x: 0, y: 0, z: 0}
@@ -68,7 +102,6 @@ MonoBehaviour:
     back: 0
     left: 0
     right: 0
-  m_Parent: {fileID: 0}
   m_CurrentRotation: {x: 0, y: 0, z: 0}
   m_OriginalRotation: {x: 0, y: 0, z: 0}
 --- !u!212 &21248620

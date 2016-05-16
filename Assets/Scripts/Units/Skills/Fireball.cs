@@ -1,12 +1,14 @@
-﻿using System;
+﻿using UnityEngine;
 using Library;
-using UnityEngine;
 
-namespace Unit.Skill
+namespace Units.Skills
 {
     public class Fireball : MonoBehaviour, IMovable, ICastable<IUsesSkills>
     {
         #region -- VARIABLES --
+        [SerializeField, ReadOnly]
+        private SkillData m_SkillData;
+
         [SerializeField]
         private float m_CurrentLifetime;
         [SerializeField]
@@ -32,11 +34,16 @@ namespace Unit.Skill
         #endregion
 
         #region -- PROPERTIES --
+        public SkillData skillData
+        {
+            get { return m_SkillData; }
+            set { m_SkillData = value; }
+        }
+
         public float currentLifetime
         {
             get { return m_CurrentLifetime; }
         }
-
         public float maxLifetime
         {
             get { return m_MaxLifetime; }
@@ -128,6 +135,9 @@ namespace Unit.Skill
                 {
                     attackableObject.damageFSM.Transition(DamageState.TakingDamge);
                     Debug.Log("Hit " + attackableObject.unitName);
+                    attackableObject.health -= m_SkillData.damage;
+
+                    Destroy(gameObject);
                 }
             }
         }

@@ -1,6 +1,4 @@
 ﻿// Unit class used for storing Player and Enemy Data.
-
-using System;
 using System.Collections.Generic;
 
 using UI;
@@ -11,10 +9,11 @@ using XInputDotNetPure;
 #endif
 
 using Library;
-using Unit.Controller;
+using Units.Controller;
+using Units.Skills;
 using Event = Define.Event;
 
-namespace Unit
+namespace Units
 {
     // Public unit class that takes in IStats and IAttack
     public class Player : MonoBehaviour, IUsesSkills, IControlable, IChildable<UIManager>
@@ -33,9 +32,9 @@ namespace Unit
         private FiniteStateMachine<MovementState> m_MovementFSM;
         [SerializeField]
         private FiniteStateMachine<DamageState> m_DamageFSM;
-
+        
         [SerializeField]
-        private List<SkillData> m_Skills;
+        private List<Skill> m_Skills;
 
         [SerializeField]
         private string m_UnitName;
@@ -195,10 +194,10 @@ namespace Unit
             set { m_CanMoveWithInput = value; }
         }
 
-        public List<SkillData> skills
+        public List<Skill> skills
         {
             get { return m_Skills; }
-            set { m_Skills = value; }
+            private set { m_Skills = value; }
         }
 
         public UIManager parent
@@ -224,7 +223,13 @@ namespace Unit
         private void Start()
         {
             if (m_Skills == null)
-                m_Skills = new List<SkillData>();
+                m_Skills = new List<Skill>();
+            else
+                for (int i = 0; i < m_Skills.Count; i++)
+                {
+                    m_Skills[i].skillIndex = i;
+                    m_Skills[i].parent = this;
+                }
 
             GetComponent<NavMeshAgent>().updateRotation = false;
 
@@ -247,30 +252,20 @@ namespace Unit
 
         private void Update()
         {
-            for (int i = 0; i < m_Skills.Count; ++i)
-            {
-                if (m_Skills[i].remainingCooldown != 0.0f)
-                {
-                    float remainingCooldown = m_Skills[i].remainingCooldown - Time.deltaTime;
-                    if (remainingCooldown < 0.0f)
-                        remainingCooldown = 0.0f;
-
-                    m_Skills[i] = new SkillData(
-                        m_Skills[i].skillPrefab,
-                        m_Skills[i].cooldown,
-                        remainingCooldown,
-                        m_Skills[i].cost,
-                        m_Skills[i].sprite);
-
-                    Publisher.self.Broadcast(Event.SkillCooldownChanged, this, i);
-                }
-            }
+            foreach (Skill skill in m_Skills)
+                skill.UpdateCooldown();
         }
 
         public void LateUpdate()
         {
             SetRotation();
             SetMovementFSM();
+        }
+
+        private void OnDestroy()
+        {
+            m_Controller.UnRegister(this);
+            Publisher.self.Broadcast(Event.UnitDied, this);
         }
         #endregion
 
@@ -334,19 +329,16 @@ namespace Unit
             int skillIndex = (int)a_Params[1];
 
             if ((Player)unit != this ||
-                m_Skills.Count < skillIndex ||
-                !(m_Skills[skillIndex - 1].remainingCooldown <= 0.0f) ||
-                !(m_Skills[skillIndex - 1].cost <= m_Mana))
+                m_Skills.Count <= skillIndex ||
+                !(m_Skills[skillIndex].remainingCooldown <= 0.0f) ||
+                !(m_Skills[skillIndex].skillData.cost <= m_Mana))
                 return;
-
-            Debug.Log("Use Skill " + skillIndex);
-
-            skillIndex -= 1;
-
+            
             GameObject newObject = Instantiate(m_Skills[skillIndex].skillPrefab);
 
-            newObject.transform.position = transform.position;
+            Physics.IgnoreCollision(GetComponent<Collider>(), newObject.GetComponent<Collider>());
 
+            newObject.transform.position = transform.position;
             newObject.GetComponent<IChildable<IUsesSkills>>().parent = this;
 
             newObject.GetComponent<IMovable>().velocity = new Vector3(
@@ -354,14 +346,11 @@ namespace Unit
                 0,
                 Mathf.Sin((-m_CurrentRotation.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed);
 
-            mana -= m_Skills[skillIndex].cost;
+            newObject.GetComponent<ICastable<IUsesSkills>>().skillData = m_Skills[skillIndex].skillData;
 
-            m_Skills[skillIndex] = new SkillData(
-                m_Skills[skillIndex].skillPrefab,
-                m_Skills[skillIndex].cooldown,
-                m_Skills[skillIndex].cooldown,
-                m_Skills[skillIndex].cost,
-                m_Skills[skillIndex].sprite);
+            mana -= m_Skills[skillIndex].skillData.cost;
+
+            m_Skills[skillIndex].PutOnCooldown();
         }
         #endregion
     }

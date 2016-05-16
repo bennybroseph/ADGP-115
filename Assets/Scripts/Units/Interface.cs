@@ -3,9 +3,10 @@
 using System;
 using System.Collections.Generic;
 using Library;
+using Units.Skills;
 using UnityEngine;
 
-namespace Unit
+namespace Units
 {
     [Serializable]
     public struct Moving
@@ -76,11 +77,9 @@ namespace Unit
         bool canMoveWithInput { get; set; }
 
         FiniteStateMachine<MovementState> movementFSM { get; }
-        
+
         ControllerType controllerType { get; set; }
         IController controller { get; set; }
-
-        GameObject gameObject { get; }
     }
 
     public interface IParentable
@@ -98,6 +97,8 @@ namespace Unit
     {
         float currentLifetime { get; }
         float maxLifetime { get; set; }
+
+        SkillData skillData { get; set; }
     }
 
     public enum DamageState
@@ -137,31 +138,8 @@ namespace Unit
         int level { get; }
     }
 
-    [Serializable]
-    public struct SkillData
-    {
-        public GameObject skillPrefab;
-        public float cooldown;
-        public float remainingCooldown;
-
-        public float cost;
-
-        public Sprite sprite;
-
-        public SkillData(GameObject a_SkillPrefab, float a_Cooldown, float a_RemainingCooldown, float a_Cost, Sprite a_Sprite) : this()
-        {
-            skillPrefab = a_SkillPrefab;
-            cooldown = a_Cooldown;
-            remainingCooldown = a_RemainingCooldown;
-
-            cost = a_Cost;
-
-            sprite = a_Sprite;
-        }
-    }
-
     public interface IUsesSkills : IStats
     {
-        List<SkillData> skills { get; set; }
+        List<Skill> skills { get; }
     }
 }

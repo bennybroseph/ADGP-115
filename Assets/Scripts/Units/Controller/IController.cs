@@ -6,7 +6,7 @@ using UnityEngine;
 using System.Xml;
 using System.Xml.Linq;
 
-namespace Unit
+namespace Units
 {
     internal static partial class Globals
     {
@@ -191,45 +191,6 @@ namespace Unit
                                 break;
                         }
                     }
-                    //if (reader.IsStartElement())
-                    //{
-                    //    switch (reader.Name)
-                    //    {
-                    //        case "Player":
-                    //            m_UserConfigurations.Add(new UserConfiguration(new List<Key>(), new Axis(), new Axis()));
-                    //            break;
-                    //        case "Skill":
-                    //            m_UserConfigurations[m_UserConfigurations.Count - 1].skillKeyCodes.Add(ReadKey(reader));
-                    //            break;
-                    //        case "Axis":
-                    //            {
-                    //                reader.Read();
-
-                    //                Key positive = ReadKey(reader);
-                    //                reader.Read();
-                    //                reader.Read();
-                    //                Key negative = ReadKey(reader);
-
-                    //                m_UserConfigurations[m_UserConfigurations.Count - 1] = new UserConfiguration(
-                    //                    m_UserConfigurations[m_UserConfigurations.Count - 1].skillKeyCodes,
-                    //                    new Axis(positive, negative),
-                    //                    m_UserConfigurations[m_UserConfigurations.Count - 1].horizontal);
-                    //                reader.Read(); reader.Read(); reader.Read(); reader.Read();
-                    //                Debug.Log(reader.Name);
-
-                    //                positive = ReadKey(reader);
-                    //                reader.Read();
-                    //                reader.Read();
-                    //                negative = ReadKey(reader);
-
-                    //                m_UserConfigurations[m_UserConfigurations.Count - 1] = new UserConfiguration(
-                    //                    m_UserConfigurations[m_UserConfigurations.Count - 1].skillKeyCodes,
-                    //                    m_UserConfigurations[m_UserConfigurations.Count - 1].vertical,
-                    //                    new Axis(positive, negative));
-                    //            }
-                    //            break;
-                    //    }
-                    //}
                 }
             }
         }
@@ -250,7 +211,7 @@ namespace Unit
             TCode keyCode = (TCode)Enum.Parse(typeof(TCode), a_Reader.Value);
 
             key = new Key<TCode>(name, description, keyCode);
-            Debug.Log(name + " " + description + " " + keyCode);
+            //Debug.Log(name + " " + description + " " + keyCode);
             return key;
         }
         #endregion

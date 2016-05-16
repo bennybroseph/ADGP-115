@@ -14,7 +14,7 @@ using Library;
 
 using Event = Define.Event;
 
-namespace Unit.Controller
+namespace Units.Controller
 {
     public sealed class UserController : MonoSingleton<UserController>, IController
     {
@@ -130,12 +130,14 @@ namespace Unit.Controller
                     Input.GetAxisRaw("Skill 4") != 0.0f
                 };
 #endif
-                if (controlable.gameObject.GetComponent<IUsesSkills>() != null)
+                IUsesSkills skillUser = controlable as IUsesSkills;
+
+                if (skillUser != null)
                 {
                     if (Input.GetKeyDown(KeyConfiguration.self.userConfigurations[i].skillKeyCodes[0].keyCode) || isPressed[0])
-                        Publisher.self.Broadcast(Event.UseSkill, controlable.gameObject.GetComponent<IUsesSkills>(), 1);
+                        Publisher.self.Broadcast(Event.UseSkill, skillUser, 0);
                     if (Input.GetKeyDown(KeyConfiguration.self.userConfigurations[i].skillKeyCodes[1].keyCode) || isPressed[1])
-                        Publisher.self.Broadcast(Event.UseSkill, controlable.gameObject.GetComponent<IUsesSkills>(), 2);
+                        Publisher.self.Broadcast(Event.UseSkill, skillUser, 1);
                 }
 
                 i++;

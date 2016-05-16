@@ -1,12 +1,10 @@
-﻿
-using System;
-using Library;
+﻿using Library;
 using UI;
-using Unit.Controller;
+using Units.Controller;
 using UnityEngine;
 using Event = Define.Event;
 
-namespace Unit
+namespace Units
 {   //Public Enemy class that inherits IStats and IAttackable from interfaces 
     public class Enemy : MonoBehaviour, IStats, IControlable
     {
@@ -20,6 +18,9 @@ namespace Unit
 
         [SerializeField]
         private FiniteStateMachine<MovementState> m_MovementFSM;
+
+        [SerializeField]
+        private FiniteStateMachine<DamageState> m_DamageFSM;
 
         [SerializeField]
         private string m_UnitName;
@@ -167,10 +168,7 @@ namespace Unit
 
         public FiniteStateMachine<DamageState> damageFSM
         {
-            get
-            {
-                throw new NotImplementedException();
-            }
+            get { return m_DamageFSM; }
         }
         #endregion
 
@@ -192,6 +190,15 @@ namespace Unit
 
             SetController();
 
+            m_DamageFSM = new FiniteStateMachine<DamageState>();
+
+            m_DamageFSM.AddTransition(DamageState.Init, DamageState.Idle);
+            m_DamageFSM.AddTransitionFromAny(DamageState.Dead);
+
+            m_MovementFSM.Transition(MovementState.Idle);
+
+            m_DamageFSM.Transition(DamageState.Idle);
+
             if (m_Pathfinding == null)
             {
                 m_Pathfinding = new Pathfinding(
@@ -204,7 +211,17 @@ namespace Unit
 
         void Update()
         {
+            if(m_Health <= 0.0f)
+                Destroy(gameObject);
+
             m_Pathfinding.Search();
+        }
+
+        private void OnDestroy()
+        {
+            m_Controller.UnRegister(this);
+
+            Publisher.self.Broadcast(Event.UnitDied, this);
         }
 
         private void SetController()
