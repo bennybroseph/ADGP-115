@@ -1,12 +1,12 @@
 ﻿using System;
-using Library;
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 using System.Xml;
 using System.Xml.Linq;
+using Library;
+using UnityEngine;
 
-namespace Units
+namespace Units.Controller
 {
     internal static partial class Globals
     {
