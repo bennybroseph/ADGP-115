@@ -41,7 +41,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SpawnPoints: []
-  m_EnemyPrefab: {fileID: 123888, guid: 428d3e8d7eb8b894cae52741600241df, type: 2}
+  m_GoblinMagePrefab: {fileID: 110916, guid: bdb6e8711fb6dfc4c864876aa23353cf, type: 2}
+  m_GoblinPrefab: {fileID: 121338, guid: 25615d83f1227ce4cbcfefb0ef1921d1, type: 2}
   m_WaveCounter: 0
   m_Variance: {x: 0, y: 0, z: 0}
 --- !u!114 &11473028

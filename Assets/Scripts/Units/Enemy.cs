@@ -29,7 +29,7 @@ namespace Units
                 m_NavMeshAgent = GetComponent<NavMeshAgent>();
         }
 
-        void Start()
+        protected void Start()
         {
             m_Health = m_MaxHealth;
             m_Mana = m_MaxMana;
@@ -49,27 +49,30 @@ namespace Units
             Publisher.self.Broadcast(Event.UnitInitialized, this);
         }
 
-        void Update()
+        protected void Update()
         {
             if(m_Health <= 0.0f)
                 Destroy(gameObject);
 
         }
 
-        private void OnDestroy()
+        protected void OnDestroy()
         {
             m_Controller.UnRegister(this);
 
             Publisher.self.Broadcast(Event.UnitDied, this);
         }
 
-        private void SetController()
+        protected void SetController()
         {
             m_MovementFSM = new FiniteStateMachine<MovementState>();
 
             switch (m_ControllerType)
             {
-                case ControllerType.Enemy:
+                case ControllerType.GoblinMage:
+                    m_Controller = AIController.self;
+                    break;
+                case ControllerType.Goblin:
                     m_Controller = AIController.self;
                     break;
                 case ControllerType.Fortress:
