@@ -80,6 +80,8 @@ namespace Units
 
         ControllerType controllerType { get; set; }
         IController controller { get; set; }
+        NavMeshAgent navMashAgent { get; }
+        GameObject following { get; set; }
     }
 
     public interface IParentable

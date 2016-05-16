@@ -1,4 +1,5 @@
-﻿using Library;
+﻿using System;
+using Library;
 using UI;
 using Units.Controller;
 using UnityEngine;
@@ -10,6 +11,10 @@ namespace Units
     {
         [SerializeField]
         private UnitNameplate m_Nameplate;
+
+        [SerializeField]
+        private NavMeshAgent m_NaveMeshAgent;
+        private GameObject m_following;
 
         [SerializeField]
         private ControllerType m_ControllerType;
@@ -55,9 +60,6 @@ namespace Units
 
         [SerializeField]
         private bool m_CanMoveWithInput;
-
-
-        private Pathfinding m_Pathfinding;
 
         #region -- PROPERTIES --
         public ControllerType controllerType
@@ -170,6 +172,27 @@ namespace Units
         {
             get { return m_DamageFSM; }
         }
+
+        public NavMeshAgent navMashAgent
+        {
+            get
+            {
+                return m_NaveMeshAgent;
+            }
+        }
+
+        public GameObject following
+        {
+            get
+            {
+                return m_following;
+            }
+
+            set
+            {
+                m_following = value;
+            }
+        }
         #endregion
 
         void Awake()
@@ -180,6 +203,9 @@ namespace Units
                 nameplate.parent = this;
                 nameplate.Awake();
             }
+
+            if (m_NaveMeshAgent == null)
+                m_NaveMeshAgent = GetComponent<NavMeshAgent>();
         }
 
         void Start()
@@ -199,13 +225,6 @@ namespace Units
 
             m_DamageFSM.Transition(DamageState.Idle);
 
-            if (m_Pathfinding == null)
-            {
-                m_Pathfinding = new Pathfinding(
-                    GameObject.FindGameObjectWithTag("Fortress"),
-                    GetComponent<NavMeshAgent>());
-            }
-
             Publisher.self.Broadcast(Event.UnitInitialized, this);
         }
 
@@ -214,7 +233,6 @@ namespace Units
             if(m_Health <= 0.0f)
                 Destroy(gameObject);
 
-            m_Pathfinding.Search();
         }
 
         private void OnDestroy()
@@ -230,11 +248,18 @@ namespace Units
 
             switch (m_ControllerType)
             {
-                default:
+                case ControllerType.Enemy:
+                    m_Controller = AIController.self;
+                    break;
+                case ControllerType.Fortress:
                     m_Controller = UserController.self;
-                    m_Controller.Register(this);
+                    break;
+                case ControllerType.User:
+                    m_Controller = UserController.self;
                     break;
             }
+
+            m_Controller.Register(this);
         }
     }
 }

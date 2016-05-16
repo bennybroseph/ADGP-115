@@ -4,7 +4,7 @@ using UnityEngine;
 
 using Library;
 using Units;
-
+using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 using Event = Define.Event;
 
@@ -17,7 +17,8 @@ namespace UI
         private SkillButton m_SkillButtonPrefab;
         [SerializeField]
         private List<SkillButton> m_SkillButtons;
-
+        [SerializeField]
+        private Text m_WaveCounter;
         [SerializeField]
         private RectTransform m_HUD;
         [SerializeField]
@@ -35,6 +36,7 @@ namespace UI
 
             Publisher.self.Subscribe(Event.Instructions, OnInstructions);
             Publisher.self.Subscribe(Event.ToggleQuitMenu, OnToggleQuitMenu);
+            Publisher.self.Subscribe(Event.SpawnWave, OnSpawnWave);
 
             if (m_SkillButtonPrefab != null)
                 Publisher.self.Subscribe(Event.UnitInitialized, OnUnitInitialized);
@@ -52,7 +54,7 @@ namespace UI
             List<IUsesSkills> skillUsers =
                 FindObjectsOfType<GameObject>().
                     Where(
-                        x => x.GetComponent<IControlable>() != null && 
+                        x => x.GetComponent<IControlable>() != null &&
                         x.GetComponent<IControlable>().controllerType == ControllerType.User &&
                         x.GetComponent<IUsesSkills>() != null).
                     Select(x => x.GetComponent<IUsesSkills>()).
@@ -63,7 +65,7 @@ namespace UI
             int numOfSkills = 0;
             foreach (IUsesSkills skillUser in skillUsers)
                 numOfSkills += skillUser.skills.Count - 1;
-            
+
             int k = 0;
             for (int i = 0; i < skillUsers.Count; i++)
             {
@@ -116,6 +118,7 @@ namespace UI
 
                             spawnWaveButton.onClick.AddListener(OnSpawnWaveClick);
                             instructionsButton.onClick.AddListener(OnInstructionsClick);
+                            m_WaveCounter = m_HUD.GetComponentInChildren<Text>();
                         }
                         break;
                     case "Quit Menu":
@@ -200,7 +203,7 @@ namespace UI
 
         public void OnSpawnWaveClick()
         {
-            Publisher.self.Broadcast(Event.SpawnWave);
+            Publisher.self.Broadcast(Event.SpawnWaveClicked);
         }
 
         //Function for NewGame button
@@ -228,6 +231,12 @@ namespace UI
         {
             //Publisher Subscriber or QuitGame / Broadcast 
             Publisher.self.Broadcast(Event.QuitGame);
+        }
+
+        private void OnSpawnWave(Event a_Event, params object[] a_Params)
+        {
+            int waveCounter = (int)a_Params[0];
+            m_WaveCounter.text = " Wave: " + waveCounter;
         }
         #endregion
 
