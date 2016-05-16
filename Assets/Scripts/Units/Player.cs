@@ -17,65 +17,13 @@ using System;
 namespace Units
 {
     // Public unit class that takes in IStats and IAttack
-    public class Player : MonoBehaviour, IUsesSkills, IControlable, IChildable<UIManager>
+    public class Player : Unit, IChildable<UIManager>
     {
         #region -- VARIABLES --
         // Private member variables
         [SerializeField]
         private UnitNameplate m_Nameplate;
-
-        private NavMeshAgent m_NaveMeshAgent;
-        private GameObject m_following;
-
-        [SerializeField]
-        private ControllerType m_ControllerType;
-        [SerializeField]
-        private IController m_Controller;
-
-        [SerializeField]
-        private FiniteStateMachine<MovementState> m_MovementFSM;
-        [SerializeField]
-        private FiniteStateMachine<DamageState> m_DamageFSM;
-        
-        [SerializeField]
-        private List<Skill> m_Skills;
-
-        [SerializeField]
-        private string m_UnitName;
-        [SerializeField]
-        private string m_UnitNickname;
-
-        [SerializeField]
-        private float m_MaxHealth;
-        [SerializeField]
-        private float m_Health;
-        [SerializeField]
-        private float m_MaxMana;
-        [SerializeField]
-        private float m_Mana;
-        [SerializeField]
-        private float m_MaxDefense;
-        [SerializeField]
-        private float m_Defense;
-
-        [SerializeField]
-        private float m_Exp;
-        [SerializeField]
-        private int m_Level;
-
-        [SerializeField]
-        private Vector3 m_TotalVelocity;
-        [SerializeField]
-        private Vector3 m_Velocity;
-        [SerializeField]
-        private float m_Speed;
-
-        [SerializeField]
-        private Moving m_IsMoving;
-
-        [SerializeField]
-        private bool m_CanMoveWithInput;
-
+  
         [SerializeField]
         private UIManager m_Parent;
 
@@ -86,149 +34,11 @@ namespace Units
         #endregion
 
         #region -- PROPERTIES --
-        public ControllerType controllerType
-        {
-            get { return m_ControllerType; }
-            set { m_ControllerType = value; }
-        }
-        public IController controller
-        {
-            get { return m_Controller; }
-            set { m_Controller = value; }
-        }
-
-        public FiniteStateMachine<MovementState> movementFSM
-        {
-            get { return m_MovementFSM; }
-            private set { m_MovementFSM = value; }
-        }
-        public FiniteStateMachine<DamageState> damageFSM
-        {
-            get { return m_DamageFSM; }
-            private set { m_DamageFSM = value; }
-        }
-
-        // String name property
-        public string unitName
-        {
-            get { return m_UnitName; }
-            private set { m_UnitName = value; }
-        }
-
-        public string unitNickname
-        {
-            get { return m_UnitNickname; }
-            set { m_UnitNickname = value; }
-        }
-
-        public float maxHealth
-        {
-            get { return m_MaxHealth; }
-            private set { m_MaxHealth = value; }
-        }
-        // Health int property
-        public float health
-        {
-            get { return m_Health; }
-            set { m_Health = value; Publisher.self.DelayedBroadcast(Event.UnitHealthChanged, this); }
-        }
-
-        public float maxDefense
-        {
-            get { return m_MaxDefense; }
-            private set { m_MaxDefense = value; }
-        }
-        // Defense int property
-        public float defense
-        {
-            get { return m_Defense; }
-            set { m_Defense = value; }
-        }
-
-        public float maxMana
-        {
-            get { return m_MaxMana; }
-            private set { m_MaxMana = value; }
-        }
         // Mana/Currency int property
-        public float mana
-        {
-            get { return m_Mana; }
-            set { m_Mana = value; Publisher.self.DelayedBroadcast(Event.UnitManaChanged, this); }
-        }
-        // Experience int property
-        public float experience
-        {
-            get { return m_Exp; }
-            set { m_Exp = value; }
-        }
-        // Speed int property
-        public float speed
-        {
-            get { return m_Speed; }
-            set { m_Speed = value; }
-        }
-        // Level int property
-        public int level
-        {
-            get { return m_Level; }
-            private set { m_Level = value; Publisher.self.DelayedBroadcast(Event.UnitLevelChanged, this); }
-        }
-
-        public Moving isMoving
-        {
-            get { return m_IsMoving; }
-            set { m_IsMoving = value; }
-        }
-
-        public Vector3 totalVelocity
-        {
-            get { return m_TotalVelocity; }
-            set { m_TotalVelocity = value; }
-        }
-        public Vector3 velocity
-        {
-            get { return m_Velocity; }
-            set { m_Velocity = value; }
-        }
-
-        public bool canMoveWithInput
-        {
-            get { return m_CanMoveWithInput; }
-            set { m_CanMoveWithInput = value; }
-        }
-
-        public List<Skill> skills
-        {
-            get { return m_Skills; }
-            private set { m_Skills = value; }
-        }
-
         public UIManager parent
         {
             get { return m_Parent; }
             set { m_Parent = value; }
-        }
-
-        public NavMeshAgent navMashAgent
-        {
-            get
-            {
-                return m_NaveMeshAgent;
-            }
-        }
-
-        public GameObject following
-        {
-            get
-            {
-                return m_following;
-            }
-
-            set
-            {
-                m_following = value;
-            }
         }
         #endregion
 
