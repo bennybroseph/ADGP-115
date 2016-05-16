@@ -136,57 +136,104 @@ namespace Units
                         switch (reader.Name)
                         {
                             case "Player":
-                                m_UserConfigurations = new List<UserConfiguration>();
-                                while (reader.Read())
                                 {
-                                    if (reader.Name == "Player")
-                                        break;
+                                    List<Key<KeyCode>> keySkills = new List<Key<KeyCode>>();
+                                    List<Axis<KeyCode>> keyAxii = new List<Axis<KeyCode>>();
 
-                                    if (reader.IsStartElement())
+                                    List<Key<ButtonCode>> buttonSkills = new List<Key<ButtonCode>>();
+                                    List<Axis<ButtonCode>> buttonAxii = new List<Axis<ButtonCode>>();
+
+                                    while (reader.Read())
                                     {
-                                        switch (reader.Name)
+                                        if (reader.IsStartElement())
                                         {
-                                            case "Keyboard":
-                                                List<Key<KeyCode>> skills = new List<Key<KeyCode>>();
-                                                List<Axis<KeyCode>> axii = new List<Axis<KeyCode>>();
-
-                                                while (reader.Read())
-                                                {
-                                                    if (reader.IsStartElement())
+                                            switch (reader.Name)
+                                            {
+                                                case "Keyboard":
                                                     {
-                                                        if (reader.Name == "Axis")
-                                                            break;
-                                                        skills.Add(ReadKey<KeyCode>(reader));
-                                                    }
-                                                }
-
-                                                for (int i = 0; i < 2; i++)
-                                                {
-                                                    Axis<KeyCode> axis = new Axis<KeyCode>();
-                                                    while (reader.Read())
-                                                    {
-                                                        if (reader.IsStartElement())
+                                                        while (reader.Read())
                                                         {
-                                                            switch (reader.Name)
+                                                            if (reader.IsStartElement())
                                                             {
-                                                                case "Positive":
-                                                                    axis.positive = ReadKey<KeyCode>(reader);
+                                                                if (reader.Name == "Axis")
                                                                     break;
-                                                                case "Negative":
-                                                                    axis.negative = ReadKey<KeyCode>(reader);
-                                                                    break;
+                                                                keySkills.Add(ReadKey<KeyCode>(reader));
                                                             }
                                                         }
-                                                        else if (reader.Name == "Axis")
-                                                            break;
-                                                    }
-                                                    axii.Add(new Axis<KeyCode>(axis.positive, axis.negative));
-                                                }
-                                                m_UserConfigurations.Add(new UserConfiguration(skills, new List<Key<ButtonCode>>(), axii[0], axii[1], new Axis<ButtonCode>(), new Axis<ButtonCode>()));
 
-                                                break;
+                                                        for (int i = 0; i < 2; i++)
+                                                        {
+                                                            Axis<KeyCode> axis = new Axis<KeyCode>();
+                                                            while (reader.Read())
+                                                            {
+                                                                if (reader.IsStartElement())
+                                                                {
+                                                                    switch (reader.Name)
+                                                                    {
+                                                                        case "Positive":
+                                                                            axis.positive = ReadKey<KeyCode>(reader);
+                                                                            break;
+                                                                        case "Negative":
+                                                                            axis.negative = ReadKey<KeyCode>(reader);
+                                                                            break;
+                                                                    }
+                                                                }
+                                                                else if (reader.Name == "Axis")
+                                                                    break;
+                                                            }
+                                                            keyAxii.Add(new Axis<KeyCode>(axis.positive, axis.negative));
+                                                        }
+                                                    }
+                                                    break;
+                                                case "XInput":
+                                                    {
+                                                        while (reader.Read())
+                                                        {
+                                                            if (reader.IsStartElement())
+                                                            {
+                                                                if (reader.Name == "Axis")
+                                                                    break;
+                                                                buttonSkills.Add(ReadKey<ButtonCode>(reader));
+                                                            }
+                                                        }
+
+                                                        for (int i = 0; i < 2; i++)
+                                                        {
+                                                            Axis<ButtonCode> axis = new Axis<ButtonCode>();
+                                                            while (reader.Read())
+                                                            {
+                                                                if (reader.IsStartElement())
+                                                                {
+                                                                    switch (reader.Name)
+                                                                    {
+                                                                        case "Positive":
+                                                                            axis.positive = ReadKey<ButtonCode>(reader);
+                                                                            break;
+                                                                        case "Negative":
+                                                                            axis.negative = ReadKey<ButtonCode>(reader);
+                                                                            break;
+                                                                    }
+                                                                }
+                                                                else if (reader.Name == "Axis")
+                                                                    break;
+                                                            }
+                                                            buttonAxii.Add(new Axis<ButtonCode>(axis.positive, axis.negative));
+                                                        }
+                                                    }
+                                                    break;
+                                            }
                                         }
+                                        else if (reader.Name == "Player")
+                                            break;
                                     }
+                                    m_UserConfigurations.Add(
+                                        new UserConfiguration(
+                                            keySkills,
+                                            buttonSkills,
+                                            keyAxii[0],
+                                            keyAxii[1],
+                                            buttonAxii[0],
+                                            buttonAxii[1]));
                                 }
                                 break;
                         }
