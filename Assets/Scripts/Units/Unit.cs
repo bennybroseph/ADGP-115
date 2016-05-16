@@ -3,41 +3,54 @@ using System.Collections.Generic;
 using Library;
 using Units.Skills;
 
+using Event = Define.Event;
+
 namespace Units
 {
     public class Unit : MonoBehaviour, IUsesSkills, IControlable
     {
-        private IController m_Controller;
-        private ControllerType m_ControllerType;
-        private FiniteStateMachine<DamageState> m_DamageFSM;
-        private FiniteStateMachine<MovementState> m_MovementFSM;
-        private List<Skill> m_Skills;
-        private string m_UnitName;
-        private string m_UnitNickname;
+        protected NavMeshAgent m_NavMeshAgent;
+        protected GameObject m_Following;
+        protected IController m_Controller;
+        protected ControllerType m_ControllerType;
+        protected FiniteStateMachine<DamageState> m_DamageFSM;
+        protected FiniteStateMachine<MovementState> m_MovementFSM;
+        protected List<Skill> m_Skills;
+        protected string m_UnitName;
+        protected string m_UnitNickname;
         [SerializeField]
-        private float m_MaxMana;
-        private float m_Mana;
+        protected float m_MaxMana;
+        protected float m_Mana;
         [SerializeField]
-        private float m_MaxDefense;
-        private float m_Defense;
+        protected float m_MaxDefense;
+        protected float m_Defense;
         [SerializeField]
-        private float m_MaxHealth;
-        private float m_Health;
+        protected float m_MaxHealth;
+        protected float m_Health;
 
-        private float m_Experience;
-        private int m_Level;
+        protected float m_Experience;
+        protected int m_Level;
 
-        private Vector3 m_TotalVelocity;
-        private Vector3 m_Velocity;
+        protected Vector3 m_TotalVelocity;
+        protected Vector3 m_Velocity;
 
+        protected float m_Speed;
+        protected Moving m_IsMoving;
 
-
-        private float m_Speed;
-        private Moving m_IsMoving;
-
-        private bool m_CanMoveWithInput;
+        protected bool m_CanMoveWithInput;
 
 
+        public NavMeshAgent navMashAgent
+        {
+            get { return m_NavMeshAgent;}
+            set { m_NavMeshAgent = value; }  
+        }
+
+        public GameObject following
+        {
+            get { return m_Following;}
+            set { m_Following = value; }
+        }
 
         public IController controller
         {
@@ -92,7 +105,7 @@ namespace Units
         public float mana
         {
             get { return m_Mana; }
-            set { m_Mana = value; }
+            set {m_Mana = value; Publisher.self.DelayedBroadcast(Event.UnitManaChanged, this); }
         }
 
         //Max defense int property
@@ -132,7 +145,7 @@ namespace Units
         public int level
         {
             get { return m_Level; }
-            set { m_Level = value; }
+            set { m_Level = value; Publisher.self.DelayedBroadcast(Event.UnitLevelChanged, this);}
         }
 
         //totalVelecotiy Vector3 property 
@@ -168,14 +181,5 @@ namespace Units
             get { return m_CanMoveWithInput; }
             set { m_CanMoveWithInput = value; }
         }
-
-
-       
-
-
-        
-
-
-
     }
 }
