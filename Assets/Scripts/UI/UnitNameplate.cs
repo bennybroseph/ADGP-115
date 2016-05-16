@@ -1,4 +1,4 @@
-﻿using Unit;
+﻿using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,11 +17,13 @@ namespace UI
         private Vector3 m_Offset;
 
         [SerializeField]
+        private Text m_NameText;
+        [SerializeField]
+        private Text m_LevelText;
+        [SerializeField]
         private RectTransform m_HealthBar;
         [SerializeField]
         private RectTransform m_ManaBar;
-        [SerializeField]
-        private Text m_LevelText;
 
         private Vector2 m_HealthBarOriginalSize;
         private Vector2 m_ManaBarOriginalSize;
@@ -50,6 +52,8 @@ namespace UI
             Publisher.self.Subscribe(Event.UnitHealthChanged, OnValueChanged);
             Publisher.self.Subscribe(Event.UnitManaChanged, OnValueChanged);
             Publisher.self.Subscribe(Event.UnitLevelChanged, OnValueChanged);
+
+            Publisher.self.Subscribe(Event.UnitDied, OnUnitDied);
         }
 
         // Use this for initialization
@@ -66,6 +70,12 @@ namespace UI
             {
                 switch (child.tag)
                 {
+                    case "Name Text":
+                    {
+                        if (m_NameText == null)
+                            m_NameText = child.gameObject.GetComponent<Text>();
+                    }
+                        break;
                     case "Level Text":
                         {
                             if (m_LevelText == null)
@@ -100,10 +110,12 @@ namespace UI
             if (unit == null || unit != m_Parent)
                 return;
 
+            SetName(unit.unitNickname);
+            SetLevel(unit.level);
             SetBar(m_HealthBar, m_HealthBarOriginalSize, unit.health, unit.maxHealth);
             SetBar(m_ManaBar, m_ManaBarOriginalSize, unit.mana, unit.maxMana);
-            SetLevel(unit.level);
         }
+
         private void OnValueChanged(Event a_Event, params object[] a_Params)
         {
             IStats unit = a_Params[0] as IStats;
@@ -113,16 +125,31 @@ namespace UI
 
             switch (a_Event)
             {
+                case Event.UnitLevelChanged:
+                    SetLevel(unit.level);
+                    break;
                 case Event.UnitHealthChanged:
                     SetBar(m_HealthBar, m_HealthBarOriginalSize, unit.health, unit.maxHealth);
                     break;
                 case Event.UnitManaChanged:
                     SetBar(m_ManaBar, m_ManaBarOriginalSize, unit.mana, unit.maxMana);
                     break;
-                case Event.UnitLevelChanged:
-                    SetLevel(unit.level);
-                    break;
             }
+        }
+
+        private void SetName(string a_Name)
+        {
+            if (m_NameText == null)
+                return;
+
+            m_NameText.text = a_Name;
+        }
+        private void SetLevel(int a_Level)
+        {
+            if (m_LevelText == null)
+                return;
+
+            m_LevelText.text = "lvl. " + a_Level;
         }
 
         private void SetBar(RectTransform a_Bar, Vector2 a_OriginalSize, float a_CurrentValue, float a_MaxValue)
@@ -139,12 +166,15 @@ namespace UI
             a_Bar.GetComponentInChildren<Text>().text = a_CurrentValue + "/" + a_MaxValue;
         }
 
-        private void SetLevel(int a_Level)
+        private void OnUnitDied(Event a_Event, params object[] a_Params)
         {
-            if (m_LevelText == null)
+            IStats unit = a_Params[0] as IStats;
+
+            // The 'this == null' call is surprisingly necessary when in the editor...
+            if (unit == null || unit != m_Parent || this == null)
                 return;
 
-            m_LevelText.text = "Level: " + a_Level;
+            Destroy(gameObject);
         }
     }
 }

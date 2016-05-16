@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
 using Library;
-using Unit;
+using Units;
 
 using Button = UnityEngine.UI.Button;
 using Event = Define.Event;
@@ -16,6 +15,8 @@ namespace UI
         #region -- VARIABLES --
         [SerializeField]
         private SkillButton m_SkillButtonPrefab;
+        [SerializeField]
+        private List<SkillButton> m_SkillButtons;
 
         [SerializeField]
         private RectTransform m_HUD;
@@ -28,57 +29,63 @@ namespace UI
         #region -- UNITY FUNCTIONS --
         private void Awake()
         {
-            List<Player> players = new List<Player>();
-
-            foreach (Player player in FindObjectsOfType<Player>())
-            {
-                if (player.parent != null) continue;
-
-                player.parent = this;
-                players.Add(player);
-            }
-
-            if (m_SkillButtonPrefab.GetComponent<RectTransform>() == null)
-                return;
-
-            players.Sort(
-                (a, b) => a.unitName.CompareTo(b.unitName));
-
-            int numOfSkills = 0;
-            foreach (Player player in players) { numOfSkills += player.skills.Count - 1; }
-            if (numOfSkills == 0) return;
-
-            int k = 0;
-            for (int i = 0; i < players.Count; i++)
-            {
-                for (int j = 0; j < players[i].skills.Count; j++)
-                {
-                    SkillButton skillButton = InstantiateRectTransform(
-                        m_SkillButtonPrefab,
-                        new Vector3(
-                            k * 70 + i * 100 - (numOfSkills * 70 + (players.Count - 1) * 100) / 2,
-                            0,
-                            0));
-
-                    skillButton.parent = players[i];
-                    skillButton.skillIndex = j;
-                    skillButton.sprite = players[i].skills[j].sprite;
-
-                    k++;
-                }
-                k--;
-            }
+            m_SkillButtons = new List<SkillButton>();
 
             GetComponents();
 
             Publisher.self.Subscribe(Event.Instructions, OnInstructions);
             Publisher.self.Subscribe(Event.ToggleQuitMenu, OnToggleQuitMenu);
+
+            if (m_SkillButtonPrefab != null)
+                Publisher.self.Subscribe(Event.UnitInitialized, OnUnitInitialized);
+            else
+                Debug.LogWarning("UIManager needs a 'Skill Button Prefab' in order to function properly");
+
         }
 
         // Use this for initialization
         private void Start()
         {
+            if (m_SkillButtonPrefab.GetComponent<RectTransform>() == null)
+                return;
 
+            List<IUsesSkills> skillUsers =
+                FindObjectsOfType<GameObject>().
+                    Where(
+                        x => x.GetComponent<IControlable>() != null && 
+                        x.GetComponent<IControlable>().controllerType == ControllerType.User &&
+                        x.GetComponent<IUsesSkills>() != null).
+                    Select(x => x.GetComponent<IUsesSkills>()).
+                    ToList();
+
+            skillUsers.Sort((a, b) => a.unitName.CompareTo(b.unitName));
+
+            int numOfSkills = 0;
+            foreach (IUsesSkills skillUser in skillUsers)
+                numOfSkills += skillUser.skills.Count - 1;
+            
+            int k = 0;
+            for (int i = 0; i < skillUsers.Count; i++)
+            {
+                for (int j = 0; j < skillUsers[i].skills.Count; j++)
+                {
+                    SkillButton skillButton = InstantiateRectTransform(
+                        m_SkillButtonPrefab,
+                        new Vector3(
+                            k * 70 + i * 100 - (numOfSkills * 70 + (skillUsers.Count - 1) * 100) / 2,
+                            0,
+                            0));
+
+                    skillButton.parent = skillUsers[i];
+                    skillButton.skillIndex = j;
+                    skillButton.sprite = skillUsers[i].skills[j].sprite;
+
+                    m_SkillButtons.Add(skillButton);
+
+                    k++;
+                }
+                k--;
+            }
         }
 
         //LateUpdate is called once per frame
@@ -98,6 +105,11 @@ namespace UI
                         {
                             if (m_HUD == null)
                                 m_HUD = child.GetComponent<RectTransform>();
+                            if (m_HUD == null)
+                            {
+                                Debug.LogWarning("UIManager is missing an object with the 'HUD' tag parented to it");
+                                continue;
+                            }
 
                             Button spawnWaveButton = m_HUD.GetComponentsInChildren<Button>()[0];
                             Button instructionsButton = m_HUD.GetComponentsInChildren<Button>()[1];
@@ -110,6 +122,11 @@ namespace UI
                         {
                             if (m_QuitMenu == null)
                                 m_QuitMenu = child.GetComponent<RectTransform>();
+                            if (m_QuitMenu == null)
+                            {
+                                Debug.LogWarning("UIManager is missing an object with the 'Quit Menu' tag parented to it");
+                                continue;
+                            }
 
                             Button quitButton = m_QuitMenu.GetComponentsInChildren<Button>()[0];
                             Button resumeButton = m_QuitMenu.GetComponentsInChildren<Button>()[1];
@@ -124,6 +141,11 @@ namespace UI
                         {
                             if (m_InstructionMenu == null)
                                 m_InstructionMenu = child.GetComponent<RectTransform>();
+                            if (m_InstructionMenu == null)
+                            {
+                                Debug.LogWarning("UIManager is missing an object with the 'Instructions Menu' tag parented to it");
+                                continue;
+                            }
 
                             Button closeButton = m_InstructionMenu.GetComponentInChildren<Button>();
 
@@ -137,6 +159,11 @@ namespace UI
         }
 
         #region -- EVENT FUNCTIONS --
+
+        private void OnUnitInitialized(Event a_Event, params object[] a_Params)
+        {
+
+        }
 
         private void OnToggleQuitMenu(Event a_Event, params object[] a_Params)
         {

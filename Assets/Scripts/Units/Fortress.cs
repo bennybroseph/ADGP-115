@@ -4,18 +4,24 @@ using UnityEngine;
 
 using Event = Define.Event;
 
-namespace Unit
+namespace Units
 {
     //Currently Working on Fortress.
     public class Fortress : MonoBehaviour, IAttackable
     {
+        [SerializeField]
         private string m_UnitName;
+        [SerializeField]
         private string m_UnitNickname;
 
+        [SerializeField]
         private float m_MaxHealth;
+        [SerializeField, ReadOnly]
         private float m_Health;
 
+        [SerializeField]
         private float m_MaxDefense;
+        [SerializeField, ReadOnly]
         private float m_Defense;
 
         #region -- PROPERTIES --

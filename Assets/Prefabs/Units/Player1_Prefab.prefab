@@ -123,16 +123,15 @@ MonoBehaviour:
   m_Nameplate: {fileID: 11440620, guid: 730dacfbc8927a643a8a0fabf81d46c5, type: 2}
   m_ControllerType: 0
   m_Skills:
-  - skillPrefab: {fileID: 167634, guid: e4edc7fe0341b644c835f75acf8dad64, type: 2}
-    cooldown: 3
-    remainingCooldown: 0
-    cost: 1
-    sprite: {fileID: 21300000, guid: 04c6b09ab8e07464c838aaed8d220c73, type: 3}
-  - skillPrefab: {fileID: 167634, guid: e4edc7fe0341b644c835f75acf8dad64, type: 2}
-    cooldown: 3
-    remainingCooldown: 0
-    cost: 1
-    sprite: {fileID: 21300000, guid: 779c8907123ed8e4a8f6a7adab584e8b, type: 3}
+  - m_SkillPrefab: {fileID: 167634, guid: e4edc7fe0341b644c835f75acf8dad64, type: 2}
+    m_Sprite: {fileID: 21300000, guid: 04c6b09ab8e07464c838aaed8d220c73, type: 3}
+    m_SkillData:
+      maxCooldown: 3
+      damage: 1
+      cost: 1
+    m_SkillIndex: 0
+    m_CooldownReduction: 0
+    m_RemainingCooldown: 0
   m_UnitName: Player1
   m_UnitNickname: Player 1
   m_MaxHealth: 10

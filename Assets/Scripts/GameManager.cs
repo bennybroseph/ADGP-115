@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 using Library;
 using UI;
-using Unit;
+using Units;
 using Event = Define.Event;
 
 

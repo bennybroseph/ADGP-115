@@ -41,14 +41,18 @@ namespace Define
         /// <param name="Skill Index"> int: which skill's cooldown changed</param>
         SkillCooldownChanged,
 
-        /// <param name="Unit"> IStats: which unit's health changed</param>
+        /// <param name="Unit"> IStats: which unit was initialized</param>
         UnitInitialized,
+
         /// <param name="Unit"> IStats: which unit's health changed</param>
         UnitHealthChanged,
         /// <param name="Unit"> IStats: which unit's mana changed</param>
         UnitManaChanged,
         /// <param name="Unit"> IStats: which unit's level changed</param>
-        UnitLevelChanged
+        UnitLevelChanged,
+
+        /// <param name="Unit"> IStats: which unit died</param>
+        UnitDied,
     }
 
 }
