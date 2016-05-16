@@ -87,6 +87,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97ab43767e94f1140904eda84a31421e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_NameplatePrefab: {fileID: 11437952, guid: 13306f1a04c22a943b7a3a2c3428c597, type: 2}
+  m_UnitName: 
+  m_UnitNickname: 
+  m_MaxHealth: 15
+  m_Health: 0
+  m_MaxDefense: 0
+  m_Defense: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
