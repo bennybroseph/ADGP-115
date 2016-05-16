@@ -113,6 +113,7 @@ namespace Units
             {
                 default:
                     m_Controller = UserController.self;
+                    m_CanMoveWithInput = true;
                     m_Controller.Register(this);
                     break;
             }

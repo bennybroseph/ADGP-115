@@ -120,37 +120,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f944c61a53426674db03c701eb3babb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Nameplate: {fileID: 11440620, guid: 730dacfbc8927a643a8a0fabf81d46c5, type: 2}
   m_ControllerType: 0
   m_Skills:
   - m_SkillPrefab: {fileID: 167634, guid: e4edc7fe0341b644c835f75acf8dad64, type: 2}
     m_Sprite: {fileID: 21300000, guid: 04c6b09ab8e07464c838aaed8d220c73, type: 3}
     m_SkillData:
-      maxCooldown: 3
+      maxCooldown: 1
       damage: 1
       cost: 1
     m_SkillIndex: 0
     m_CooldownReduction: 0
     m_RemainingCooldown: 0
   m_UnitName: Player1
-  m_UnitNickname: Player 1
-  m_MaxHealth: 10
-  m_Health: 0
   m_MaxMana: 5
-  m_Mana: 0
   m_MaxDefense: 3
-  m_Defense: 0
-  m_Exp: 0
-  m_Level: 1
-  m_TotalVelocity: {x: 0, y: 0, z: 0}
-  m_Velocity: {x: 0, y: 0, z: 0}
+  m_MaxHealth: 10
   m_Speed: 5
-  m_IsMoving:
-    forward: 0
-    back: 0
-    left: 0
-    right: 0
-  m_CanMoveWithInput: 1
+  m_Nameplate: {fileID: 11440620, guid: 730dacfbc8927a643a8a0fabf81d46c5, type: 2}
   m_Parent: {fileID: 0}
   m_CurrentRotation: {x: 0, y: 0, z: 0}
   m_OriginalRotation: {x: 0, y: 0, z: 0}
