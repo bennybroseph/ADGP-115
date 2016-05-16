@@ -55,6 +55,13 @@ namespace Define
         /// <param name="Unit"> IStats: which unit's level changed</param>
         UnitLevelChanged,
 
+        /// <param name="Fortress"> IAttackable: which fortress was initialized</param>
+        FortressInitialized,
+        /// <param name="Fortress"> IAttackable: which fortress's health changed</param>
+        FortressHealthChanged,
+        /// <param name="Fortress"> IAttackable: which fortress died</param>
+        FortressDied,
+
         /// <param name="Unit"> IStats: which unit died</param>
         UnitDied,
     }
