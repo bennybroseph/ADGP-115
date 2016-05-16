@@ -15,41 +15,25 @@ public class GameManager : MonoSingleton<GameManager>
 {
     [SerializeField]
     private UIManager m_UIManager;
-    //[SerializeField]
-    //private SpawnWaves m_WaveSpawner;
     [SerializeField]
     private float m_PreviousTimeScale;
 
     private GameObject m_Background;
 
-#if !UNITY_WEBGL
-    private bool m_PlayerIndexSet = false;
+#if !UNITY_WEBGL 
+    private bool m_PlayerIndexSet;
     [SerializeField]
     private PlayerIndex m_PlayerIndex;
     private GamePadState m_State;
     private GamePadState m_PrevState;
 #endif
 
-#if !UNITY_WEBGL
-    public PlayerIndex playerIndex
-    {
-        get { return m_PlayerIndex; }
-    }
-    public GamePadState state
-    {
-        get { return m_State; }
-    }
-    public GamePadState prevState
-    {
-        get { return m_PrevState; }
-    }
-#endif
-
+    #region -- UNITY FUNCTIONS --
     private void Awake()
     {
-        //Instantiate(m_WaveSpawner);
         Instantiate(m_UIManager);
     }
+
     // Use this for initialization
     private void Start()
     {
@@ -63,6 +47,7 @@ public class GameManager : MonoSingleton<GameManager>
 
         Publisher.self.Subscribe(Event.PauseGame, OnPauseGame);
         Publisher.self.Subscribe(Event.UnPauseGame, OnUnPauseGame);
+
 
     }
 
@@ -96,7 +81,53 @@ public class GameManager : MonoSingleton<GameManager>
         if (Input.GetKeyDown(KeyCode.P))
             Publisher.self.Broadcast(Event.ToggleQuitMenu);
     }
+    #endregion
 
+    #region -- PUBLIC FUNCTIONS --
+
+    public bool GetButtonState(PlayerIndex a_PlayerIndex, ButtonCode a_Button)
+    {
+        switch (a_Button)
+        {
+            case ButtonCode.A:
+                return GamePad.GetState(a_PlayerIndex).Buttons.A == ButtonState.Pressed;
+            case ButtonCode.B:
+                return GamePad.GetState(a_PlayerIndex).Buttons.B == ButtonState.Pressed;
+            case ButtonCode.X:
+                return GamePad.GetState(a_PlayerIndex).Buttons.X == ButtonState.Pressed;
+            case ButtonCode.Y:
+                return GamePad.GetState(a_PlayerIndex).Buttons.Y == ButtonState.Pressed;
+
+            case ButtonCode.DpadUp:
+                return GamePad.GetState(a_PlayerIndex).DPad.Up == ButtonState.Pressed;
+            case ButtonCode.DpadDown:
+                return GamePad.GetState(a_PlayerIndex).DPad.Down == ButtonState.Pressed;
+            case ButtonCode.DpadLeft:
+                return GamePad.GetState(a_PlayerIndex).DPad.Left == ButtonState.Pressed;
+            case ButtonCode.DpadRight:
+                return GamePad.GetState(a_PlayerIndex).DPad.Right == ButtonState.Pressed;
+
+            case ButtonCode.Start:
+                return GamePad.GetState(a_PlayerIndex).Buttons.Start == ButtonState.Pressed;
+            case ButtonCode.Back:
+                return GamePad.GetState(a_PlayerIndex).Buttons.Back == ButtonState.Pressed;
+
+            case ButtonCode.LBumper:
+                return GamePad.GetState(a_PlayerIndex).Buttons.LeftShoulder == ButtonState.Pressed;
+            case ButtonCode.RBumper:
+                return GamePad.GetState(a_PlayerIndex).Buttons.RightShoulder == ButtonState.Pressed;
+            case ButtonCode.LStick:
+                return GamePad.GetState(a_PlayerIndex).Buttons.LeftStick == ButtonState.Pressed;
+            case ButtonCode.RStick:
+                return GamePad.GetState(a_PlayerIndex).Buttons.RightStick == ButtonState.Pressed;
+
+            default:
+                return false;
+        }
+    }
+    #endregion
+
+    #region -- EVENT FUNCTIONS --
     private void OnNewGame(Event a_Event, params object[] a_Params)
     {
         //Loads the first scene.
@@ -119,5 +150,5 @@ public class GameManager : MonoSingleton<GameManager>
     {
         Time.timeScale = m_PreviousTimeScale;
     }
-
+    #endregion
 }
