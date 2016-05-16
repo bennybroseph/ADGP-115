@@ -10,7 +10,9 @@ public class AIController : MonoSingleton<AIController>, IController
     [SerializeField]
     private List<Vector3> m_SpawnPoints;
     [SerializeField]
-    private GameObject m_EnemyPrefab;
+    private GameObject m_GoblinMagePrefab;
+    [SerializeField]
+    private GameObject m_GoblinPrefab;
     [SerializeField]
     private List<IStats> m_Enemies;
     [SerializeField]
@@ -55,8 +57,13 @@ public class AIController : MonoSingleton<AIController>, IController
     {
         switch (a_Controlable.controllerType)
         {
-            case ControllerType.Enemy:
+            case ControllerType.GoblinMage:
                 a_Controlable.following = GameObject.FindGameObjectWithTag("Fortress");
+                m_Controlables.Add(a_Controlable);
+                break;
+
+            case ControllerType.Goblin:
+                a_Controlable.following = GameObject.FindGameObjectWithTag("Player");
                 m_Controlables.Add(a_Controlable);
                 break;
         }
@@ -85,8 +92,8 @@ public class AIController : MonoSingleton<AIController>, IController
             m_SpawnPoints.Add(spawnPoint3);
         }
 
-        
-        
+
+
         foreach (Vector3 spawnPoint in m_SpawnPoints)
         {
             for (int i = 0; i < m_WaveCounter; i++)
@@ -94,13 +101,16 @@ public class AIController : MonoSingleton<AIController>, IController
                 float x = Random.Range(-m_Variance.x, m_Variance.x);
                 float z = Random.Range(-m_Variance.z, m_Variance.z);
 
-                GameObject newObject = Instantiate(m_EnemyPrefab);
+                GameObject goblin = Instantiate(m_GoblinPrefab);
+
+                GameObject newObject = Instantiate(m_GoblinMagePrefab);
                 newObject.transform.position = new Vector3(
                     spawnPoint.x + x,
                     spawnPoint.y,
                     spawnPoint.z + z);
 
                 m_Enemies.Add(newObject.GetComponent<IStats>());
+                m_Enemies.Add(goblin.GetComponent<IStats>());
             }
 
 

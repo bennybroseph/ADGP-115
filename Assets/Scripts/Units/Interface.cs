@@ -65,7 +65,8 @@ namespace Units
     {
         User,
         Fortress,
-        Enemy,
+        GoblinMage,
+        Goblin
     }
     /// <summary>
     ///  Ensures the object can move using input or other stimulus 
