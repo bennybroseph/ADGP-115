@@ -37,8 +37,8 @@ namespace Units.Controller
                 if (controlable.velocity != Vector3.zero &&
                     (controlable.isMoving == Moving.nowhere ||
 #if !UNITY_WEBGL
-                        (GameManager.self.state.ThumbSticks.Left.X == 0.0f &&
-                         GameManager.self.state.ThumbSticks.Left.Y == 0.0f)))
+                       true)) //(GameManager.self.state.ThumbSticks.Left.X == 0.0f &&
+                         //GameManager.self.state.ThumbSticks.Left.Y == 0.0f)))
 #else
                     (Input.GetAxisRaw("Horizontal") == 0.0f &&
                     Input.GetAxisRaw("Vertical") == 0.0f)))
@@ -61,10 +61,18 @@ namespace Units.Controller
                 {
                     Moving dPad = Moving.nowhere;
 #if !UNITY_WEBGL
-                    dPad.forward = GameManager.self.state.DPad.Up == ButtonState.Pressed;
-                    dPad.back = GameManager.self.state.DPad.Down == ButtonState.Pressed;
-                    dPad.left = GameManager.self.state.DPad.Left == ButtonState.Pressed;
-                    dPad.right = GameManager.self.state.DPad.Right == ButtonState.Pressed;
+                    dPad.forward = GameManager.self.GetButtonState(
+                        (PlayerIndex)i, 
+                        KeyConfiguration.self.userConfigurations[i].verticalButtonAxis.positive.keyCode);
+                    dPad.back = GameManager.self.GetButtonState(
+                        (PlayerIndex)i,
+                        KeyConfiguration.self.userConfigurations[i].verticalButtonAxis.negative.keyCode);
+                    dPad.left = GameManager.self.GetButtonState(
+                        (PlayerIndex)i,
+                        KeyConfiguration.self.userConfigurations[i].horizontalButtonAxis.negative.keyCode);
+                    dPad.right = GameManager.self.GetButtonState(
+                        (PlayerIndex)i,
+                        KeyConfiguration.self.userConfigurations[i].horizontalButtonAxis.positive.keyCode);
 #else
                     dPad.forward = Input.GetAxisRaw("POV Vertical") > 0.0f;
                     dPad.back = Input.GetAxisRaw("POV Vertical") < 0.0f;
@@ -99,8 +107,8 @@ namespace Units.Controller
 
                     Vector2 leftStick;
 #if !UNITY_WEBGL
-                    leftStick.x = GameManager.self.state.ThumbSticks.Left.X;
-                    leftStick.y = GameManager.self.state.ThumbSticks.Left.Y;
+                    leftStick.x = 0;//GameManager.self.state.ThumbSticks.Left.X;
+                    leftStick.y = 0;//GameManager.self.state.ThumbSticks.Left.Y;
 #else
                     leftStick.x = Input.GetAxisRaw("Horizontal");
                     leftStick.y = Input.GetAxisRaw("Vertical");
@@ -118,8 +126,11 @@ namespace Units.Controller
 #if !UNITY_WEBGL
                 bool[] isPressed =
                 {
-                    GameManager.self.state.Triggers.Right > 0.0f,
-                    GameManager.self.state.Triggers.Left > 0.0f
+                    false,
+                    false,
+                    //GameManager.self.GetButtonState(
+                    //    (PlayerIndex)i, 
+                    //    KeyConfiguration.self.userConfigurations[i].skillButtonCodes[0].keyCode),
                 };
 #else
                 bool[] isPressed =
