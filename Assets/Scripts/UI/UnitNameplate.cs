@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using Interfaces;
@@ -14,6 +15,12 @@ namespace UI
 {
     public class UnitNameplate : MonoBehaviour, IChildable<IStats>
     {
+        private enum BarType
+        {
+            Health,
+            Mana,
+        }
+
         [SerializeField]
         private IStats m_Parent;
 
@@ -25,12 +32,23 @@ namespace UI
         [SerializeField]
         private Text m_LevelText;
         [SerializeField]
-        private RectTransform m_HealthBar;
+        private Image m_HealthBar;
         [SerializeField]
-        private RectTransform m_ManaBar;
+        private Image m_ManaBar;
+        [SerializeField]
+        private Image m_NegativeHealthBar;
+        [SerializeField]
+        private Image m_NegativeManaBar;
 
-        private Vector2 m_HealthBarOriginalSize;
-        private Vector2 m_ManaBarOriginalSize;
+        [SerializeField]
+        private float m_LastHealthChange;
+        [SerializeField]
+        private bool m_HealthCoroutineIsRunning;
+
+        [SerializeField]
+        private float m_LastManaChange;
+        [SerializeField]
+        private bool m_ManaCoroutineIsRunning;
 
         public IStats parent
         {
@@ -55,6 +73,12 @@ namespace UI
             transform.SetAsFirstSibling();
 
             GetComponents();
+
+            m_LastHealthChange = 0;
+            m_HealthCoroutineIsRunning = false;
+
+            m_LastManaChange = 0;
+            m_ManaCoroutineIsRunning = false;
 
             Publisher.self.Subscribe(Event.UnitInitialized, OnInit);
 
@@ -99,13 +123,25 @@ namespace UI
                     case "Health Bar":
                         {
                             if (m_HealthBar == null)
-                                m_HealthBar = child.gameObject.GetComponent<RectTransform>();
+                                m_HealthBar = child.gameObject.GetComponent<Image>();
                         }
                         break;
                     case "Mana Bar":
                         {
                             if (m_ManaBar == null)
-                                m_ManaBar = child.gameObject.GetComponent<RectTransform>();
+                                m_ManaBar = child.gameObject.GetComponent<Image>();
+                        }
+                        break;
+                    case "Negative Health Bar":
+                        {
+                            if (m_NegativeHealthBar == null)
+                                m_NegativeHealthBar = child.gameObject.GetComponent<Image>();
+                        }
+                        break;
+                    case "Negative Mana Bar":
+                        {
+                            if (m_NegativeManaBar == null)
+                                m_NegativeManaBar = child.gameObject.GetComponent<Image>();
                         }
                         break;
                 }
@@ -139,9 +175,23 @@ namespace UI
                     break;
                 case Event.UnitHealthChanged:
                     SetBar(m_HealthBar, unit.health, unit.maxHealth);
+
+                    if (m_NegativeHealthBar.fillAmount < m_HealthBar.fillAmount)
+                        m_NegativeHealthBar.fillAmount = m_HealthBar.fillAmount;
+
+                    m_LastHealthChange = 0;
+                    if (!m_HealthCoroutineIsRunning)
+                        StartCoroutine(ReduceNegativeHealthSpace());
                     break;
                 case Event.UnitManaChanged:
                     SetBar(m_ManaBar, unit.mana, unit.maxMana);
+
+                    if (m_NegativeManaBar.fillAmount < m_ManaBar.fillAmount)
+                        m_NegativeManaBar.fillAmount = m_ManaBar.fillAmount;
+
+                    m_LastManaChange = 0;
+                    if (!m_ManaCoroutineIsRunning)
+                        StartCoroutine(ReduceNegativeManaSpace());
                     break;
             }
         }
@@ -157,12 +207,12 @@ namespace UI
                 a_Text.text = a_String;
         }
 
-        private void SetBar(RectTransform a_Bar, float a_CurrentValue, float a_MaxValue)
+        private void SetBar(Image a_Bar, float a_CurrentValue, float a_MaxValue)
         {
             if (a_Bar == null)
                 return;
 
-            a_Bar.GetComponent<Image>().fillAmount = a_CurrentValue / a_MaxValue;
+            a_Bar.fillAmount = a_CurrentValue / a_MaxValue;
 
             if (a_Bar.GetComponentInChildren<Text>() == null)
                 return;
@@ -178,6 +228,49 @@ namespace UI
                 return;
 
             Destroy(gameObject);
+        }
+
+        private IEnumerator ReduceNegativeHealthSpace()
+        {
+            m_HealthCoroutineIsRunning = true;
+            while (m_HealthBar.fillAmount != m_NegativeHealthBar.fillAmount)
+            {
+                while (m_LastHealthChange < 1.5f)
+                {
+                    m_LastHealthChange += Time.deltaTime;
+                    yield return false;
+                }
+
+                m_LastHealthChange += Time.deltaTime;
+                m_NegativeHealthBar.fillAmount -= Mathf.Sqrt(m_LastHealthChange - 1.5f) * Time.deltaTime;
+
+                if (m_NegativeHealthBar.fillAmount < m_HealthBar.fillAmount)
+                    m_NegativeHealthBar.fillAmount = m_HealthBar.fillAmount;
+
+                yield return false;
+            }
+            m_HealthCoroutineIsRunning = false;
+        }
+        private IEnumerator ReduceNegativeManaSpace()
+        {
+            m_ManaCoroutineIsRunning = true;
+            while (m_ManaBar.fillAmount != m_NegativeManaBar.fillAmount)
+            {
+                while (m_LastManaChange < 1.5f)
+                {
+                    m_LastManaChange += Time.deltaTime;
+                    yield return false;
+                }
+
+                m_LastManaChange += Time.deltaTime;
+                m_NegativeManaBar.fillAmount -= Mathf.Sqrt(m_LastManaChange - 1.5f) * Time.deltaTime;
+
+                if (m_NegativeManaBar.fillAmount < m_ManaBar.fillAmount)
+                    m_NegativeManaBar.fillAmount = m_ManaBar.fillAmount;
+
+                yield return false;
+            }
+            m_ManaCoroutineIsRunning = false;
         }
     }
 }

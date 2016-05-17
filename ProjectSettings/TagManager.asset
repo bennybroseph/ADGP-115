@@ -16,6 +16,8 @@ TagManager:
   - Cooldown Indicator
   - Name Text
   - Game Over Menu
+  - Negative Health Bar
+  - Negative Mana Bar
   layers:
   - Default
   - TransparentFX
