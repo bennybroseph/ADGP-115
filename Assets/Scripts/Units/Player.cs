@@ -88,6 +88,9 @@ namespace Units
         {
             foreach (Skill skill in m_Skills)
                 skill.UpdateCooldown();
+
+            if (m_Health <= 0.0f)
+                Destroy(gameObject);
         }
 
         public void LateUpdate()

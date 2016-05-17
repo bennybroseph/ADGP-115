@@ -109,7 +109,6 @@ namespace Units
         private void OnDestroy()
         {
             Publisher.self.Broadcast(Event.FortressDied, this);
-            Publisher.self.Broadcast(Event.GameOver);
         }
     }
 }

@@ -195,7 +195,7 @@ namespace UI
 
         private void OnMainMenu(Event a_Event, params object[] a_Params)
         {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(0);
         }
 
         private void OnToggleQuitMenu(Event a_Event, params object[] a_Params)

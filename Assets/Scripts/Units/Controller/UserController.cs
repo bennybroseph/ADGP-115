@@ -170,6 +170,8 @@ namespace Units.Controller
         public void UnRegister(IControllable a_Controllable)
         {
             m_Controllables.Remove(a_Controllable);
+            if(m_Controllables.Count == 0)
+                Publisher.self.Broadcast(Event.GameOver);
         }
     }
 }
