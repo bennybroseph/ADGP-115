@@ -15,6 +15,7 @@ TagManager:
   - Instructions Menu
   - Cooldown Indicator
   - Name Text
+  - Game Over Menu
   layers:
   - Default
   - TransparentFX

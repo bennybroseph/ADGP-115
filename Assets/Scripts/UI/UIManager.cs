@@ -4,6 +4,7 @@ using UnityEngine;
 
 using Library;
 using Units;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 using Button = UnityEngine.UI.Button;
@@ -26,6 +27,8 @@ namespace UI
         private RectTransform m_QuitMenu;
         [SerializeField]
         private RectTransform m_InstructionMenu;
+        [SerializeField]
+        private RectTransform m_GameOverMenu;
         #endregion
 
         #region -- UNITY FUNCTIONS --
@@ -38,6 +41,7 @@ namespace UI
             Publisher.self.Subscribe(Event.Instructions, OnInstructions);
             Publisher.self.Subscribe(Event.ToggleQuitMenu, OnToggleQuitMenu);
             Publisher.self.Subscribe(Event.SpawnWave, OnSpawnWave);
+            Publisher.self.Subscribe(Event.MainMenu, OnMainMenu);
 
             if (m_SkillButtonPrefab != null)
                 Publisher.self.Subscribe(Event.UnitInitialized, OnUnitInitialized);
@@ -158,6 +162,25 @@ namespace UI
                             m_InstructionMenu.gameObject.SetActive(false);
                         }
                         break;
+                    case "Game Over Menu":
+                    {
+                        if (m_GameOverMenu == null)
+                            m_GameOverMenu = child.GetComponent<RectTransform>();
+                        if (m_GameOverMenu == null)
+                        {
+                            Debug.LogWarning("UIManager is missing an object with the 'Game Over Menu' tag parented to it");
+                            continue;
+                        }
+
+                            Button mainMenuButton = m_GameOverMenu.GetComponentsInChildren<Button>()[0];
+                            Button quitButton = m_GameOverMenu.GetComponentsInChildren<Button>()[1];
+
+                            mainMenuButton.onClick.AddListener(OnMainMenuClick);
+                            quitButton.onClick.AddListener(OnQuitGameClick);
+                            
+                            m_GameOverMenu.gameObject.SetActive(false);
+                    }
+                        break;
                 }
             }
         }
@@ -167,6 +190,11 @@ namespace UI
         private void OnUnitInitialized(Event a_Event, params object[] a_Params)
         {
 
+        }
+
+        private void OnMainMenu(Event a_Event, params object[] a_Params)
+        {
+            SceneManager.LoadScene(0);
         }
 
         private void OnToggleQuitMenu(Event a_Event, params object[] a_Params)
@@ -207,6 +235,10 @@ namespace UI
             Publisher.self.Broadcast(Event.SpawnWaveClicked);
         }
 
+        public void OnMainMenuClick()
+        {
+            Publisher.self.Broadcast(Event.MainMenu);
+        }
         //Function for NewGame button
         public void NewGame()
         {
