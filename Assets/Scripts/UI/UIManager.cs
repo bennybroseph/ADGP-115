@@ -30,6 +30,14 @@ namespace UI
         private RectTransform m_InstructionMenu;
         [SerializeField]
         private RectTransform m_GameOverMenu;
+        [SerializeField]
+        private Button m_NewGame;
+        [SerializeField]
+        private Button m_LoadGame;
+        [SerializeField]
+        private Button m_Instructions;
+        [SerializeField]
+        private Button m_QuitGame;
         #endregion
 
         #region -- UNITY FUNCTIONS --
@@ -164,25 +172,80 @@ namespace UI
                         }
                         break;
                     case "Game Over Menu":
-                    {
-                        if (m_GameOverMenu == null)
-                            m_GameOverMenu = child.GetComponent<RectTransform>();
-                        if (m_GameOverMenu == null)
                         {
-                            Debug.LogWarning("UIManager is missing an object with the 'Game Over Menu' tag parented to it");
-                            continue;
-                        }
+                            if (m_GameOverMenu == null)
+                                m_GameOverMenu = child.GetComponent<RectTransform>();
+                            if (m_GameOverMenu == null)
+                            {
+                                Debug.LogWarning("UIManager is missing an object with the 'Game Over Menu' tag parented to it");
+                                continue;
+                            }
 
                             Button mainMenuButton = m_GameOverMenu.GetComponentsInChildren<Button>()[0];
                             Button quitButton = m_GameOverMenu.GetComponentsInChildren<Button>()[1];
 
                             mainMenuButton.onClick.AddListener(OnMainMenuClick);
                             quitButton.onClick.AddListener(OnQuitGameClick);
-                            
+
                             m_GameOverMenu.gameObject.SetActive(false);
-                    }
+                        }
+                        break;
+                    case "New Game":
+                        {
+                            if (m_NewGame == null)
+                                m_NewGame = child.GetComponent<Button>();
+                            if (m_NewGame == null)
+                            {
+                                Debug.LogWarning("UIManager is missing an object with the 'New Game' tag parented to it");
+                                continue;
+                            }
+
+                            m_NewGame.onClick.AddListener(delegate {SceneManager.LoadScene("Andrew"); });
+                        }
+                        break;
+                    case "Load Game":
+                        {
+                            if (m_LoadGame == null)
+                                m_LoadGame = child.GetComponent<Button>();
+                            if (m_LoadGame == null)
+                            {
+                                Debug.LogWarning("UIManager is missing an object with the 'Load Game' tag parented to it");
+                                continue;
+                            }
+
+                            m_LoadGame.onClick.AddListener(OnLoadGameClick);
+                        }
+                        break;
+                    case "Instructions":
+                        {
+                            if (m_Instructions == null)
+                                m_Instructions = child.GetComponent<Button>();
+                            if (m_Instructions == null)
+                            {
+                                Debug.LogWarning("UIManager is missing an object with the 'Instructions' tag parented to it");
+                                continue;
+
+                            }
+
+                            m_Instructions.onClick.AddListener(OnInstructionsClick);
+                        }
+                        break;
+                    case "Quit Game":
+                        {
+                            if (m_QuitGame == null)
+                                m_QuitGame = child.GetComponent<Button>();
+                            if (m_QuitGame == null)
+                            {
+                                Debug.LogWarning("UIManager is missing an object with the 'Quit Game' tag parented to it");
+                                continue;
+
+                            }
+
+                            m_QuitGame.onClick.AddListener(delegate { Application.Quit(); });
+                        }
                         break;
                 }
+
             }
         }
 
@@ -195,7 +258,7 @@ namespace UI
 
         private void OnMainMenu(Event a_Event, params object[] a_Params)
         {
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
         }
 
         private void OnToggleQuitMenu(Event a_Event, params object[] a_Params)
@@ -226,11 +289,6 @@ namespace UI
             Publisher.self.Broadcast(Event.UnPauseGame);
         }
 
-        public void OnQuitGameClick()
-        {
-            Publisher.self.Broadcast(Event.QuitGame);
-        }
-
         public void OnSpawnWaveClick()
         {
             Publisher.self.Broadcast(Event.SpawnWaveClicked);
@@ -240,28 +298,17 @@ namespace UI
         {
             Publisher.self.Broadcast(Event.MainMenu);
         }
-        //Function for NewGame button
-        public void NewGame()
-        {
-            //Publisher Subscriber for NewGame / Broadcast
-            Publisher.self.Broadcast(Event.NewGame);
 
-        }
         //Function for LoadGame button
-        public void LoadGame()
+        public void OnLoadGameClick()
         {
             //Load Game Function
             //Publisher Subscriber for LoadGame/ Broadcast
             Publisher.self.Broadcast(Event.LoadGame);
         }
-        //Function for Instructions
-        public void Instructions()
-        {
-            //Publisher Subscriber for Instructions / Broadcast 
-            Publisher.self.Broadcast(Event.Instructions);
-        }
+
         //Function for QuitGame button
-        public void QuitGame()
+        public void OnQuitGameClick()
         {
             //Publisher Subscriber or QuitGame / Broadcast 
             Publisher.self.Broadcast(Event.QuitGame);
