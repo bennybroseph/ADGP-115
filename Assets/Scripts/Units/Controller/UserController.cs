@@ -18,12 +18,16 @@ namespace Units.Controller
             get { return m_Controllables; }
         }
 
-        public UserController()
+        #region -- UNITY FUNCTIONS --
+        protected override void Awake()
         {
+            base.Awake();
+
+            Debug.Log(self);
+
             m_Controllables = new List<IControllable>();
         }
-
-        #region -- UNITY FUNCTIONS --
+        
         private void FixedUpdate()
         {
             int i = 0;

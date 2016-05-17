@@ -11,8 +11,10 @@ namespace UI
         private List<string> m_Announcments;
 
         // Use this for initialization
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             m_Announcments = new List<string>();
         }
 

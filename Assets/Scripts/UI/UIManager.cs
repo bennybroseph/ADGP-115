@@ -41,8 +41,10 @@ namespace UI
         #endregion
 
         #region -- UNITY FUNCTIONS --
-        private void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             m_SkillButtons = new List<SkillButton>();
 
             GetComponents();
@@ -120,7 +122,7 @@ namespace UI
                 {
                     case "HUD":
                         {
-                            if (m_HUD == null)
+                            //if (m_HUD == null)
                                 m_HUD = child.GetComponent<RectTransform>();
                             if (m_HUD == null)
                             {
@@ -138,7 +140,7 @@ namespace UI
                         break;
                     case "Quit Menu":
                         {
-                            if (m_QuitMenu == null)
+                            //if (m_QuitMenu == null)
                                 m_QuitMenu = child.GetComponent<RectTransform>();
                             if (m_QuitMenu == null)
                             {
@@ -157,7 +159,7 @@ namespace UI
                         break;
                     case "Instructions Menu":
                         {
-                            if (m_InstructionMenu == null)
+                            //if (m_InstructionMenu == null)
                                 m_InstructionMenu = child.GetComponent<RectTransform>();
                             if (m_InstructionMenu == null)
                             {
@@ -174,7 +176,7 @@ namespace UI
                         break;
                     case "Game Over Menu":
                         {
-                            if (m_GameOverMenu == null)
+                            //if (m_GameOverMenu == null)
                                 m_GameOverMenu = child.GetComponent<RectTransform>();
                             if (m_GameOverMenu == null)
                             {
@@ -193,7 +195,7 @@ namespace UI
                         break;
                     case "New Game":
                         {
-                            if (m_NewGame == null)
+                            //if (m_NewGame == null)
                                 m_NewGame = child.GetComponent<Button>();
                             if (m_NewGame == null)
                             {
@@ -206,7 +208,7 @@ namespace UI
                         break;
                     case "Load Game":
                         {
-                            if (m_LoadGame == null)
+                            //if (m_LoadGame == null)
                                 m_LoadGame = child.GetComponent<Button>();
                             if (m_LoadGame == null)
                             {
@@ -219,7 +221,7 @@ namespace UI
                         break;
                     case "Instructions":
                         {
-                            if (m_Instructions == null)
+                            //if (m_Instructions == null)
                                 m_Instructions = child.GetComponent<Button>();
                             if (m_Instructions == null)
                             {
@@ -233,7 +235,7 @@ namespace UI
                         break;
                     case "Quit Game":
                         {
-                            if (m_QuitGame == null)
+                            //if (m_QuitGame == null)
                                 m_QuitGame = child.GetComponent<Button>();
                             if (m_QuitGame == null)
                             {

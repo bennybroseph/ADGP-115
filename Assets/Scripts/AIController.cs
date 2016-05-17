@@ -23,8 +23,10 @@ public class AIController : MonoSingleton<AIController>, IController
     [SerializeField]
     private Vector3 m_Variance;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         m_Controlables = new List<IControllable>();
         m_Enemies = new List<IStats>();
 

@@ -31,8 +31,10 @@ public class GameManager : MonoSingleton<GameManager>
 #endif
 
     #region -- UNITY FUNCTIONS --
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         Instantiate(m_UIManager);
         m_Fortresses = new List<IAttackable>();
         m_PreviousTimeScale = Time.timeScale;
