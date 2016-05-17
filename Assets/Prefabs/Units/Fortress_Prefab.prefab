@@ -88,7 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_NameplatePrefab: {fileID: 11437952, guid: 13306f1a04c22a943b7a3a2c3428c597, type: 2}
-  m_UnitName: 
+  m_UnitName: Fortress
   m_UnitNickname: 
   m_MaxHealth: 15
   m_Health: 0

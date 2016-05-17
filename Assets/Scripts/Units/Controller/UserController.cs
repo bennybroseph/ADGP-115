@@ -62,16 +62,16 @@ namespace Units.Controller
                     Moving dPad = Moving.nowhere;
 #if !UNITY_WEBGL
                     dPad.forward = GameManager.self.GetButtonState(
-                        (PlayerIndex)i, 
+                        i, 
                         KeyConfiguration.self.userConfigurations[i].verticalButtonAxis.positive.keyCode);
                     dPad.back = GameManager.self.GetButtonState(
-                        (PlayerIndex)i,
+                        i,
                         KeyConfiguration.self.userConfigurations[i].verticalButtonAxis.negative.keyCode);
                     dPad.left = GameManager.self.GetButtonState(
-                        (PlayerIndex)i,
+                        i,
                         KeyConfiguration.self.userConfigurations[i].horizontalButtonAxis.negative.keyCode);
                     dPad.right = GameManager.self.GetButtonState(
-                        (PlayerIndex)i,
+                        i,
                         KeyConfiguration.self.userConfigurations[i].horizontalButtonAxis.positive.keyCode);
 #else
                     dPad.forward = Input.GetAxisRaw("POV Vertical") > 0.0f;
@@ -126,11 +126,12 @@ namespace Units.Controller
 #if !UNITY_WEBGL
                 bool[] isPressed =
                 {
-                    false,
-                    false,
-                    //GameManager.self.GetButtonState(
-                    //    (PlayerIndex)i, 
-                    //    KeyConfiguration.self.userConfigurations[i].skillButtonCodes[0].keyCode),
+                    GameManager.self.GetButtonState(
+                        i, 
+                        KeyConfiguration.self.userConfigurations[i].skillButtonCodes[0].keyCode),
+                    GameManager.self.GetButtonState(
+                        i,
+                        KeyConfiguration.self.userConfigurations[i].skillButtonCodes[1].keyCode),
                 };
 #else
                 bool[] isPressed =
