@@ -1,4 +1,6 @@
-﻿using Units;
+﻿using System;
+using System.Collections.Generic;
+using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,11 +12,53 @@ namespace UI
 {
     public class UnitNameplate : MonoBehaviour, IChildable<IStats>
     {
+        [Serializable]
+        private class CanvasObject<TComponent> where TComponent : Component
+        {
+            private TComponent m_Component;
+            private Vector3 m_OriginalPosition;
+
+            public TComponent component
+            {
+                get { return m_Component; }
+                set { m_Component = value; }
+            }
+
+            public Vector3 originalPosition
+            {
+                get { return m_OriginalPosition; }
+                set { m_OriginalPosition = value; }
+            }
+
+            public Transform transform
+            {
+                get { return m_Component.transform; }
+            }
+
+            public CanvasObject()
+            {
+                m_Component = null;
+                m_OriginalPosition = new Vector3();
+            }
+
+            public CanvasObject(TComponent a_Component, Vector3 a_OriginalPosition)
+            {
+                m_Component = a_Component;
+                m_OriginalPosition = a_OriginalPosition;
+            }
+        }
+
         [SerializeField]
         private IStats m_Parent;
 
         [SerializeField]
+        private Camera m_Camera;
+
+        [SerializeField]
         private Vector3 m_Offset;
+
+        [SerializeField]
+        private List<CanvasObject<Component>> m_CanvasObjects;
 
         [SerializeField]
         private Text m_NameText;
@@ -45,6 +89,12 @@ namespace UI
             if (!gameObject.activeInHierarchy)
                 gameObject.SetActive(true);
 
+            m_CanvasObjects = new List<CanvasObject<Component>>();
+            foreach (Transform child in transform)
+            {
+                m_CanvasObjects.Add(new CanvasObject<Component>(child.GetComponent<Component>(), child.transform.position));
+            }
+
             GetComponents();
 
             Publisher.self.Subscribe(Event.UnitInitialized, OnInit);
@@ -57,11 +107,23 @@ namespace UI
         }
 
         // Use this for initialization
-        void Start() { }
+        void Start()
+        {
+            m_Camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            GetComponent<Canvas>().worldCamera = m_Camera;
+        }
 
         private void LateUpdate()
         {
-            transform.position = m_Parent.transform.position + m_Offset;
+            //transform.position = m_Parent.transform.position + m_Offset;
+
+            Vector3 relativePosition = Camera.main.WorldToScreenPoint(parent.transform.position);
+
+            foreach (CanvasObject<Component> canvasObject in m_CanvasObjects)
+            {
+                canvasObject.transform.position = relativePosition + m_Offset + canvasObject.originalPosition - (Vector3)(canvasObject.component.GetComponent<RectTransform>().sizeDelta * GetComponent<Canvas>().scaleFactor / 2);
+            }
+            Debug.Log(GetComponent<Canvas>().scaleFactor);
         }
 
         private void GetComponents()
@@ -71,10 +133,10 @@ namespace UI
                 switch (child.tag)
                 {
                     case "Name Text":
-                    {
-                        if (m_NameText == null)
-                            m_NameText = child.gameObject.GetComponent<Text>();
-                    }
+                        {
+                            if (m_NameText == null)
+                                m_NameText = child.gameObject.GetComponent<Text>();
+                        }
                         break;
                     case "Level Text":
                         {
@@ -96,11 +158,6 @@ namespace UI
                         break;
                 }
             }
-
-            if (m_HealthBar != null)
-                m_HealthBarOriginalSize = m_HealthBar.sizeDelta;
-            if (m_ManaBar != null)
-                m_ManaBarOriginalSize = m_ManaBar.sizeDelta;
         }
 
         private void OnInit(Event a_Event, params object[] a_Params)
@@ -110,10 +167,10 @@ namespace UI
             if (unit == null || unit != m_Parent)
                 return;
 
-            SetName(unit.unitNickname);
-            SetLevel(unit.level);
-            SetBar(m_HealthBar, m_HealthBarOriginalSize, unit.health, unit.maxHealth);
-            SetBar(m_ManaBar, m_ManaBarOriginalSize, unit.mana, unit.maxMana);
+            SetText(m_NameText, unit.unitNickname);
+            SetText(m_LevelText, unit.level.ToString(), true);
+            SetBar(m_HealthBar, unit.health, unit.maxHealth);
+            SetBar(m_ManaBar, unit.mana, unit.maxMana);
         }
 
         private void OnValueChanged(Event a_Event, params object[] a_Params)
@@ -126,40 +183,34 @@ namespace UI
             switch (a_Event)
             {
                 case Event.UnitLevelChanged:
-                    SetLevel(unit.level);
+                    SetText(m_LevelText, unit.level.ToString(), true);
                     break;
                 case Event.UnitHealthChanged:
-                    SetBar(m_HealthBar, m_HealthBarOriginalSize, unit.health, unit.maxHealth);
+                    SetBar(m_HealthBar, unit.health, unit.maxHealth);
                     break;
                 case Event.UnitManaChanged:
-                    SetBar(m_ManaBar, m_ManaBarOriginalSize, unit.mana, unit.maxMana);
+                    SetBar(m_ManaBar, unit.mana, unit.maxMana);
                     break;
             }
         }
 
-        private void SetName(string a_Name)
+        private void SetText(Text a_Text, string a_String, bool a_AddLevel = false)
         {
-            if (m_NameText == null)
+            if (a_Text == null)
                 return;
 
-            m_NameText.text = a_Name;
-        }
-        private void SetLevel(int a_Level)
-        {
-            if (m_LevelText == null)
-                return;
-
-            m_LevelText.text = "lvl. " + a_Level;
+            if (a_AddLevel)
+                a_Text.text = "lvl. " + a_String;
+            else
+                a_Text.text = a_String;
         }
 
-        private void SetBar(RectTransform a_Bar, Vector2 a_OriginalSize, float a_CurrentValue, float a_MaxValue)
+        private void SetBar(RectTransform a_Bar, float a_CurrentValue, float a_MaxValue)
         {
             if (a_Bar == null)
                 return;
 
-            float proportion = a_CurrentValue / a_MaxValue;
-
-            a_Bar.sizeDelta = new Vector2(proportion * a_OriginalSize.x, a_Bar.sizeDelta.y);
+            a_Bar.GetComponent<Image>().fillAmount = a_CurrentValue / a_MaxValue;
 
             if (a_Bar.GetComponentInChildren<Text>() == null)
                 return;
