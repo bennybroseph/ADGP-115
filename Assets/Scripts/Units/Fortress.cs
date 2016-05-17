@@ -97,7 +97,7 @@ namespace Units
                 //Set Fort Health to equal max fort health
                 m_Health = m_MaxHealth;
             }
-            //If Fort Helth is less or equal to zero
+            //If Fort Health is less or equal to zero
             if (m_Health <= 0)
             {
                 //If forthealth = 0
@@ -109,6 +109,7 @@ namespace Units
         private void OnDestroy()
         {
             Publisher.self.Broadcast(Event.FortressDied, this);
+            Publisher.self.Broadcast(Event.GameOver);
         }
     }
 }

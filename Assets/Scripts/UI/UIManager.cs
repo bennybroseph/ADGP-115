@@ -43,7 +43,7 @@ namespace UI
             Publisher.self.Subscribe(Event.ToggleQuitMenu, OnToggleQuitMenu);
             Publisher.self.Subscribe(Event.SpawnWave, OnSpawnWave);
             Publisher.self.Subscribe(Event.MainMenu, OnMainMenu);
-
+            Publisher.self.Subscribe(Event.GameOver, OnGameOver);
             if (m_SkillButtonPrefab != null)
                 Publisher.self.Subscribe(Event.UnitInitialized, OnUnitInitialized);
             else
@@ -195,7 +195,7 @@ namespace UI
 
         private void OnMainMenu(Event a_Event, params object[] a_Params)
         {
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
         }
 
         private void OnToggleQuitMenu(Event a_Event, params object[] a_Params)
@@ -284,5 +284,9 @@ namespace UI
             return skillButton;
         }
 
+        private void OnGameOver(Event a_Event, params object[] a_Params)
+        {
+            m_GameOverMenu.gameObject.SetActive(true);
+        }
     }
 }

@@ -170,5 +170,6 @@ public class GameManager : MonoSingleton<GameManager>
     {
         Time.timeScale = m_PreviousTimeScale;
     }
+
     #endregion
 }
