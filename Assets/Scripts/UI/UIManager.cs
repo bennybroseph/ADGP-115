@@ -111,6 +111,18 @@ namespace UI
         {
 
         }
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            Publisher.self.UnSubscribe(Event.Instructions, OnInstructions);
+            Publisher.self.UnSubscribe(Event.ToggleQuitMenu, OnToggleQuitMenu);
+            Publisher.self.UnSubscribe(Event.SpawnWave, OnSpawnWave);
+            Publisher.self.UnSubscribe(Event.MainMenu, OnMainMenu);
+            Publisher.self.UnSubscribe(Event.GameOver, OnGameOver);
+            if (m_SkillButtonPrefab != null)
+                Publisher.self.UnSubscribe(Event.UnitInitialized, OnUnitInitialized);
+        }
         #endregion
 
         #region -- PRIVATE VOID FUNCTIONS --

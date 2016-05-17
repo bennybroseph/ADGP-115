@@ -80,6 +80,19 @@ public class GameManager : MonoSingleton<GameManager>
         if (Input.GetKeyDown(KeyCode.P))
             Publisher.self.Broadcast(Event.ToggleQuitMenu);
     }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+
+        Publisher.self.UnSubscribe(Event.NewGame, OnNewGame);
+        Publisher.self.UnSubscribe(Event.QuitGame, OnQuitGame);
+
+        Publisher.self.UnSubscribe(Event.PauseGame, OnPauseGame);
+        Publisher.self.UnSubscribe(Event.UnPauseGame, OnUnPauseGame);
+        Publisher.self.UnSubscribe(Event.FortressInitialized, OnFortressInit);
+        Publisher.self.UnSubscribe(Event.FortressDied, OnFortressDied);
+    }
     #endregion
 
     #region -- PUBLIC FUNCTIONS --

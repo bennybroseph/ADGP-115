@@ -47,7 +47,13 @@ public class AIController : MonoSingleton<AIController>, IController
 
     }
 
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
 
+        Publisher.self.UnSubscribe(Event.SpawnWaveClicked, SpawnWaves);
+        Publisher.self.UnSubscribe(Event.UnitDied, OnUnitDied);
+    }
 
     private void Search()
     {
