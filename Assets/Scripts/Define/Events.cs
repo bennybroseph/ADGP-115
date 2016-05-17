@@ -17,7 +17,8 @@ namespace Define
         Instructions,
         // There are no parameters
         QuitGame,
-
+        //There are no parameters
+        MainMenu,
         // There are no parameters
         SpawnWaveClicked,
 
