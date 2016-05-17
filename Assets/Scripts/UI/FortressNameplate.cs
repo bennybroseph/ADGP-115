@@ -36,6 +36,9 @@ namespace UI
             if (!gameObject.activeInHierarchy)
                 gameObject.SetActive(true);
 
+            transform.SetParent(UIManager.self.transform);
+            transform.SetAsFirstSibling();
+
             foreach (Transform child in transform)
             {
                 switch (child.gameObject.tag)
@@ -65,12 +68,14 @@ namespace UI
         // Update is called once per frame
         void Update()
         {
-
+            
         }
 
         private void LateUpdate()
         {
-            transform.position = m_Parent.transform.position + m_Offset;
+            Vector3 worldPos = m_Parent.transform.position + m_Offset;
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+            transform.position = new Vector3(screenPos.x, screenPos.y, screenPos.z);
         }
 
         private void SetHealth(RectTransform a_Bar, float a_CurrentValue, float a_MaxValue)
