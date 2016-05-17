@@ -10,8 +10,10 @@ namespace Units
 {   //Public Enemy class that inherits IStats and IAttackable from interfaces 
     public class Enemy : Unit
     {
+        #region -- VARIABLES --
         [SerializeField]
         private UnitNameplate m_Nameplate;
+        #endregion
 
         #region -- UNITY FUNCTIONS --
         void Awake()
@@ -61,6 +63,7 @@ namespace Units
         }
         #endregion
 
+        #region -- PROTECTED FUNCTIONS --
         protected void SetController()
         {
             m_MovementFSM = new FiniteStateMachine<MovementState>();
@@ -84,4 +87,5 @@ namespace Units
             m_Controller.Register(this);
         }
     }
+#endregion
 }

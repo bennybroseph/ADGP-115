@@ -15,12 +15,15 @@ namespace UI
 {
     public class UnitNameplate : MonoBehaviour, IChildable<IStats>
     {
+        #region -- ENUM -- 
         private enum BarType
         {
             Health,
             Mana,
         }
+        #endregion
 
+        #region -- PRIVATE VARIABLES --
         [SerializeField]
         private IStats m_Parent;
 
@@ -49,13 +52,17 @@ namespace UI
         private float m_LastManaChange;
         [SerializeField]
         private bool m_ManaCoroutineIsRunning;
+        #endregion
 
+        #region -- ISTATS PARENT --
         public IStats parent
         {
             get { return m_Parent; }
             set { m_Parent = value; Awake(); }
         }
+        #endregion
 
+        #region -- UNITY FUNCTIONS --
         public void Awake()
         {
             if (m_Parent == null)
@@ -101,7 +108,9 @@ namespace UI
             Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
             transform.position = new Vector3(screenPos.x, screenPos.y, screenPos.z);
         }
+        #endregion
 
+        #region -- PRIVATE VOID FUNCTIONS --
         private void GetComponents()
         {
             foreach (Transform child in transform)
@@ -229,7 +238,9 @@ namespace UI
 
             Destroy(gameObject);
         }
+#endregion
 
+        #region -- ENUMERATOR --
         private IEnumerator ReduceNegativeHealthSpace()
         {
             m_HealthCoroutineIsRunning = true;
@@ -272,5 +283,6 @@ namespace UI
             }
             m_ManaCoroutineIsRunning = false;
         }
+#endregion
     }
 }

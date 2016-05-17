@@ -111,6 +111,7 @@ namespace UI
         }
         #endregion
 
+        #region -- PRIVATE VOID FUNCTIONS --
         private void GetComponents()
         {
             foreach (Transform child in transform)
@@ -246,8 +247,10 @@ namespace UI
                         break;
                 }
 
+
             }
         }
+        #endregion
 
         #region -- EVENT FUNCTIONS --
 
@@ -258,7 +261,7 @@ namespace UI
 
         private void OnMainMenu(Event a_Event, params object[] a_Params)
         {
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(0);
         }
 
         private void OnToggleQuitMenu(Event a_Event, params object[] a_Params)
@@ -321,6 +324,7 @@ namespace UI
         }
         #endregion
 
+        #region -- PRIVATE FUNCTIONS --
         private SkillButton InstantiateRectTransform(SkillButton a_RectTransform, Vector3 a_Position)
         {
             SkillButton skillButton = Instantiate(a_RectTransform);
@@ -335,5 +339,6 @@ namespace UI
         {
             m_GameOverMenu.gameObject.SetActive(true);
         }
+#endregion
     }
 }

@@ -4,15 +4,18 @@ using Library;
 
 namespace Interfaces
 {
-        public enum DamageState
+    #region -- ENUM --
+    public enum DamageState
         {
             Init,
             Idle,
             TakingDamge,
             Dead,
         }
+    #endregion
 
-        public interface IAttackable
+    #region -- INTERFACE --
+    public interface IAttackable
         {
             // String Name property
             string unitName { get; }
@@ -28,4 +31,5 @@ namespace Interfaces
 
             FiniteStateMachine<DamageState> damageFSM { get; }
         }
+    #endregion
 }

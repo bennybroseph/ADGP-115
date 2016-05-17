@@ -1,6 +1,7 @@
 ﻿using Interfaces;
 using Library;
 using Units;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using Event = Define.Event;
@@ -9,6 +10,7 @@ namespace UI
 {
     public class FortressNameplate : MonoBehaviour, IChildable<Fortress>
     {
+        #region -- VARIABLES --
         [SerializeField]
         private Fortress m_Parent;
 
@@ -19,13 +21,17 @@ namespace UI
         private RectTransform m_HealthBar;
         [SerializeField]
         private Text m_HealthText;
+        #endregion
 
+        #region -- PUBLIC PARENT --
         public Fortress parent
         {
             get { return m_Parent; }
             set { m_Parent = value; Awake(); }
         }
+        #endregion
 
+        #region -- UNITY FUNCTIONS --
         private void Awake()
         {
             if (m_Parent == null)
@@ -78,7 +84,9 @@ namespace UI
             Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
             transform.position = new Vector3(screenPos.x, screenPos.y, screenPos.z);
         }
+        #endregion
 
+        #region -- PRIVATE FUNCTIONS --
         private void SetHealth(RectTransform a_Bar, float a_CurrentValue, float a_MaxValue)
         {
             m_HealthBar.GetComponent<Image>().fillAmount = a_CurrentValue / a_MaxValue;
@@ -114,5 +122,7 @@ namespace UI
 
             Destroy(gameObject);
         }
+        #endregion
     }
+
 }

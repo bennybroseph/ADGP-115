@@ -82,6 +82,7 @@ namespace Units.Skills
         }
         #endregion
 
+        #region -- UNITY FUNCTIONS --
         // Use this for initialization
         private void Start()
         {
@@ -107,6 +108,10 @@ namespace Units.Skills
         {
             CalculateRotation();
         }
+        #endregion
+
+
+        #region -- OTHER VOID FUNCTIONS
         private void CalculateRotation()
         {
             if (m_Velocity == Vector3.zero)
@@ -147,5 +152,6 @@ namespace Units.Skills
         {
             transform.position += (m_Velocity + m_TotalVelocity) * Time.deltaTime;
         }
+    #endregion
     }
 }
