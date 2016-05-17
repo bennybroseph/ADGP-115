@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Sockets;
 using Units;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,42 +13,6 @@ namespace UI
 {
     public class UnitNameplate : MonoBehaviour, IChildable<IStats>
     {
-        [Serializable]
-        private class CanvasObject<TComponent> where TComponent : Component
-        {
-            private TComponent m_Component;
-            private Vector3 m_OriginalPosition;
-
-            public TComponent component
-            {
-                get { return m_Component; }
-                set { m_Component = value; }
-            }
-
-            public Vector3 originalPosition
-            {
-                get { return m_OriginalPosition; }
-                set { m_OriginalPosition = value; }
-            }
-
-            public Transform transform
-            {
-                get { return m_Component.transform; }
-            }
-
-            public CanvasObject()
-            {
-                m_Component = null;
-                m_OriginalPosition = new Vector3();
-            }
-
-            public CanvasObject(TComponent a_Component, Vector3 a_OriginalPosition)
-            {
-                m_Component = a_Component;
-                m_OriginalPosition = a_OriginalPosition;
-            }
-        }
-
         [SerializeField]
         private IStats m_Parent;
 
@@ -56,9 +21,6 @@ namespace UI
 
         [SerializeField]
         private Vector3 m_Offset;
-
-        [SerializeField]
-        private List<CanvasObject<Component>> m_CanvasObjects;
 
         [SerializeField]
         private Text m_NameText;
@@ -89,11 +51,8 @@ namespace UI
             if (!gameObject.activeInHierarchy)
                 gameObject.SetActive(true);
 
-            m_CanvasObjects = new List<CanvasObject<Component>>();
-            foreach (Transform child in transform)
-            {
-                m_CanvasObjects.Add(new CanvasObject<Component>(child.GetComponent<Component>(), child.transform.position));
-            }
+            transform.parent = UIManager.self.transform;
+            transform.localScale = new Vector3(1, 1, 1);
 
             GetComponents();
 
@@ -110,20 +69,13 @@ namespace UI
         void Start()
         {
             m_Camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            GetComponent<Canvas>().worldCamera = m_Camera;
         }
 
         private void LateUpdate()
         {
-            //transform.position = m_Parent.transform.position + m_Offset;
-
-            Vector3 relativePosition = Camera.main.WorldToScreenPoint(parent.transform.position);
-
-            foreach (CanvasObject<Component> canvasObject in m_CanvasObjects)
-            {
-                canvasObject.transform.position = relativePosition + m_Offset + canvasObject.originalPosition - (Vector3)(canvasObject.component.GetComponent<RectTransform>().sizeDelta * GetComponent<Canvas>().scaleFactor / 2);
-            }
-            Debug.Log(GetComponent<Canvas>().scaleFactor);
+            Vector3 worldPos = m_Parent.transform.position + m_Offset;
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+            transform.position = new Vector3(screenPos.x, screenPos.y, screenPos.z);
         }
 
         private void GetComponents()
