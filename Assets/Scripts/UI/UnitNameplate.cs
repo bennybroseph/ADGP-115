@@ -15,12 +15,6 @@ namespace UI
 {
     public class UnitNameplate : MonoBehaviour, IChildable<IStats>
     {
-        private enum BarType
-        {
-            Health,
-            Mana,
-        }
-
         [SerializeField]
         private IStats m_Parent;
 
