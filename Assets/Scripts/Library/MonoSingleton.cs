@@ -16,9 +16,6 @@ namespace Library
         {
             get
             {
-                if (s_IsQuitting)
-                    return null;
-
                 if (s_Self == null)
                     s_Self = FindObjectOfType<T>();
                 return s_Self;
@@ -27,9 +24,9 @@ namespace Library
 
         protected MonoSingleton() { }
 
-        public void OnDestroy()
+        protected void Awake()
         {
-            s_IsQuitting = true;
+            s_IsQuitting = false;
         }
     }
 }
