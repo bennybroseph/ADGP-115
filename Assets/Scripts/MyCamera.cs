@@ -34,7 +34,7 @@ public class MyCamera : MonoBehaviour
     {
 
     }
-    
+
     // Update is called once per frame
     void LateUpdate()
     {
@@ -54,11 +54,19 @@ public class MyCamera : MonoBehaviour
             Vector3 relativePosition = transform.InverseTransformDirection(controllable.transform.position - transform.position) + new Vector3(2.0f, 2.0f);
 
             if (relativePosition.x > cameraExtent.x)
+            {
                 m_Camera.orthographicSize = relativePosition.x * Screen.height / Screen.width;
+                cameraExtent = new Vector2(
+                    m_Camera.orthographicSize * Screen.width / Screen.height,
+                    m_Camera.orthographicSize);
+            }
             if (relativePosition.y > cameraExtent.y)
+            {
                 m_Camera.orthographicSize = relativePosition.y;
-
-            cameraExtent = new Vector2(m_Camera.orthographicSize * Screen.width / Screen.height, m_Camera.orthographicSize);
+                cameraExtent = new Vector2(
+                    m_Camera.orthographicSize * Screen.width / Screen.height,
+                    m_Camera.orthographicSize);
+            }
         }
 
 
