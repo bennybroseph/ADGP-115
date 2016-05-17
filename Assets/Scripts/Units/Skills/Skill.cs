@@ -11,6 +11,7 @@ namespace Units.Skills
     [Serializable]
     public struct SkillData
     {
+        #region -- Skill DATA Struct --
         public float maxCooldown;
 
         public float damage;
@@ -23,6 +24,7 @@ namespace Units.Skills
             damage = a_Damage;
             cost = a_Cost;
         }
+        #endregion
     }
 
     [Serializable]
@@ -62,7 +64,7 @@ namespace Units.Skills
         }
         public Sprite sprite
         {
-            get { return m_Sprite;}
+            get { return m_Sprite; }
             set { m_Sprite = value; }
         }
 
@@ -88,6 +90,8 @@ namespace Units.Skills
         }
         #endregion
 
+        #region -- PUBLIC FUNCTIONS --
+
         public void ChangeCoolDown(float a_RemainingCooldown)
         {
             m_RemainingCooldown = a_RemainingCooldown;
@@ -108,7 +112,9 @@ namespace Units.Skills
 
         public void PutOnCooldown()
         {
-            ChangeCoolDown(skillData.maxCooldown * (1.0f - cooldownReduction));
+            ChangeCoolDown(skillData.maxCooldown*(1.0f - cooldownReduction));
         }
+
+        #endregion
     }
 }

@@ -8,6 +8,7 @@ using Event = Define.Event;
 
 public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
 {
+    #region -- VARIABLES -- 
     [SerializeField]
     private Image m_CooldownIndicatorImage;
 
@@ -19,25 +20,29 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
 
     [SerializeField]
     private Sprite m_Sprite;
+    #endregion
 
-    public IUsesSkills parent
-    {
-        get { return m_Parent; }
-        set { m_Parent = value; }
-    }
+    #region -- PUBLIC Properties --
+        public IUsesSkills parent
+        {
+            get { return m_Parent; }
+            set { m_Parent = value; }
+        }
 
-    public int skillIndex
-    {
-        get { return m_SkillIndex; }
-        set { m_SkillIndex = value; }
-    }
+        public int skillIndex
+        {
+            get { return m_SkillIndex; }
+            set { m_SkillIndex = value; }
+        }
 
-    public Sprite sprite
-    {
-        get { return m_Sprite; }
-        set { m_Sprite = value; }
-    }
+        public Sprite sprite
+        {
+            get { return m_Sprite; }
+            set { m_Sprite = value; }
+        }
+    #endregion
 
+    #region -- UNITY FUNCTIONS --
     private void Awake()
     {
         if (GetComponent<Button>() != null)
@@ -46,7 +51,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         Publisher.self.Subscribe(Event.SkillCooldownChanged, OnSkillCooldownChanged);
         Publisher.self.Subscribe(Event.UnitManaChanged, OnUnitManaChanged);
     }
-
+    
     // Use this for initialization
     private void Start()
     {
@@ -66,7 +71,9 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
     {
 
     }
+    #endregion
 
+    #region -- PRIVATE FUNCTIONS --
     private void OnClick()
     {
         Publisher.self.Broadcast(Event.UseSkill, m_Parent, m_SkillIndex);
@@ -108,4 +115,5 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
 
         GetComponentInChildren<Text>().text = parsedCooldown;
     }
+#endregion
 }

@@ -11,6 +11,7 @@ namespace Units
 {
     public class Unit : MonoBehaviour, IUsesSkills, IControllable
     {
+        #region -- VARIABLES --
         protected NavMeshAgent m_NavMeshAgent;
         protected GameObject m_Following;
         protected IController m_Controller;
@@ -44,8 +45,9 @@ namespace Units
         protected Moving m_IsMoving;
 
         protected bool m_CanMoveWithInput;
+        #endregion
 
-
+        #region -- Get and Set --
         public NavMeshAgent navMashAgent
         {
             get { return m_NavMeshAgent; }
@@ -187,5 +189,6 @@ namespace Units
             get { return m_CanMoveWithInput; }
             set { m_CanMoveWithInput = value; }
         }
+        #endregion
     }
 }

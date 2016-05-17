@@ -1,7 +1,7 @@
-﻿using System.Collections;
-using Interfaces;
+﻿using Interfaces;
 using Library;
 using Units;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using Event = Define.Event;
@@ -10,6 +10,7 @@ namespace UI
 {
     public class FortressNameplate : MonoBehaviour, IChildable<Fortress>
     {
+        #region -- VARIABLES --
         [SerializeField]
         private Fortress m_Parent;
 
@@ -17,24 +18,20 @@ namespace UI
         private Vector3 m_Offset;
 
         [SerializeField]
-        private Image m_HealthBar;
+        private RectTransform m_HealthBar;
         [SerializeField]
         private Text m_HealthText;
+        #endregion
 
-        [SerializeField]
-        private Image m_NegativeHealthBar;
-
-        [SerializeField]
-        private float m_LastHealthChange;
-        [SerializeField]
-        private bool m_HealthCoroutineIsRunning;
-
+        #region -- PUBLIC PARENT --
         public Fortress parent
         {
             get { return m_Parent; }
             set { m_Parent = value; Awake(); }
         }
+        #endregion
 
+        #region -- UNITY FUNCTIONS --
         private void Awake()
         {
             if (m_Parent == null)
@@ -55,16 +52,9 @@ namespace UI
                 {
                     case "Health Bar":
                         if (m_HealthBar == null)
-                            m_HealthBar = child.gameObject.GetComponent<Image>();
+                            m_HealthBar = child.gameObject.GetComponent<RectTransform>();
                         if (m_HealthText == null)
                             m_HealthText = m_HealthBar.GetComponentInChildren<Text>();
-                        break;
-
-                    case "Negative Health Bar":
-                        {
-                            if (m_NegativeHealthBar == null)
-                                m_NegativeHealthBar = child.gameObject.GetComponent<Image>();
-                        }
                         break;
                 }
             }
@@ -94,10 +84,12 @@ namespace UI
             Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
             transform.position = new Vector3(screenPos.x, screenPos.y, screenPos.z);
         }
+        #endregion
 
-        private void SetHealth(Image a_Bar, float a_CurrentValue, float a_MaxValue)
+        #region -- PRIVATE FUNCTIONS --
+        private void SetHealth(RectTransform a_Bar, float a_CurrentValue, float a_MaxValue)
         {
-            m_HealthBar.fillAmount = a_CurrentValue / a_MaxValue;
+            m_HealthBar.GetComponent<Image>().fillAmount = a_CurrentValue / a_MaxValue;
             m_HealthText.text = a_CurrentValue + "/" + a_MaxValue;
         }
     
@@ -109,13 +101,6 @@ namespace UI
                 return;
 
             SetHealth(m_HealthBar, unit.health, unit.maxHealth);
-
-            if (m_NegativeHealthBar.fillAmount < m_HealthBar.fillAmount)
-                m_NegativeHealthBar.fillAmount = m_HealthBar.fillAmount;
-
-            m_LastHealthChange = 0;
-            if (!m_HealthCoroutineIsRunning)
-                StartCoroutine(ReduceNegativeHealthSpace());
         }
 
         private void OnInit(Event a_Event, params object[] a_Params)
@@ -137,27 +122,7 @@ namespace UI
 
             Destroy(gameObject);
         }
-
-        private IEnumerator ReduceNegativeHealthSpace()
-        {
-            m_HealthCoroutineIsRunning = true;
-            while (m_HealthBar.fillAmount != m_NegativeHealthBar.fillAmount)
-            {
-                while (m_LastHealthChange < 1.5f)
-                {
-                    m_LastHealthChange += Time.deltaTime;
-                    yield return false;
-                }
-
-                m_LastHealthChange += Time.deltaTime;
-                m_NegativeHealthBar.fillAmount -= Mathf.Sqrt(m_LastHealthChange - 1.5f) * Time.deltaTime;
-
-                if (m_NegativeHealthBar.fillAmount < m_HealthBar.fillAmount)
-                    m_NegativeHealthBar.fillAmount = m_HealthBar.fillAmount;
-
-                yield return false;
-            }
-            m_HealthCoroutineIsRunning = false;
-        }
+        #endregion
     }
+
 }

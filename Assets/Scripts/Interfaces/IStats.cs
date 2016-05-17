@@ -5,6 +5,7 @@ using Units.Skills;
 
 namespace Interfaces
 {
+    #region -- PUBLIC INTERFACES
     public interface IStats : IAttackable, IParentable
     {
         float maxMana { get; }
@@ -21,4 +22,5 @@ namespace Interfaces
     {
         List<Skill> skills { get; }
     }
+#endregion
 }
