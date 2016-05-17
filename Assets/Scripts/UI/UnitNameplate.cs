@@ -17,9 +17,6 @@ namespace UI
         private IStats m_Parent;
 
         [SerializeField]
-        private Camera m_Camera;
-
-        [SerializeField]
         private Vector3 m_Offset;
 
         [SerializeField]
@@ -51,8 +48,10 @@ namespace UI
             if (!gameObject.activeInHierarchy)
                 gameObject.SetActive(true);
 
-            transform.parent = UIManager.self.transform;
+            transform.SetParent(UIManager.self.transform);
             transform.localScale = new Vector3(1, 1, 1);
+
+            transform.SetAsFirstSibling();
 
             GetComponents();
 
@@ -68,7 +67,7 @@ namespace UI
         // Use this for initialization
         void Start()
         {
-            m_Camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+
         }
 
         private void LateUpdate()
