@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Library;
+using Units.Controller;
 using Units.Skills;
 using UnityEngine;
 
@@ -41,9 +42,9 @@ namespace Units
             return !(a_Left == a_Right);
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object a_Object)
         {
-            return base.Equals(obj);
+            return GetHashCode() == a_Object.GetHashCode();
         }
 
         public override int GetHashCode()
@@ -51,7 +52,6 @@ namespace Units
             return base.GetHashCode();
         }
     }
-
 
     public enum MovementState
     {
@@ -71,7 +71,7 @@ namespace Units
     /// <summary>
     ///  Ensures the object can move using input or other stimulus 
     /// </summary>
-    public interface IControlable : IMovable
+    public interface IControllable : IMovable
     {
         /// <summary> Which directions the object is moving in. </summary>
         Moving isMoving { get; set; }

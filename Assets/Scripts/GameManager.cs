@@ -1,13 +1,16 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
 #if !UNITY_WEBGL
 using XInputDotNetPure; // Required in C#
 #endif
-using UnityEngine.SceneManagement;
 
 using Library;
 using UI;
-using Units;
+using Units.Controller;
+
 using Event = Define.Event;
 
 
@@ -21,22 +24,14 @@ public class GameManager : MonoSingleton<GameManager>
     private GameObject m_Background;
 
 #if !UNITY_WEBGL 
-    private bool m_PlayerIndexSet;
     [SerializeField]
-    private PlayerIndex m_PlayerIndex;
-    private GamePadState m_State;
-    private GamePadState m_PrevState;
+    private List<PlayerIndex> m_PlayerIndices;
 #endif
 
     #region -- UNITY FUNCTIONS --
     private void Awake()
     {
         Instantiate(m_UIManager);
-    }
-
-    // Use this for initialization
-    private void Start()
-    {
 
         m_PreviousTimeScale = Time.timeScale;
 
@@ -47,8 +42,6 @@ public class GameManager : MonoSingleton<GameManager>
 
         Publisher.self.Subscribe(Event.PauseGame, OnPauseGame);
         Publisher.self.Subscribe(Event.UnPauseGame, OnUnPauseGame);
-
-
     }
 
     // Update is called once per frame
@@ -59,23 +52,23 @@ public class GameManager : MonoSingleton<GameManager>
 #if !UNITY_WEBGL
         // Find a PlayerIndex, for a single player game
         // Will find the first controller that is connected ans use it
-        if (!m_PlayerIndexSet || !m_PrevState.IsConnected)
+        for (int i = 0; i < 4; ++i)
         {
-            for (int i = 0; i < 4; ++i)
+            PlayerIndex testPlayerIndex = (PlayerIndex)i;
+            GamePadState testState = GamePad.GetState(testPlayerIndex);
+            if (testState.IsConnected && !m_PlayerIndices.Contains(testPlayerIndex))
             {
-                PlayerIndex testPlayerIndex = (PlayerIndex)i;
-                GamePadState testState = GamePad.GetState(testPlayerIndex);
-                if (testState.IsConnected)
-                {
-                    //Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
-                    m_PlayerIndex = testPlayerIndex;
-                    m_PlayerIndexSet = true;
-                }
+                Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
+                m_PlayerIndices.Add(testPlayerIndex);
+                m_PlayerIndices.Sort();
+            }
+            else if (!testState.IsConnected && m_PlayerIndices.Contains(testPlayerIndex))
+            {
+                Debug.Log(string.Format("GamePad removed {0}", testPlayerIndex));
+                m_PlayerIndices.Remove(testPlayerIndex);
+                m_PlayerIndices.Sort();
             }
         }
-
-        m_PrevState = m_State;
-        m_State = GamePad.GetState(m_PlayerIndex);
 #endif
 
         if (Input.GetKeyDown(KeyCode.P))
@@ -84,47 +77,74 @@ public class GameManager : MonoSingleton<GameManager>
     #endregion
 
     #region -- PUBLIC FUNCTIONS --
-
-    public bool GetButtonState(PlayerIndex a_PlayerIndex, ButtonCode a_Button)
+#if !UNITY_WEBGL
+    public bool GetButtonState(int a_Index, ButtonCode a_Button)
     {
+        if (m_PlayerIndices.Count <= a_Index)
+            return false;
+
         switch (a_Button)
         {
             case ButtonCode.A:
-                return GamePad.GetState(a_PlayerIndex).Buttons.A == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).Buttons.A == ButtonState.Pressed;
             case ButtonCode.B:
-                return GamePad.GetState(a_PlayerIndex).Buttons.B == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).Buttons.B == ButtonState.Pressed;
             case ButtonCode.X:
-                return GamePad.GetState(a_PlayerIndex).Buttons.X == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).Buttons.X == ButtonState.Pressed;
             case ButtonCode.Y:
-                return GamePad.GetState(a_PlayerIndex).Buttons.Y == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).Buttons.Y == ButtonState.Pressed;
 
             case ButtonCode.DpadUp:
-                return GamePad.GetState(a_PlayerIndex).DPad.Up == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).DPad.Up == ButtonState.Pressed;
             case ButtonCode.DpadDown:
-                return GamePad.GetState(a_PlayerIndex).DPad.Down == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).DPad.Down == ButtonState.Pressed;
             case ButtonCode.DpadLeft:
-                return GamePad.GetState(a_PlayerIndex).DPad.Left == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).DPad.Left == ButtonState.Pressed;
             case ButtonCode.DpadRight:
-                return GamePad.GetState(a_PlayerIndex).DPad.Right == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).DPad.Right == ButtonState.Pressed;
 
             case ButtonCode.Start:
-                return GamePad.GetState(a_PlayerIndex).Buttons.Start == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).Buttons.Start == ButtonState.Pressed;
             case ButtonCode.Back:
-                return GamePad.GetState(a_PlayerIndex).Buttons.Back == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).Buttons.Back == ButtonState.Pressed;
 
             case ButtonCode.LBumper:
-                return GamePad.GetState(a_PlayerIndex).Buttons.LeftShoulder == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).Buttons.LeftShoulder == ButtonState.Pressed;
             case ButtonCode.RBumper:
-                return GamePad.GetState(a_PlayerIndex).Buttons.RightShoulder == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).Buttons.RightShoulder == ButtonState.Pressed;
             case ButtonCode.LStick:
-                return GamePad.GetState(a_PlayerIndex).Buttons.LeftStick == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).Buttons.LeftStick == ButtonState.Pressed;
             case ButtonCode.RStick:
-                return GamePad.GetState(a_PlayerIndex).Buttons.RightStick == ButtonState.Pressed;
+                return GamePad.GetState(m_PlayerIndices[a_Index]).Buttons.RightStick == ButtonState.Pressed;
 
             default:
                 return false;
         }
     }
+
+    public enum Stick
+    {
+        Left,
+        Right,
+    };
+
+    public GamePadThumbSticks.StickValue GetStickValue(int a_Index, Stick a_Stick)
+    {
+        if (m_PlayerIndices.Count <= a_Index)
+            return new GamePadThumbSticks.StickValue();
+
+        switch (a_Stick)
+        {
+            case Stick.Left:
+                return GamePad.GetState(m_PlayerIndices[a_Index]).ThumbSticks.Left;
+            case Stick.Right:
+                return GamePad.GetState(m_PlayerIndices[a_Index]).ThumbSticks.Right;
+
+            default:
+                return new GamePadThumbSticks.StickValue();
+        }
+    }
+#endif
     #endregion
 
     #region -- EVENT FUNCTIONS --

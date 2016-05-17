@@ -1,30 +1,32 @@
 ﻿using UnityEngine;
 using System.Collections;
+using Units;
+using Units.Controller;
 
 public class MyCamera : MonoBehaviour
 {
     [SerializeField]
-    protected GameObject m_Following;
+    private Camera m_Camera;
     [SerializeField]
-    protected Vector3 m_Offset;
+    private Vector3 m_Offset;
 
     //[SerializeField, Tooltip("How close the camera should get before it decides that it should stop trying to be more accurate")]
     //protected float m_CloseEnough;
 
     [System.Serializable]
-    protected class Box
+    private struct Box
     {
         public Vector3 m_Min;
         public Vector3 m_Max;
     }
 
     [SerializeField]
-    protected Box m_ScreenBorders;
+    private Box m_ScreenBorders;
 
-    public GameObject following
+    private void Awake()
     {
-        get { return m_Following; }
-        set { m_Following = value; }
+        if (m_Camera == null)
+            m_Camera = GetComponent<Camera>();
     }
 
     // Use this for initialization
@@ -32,18 +34,38 @@ public class MyCamera : MonoBehaviour
     {
 
     }
-
+    
     // Update is called once per frame
     void LateUpdate()
     {
-        transform.position = new Vector3(
-            m_Following.transform.position.x - m_Offset.x,
-            m_Following.transform.position.y - m_Offset.y,
-            m_Following.transform.position.z - m_Offset.z);
+        m_Camera.orthographicSize = 7;
+        Vector3 cameraExtent = new Vector2(m_Camera.orthographicSize * Screen.width / Screen.height, m_Camera.orthographicSize);
+
+        Vector3 sumOfPositions = new Vector3();
+        foreach (IControllable controllable in UserController.self.controllables)
+            sumOfPositions += controllable.transform.position;
+
+        sumOfPositions /= UserController.self.controllables.Count;
+
+        transform.position = sumOfPositions;
+
+        foreach (IControllable controllable in UserController.self.controllables)
+        {
+            Vector3 relativePosition = transform.InverseTransformDirection(controllable.transform.position - transform.position) + new Vector3(2.0f, 2.0f);
+
+            if (relativePosition.x > cameraExtent.x)
+                m_Camera.orthographicSize = relativePosition.x * Screen.height / Screen.width;
+            if (relativePosition.y > cameraExtent.y)
+                m_Camera.orthographicSize = relativePosition.y;
+
+            cameraExtent = new Vector2(m_Camera.orthographicSize * Screen.width / Screen.height, m_Camera.orthographicSize);
+        }
+
+
 
         transform.position = new Vector3(
-            Mathf.Clamp(transform.position.x, m_ScreenBorders.m_Min.x, m_ScreenBorders.m_Max.x), 
-            Mathf.Clamp(transform.position.y, m_ScreenBorders.m_Min.y, m_ScreenBorders.m_Max.y),
-            Mathf.Clamp(transform.position.z, m_ScreenBorders.m_Min.z, m_ScreenBorders.m_Max.z));
+        Mathf.Clamp(transform.position.x, m_ScreenBorders.m_Min.x, m_ScreenBorders.m_Max.x),
+        Mathf.Clamp(transform.position.y, m_ScreenBorders.m_Min.y, m_ScreenBorders.m_Max.y),
+        Mathf.Clamp(transform.position.z, m_ScreenBorders.m_Min.z, m_ScreenBorders.m_Max.z));
     }
 }

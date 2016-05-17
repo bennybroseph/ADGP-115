@@ -1,12 +1,12 @@
 ﻿using System;
-using Library;
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 using System.Xml;
 using System.Xml.Linq;
+using Library;
+using UnityEngine;
 
-namespace Units
+namespace Units.Controller
 {
     internal static partial class Globals
     {
@@ -19,8 +19,8 @@ namespace Units
 
     public interface IController
     {
-        void Register(IControlable a_Controlable);
-        void UnRegister(IControlable a_Controlable);
+        void Register(IControllable a_Controllable);
+        void UnRegister(IControllable a_Controllable);
     }
 
     #region -- CONTROLS STRUCTS --
