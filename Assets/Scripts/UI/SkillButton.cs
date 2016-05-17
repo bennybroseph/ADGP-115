@@ -2,7 +2,6 @@
 using Interfaces;
 using Library;
 using UnityEngine;
-using Units;
 using UnityEngine.UI;
 
 using Event = Define.Event;
@@ -49,7 +48,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
     }
 
     // Use this for initialization
-    void Start()
+    private void Start()
     {
         if (m_CooldownIndicatorImage == null)
             foreach (Transform child in transform)
@@ -63,7 +62,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
 
     }
@@ -80,7 +79,10 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         if (unit == null || unit != m_Parent)
             return;
 
-        GetComponent<Image>().color = unit.mana < m_Parent.skills[m_SkillIndex].skillData.cost ? Color.blue : Color.white;
+        GetComponent<Image>().color = 
+            unit.mana < m_Parent.skills[m_SkillIndex].skillData.cost ? 
+                new Color32(33, 150, 243, 255) : 
+                new Color32(255, 255, 255, 255);
     }
 
     private void OnSkillCooldownChanged(Event a_Event, params object[] a_Params)
@@ -100,7 +102,8 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         else
         {
             parsedCooldown = string.Format("{0:0.0}", Math.Round(unit.skills[parsedSkillIndex].remainingCooldown, 1));
-            m_CooldownIndicatorImage.fillAmount = unit.skills[parsedSkillIndex].remainingCooldown / unit.skills[parsedSkillIndex].skillData.maxCooldown;
+            m_CooldownIndicatorImage.fillAmount = 
+                unit.skills[parsedSkillIndex].remainingCooldown / unit.skills[parsedSkillIndex].skillData.maxCooldown;
         }
 
         GetComponentInChildren<Text>().text = parsedCooldown;
