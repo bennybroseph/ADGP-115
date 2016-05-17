@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Interfaces;
+
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,7 +9,6 @@ using XInputDotNetPure; // Required in C#
 
 using Library;
 using UI;
-using Units;
 using Units.Controller;
 
 using Event = Define.Event;
@@ -21,8 +20,6 @@ public class GameManager : MonoSingleton<GameManager>
     private UIManager m_UIManager;
     [SerializeField]
     private float m_PreviousTimeScale;
-    [SerializeField]
-    private List<IAttackable> m_Fortresses;
 
     private GameObject m_Background;
 
@@ -35,7 +32,7 @@ public class GameManager : MonoSingleton<GameManager>
     private void Awake()
     {
         Instantiate(m_UIManager);
-        m_Fortresses = new List<IAttackable>();
+
         m_PreviousTimeScale = Time.timeScale;
 
         Application.targetFrameRate = -1;
@@ -45,8 +42,6 @@ public class GameManager : MonoSingleton<GameManager>
 
         Publisher.self.Subscribe(Event.PauseGame, OnPauseGame);
         Publisher.self.Subscribe(Event.UnPauseGame, OnUnPauseGame);
-        Publisher.self.Subscribe(Event.FortressInitialized, OnFortressInit);
-        Publisher.self.Subscribe(Event.FortressDied, OnFortressDied);
     }
 
     // Update is called once per frame
@@ -155,12 +150,15 @@ public class GameManager : MonoSingleton<GameManager>
     #region -- EVENT FUNCTIONS --
     private void OnNewGame(Event a_Event, params object[] a_Params)
     {
+        Debug.Log("Works New Game Clicked");
         //Loads the first scene.
         SceneManager.LoadScene(1);
+        
     }
 
     private void OnQuitGame(Event a_Event, params object[] a_Params)
     {
+        Debug.Log("Works Quit Game Clicked");
         //Used to Quit Application
         Application.Quit();
     }
@@ -174,21 +172,6 @@ public class GameManager : MonoSingleton<GameManager>
     private void OnUnPauseGame(Event a_Event, params object[] a_Params)
     {
         Time.timeScale = m_PreviousTimeScale;
-    }
-
-    private void OnFortressDied(Event a_Event, params object[] a_Params)
-    {
-        IAttackable fortress = a_Params[0] as IAttackable;
-        m_Fortresses.Remove(fortress);
-
-        if(m_Fortresses.Count == 0)
-        Publisher.self.Broadcast(Event.GameOver);
-    }
-
-    private void OnFortressInit(Event a_Event, params object[] a_Params)
-    {
-        IAttackable fortress = a_Params[0] as IAttackable;
-        m_Fortresses.Add(fortress);
     }
 
     #endregion

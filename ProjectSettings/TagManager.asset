@@ -18,6 +18,10 @@ TagManager:
   - Game Over Menu
   - Negative Health Bar
   - Negative Mana Bar
+  - New Game
+  - Load Game
+  - Instructions
+  - Quit Game
   layers:
   - Default
   - TransparentFX
