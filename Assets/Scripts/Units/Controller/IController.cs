@@ -19,8 +19,8 @@ namespace Units.Controller
 
     public interface IController
     {
-        void Register(IControlable a_Controlable);
-        void UnRegister(IControlable a_Controlable);
+        void Register(IControllable a_Controllable);
+        void UnRegister(IControllable a_Controllable);
     }
 
     #region -- CONTROLS STRUCTS --

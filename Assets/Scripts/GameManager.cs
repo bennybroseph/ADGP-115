@@ -1,14 +1,16 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+
+using UnityEngine;
+using UnityEngine.SceneManagement;
+
 #if !UNITY_WEBGL
 using XInputDotNetPure; // Required in C#
 #endif
-using UnityEngine.SceneManagement;
 
 using Library;
 using UI;
-using Units;
 using Units.Controller;
+
 using Event = Define.Event;
 
 
@@ -30,11 +32,7 @@ public class GameManager : MonoSingleton<GameManager>
     private void Awake()
     {
         Instantiate(m_UIManager);
-    }
 
-    // Use this for initialization
-    private void Start()
-    {
         m_PreviousTimeScale = Time.timeScale;
 
         Application.targetFrameRate = -1;
@@ -44,8 +42,6 @@ public class GameManager : MonoSingleton<GameManager>
 
         Publisher.self.Subscribe(Event.PauseGame, OnPauseGame);
         Publisher.self.Subscribe(Event.UnPauseGame, OnUnPauseGame);
-
-
     }
 
     // Update is called once per frame
@@ -123,6 +119,29 @@ public class GameManager : MonoSingleton<GameManager>
 
             default:
                 return false;
+        }
+    }
+
+    public enum Stick
+    {
+        Left,
+        Right,
+    };
+
+    public GamePadThumbSticks.StickValue GetStickValue(int a_Index, Stick a_Stick)
+    {
+        if (m_PlayerIndices.Count <= a_Index)
+            return new GamePadThumbSticks.StickValue();
+
+        switch (a_Stick)
+        {
+            case Stick.Left:
+                return GamePad.GetState(m_PlayerIndices[a_Index]).ThumbSticks.Left;
+            case Stick.Right:
+                return GamePad.GetState(m_PlayerIndices[a_Index]).ThumbSticks.Right;
+
+            default:
+                return new GamePadThumbSticks.StickValue();
         }
     }
 #endif

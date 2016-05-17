@@ -12,10 +12,7 @@ namespace Units
         [SerializeField]
         private UnitNameplate m_Nameplate;
 
-        #region -- PROPERTIES --
-
-        #endregion
-
+        #region -- UNITY FUNCTIONS --
         void Awake()
         {
             if (m_Nameplate != null)
@@ -27,10 +24,7 @@ namespace Units
 
             if (m_NavMeshAgent == null)
                 m_NavMeshAgent = GetComponent<NavMeshAgent>();
-        }
 
-        protected void Start()
-        {
             m_Health = m_MaxHealth;
             m_Mana = m_MaxMana;
             m_Defense = m_MaxDefense;
@@ -45,15 +39,17 @@ namespace Units
             m_MovementFSM.Transition(MovementState.Idle);
 
             m_DamageFSM.Transition(DamageState.Idle);
+        }
 
+        protected void Start()
+        {
             Publisher.self.Broadcast(Event.UnitInitialized, this);
         }
 
         protected void Update()
         {
-            if(m_Health <= 0.0f)
+            if (m_Health <= 0.0f)
                 Destroy(gameObject);
-
         }
 
         protected void OnDestroy()
@@ -62,6 +58,7 @@ namespace Units
 
             Publisher.self.Broadcast(Event.UnitDied, this);
         }
+        #endregion
 
         protected void SetController()
         {
