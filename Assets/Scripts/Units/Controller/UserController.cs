@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Xml;
-using System.Xml.Linq;
+﻿using System.Collections.Generic;
 
 using UnityEngine;
-
-#if !UNITY_WEBGL
-using XInputDotNetPure;
-#endif
 
 using Library;
 
@@ -19,17 +11,23 @@ namespace Units.Controller
     public sealed class UserController : MonoSingleton<UserController>, IController
     {
         [SerializeField]
-        private List<IControlable> m_Controlables;
+        private List<IControllable> m_Controllables;
+
+        public List<IControllable> controllables
+        {
+            get { return m_Controllables; }
+        }
 
         public UserController()
         {
-            m_Controlables = new List<IControlable>();
+            m_Controllables = new List<IControllable>();
         }
 
         #region -- UNITY FUNCTIONS --
         private void FixedUpdate()
         {
-            foreach (IControlable controlable in m_Controlables)
+            int i = 0;
+            foreach (IControllable controlable in m_Controllables)
             {
                 controlable.transform.position += (controlable.velocity + controlable.totalVelocity) * Time.deltaTime;
 
@@ -37,8 +35,8 @@ namespace Units.Controller
                 if (controlable.velocity != Vector3.zero &&
                     (controlable.isMoving == Moving.nowhere ||
 #if !UNITY_WEBGL
-                       true)) //(GameManager.self.state.ThumbSticks.Left.X == 0.0f &&
-                         //GameManager.self.state.ThumbSticks.Left.Y == 0.0f)))
+                       (GameManager.self.GetStickValue(i, GameManager.Stick.Left).X == 0.0f &&
+                        GameManager.self.GetStickValue(i, GameManager.Stick.Left).Y == 0.0f)))
 #else
                     (Input.GetAxisRaw("Horizontal") == 0.0f &&
                     Input.GetAxisRaw("Vertical") == 0.0f)))
@@ -46,13 +44,14 @@ namespace Units.Controller
                 {
                     Movable.Brake(controlable);
                 }
+                i++;
             }
         }
 
         private void Update()
         {
             int i = 0;
-            foreach (IControlable controlable in m_Controlables)
+            foreach (IControllable controlable in m_Controllables)
             {
                 if (i >= KeyConfiguration.self.userConfigurations.Count)
                     continue;
@@ -107,8 +106,8 @@ namespace Units.Controller
 
                     Vector2 leftStick;
 #if !UNITY_WEBGL
-                    leftStick.x = 0;//GameManager.self.state.ThumbSticks.Left.X;
-                    leftStick.y = 0;//GameManager.self.state.ThumbSticks.Left.Y;
+                    leftStick.x = GameManager.self.GetStickValue(i, GameManager.Stick.Left).X;
+                    leftStick.y = GameManager.self.GetStickValue(i, GameManager.Stick.Left).Y;
 #else
                     leftStick.x = Input.GetAxisRaw("Horizontal");
                     leftStick.y = Input.GetAxisRaw("Vertical");
@@ -157,20 +156,20 @@ namespace Units.Controller
         }
         #endregion
 
-        public void Register(IControlable a_Controlable)
+        public void Register(IControllable a_Controllable)
         {
-            m_Controlables.Add(a_Controlable);
+            m_Controllables.Add(a_Controllable);
 
-            a_Controlable.movementFSM.AddTransition(MovementState.Init, MovementState.Idle);
-            a_Controlable.movementFSM.AddTransition(MovementState.Idle, MovementState.Walking);
-            a_Controlable.movementFSM.AddTransition(MovementState.Walking, MovementState.Running);
+            a_Controllable.movementFSM.AddTransition(MovementState.Init, MovementState.Idle);
+            a_Controllable.movementFSM.AddTransition(MovementState.Idle, MovementState.Walking);
+            a_Controllable.movementFSM.AddTransition(MovementState.Walking, MovementState.Running);
 
-            a_Controlable.movementFSM.AddTransition(MovementState.Running, MovementState.Walking);
-            a_Controlable.movementFSM.AddTransition(MovementState.Walking, MovementState.Idle);
+            a_Controllable.movementFSM.AddTransition(MovementState.Running, MovementState.Walking);
+            a_Controllable.movementFSM.AddTransition(MovementState.Walking, MovementState.Idle);
         }
-        public void UnRegister(IControlable a_Controlable)
+        public void UnRegister(IControllable a_Controllable)
         {
-            m_Controlables.Remove(a_Controlable);
+            m_Controllables.Remove(a_Controllable);
         }
     }
 }

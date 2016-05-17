@@ -18,13 +18,13 @@ public class AIController : MonoSingleton<AIController>, IController
     private List<IStats> m_Enemies;
     [SerializeField]
     private int m_WaveCounter;
-    private List<IControlable> m_Controlables;
+    private List<IControllable> m_Controlables;
     [SerializeField]
     private Vector3 m_Variance;
 
     private void Awake()
     {
-        m_Controlables = new List<IControlable>();
+        m_Controlables = new List<IControllable>();
         m_Enemies = new List<IStats>();
 
         Publisher.self.Subscribe(Event.SpawnWaveClicked, SpawnWaves);
@@ -48,31 +48,31 @@ public class AIController : MonoSingleton<AIController>, IController
 
     private void Search()
     {
-        foreach (IControlable controlable in m_Controlables)
+        foreach (IControllable controlable in m_Controlables)
         {
             controlable.navMashAgent.SetDestination(controlable.following.transform.position);
         }
     }
 
-    public void Register(IControlable a_Controlable)
+    public void Register(IControllable a_Controllable)
     {
-        switch (a_Controlable.controllerType)
+        switch (a_Controllable.controllerType)
         {
             case ControllerType.GoblinMage:
-                a_Controlable.following = GameObject.FindGameObjectWithTag("Fortress");
-                m_Controlables.Add(a_Controlable);
+                a_Controllable.following = GameObject.FindGameObjectWithTag("Fortress");
+                m_Controlables.Add(a_Controllable);
                 break;
 
             case ControllerType.Goblin:
-                a_Controlable.following = GameObject.FindGameObjectWithTag("Player");
-                m_Controlables.Add(a_Controlable);
+                a_Controllable.following = GameObject.FindGameObjectWithTag("Player");
+                m_Controlables.Add(a_Controllable);
                 break;
         }
     }
 
-    public void UnRegister(IControlable a_Controlable)
+    public void UnRegister(IControllable a_Controllable)
     {
-        m_Controlables.Remove(a_Controlable);
+        m_Controlables.Remove(a_Controllable);
     }
 
     public void SpawnWaves(Event a_Event, params object[] a_Params)

@@ -1,18 +1,14 @@
-﻿// Unit class used for storing Player and Enemy Data.
+﻿// Unit class used for storing Player Data.
 using System.Collections.Generic;
 
 using UI;
 using UnityEngine;
 
-#if !UNITY_WEBGL
-using XInputDotNetPure;
-#endif
-
 using Library;
 using Units.Controller;
 using Units.Skills;
+
 using Event = Define.Event;
-using System;
 
 namespace Units
 {
@@ -43,7 +39,6 @@ namespace Units
         #endregion
 
         #region -- UNITY FUNCTIONS --
-
         private void Awake()
         {
             if (m_Nameplate != null)
@@ -52,11 +47,6 @@ namespace Units
                 nameplate.parent = this;
             }
 
-            Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
-        }
-
-        private void Start()
-        {
             if (m_Skills == null)
                 m_Skills = new List<Skill>();
             else
@@ -66,23 +56,32 @@ namespace Units
                     m_Skills[i].parent = this;
                 }
 
-            GetComponent<NavMeshAgent>().updateRotation = false;
-
             m_OriginalRotation = transform.eulerAngles;
             m_CurrentRotation = m_OriginalRotation;
-
-            SetController();
 
             m_Health = m_MaxHealth;
             m_Mana = m_MaxMana;
             m_Defense = m_MaxDefense;
 
-            Publisher.self.Broadcast(Event.UnitInitialized, this);
+            GetComponent<NavMeshAgent>().updateRotation = false;
+
+            SetController();
+
+            m_DamageFSM = new FiniteStateMachine<DamageState>();
+
+            m_DamageFSM.AddTransition(DamageState.Init, DamageState.Idle);
+            m_DamageFSM.AddTransitionFromAny(DamageState.Dead);
+
+            m_MovementFSM.Transition(MovementState.Idle);
+
+            m_DamageFSM.Transition(DamageState.Idle);
+
+            Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
         }
 
-        private void FixedUpdate()
+        private void Start()
         {
-
+            Publisher.self.Broadcast(Event.UnitInitialized, this);
         }
 
         private void Update()
@@ -117,15 +116,6 @@ namespace Units
                     m_Controller.Register(this);
                     break;
             }
-
-            m_DamageFSM = new FiniteStateMachine<DamageState>();
-
-            m_DamageFSM.AddTransition(DamageState.Init, DamageState.Idle);
-            m_DamageFSM.AddTransitionFromAny(DamageState.Dead);
-
-            m_MovementFSM.Transition(MovementState.Idle);
-
-            m_DamageFSM.Transition(DamageState.Idle);
         }
 
         private void SetRotation()

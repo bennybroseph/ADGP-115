@@ -5,6 +5,7 @@ using UnityEngine;
 using Library;
 using Units;
 using UnityEngine.UI;
+
 using Button = UnityEngine.UI.Button;
 using Event = Define.Event;
 
@@ -54,8 +55,8 @@ namespace UI
             List<IUsesSkills> skillUsers =
                 FindObjectsOfType<GameObject>().
                     Where(
-                        x => x.GetComponent<IControlable>() != null &&
-                        x.GetComponent<IControlable>().controllerType == ControllerType.User &&
+                        x => x.GetComponent<IControllable>() != null &&
+                        x.GetComponent<IControllable>().controllerType == ControllerType.User &&
                         x.GetComponent<IUsesSkills>() != null).
                     Select(x => x.GetComponent<IUsesSkills>()).
                     ToList();

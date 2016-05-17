@@ -8,7 +8,7 @@ using Event = Define.Event;
 
 namespace Units
 {
-    public class Unit : MonoBehaviour, IUsesSkills, IControlable
+    public class Unit : MonoBehaviour, IUsesSkills, IControllable
     {
         protected NavMeshAgent m_NavMeshAgent;
         protected GameObject m_Following;
