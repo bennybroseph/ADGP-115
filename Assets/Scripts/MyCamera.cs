@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Interfaces;
-using Units;
 using Units.Controller;
 
 public class MyCamera : MonoBehaviour
@@ -39,6 +37,12 @@ public class MyCamera : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
+        if (UserController.self.controllables.Count == 0)
+        {
+            transform.position = m_Offset;
+            return;
+        }
+
         m_Camera.orthographicSize = 7;
         Vector3 cameraExtent = new Vector2(m_Camera.orthographicSize * Screen.width / Screen.height, m_Camera.orthographicSize);
 
@@ -70,11 +74,9 @@ public class MyCamera : MonoBehaviour
             }
         }
 
-
-
         transform.position = new Vector3(
-        Mathf.Clamp(transform.position.x, m_ScreenBorders.m_Min.x, m_ScreenBorders.m_Max.x),
-        Mathf.Clamp(transform.position.y, m_ScreenBorders.m_Min.y, m_ScreenBorders.m_Max.y),
-        Mathf.Clamp(transform.position.z, m_ScreenBorders.m_Min.z, m_ScreenBorders.m_Max.z));
+            Mathf.Clamp(transform.position.x, m_ScreenBorders.m_Min.x, m_ScreenBorders.m_Max.x),
+            Mathf.Clamp(transform.position.y, m_ScreenBorders.m_Min.y, m_ScreenBorders.m_Max.y),
+            Mathf.Clamp(transform.position.z, m_ScreenBorders.m_Min.z, m_ScreenBorders.m_Max.z));
     }
 }
