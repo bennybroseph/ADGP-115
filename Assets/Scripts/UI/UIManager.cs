@@ -337,6 +337,8 @@ namespace UI
 
         private void OnGameOver(Event a_Event, params object[] a_Params)
         {
+            if (this == null)
+                return;
             m_GameOverMenu.gameObject.SetActive(true);
         }
 #endregion
