@@ -43,9 +43,7 @@ public class AIController : MonoSingleton<AIController>, IController
     // Update is called once per frame
     void Update()
     {
-        //m_EnemiesArray = FindObjectsOfType<Enemy>();
         Search();
-        //Fight();
     }
 
     protected override void OnDestroy()
@@ -60,6 +58,12 @@ public class AIController : MonoSingleton<AIController>, IController
     {
         foreach (IControllable controlable in m_Controlables)
         {
+            if (controlable.controllerType == ControllerType.Goblin && controlable.following == null)           
+                controlable.following = GameObject.FindGameObjectWithTag("Player");
+
+            if (controlable.controllerType == ControllerType.GoblinMage && controlable.following == null)
+                controlable.following = GameObject.FindGameObjectWithTag("Fortress");
+
             controlable.navMashAgent.SetDestination(controlable.following.transform.position);
         }
     }
