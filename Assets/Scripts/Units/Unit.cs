@@ -21,9 +21,12 @@ namespace Units
         protected FiniteStateMachine<MovementState> m_MovementFSM;
         [SerializeField]
         protected List<Skill> m_Skills;
+
         [SerializeField]
         protected string m_UnitName;
+        [SerializeField]
         protected string m_UnitNickname;
+
         [SerializeField]
         protected float m_MaxMana;
         protected float m_Mana;
