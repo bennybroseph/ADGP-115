@@ -46,7 +46,7 @@ namespace UI
             if (!gameObject.activeInHierarchy)
                 gameObject.SetActive(true);
 
-            transform.SetParent(UIManager.self.transform);
+            transform.SetParent(UIManager.self.transform, false);
             transform.SetAsFirstSibling();
 
             foreach (Transform child in transform)

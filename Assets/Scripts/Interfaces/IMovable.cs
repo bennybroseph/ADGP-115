@@ -2,10 +2,9 @@
 //   IMovable   //
 //////////////////
 
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
-namespace Units
+namespace Interfaces
 {
     public static partial class Movable
     {

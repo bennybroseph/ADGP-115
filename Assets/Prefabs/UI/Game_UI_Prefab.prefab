@@ -576,10 +576,14 @@ MonoBehaviour:
     type: 2}
   m_SkillButtons: []
   m_WaveCounter: {fileID: 0}
-  m_HUD: {fileID: 22478050}
-  m_QuitMenu: {fileID: 22461588}
-  m_InstructionMenu: {fileID: 22425672}
-  m_GameOverMenu: {fileID: 22437124, guid: 812c36b6a710e8244963eb5d90bdbeb3, type: 2}
+  m_HUD: {fileID: 0}
+  m_QuitMenu: {fileID: 0}
+  m_InstructionMenu: {fileID: 0}
+  m_GameOverMenu: {fileID: 0}
+  m_NewGame: {fileID: 0}
+  m_LoadGame: {fileID: 0}
+  m_Instructions: {fileID: 0}
+  m_QuitGame: {fileID: 0}
 --- !u!114 &11432914
 MonoBehaviour:
   m_ObjectHideFlags: 1

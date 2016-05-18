@@ -15,14 +15,6 @@ namespace UI
 {
     public class UnitNameplate : MonoBehaviour, IChildable<IStats>
     {
-        #region -- ENUM -- 
-        private enum BarType
-        {
-            Health,
-            Mana,
-        }
-        #endregion
-
         #region -- PRIVATE VARIABLES --
         [SerializeField]
         private IStats m_Parent;
@@ -74,8 +66,7 @@ namespace UI
             if (!gameObject.activeInHierarchy)
                 gameObject.SetActive(true);
 
-            transform.SetParent(UIManager.self.transform);
-            transform.localScale = new Vector3(1, 1, 1);
+            transform.SetParent(UIManager.self.transform, false);
 
             transform.SetAsFirstSibling();
 
@@ -238,9 +229,9 @@ namespace UI
 
             Destroy(gameObject);
         }
-#endregion
+        #endregion
 
-        #region -- ENUMERATOR --
+        #region -- COROUTINES --
         private IEnumerator ReduceNegativeHealthSpace()
         {
             m_HealthCoroutineIsRunning = true;
@@ -283,6 +274,6 @@ namespace UI
             }
             m_ManaCoroutineIsRunning = false;
         }
-#endregion
+        #endregion
     }
 }
