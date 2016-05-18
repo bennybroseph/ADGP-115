@@ -66,8 +66,7 @@ namespace UI
             if (!gameObject.activeInHierarchy)
                 gameObject.SetActive(true);
 
-            transform.SetParent(UIManager.self.transform);
-            transform.localScale = new Vector3(1, 1, 1);
+            transform.SetParent(UIManager.self.transform, false);
 
             transform.SetAsFirstSibling();
 
