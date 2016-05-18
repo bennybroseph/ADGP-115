@@ -28,6 +28,9 @@ namespace Units
         protected string m_UnitNickname;
 
         [SerializeField]
+        protected string m_Faction;
+
+        [SerializeField]
         protected float m_MaxMana;
         protected float m_Mana;
         [SerializeField]
@@ -104,6 +107,11 @@ namespace Units
         {
             get { return m_UnitNickname; }
             set { m_UnitNickname = value; }
+        }
+        public string faction
+        {
+            get { return m_Faction; }
+            set { m_Faction = value; }
         }
         //max mana int property
         public float maxMana
