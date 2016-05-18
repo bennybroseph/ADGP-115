@@ -75,7 +75,9 @@ namespace Units
         {
             m_Controller.UnRegister(this);
 
+            Publisher.self.UnSubscribe(Event.UseSkill, OnUseSkill);
             Publisher.self.Broadcast(Event.UnitDied, this);
+            
         }
         #endregion
 
@@ -122,9 +124,9 @@ namespace Units
             newObject.GetComponent<IChildable<IUsesSkills>>().parent = this;
 
             newObject.GetComponent<IMovable>().velocity = new Vector3(
-                Mathf.Cos((-transform.eulerAngles.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
+                Mathf.Cos((-transform.eulerAngles.y + 90) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
                 0,
-                Mathf.Sin((-transform.eulerAngles.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed);
+                Mathf.Sin((-transform.eulerAngles.y + 90) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed);
 
             newObject.GetComponent<ICastable<IUsesSkills>>().skillData = m_Skills[skillIndex].skillData;
 

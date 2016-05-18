@@ -70,9 +70,9 @@ public class AIController : MonoSingleton<AIController>, IController
 
                 controlable.navMashAgent.SetDestination(controlable.following.transform.position);
 
-                float dif = Vector3.Distance(controlable.following.transform.position, controlable.transform.position);
+                float distanceFromEnemyToTarget = Vector3.Distance(controlable.following.transform.position, controlable.transform.position);
 
-                if (dif < 7)
+                if (distanceFromEnemyToTarget < 7)
                 {
                     Publisher.self.Broadcast(Event.UseSkill, skillUser, 0);
                 }

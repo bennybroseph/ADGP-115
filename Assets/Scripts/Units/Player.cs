@@ -104,6 +104,7 @@ namespace Units
         private void OnDestroy()
         {
             m_Controller.UnRegister(this);
+            Publisher.self.UnSubscribe(Event.UseSkill, OnUseSkill);
             Publisher.self.Broadcast(Event.UnitDied, this);
         }
         #endregion
