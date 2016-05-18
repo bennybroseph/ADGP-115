@@ -41,10 +41,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SpawnPoints: []
-  m_GoblinMagePrefab: {fileID: 110916, guid: bdb6e8711fb6dfc4c864876aa23353cf, type: 2}
+  m_GoblinMagePrefab: {fileID: 155792, guid: d8949c9d58a2d684ea071c58cf2cc2af, type: 2}
   m_GoblinPrefab: {fileID: 121338, guid: 25615d83f1227ce4cbcfefb0ef1921d1, type: 2}
   m_WaveCounter: 0
   m_Variance: {x: 0, y: 0, z: 0}
+  m_Players: []
+  m_Fortresses: []
+  m_EnemiesArray: []
 --- !u!114 &11473028
 MonoBehaviour:
   m_ObjectHideFlags: 1

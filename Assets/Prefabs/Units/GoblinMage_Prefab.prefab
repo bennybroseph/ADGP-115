@@ -1,18 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &110916
+--- !u!1 &155792
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 466316}
-  - 114: {fileID: 11465152}
-  - 33: {fileID: 3335494}
-  - 65: {fileID: 6501586}
-  - 23: {fileID: 2311100}
-  - 195: {fileID: 19504966}
+  - 4: {fileID: 433760}
+  - 114: {fileID: 11424280}
+  - 33: {fileID: 3396060}
+  - 65: {fileID: 6509850}
+  - 23: {fileID: 2315584}
+  - 195: {fileID: 19511350}
   m_Layer: 9
   m_Name: GoblinMage_Prefab
   m_TagString: Untagged
@@ -20,24 +20,24 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &466316
+--- !u!4 &433760
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 110916}
+  m_GameObject: {fileID: 155792}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.5, z: 0}
+  m_LocalPosition: {x: -5.22, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!23 &2311100
+--- !u!23 &2315584
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 110916}
+  m_GameObject: {fileID: 155792}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -58,50 +58,51 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &3335494
+--- !u!33 &3396060
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 110916}
+  m_GameObject: {fileID: 155792}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &6501586
+--- !u!65 &6509850
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 110916}
+  m_GameObject: {fileID: 155792}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &11465152
+--- !u!114 &11424280
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 110916}
+  m_GameObject: {fileID: 155792}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e5b675dab655ca40931cbdf9b201b6f, type: 3}
+  m_Script: {fileID: 11500000, guid: 7808bd5d8efc81e44a431291bbae6617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_ControllerType: 2
   m_Skills: []
-  m_UnitName: Enemy
+  m_UnitName: 
+  m_UnitNickname: 
   m_MaxMana: 5
-  m_MaxDefense: 1
-  m_MaxHealth: 5
-  m_Speed: 0
+  m_MaxDefense: 12
+  m_MaxHealth: 12
+  m_Speed: 5
   m_Nameplate: {fileID: 11409874, guid: bdd14ad98f93f3a449cd18a355cc6dad, type: 2}
---- !u!195 &19504966
+--- !u!195 &19511350
 NavMeshAgent:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 110916}
+  m_GameObject: {fileID: 155792}
   m_Enabled: 1
   m_Radius: 0.5
   m_Speed: 4
@@ -125,5 +126,5 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 110916}
+  m_RootGameObject: {fileID: 155792}
   m_IsPrefabParent: 1

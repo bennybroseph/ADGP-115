@@ -37,14 +37,15 @@ public class AIController : MonoSingleton<AIController>, IController
     // Use this for initialization
     void Start()
     {
-
+       
     }
 
     // Update is called once per frame
     void Update()
     {
+        //m_EnemiesArray = FindObjectsOfType<Enemy>();
         Search();
-
+        //Fight();
     }
 
     protected override void OnDestroy()
@@ -113,13 +114,13 @@ public class AIController : MonoSingleton<AIController>, IController
 
                 GameObject goblin = Instantiate(m_GoblinPrefab);
 
-                GameObject newObject = Instantiate(m_GoblinMagePrefab);
-                newObject.transform.position = new Vector3(
+                GameObject goblinMage = Instantiate(m_GoblinMagePrefab);
+                goblinMage.transform.position = new Vector3(
                     spawnPoint.x + x,
                     spawnPoint.y,
                     spawnPoint.z + z);
 
-                m_Enemies.Add(newObject.GetComponent<IStats>());
+                m_Enemies.Add(goblinMage.GetComponent<IStats>());
                 m_Enemies.Add(goblin.GetComponent<IStats>());
             }
 
@@ -138,4 +139,5 @@ public class AIController : MonoSingleton<AIController>, IController
 
         m_Enemies.Remove(unit);
     }
+
 }

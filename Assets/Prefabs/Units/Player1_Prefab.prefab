@@ -132,6 +132,7 @@ MonoBehaviour:
     m_CooldownReduction: 0
     m_RemainingCooldown: 0
   m_UnitName: Player1
+  m_UnitNickname: 
   m_MaxMana: 5
   m_MaxDefense: 3
   m_MaxHealth: 10
