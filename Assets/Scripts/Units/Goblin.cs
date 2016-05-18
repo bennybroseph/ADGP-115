@@ -12,7 +12,7 @@ public class Goblin : Enemy
 
     void OnCollisionStay(Collision a_Collision)
     {
-        if (a_Collision.transform.gameObject == GameObject.FindGameObjectWithTag("Player"))
+        if (a_Collision.transform.gameObject.tag == "Player")
         {
             IAttackable attackableObject = a_Collision.transform.gameObject.GetComponent<IAttackable>();
             if (attackableObject != null)

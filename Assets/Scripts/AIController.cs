@@ -19,7 +19,7 @@ public class AIController : MonoSingleton<AIController>, IController
     private List<IStats> m_Enemies;
     [SerializeField]
     private int m_WaveCounter;
-    private List<IControllable> m_Controlables;
+    private List<IControllable> m_Controlables; 
     [SerializeField]
     private Vector3 m_Variance;
 
@@ -37,7 +37,7 @@ public class AIController : MonoSingleton<AIController>, IController
     // Use this for initialization
     void Start()
     {
-       
+
     }
 
     // Update is called once per frame
@@ -64,7 +64,22 @@ public class AIController : MonoSingleton<AIController>, IController
             if (controlable.controllerType == ControllerType.GoblinMage && controlable.following == null)
                 controlable.following = GameObject.FindGameObjectWithTag("Fortress");
 
-            controlable.navMashAgent.SetDestination(controlable.following.transform.position);
+            if (controlable.following != null)
+            {
+                IUsesSkills skillUser = controlable as IUsesSkills;
+
+                controlable.navMashAgent.SetDestination(controlable.following.transform.position);
+
+                float dif = Vector3.Distance(controlable.following.transform.position, controlable.transform.position);
+
+                if (dif < 7)
+                {
+                    Publisher.self.Broadcast(Event.UseSkill, skillUser, 0);
+                }
+
+                
+            }
+
         }
     }
 
@@ -117,6 +132,10 @@ public class AIController : MonoSingleton<AIController>, IController
                 float z = Random.Range(-m_Variance.z, m_Variance.z);
 
                 GameObject goblin = Instantiate(m_GoblinPrefab);
+                goblin.transform.position = new Vector3(
+                    spawnPoint.x + x,
+                    spawnPoint.y,
+                    spawnPoint.z + z);
 
                 GameObject goblinMage = Instantiate(m_GoblinMagePrefab);
                 goblinMage.transform.position = new Vector3(

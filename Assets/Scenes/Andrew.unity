@@ -240,7 +240,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 480986, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -0
+      value: -1.89
       objectReference: {fileID: 0}
     - target: {fileID: 480986, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
       propertyPath: m_LocalPosition.y
@@ -268,7 +268,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 480986, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
       propertyPath: m_RootOrder
-      value: 8
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 11468738, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
       propertyPath: m_Skills.Array.data[0].m_SkillData.damage
@@ -410,11 +410,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 498880, guid: 23f7de8b18d7af348be8ff0a01fa2131, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 11404132, guid: 23f7de8b18d7af348be8ff0a01fa2131, type: 2}
       propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11404132, guid: 23f7de8b18d7af348be8ff0a01fa2131, type: 2}
+      propertyPath: m_Variance.x
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 23f7de8b18d7af348be8ff0a01fa2131, type: 2}
@@ -490,7 +494,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 480986, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 11468738, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
       propertyPath: m_Skills.Array.data[0].m_SkillData.damage

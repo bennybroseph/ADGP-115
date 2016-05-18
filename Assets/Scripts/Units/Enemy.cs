@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using Interfaces;
 using Library;
 using UI;
+using Units.Skills;
 using Units.Controller;
 using UnityEngine;
 using Event = Define.Event;
@@ -16,7 +18,7 @@ namespace Units
         #endregion
 
         #region -- UNITY FUNCTIONS --
-        void Awake()
+        protected virtual void Awake()
         {
             if (m_Nameplate != null)
             {
@@ -24,6 +26,15 @@ namespace Units
                 nameplate.parent = this;
                 nameplate.Awake();
             }
+
+            if (m_Skills == null)
+                m_Skills = new List<Skill>();
+            else
+                for (int i = 0; i < m_Skills.Count; i++)
+                {
+                    m_Skills[i].skillIndex = i;
+                    m_Skills[i].parent = this;
+                }
 
             if (m_NavMeshAgent == null)
                 m_NavMeshAgent = GetComponent<NavMeshAgent>();
@@ -42,6 +53,8 @@ namespace Units
             m_MovementFSM.Transition(MovementState.Idle);
 
             m_DamageFSM.Transition(DamageState.Idle);
+
+            Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
         }
 
         protected void Start()
@@ -51,6 +64,9 @@ namespace Units
 
         protected void Update()
         {
+            foreach (Skill skill in m_Skills)
+                skill.UpdateCooldown();
+
             if (m_Health <= 0.0f)
                 Destroy(gameObject);
         }
@@ -64,7 +80,7 @@ namespace Units
         #endregion
 
         #region -- PROTECTED FUNCTIONS --
-        protected void SetController()
+        private void SetController()
         {
             m_MovementFSM = new FiniteStateMachine<MovementState>();
 
@@ -86,6 +102,36 @@ namespace Units
 
             m_Controller.Register(this);
         }
+
+        private void OnUseSkill(Event a_Event, params object[] a_Params)
+        {
+            IUsesSkills unit = a_Params[0] as IUsesSkills;
+            int skillIndex = (int)a_Params[1];
+
+            if (unit.GetHashCode() != this.GetHashCode() ||
+                m_Skills.Count <= skillIndex ||
+                !(m_Skills[skillIndex].remainingCooldown <= 0.0f) ||
+                !(m_Skills[skillIndex].skillData.cost <= m_Mana))
+                return;
+
+            GameObject newObject = Instantiate(m_Skills[skillIndex].skillPrefab);
+
+            Physics.IgnoreCollision(GetComponent<Collider>(), newObject.GetComponent<Collider>());
+
+            newObject.transform.position = transform.position;
+            newObject.GetComponent<IChildable<IUsesSkills>>().parent = this;
+
+            newObject.GetComponent<IMovable>().velocity = new Vector3(
+                Mathf.Cos((-transform.eulerAngles.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
+                0,
+                Mathf.Sin((-transform.eulerAngles.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed);
+
+            newObject.GetComponent<ICastable<IUsesSkills>>().skillData = m_Skills[skillIndex].skillData;
+
+            mana -= m_Skills[skillIndex].skillData.cost;
+
+            m_Skills[skillIndex].PutOnCooldown();
+        }
     }
-#endregion
+    #endregion
 }

@@ -1,8 +1,14 @@
-﻿using UnityEngine;
-using System.Collections;
-using Units;
+﻿using System.Collections;
+using System.Collections.Generic;
+using Interfaces;
+using Units.Skills;
+using UnityEngine;
+using Event = Define.Event;
 
-public class GoblinMage : Enemy {
-
-	
+namespace Units
+{
+    public class GoblinMage : Enemy
+    {
+        
+    }
 }
