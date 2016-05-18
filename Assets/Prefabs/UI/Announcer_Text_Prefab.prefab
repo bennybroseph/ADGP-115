@@ -11,7 +11,7 @@ GameObject:
   - 222: {fileID: 22291098}
   - 114: {fileID: 11446662}
   m_Layer: 5
-  m_Name: Announcer Text
+  m_Name: Announcer_Text_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,8 +37,8 @@ MonoBehaviour:
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
-    m_Font: {fileID: 12800000, guid: 25bd90d13ce6aca4f83f5be1bb350180, type: 2}
-    m_FontSize: 42
+    m_Font: {fileID: 12800000, guid: 5e5198838e805ef44827c536c02a7f74, type: 2}
+    m_FontSize: 36
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0

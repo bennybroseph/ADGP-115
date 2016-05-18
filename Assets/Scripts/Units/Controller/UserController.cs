@@ -23,8 +23,6 @@ namespace Units.Controller
         {
             base.Awake();
 
-            Debug.Log(self);
-
             m_Controllables = new List<IControllable>();
         }
         

@@ -9,117 +9,221 @@ namespace UI
 {
     public class UIAnnouncer : MonoSingleton<UIAnnouncer>
     {
-        public delegate void NoParameters();
+        private delegate void VoidFunction();
+
+        private enum AnimationType
+        {
+            Fade,
+            Scale,
+            Rotate,
+            Translate,
+        }
+
+        [Serializable]
+        private class AnimationValue
+        {
+            public AnimationType animationType;
+            [Tooltip("One Animation Curve means a Scale, Rotate, and Translate animation will use that curve on both values. Otherwise it's separate.")]
+            public List<AnimationCurve> animationCurve;
+        }
 
         [SerializeField]
-        private Text m_AnnouncementPrefab;
+        private Text m_AnnouncementTextPrefab;
         [SerializeField]
-        private Text m_CurrentAnnouncement;
+        private Text m_LogTextPrefab;
 
-        [SerializeField]
-        private Queue<string> m_CurrentAnnouncements;
-        [SerializeField]
-        private Queue<string> m_OldAnnouncements;
+        private bool m_AnchorIsSet;
+        private Vector3 m_Anchor;
 
+        private Text m_CurrentAnnouncementObject;
+        private List<Text> m_LogItems;
+
+        private Queue<string> m_QueuedAnnouncements;
+
+        [Header("Announcement Animation")]
+        [SerializeField]
+        private List<AnimationValue> m_AnimationValues;
         [SerializeField]
         private AnimationCurve m_ScaleCurve;
         [SerializeField]
         private AnimationCurve m_FadeCurve;
-
         [SerializeField, Range(0.0f, 5.0f)]
         private float m_TimeBetweenAnimations;
 
+        [Header("Announcement Log Animation")]
+        [SerializeField]
+        private AnimationCurve m_LogFadeIn;
+
+        [Header("Announcement Log Constraints")]
+        [SerializeField]
+        private float m_SpaceBetweenLogItems;
+        [SerializeField, Range(0.0f, 10.0f)]
+        private float m_MaxNumberOfLogItems;
+        [SerializeField, Tooltip("The time until the log item is deleted. Set to -1 for an infinite lifetime")]
+        private float m_LogItemLifetime;
+
         [SerializeField]
         private bool m_CoroutineIsRunning;
+
+        private void OnValidate()
+        {
+            foreach (AnimationValue animationValue in m_AnimationValues)
+            {
+                if (animationValue.animationCurve.Count < 1)
+                    animationValue.animationCurve.Add(new AnimationCurve());
+                if (animationValue.animationCurve.Count > 2)
+                    animationValue.animationCurve.RemoveAt(animationValue.animationCurve.Count - 1);
+            }
+        }
 
         // Use this for initialization
         protected override void Awake()
         {
             base.Awake();
 
-            if (m_AnnouncementPrefab == null)
-                Debug.Log("'" + gameObject.name + "'needs a prefab of the Announcement Text");
+            if (m_AnnouncementTextPrefab == null)
+            {
+                Debug.LogError("'" + gameObject.name + "'needs a prefab of the Announcement Text");
+                gameObject.SetActive(false);
+            }
+            if (m_LogTextPrefab == null)
+            {
+                Debug.LogError("'" + gameObject.name + "'needs a prefab of the Chat Log Text");
+                gameObject.SetActive(false);
+            }
 
-            m_CurrentAnnouncements = new Queue<string>();
-            m_OldAnnouncements = new Queue<string>();
+            m_QueuedAnnouncements = new Queue<string>();
+            m_LogItems = new List<Text>();
         }
 
         private void Start()
         {
+
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (!m_CoroutineIsRunning && m_CurrentAnnouncements.Count > 0)
-            {
-                m_CurrentAnnouncement = Instantiate(m_AnnouncementPrefab);
-                m_CurrentAnnouncement.transform.SetParent(UIManager.self.transform, false);
-                //m_CurrentAnnouncement.transform.localPosition = Vector3.zero;
-                //m_CurrentAnnouncement.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
-
-                m_CurrentAnnouncement.text = m_CurrentAnnouncements.Dequeue();
-
-                StartCoroutine(AnimateText());
-            }
+            if (Input.GetKeyDown(KeyCode.F4))
+                Announce("Test Announcement Incoming! " + Time.time);
         }
 
         public void Announce(string a_Announcement)
         {
-            m_CurrentAnnouncements.Enqueue(a_Announcement);
+            m_QueuedAnnouncements.Enqueue(a_Announcement);
+
+            if (!m_CoroutineIsRunning)
+                CreateNewAnnouncement();
         }
 
         public void DelayedAnnouncement(string a_Announcement, float a_TimeToWait)
         {
             StartCoroutine(
-                WaitForThis(
+                WaitThenDoThis(
                     a_TimeToWait,
-                    delegate { m_CurrentAnnouncements.Enqueue(a_Announcement); }));
+                    delegate { Announce(a_Announcement); }));
+        }
+
+        private void CreateNewAnnouncement()
+        {
+            m_CurrentAnnouncementObject = Instantiate(m_AnnouncementTextPrefab);
+            m_CurrentAnnouncementObject.transform.SetParent(UIManager.self.transform, false);
+
+            m_CurrentAnnouncementObject.text = m_QueuedAnnouncements.Dequeue();
+
+            StartCoroutine(AnimateText());
+        }
+
+        private void SortAnnouncementLog()
+        {
+            if (!m_AnchorIsSet)
+            {
+                m_Anchor = m_LogItems[m_LogItems.Count - 1].transform.position;
+                m_AnchorIsSet = true;
+            }
+
+            for (int i = 0; i < m_LogItems.Count; ++i)
+            {
+                m_LogItems[i].transform.position =
+                    new Vector3(
+                        m_Anchor.x,
+                        m_Anchor.y + i * -m_SpaceBetweenLogItems);
+            }
         }
 
         private IEnumerator AnimateText()
         {
             m_CoroutineIsRunning = true;
 
-            Keyframe lastFrame = m_ScaleCurve[m_ScaleCurve.length - 1];
-
-            float deltaTime = 0.0f;
-            while (deltaTime < lastFrame.time)
+            int i = 0;
+            foreach (AnimationValue animationValue in m_AnimationValues)
             {
-                deltaTime += Time.deltaTime;
+                if (i != 0)
+                    yield return new WaitForSeconds(m_TimeBetweenAnimations);
 
-                m_CurrentAnnouncement.transform.localScale =
-                    new Vector3(
-                        m_ScaleCurve.Evaluate(deltaTime),
-                        m_ScaleCurve.Evaluate(deltaTime));
-
-                yield return false;
+                switch (animationValue.animationType)
+                {
+                    case AnimationType.Fade:
+                        yield return
+                            StartCoroutine(
+                                Animations.Fade2DGraphic(
+                                    m_CurrentAnnouncementObject,
+                                    animationValue.animationCurve.ToArray()));
+                        break;
+                    case AnimationType.Scale:
+                        yield return
+                            StartCoroutine(
+                                Animations.Scale2DTransform(
+                                    m_CurrentAnnouncementObject.transform,
+                                    animationValue.animationCurve.ToArray()));
+                        break;
+                }
+                i++;
             }
 
-            deltaTime = 0.0f;
-            yield return new WaitForSeconds(m_TimeBetweenAnimations);
+            Text newLogItem = Instantiate(m_LogTextPrefab);
+            newLogItem.transform.SetParent(UIManager.self.transform, false);
+            newLogItem.text = m_CurrentAnnouncementObject.text;
 
-            lastFrame = m_FadeCurve[m_FadeCurve.length - 1];
+            m_LogItems.Add(newLogItem);
 
-            deltaTime = 0.0f;
-            while (deltaTime < lastFrame.time)
-            {
-                deltaTime += Time.deltaTime;
+            Destroy(m_CurrentAnnouncementObject.gameObject);
 
-                m_CurrentAnnouncement.color =
-                    new Color(0, 0, 0, m_FadeCurve.Evaluate(deltaTime));
+            if (m_LogItemLifetime != -1.0f)
+                StartCoroutine(
+                    WaitThenDoThis(
+                        m_LogItemLifetime,
+                        delegate
+                        {
+                            Destroy(newLogItem.gameObject);
+                            m_LogItems.Remove(newLogItem);
 
-                yield return false;
-            }
-
-            m_OldAnnouncements.Enqueue(m_CurrentAnnouncement.text);
-
-            Destroy(m_CurrentAnnouncement.gameObject);
+                            SortAnnouncementLog();
+                        }));
 
             m_CoroutineIsRunning = false;
+
+            if (m_QueuedAnnouncements.Count > 0)
+                CreateNewAnnouncement();
+
+            StartCoroutine(AnimateToLog());
+        }
+        private IEnumerator AnimateToLog()
+        {
+            while (m_LogItems.Count > m_MaxNumberOfLogItems)
+            {
+                Destroy(m_LogItems[m_LogItems.Count - 1].gameObject);
+                m_LogItems.RemoveAt(m_LogItems.Count - 1);
+            }
+
+            SortAnnouncementLog();
+
+            yield return StartCoroutine(Animations.Fade2DGraphic(m_LogItems[m_LogItems.Count - 1], m_LogFadeIn));
+
+            yield return false;
         }
 
-        private IEnumerator WaitForThis(float a_TimeToWait, NoParameters a_Delegate)
+        private IEnumerator WaitThenDoThis(float a_TimeToWait, VoidFunction a_Delegate)
         {
             yield return new WaitForSeconds(a_TimeToWait);
 
