@@ -32,7 +32,7 @@ namespace Library
             s_IsQuitting = false;
         }
 
-        protected void OnDestroy()
+        protected virtual void OnDestroy()
         {
             s_IsQuitting = true;
             s_Self = null;
