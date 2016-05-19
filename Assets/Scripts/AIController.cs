@@ -19,7 +19,7 @@ public class AIController : MonoSingleton<AIController>, IController
     private List<IStats> m_Enemies;
     [SerializeField]
     private int m_WaveCounter;
-    private List<IControllable> m_Controlables;
+    private List<IControllable> m_Controlables; 
     [SerializeField]
     private Vector3 m_Variance;
 
@@ -44,7 +44,6 @@ public class AIController : MonoSingleton<AIController>, IController
     void Update()
     {
         Search();
-
     }
 
     protected override void OnDestroy()
@@ -59,7 +58,28 @@ public class AIController : MonoSingleton<AIController>, IController
     {
         foreach (IControllable controlable in m_Controlables)
         {
-            controlable.navMashAgent.SetDestination(controlable.following.transform.position);
+            if (controlable.controllerType == ControllerType.Goblin && controlable.following == null)           
+                controlable.following = GameObject.FindGameObjectWithTag("Player");
+
+            if (controlable.controllerType == ControllerType.GoblinMage && controlable.following == null)
+                controlable.following = GameObject.FindGameObjectWithTag("Fortress");
+
+            if (controlable.following != null)
+            {
+                IUsesSkills skillUser = controlable as IUsesSkills;
+
+                controlable.navMashAgent.SetDestination(controlable.following.transform.position);
+
+                float distanceFromEnemyToTarget = Vector3.Distance(controlable.following.transform.position, controlable.transform.position);
+
+                if (distanceFromEnemyToTarget < 7)
+                {
+                    Publisher.self.Broadcast(Event.UseSkill, skillUser, 0);
+                }
+
+                
+            }
+
         }
     }
 
@@ -112,14 +132,18 @@ public class AIController : MonoSingleton<AIController>, IController
                 float z = Random.Range(-m_Variance.z, m_Variance.z);
 
                 GameObject goblin = Instantiate(m_GoblinPrefab);
-
-                GameObject newObject = Instantiate(m_GoblinMagePrefab);
-                newObject.transform.position = new Vector3(
+                goblin.transform.position = new Vector3(
                     spawnPoint.x + x,
                     spawnPoint.y,
                     spawnPoint.z + z);
 
-                m_Enemies.Add(newObject.GetComponent<IStats>());
+                GameObject goblinMage = Instantiate(m_GoblinMagePrefab);
+                goblinMage.transform.position = new Vector3(
+                    spawnPoint.x + x,
+                    spawnPoint.y,
+                    spawnPoint.z + z);
+
+                m_Enemies.Add(goblinMage.GetComponent<IStats>());
                 m_Enemies.Add(goblin.GetComponent<IStats>());
             }
 
@@ -138,4 +162,5 @@ public class AIController : MonoSingleton<AIController>, IController
 
         m_Enemies.Remove(unit);
     }
+
 }

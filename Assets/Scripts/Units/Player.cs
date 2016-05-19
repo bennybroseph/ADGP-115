@@ -83,7 +83,7 @@ namespace Units
         {
             Publisher.self.Broadcast(Event.UnitInitialized, this);
 
-            UIAnnouncer.self.DelayedAnnouncement(m_UnitNickname + " has entered the arena!", 1.0f);
+            //UIAnnouncer.self.DelayedAnnouncement(m_UnitNickname + " has entered the arena!", 1.0f);
         }
 
         private void Update()
@@ -104,6 +104,7 @@ namespace Units
         private void OnDestroy()
         {
             m_Controller.UnRegister(this);
+            Publisher.self.UnSubscribe(Event.UseSkill, OnUseSkill);
             Publisher.self.Broadcast(Event.UnitDied, this);
         }
         #endregion
@@ -159,7 +160,7 @@ namespace Units
             IUsesSkills unit = a_Params[0] as IUsesSkills;
             int skillIndex = (int)a_Params[1];
 
-            if ((Player)unit != this ||
+            if (unit.GetHashCode() != this.GetHashCode() ||
                 m_Skills.Count <= skillIndex ||
                 !(m_Skills[skillIndex].remainingCooldown <= 0.0f) ||
                 !(m_Skills[skillIndex].skillData.cost <= m_Mana))
