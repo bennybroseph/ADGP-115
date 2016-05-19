@@ -41,7 +41,7 @@ public static class Animations
 
     public static IEnumerator Animate<TObject>(
         AnimationSequence a_AnimationSequence,
-        TObject a_Object) where TObject : MonoBehaviour
+        TObject a_Object) where TObject : Graphic
     {
         //yield return new WaitForEndOfFrame();
         foreach (AnimationLayer animationLayer in a_AnimationSequence.animationLayers)
@@ -54,7 +54,7 @@ public static class Animations
 
     public static IEnumerator AnimateLayer<TObject>(
         AnimationLayer a_AnimationLayer,
-        TObject a_Object) where TObject : MonoBehaviour
+        TObject a_Object) where TObject : Graphic
     {
         float endTime = GetEndTime(a_AnimationLayer.animationDataList);
 
@@ -64,26 +64,26 @@ public static class Animations
             deltaTime += Time.deltaTime;
             foreach (AnimationData animationData in a_AnimationLayer.animationDataList)
             {
+                if(animationData.animationCurves.Count < 2)
+                    animationData.animationCurves.Add(animationData.animationCurves[0]);
+
                 switch (animationData.animationType)
                 {
                     case AnimationType.Fade:
                         {
-                            
-                            Text image = a_Object.GetComponent<Text>();
-                            image.color = new Color(
-                                image.color.r,
-                                image.color.g,
-                                image.color.b,
+                            a_Object.color = new Color(
+                                a_Object.color.r,
+                                a_Object.color.g,
+                                a_Object.color.b,
                                 animationData.animationCurves[0].Evaluate(deltaTime));
                             
                         }
                         break;
                     case AnimationType.Scale:
                         {
-                            Text text = a_Object.GetComponent<Text>();
-                            text.transform.localScale = new Vector3(
+                            a_Object.transform.localScale = new Vector3(
                                 animationData.animationCurves[0].Evaluate(deltaTime),
-                                animationData.animationCurves[0].Evaluate(deltaTime));
+                                animationData.animationCurves[1].Evaluate(deltaTime));
                         }
                         break;
                     default:
