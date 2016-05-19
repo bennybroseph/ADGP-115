@@ -83,7 +83,7 @@ namespace Units
         {
             Publisher.self.Broadcast(Event.UnitInitialized, this);
 
-            //UIAnnouncer.self.DelayedAnnouncement(m_UnitNickname + " has entered the arena!", 1.0f);
+            UIAnnouncer.self.DelayedAnnouncement(m_UnitNickname + " has entered the arena!", 1.0f);
         }
 
         private void Update()
