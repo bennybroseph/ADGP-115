@@ -10,22 +10,7 @@ namespace UI
     public class UIAnnouncer : MonoSingleton<UIAnnouncer>
     {
         private delegate void VoidFunction();
-
-        private enum AnimationType
-        {
-            Fade,
-            Scale,
-            Rotate,
-            Translate,
-        }
-
-        [Serializable]
-        private class AnimationValue
-        {
-            public AnimationType animationType;
-            [Tooltip("One Animation Curve means a Scale, Rotate, and Translate animation will use that curve on both values. Otherwise it's separate.")]
-            public List<AnimationCurve> animationCurve;
-        }
+        
 
         [SerializeField]
         private Text m_AnnouncementTextPrefab;
@@ -42,39 +27,53 @@ namespace UI
 
         [Header("Announcement Animation")]
         [SerializeField]
-        private List<AnimationValue> m_AnimationValues;
-        [SerializeField]
-        private AnimationCurve m_ScaleCurve;
-        [SerializeField]
-        private AnimationCurve m_FadeCurve;
-        [SerializeField, Range(0.0f, 5.0f)]
-        private float m_TimeBetweenAnimations;
-
-        [Header("Announcement Log Animation")]
-        [SerializeField]
-        private AnimationCurve m_LogFadeIn;
-
-        [Header("Announcement Log Constraints")]
-        [SerializeField]
+        private AnimationSequence m_AnimationValues;
+       
+        //[Header("Announcement Log Constraints")]
+        //[SerializeField]
         private float m_SpaceBetweenLogItems;
-        [SerializeField, Range(0.0f, 10.0f)]
+        //[SerializeField, Range(0.0f, 10.0f)]
         private float m_MaxNumberOfLogItems;
-        [SerializeField, Tooltip("The time until the log item is deleted. Set to -1 for an infinite lifetime")]
+        //[SerializeField, Tooltip("The time until the log item is deleted. Set to -1 for an infinite lifetime")]
         private float m_LogItemLifetime;
 
-        [SerializeField]
+        //[SerializeField]
         private bool m_CoroutineIsRunning;
 
         private void OnValidate()
         {
-            foreach (AnimationValue animationValue in m_AnimationValues)
-            {
-                if (animationValue.animationCurve.Count < 1)
-                    animationValue.animationCurve.Add(new AnimationCurve());
-                if (animationValue.animationCurve.Count > 2)
-                    animationValue.animationCurve.RemoveAt(animationValue.animationCurve.Count - 1);
-            }
+            //foreach (AnimationData animationValue in m_AnimationValues)
+            //{
+            //    switch (animationValue.animationType)
+            //    {
+            //        case AnimationType.Fade:
+            //            while (animationValue.animationCurves.Count > 1)
+            //                animationValue.animationCurves.RemoveAt(animationValue.animationCurves.Count - 1);
+            //            while (animationValue.animationCurves.Count < 1)
+            //                animationValue.animationCurves.Add(new AnimationCurve());
+            //            break;
+            //        case AnimationType.Scale:
+            //            while (animationValue.animationCurves.Count > 2)
+            //                animationValue.animationCurves.RemoveAt(animationValue.animationCurves.Count - 1);
+            //            while (animationValue.animationCurves.Count < 2)
+            //                animationValue.animationCurves.Add(new AnimationCurve());
+            //            break;
+            //        case AnimationType.Rotate:
+            //            while (animationValue.animationCurves.Count > 3)
+            //                animationValue.animationCurves.RemoveAt(animationValue.animationCurves.Count - 1);
+            //            while (animationValue.animationCurves.Count < 3)
+            //                animationValue.animationCurves.Add(new AnimationCurve());
+            //            break;
+            //        case AnimationType.Translate:
+            //            while (animationValue.animationCurves.Count > 2)
+            //                animationValue.animationCurves.RemoveAt(animationValue.animationCurves.Count - 1);
+            //            while (animationValue.animationCurves.Count < 2)
+            //                animationValue.animationCurves.Add(new AnimationCurve());
+            //            break;
+            //    }
+            //}
         }
+
 
         // Use this for initialization
         protected override void Awake()
@@ -155,58 +154,34 @@ namespace UI
         {
             m_CoroutineIsRunning = true;
 
-            int i = 0;
-            foreach (AnimationValue animationValue in m_AnimationValues)
-            {
-                if (i != 0)
-                    yield return new WaitForSeconds(m_TimeBetweenAnimations);
+            yield return StartCoroutine(Animations.Animate(m_AnimationValues, m_CurrentAnnouncementObject));
+            
+            //Text newLogItem = Instantiate(m_LogTextPrefab);
+            //newLogItem.transform.SetParent(UIManager.self.transform, false);
+            //newLogItem.text = m_CurrentAnnouncementObject.text;
 
-                switch (animationValue.animationType)
-                {
-                    case AnimationType.Fade:
-                        yield return
-                            StartCoroutine(
-                                Animations.Fade2DGraphic(
-                                    m_CurrentAnnouncementObject,
-                                    animationValue.animationCurve.ToArray()));
-                        break;
-                    case AnimationType.Scale:
-                        yield return
-                            StartCoroutine(
-                                Animations.Scale2DTransform(
-                                    m_CurrentAnnouncementObject.transform,
-                                    animationValue.animationCurve.ToArray()));
-                        break;
-                }
-                i++;
-            }
+            //m_LogItems.Add(newLogItem);
 
-            Text newLogItem = Instantiate(m_LogTextPrefab);
-            newLogItem.transform.SetParent(UIManager.self.transform, false);
-            newLogItem.text = m_CurrentAnnouncementObject.text;
+            //Destroy(m_CurrentAnnouncementObject.gameObject);
 
-            m_LogItems.Add(newLogItem);
+            //if (m_LogItemLifetime != -1.0f)
+            //    StartCoroutine(
+            //        WaitThenDoThis(
+            //            m_LogItemLifetime,
+            //            delegate
+            //            {
+            //                Destroy(newLogItem.gameObject);
+            //                m_LogItems.Remove(newLogItem);
 
-            Destroy(m_CurrentAnnouncementObject.gameObject);
-
-            if (m_LogItemLifetime != -1.0f)
-                StartCoroutine(
-                    WaitThenDoThis(
-                        m_LogItemLifetime,
-                        delegate
-                        {
-                            Destroy(newLogItem.gameObject);
-                            m_LogItems.Remove(newLogItem);
-
-                            SortAnnouncementLog();
-                        }));
+            //                SortAnnouncementLog();
+            //            }));
 
             m_CoroutineIsRunning = false;
 
             if (m_QueuedAnnouncements.Count > 0)
                 CreateNewAnnouncement();
 
-            StartCoroutine(AnimateToLog());
+            //StartCoroutine(AnimateToLog());
         }
         private IEnumerator AnimateToLog()
         {
@@ -218,7 +193,7 @@ namespace UI
 
             SortAnnouncementLog();
 
-            yield return StartCoroutine(Animations.Fade2DGraphic(m_LogItems[m_LogItems.Count - 1], m_LogFadeIn));
+            //yield return StartCoroutine(Animations.Fade2DGraphic(m_LogItems[m_LogItems.Count - 1], m_LogFadeIn));
 
             yield return false;
         }
