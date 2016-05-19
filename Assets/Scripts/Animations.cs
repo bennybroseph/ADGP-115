@@ -29,7 +29,7 @@ public class AnimationLayer
 }
 
 [Serializable]
-public class AnimationSequence : object
+public class AnimationSequence
 {
     public List<AnimationLayer> animationLayers;
 }

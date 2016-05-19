@@ -154,6 +154,8 @@ namespace UI
         {
             m_CoroutineIsRunning = true;
 
+            m_CurrentAnnouncementObject.transform.localScale = new Vector3(0, 0, 0);
+
             yield return StartCoroutine(Animations.Animate(m_AnimationValues, m_CurrentAnnouncementObject));
             
             //Text newLogItem = Instantiate(m_LogTextPrefab);
@@ -162,7 +164,7 @@ namespace UI
 
             //m_LogItems.Add(newLogItem);
 
-            //Destroy(m_CurrentAnnouncementObject.gameObject);
+            Destroy(m_CurrentAnnouncementObject.gameObject);
 
             //if (m_LogItemLifetime != -1.0f)
             //    StartCoroutine(
