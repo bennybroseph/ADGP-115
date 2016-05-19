@@ -184,6 +184,31 @@ namespace Units
 
             m_Skills[skillIndex].PutOnCooldown();
         }
+
+        void OnTriggerEnter(Collider a_Collision)
+        {
+            if (a_Collision.transform.gameObject.tag == "Pickup")
+            {
+                Destroy(a_Collision.transform.gameObject);
+
+                switch (a_Collision.name)
+                {
+                    case "HealthPickup":
+                        gameObject.GetComponent<IAttackable>().health += 5;
+                        break;
+
+                    case "ManaPickup":
+                        m_Mana += 2;
+                        break;
+
+                    case "ExpPickup":
+                        m_Experience += 5;
+                        break;
+
+                }
+               
+            }
+        }
         #endregion
     }
 }

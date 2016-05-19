@@ -22,6 +22,7 @@ TagManager:
   - Load Game
   - Instructions
   - Quit Game
+  - Pickup
   layers:
   - Default
   - TransparentFX
