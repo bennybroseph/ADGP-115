@@ -15,7 +15,7 @@ GameObject:
   - 195: {fileID: 19556852}
   m_Layer: 9
   m_Name: Goblin_Prefab
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 121338}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.14, y: 0.5, z: 0}
+  m_LocalPosition: {x: -4.45, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -80,9 +80,11 @@ MonoBehaviour:
   m_Skills: []
   m_UnitName: Goblin
   m_UnitNickname: 
+  m_Faction: 
   m_MaxMana: 2
   m_MaxDefense: 4
   m_MaxHealth: 10
+  m_Experience: 5
   m_Speed: 5
   m_Nameplate: {fileID: 11409874, guid: bdd14ad98f93f3a449cd18a355cc6dad, type: 2}
 --- !u!135 &13544926

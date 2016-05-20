@@ -22,7 +22,9 @@ TagManager:
   - Load Game
   - Instructions
   - Quit Game
-  - Pickup
+  - HealthPickup
+  - ManaPickup
+  - Enemy
   layers:
   - Default
   - TransparentFX

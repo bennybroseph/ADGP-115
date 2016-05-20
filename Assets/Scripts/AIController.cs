@@ -26,8 +26,6 @@ public class AIController : MonoSingleton<AIController>, IController
     private GameObject m_ManaPickupPrefab;
     [SerializeField]
     private GameObject m_HealthPickupPrefab;
-    [SerializeField]
-    private GameObject m_ExpPickupPrefab;
 
     protected override void Awake()
     {
@@ -163,13 +161,16 @@ public class AIController : MonoSingleton<AIController>, IController
     {
         IStats unit = a_Params[0] as IStats;
 
-        Vector3 expinstantposition = new Vector3(unit.transform.position.x + 1, unit.transform.position.y, unit.transform.position.z);
-        Vector3 healthinstantposition = new Vector3(unit.transform.position.x + 0.5f, unit.transform.position.y, unit.transform.position.z + 1);
-        Vector3 manainstantposition = new Vector3(unit.transform.position.x, unit.transform.position.y, unit.transform.position.z);
+        if (unit.gameObject.tag == "Enemy")
+        {
+            Vector3 healthinstantposition = new Vector3(unit.transform.position.x + 0.5f, unit.transform.position.y, unit.transform.position.z + 1);
+            Vector3 manainstantposition = new Vector3(unit.transform.position.x, unit.transform.position.y, unit.transform.position.z);
 
-        Instantiate(m_ExpPickupPrefab, expinstantposition, Quaternion.identity);
-        Instantiate(m_HealthPickupPrefab, healthinstantposition, Quaternion.identity);
-        Instantiate(m_ManaPickupPrefab, manainstantposition, Quaternion.identity);
+            Instantiate(m_HealthPickupPrefab, healthinstantposition, Quaternion.identity);
+            Instantiate(m_ManaPickupPrefab, manainstantposition, Quaternion.identity);
+
+        }
+        
 
         if (unit == null)
             return;

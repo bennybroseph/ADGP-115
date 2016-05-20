@@ -187,28 +187,34 @@ namespace Units
 
         void OnTriggerEnter(Collider a_Collision)
         {
-            if (a_Collision.transform.gameObject.tag == "Pickup")
-            {
-                Destroy(a_Collision.transform.gameObject);
+            IStats player = gameObject.GetComponent<IStats>();
+            ItemDrops item = a_Collision.GetComponent<ItemDrops>();
 
-                switch (a_Collision.name)
+            switch (a_Collision.transform.gameObject.tag)
                 {
                     case "HealthPickup":
-                        gameObject.GetComponent<IAttackable>().health += 5;
+                        player.health = player.health > 0 && player.health < player.maxHealth 
+                        ? player.health += item.HealthIncrease 
+                        : player.health;
+
+                        player.health = player.health > player.maxHealth
+                        ? player.maxHealth
+                        : player.health;
                         break;
 
                     case "ManaPickup":
-                        m_Mana += 2;
-                        break;
+                    player.mana = player.mana > 0 && player.mana < player.maxMana
+                    ? player.mana += item.ManaIncrease
+                    : player.mana;
 
-                    case "ExpPickup":
-                        m_Experience += 5;
-                        break;
-
+                    player.mana = player.mana > player.maxMana
+                    ? player.maxMana
+                    : player.mana;
+                    break;
                 }
-               
-            }
+            Destroy(a_Collision.transform.gameObject);
         }
+
         #endregion
     }
 }

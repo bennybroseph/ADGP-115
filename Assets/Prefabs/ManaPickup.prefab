@@ -14,7 +14,7 @@ GameObject:
   - 114: {fileID: 11464298}
   m_Layer: 0
   m_Name: ManaPickup
-  m_TagString: Pickup
+  m_TagString: ManaPickup
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -75,6 +75,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80daf52ee16d25a4a912d92a876c847a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_HealthIncrease: 0
+  m_ManaIncrease: 2
 --- !u!135 &13557204
 SphereCollider:
   m_ObjectHideFlags: 1

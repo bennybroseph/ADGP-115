@@ -137,12 +137,15 @@ namespace Units.Skills
             if (a_Collision.transform.gameObject != m_Parent.gameObject)
             {
                 IAttackable attackableObject = a_Collision.transform.gameObject.GetComponent<IAttackable>();
+
                 if (attackableObject != null)
                 {
                     attackableObject.damageFSM.Transition(DamageState.TakingDamge);
                     Debug.Log("Hit " + attackableObject.unitName);
                     attackableObject.health -= m_SkillData.damage;
 
+                    if (a_Collision.gameObject.tag == "Enemy" && attackableObject.health <= 0)
+                        m_Parent.experience += a_Collision.transform.GetComponent<IStats>().experience;
                     Destroy(gameObject);
                 }
             }

@@ -41,7 +41,7 @@ namespace Units
         [SerializeField]
         protected float m_MaxHealth;
         protected float m_Health;
-
+        [SerializeField]
         protected float m_Experience;
         protected int m_Level;
 
