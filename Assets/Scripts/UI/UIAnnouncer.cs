@@ -28,6 +28,10 @@ namespace UI
         [Header("Announcement Animation")]
         [SerializeField]
         private AnimationSequence m_AnimationValues;
+        //[SerializeField]
+        //private AnimationLayer m_AnimationLayer;
+        //[SerializeField]
+        //private AnimationData m_AnimationData;
        
         //[Header("Announcement Log Constraints")]
         //[SerializeField]
