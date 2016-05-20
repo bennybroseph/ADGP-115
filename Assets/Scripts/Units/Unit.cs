@@ -17,7 +17,9 @@ namespace Units
         protected IController m_Controller;
         [SerializeField]
         protected ControllerType m_ControllerType;
+        [SerializeField]
         protected FiniteStateMachine<DamageState> m_DamageFSM;
+        [SerializeField]
         protected FiniteStateMachine<MovementState> m_MovementFSM;
         [SerializeField]
         protected List<Skill> m_Skills;
