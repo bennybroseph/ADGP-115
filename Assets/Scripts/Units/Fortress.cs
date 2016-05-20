@@ -20,6 +20,9 @@ namespace Units
         private string m_UnitNickname;
 
         [SerializeField]
+        private string m_Faction;
+
+        [SerializeField]
         private float m_MaxHealth;
         [SerializeField, ReadOnly]
         private float m_Health;
@@ -51,7 +54,7 @@ namespace Units
         public float health
         {
             get { return m_Health; }
-            set { m_Health = value; Publisher.self.DelayedBroadcast(Event.FortressHealthChanged, this);}
+            set { m_Health = value; Publisher.self.DelayedBroadcast(Event.FortressHealthChanged, this); }
         }
 
         public float maxDefense
@@ -68,6 +71,12 @@ namespace Units
         public FiniteStateMachine<DamageState> damageFSM
         {
             get { return m_DamageFSM; }
+        }
+
+        public string faction
+        {
+            get { return m_Faction; }
+            set { m_Faction = value; }
         }
         #endregion
 

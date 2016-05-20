@@ -160,7 +160,7 @@ namespace Units
             IUsesSkills unit = a_Params[0] as IUsesSkills;
             int skillIndex = (int)a_Params[1];
 
-            if (unit.GetHashCode() != this.GetHashCode() ||
+            if (unit.GetHashCode() != GetHashCode() ||
                 m_Skills.Count <= skillIndex ||
                 !(m_Skills[skillIndex].remainingCooldown <= 0.0f) ||
                 !(m_Skills[skillIndex].skillData.cost <= m_Mana))
@@ -184,33 +184,6 @@ namespace Units
 
             m_Skills[skillIndex].PutOnCooldown();
         }
-
-        void OnTriggerEnter(Collider a_Collision)
-        {
-            IStats player = gameObject.GetComponent<IStats>();
-            ItemDrops item = a_Collision.GetComponent<ItemDrops>();
-
-            switch (a_Collision.transform.gameObject.tag)
-            {
-                case "HealthPickup":
-                    if (player.damageFSM.currentState == DamageState.Dead)
-                        return;
-
-                    player.health += item.healthIncrease;
-                    player.health = Mathf.Clamp(player.health, 0, player.maxHealth);
-                    break;
-
-                case "ManaPickup":
-                    if (player.damageFSM.currentState == DamageState.Dead)
-                        return;
-
-                    player.mana += item.manaIncrease;
-                    player.mana = Mathf.Clamp(player.mana, 0, player.maxMana);
-                    break;
-            }
-            //Destroy(a_Collision.transform.gameObject);
-        }
-
         #endregion
     }
 }

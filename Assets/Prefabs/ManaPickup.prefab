@@ -10,9 +10,9 @@ GameObject:
   - 4: {fileID: 403746}
   - 33: {fileID: 3384970}
   - 135: {fileID: 13557204}
+  - 135: {fileID: 13520812}
   - 23: {fileID: 2346020}
   - 114: {fileID: 11464298}
-  - 135: {fileID: 13590754}
   m_Layer: 0
   m_Name: ManaPickup
   m_TagString: ManaPickup
@@ -78,6 +78,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HealthIncrease: 0
   m_ManaIncrease: 2
+--- !u!135 &13520812
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 113702}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &13557204
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -89,18 +101,6 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 5
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &13590754
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 113702}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &100100000
 Prefab:

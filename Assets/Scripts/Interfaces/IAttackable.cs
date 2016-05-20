@@ -28,7 +28,7 @@ namespace Interfaces
             float maxDefense { get; }
             // Defense property
             float defense { get; set; }
-
+            string faction { get; set; }
             FiniteStateMachine<DamageState> damageFSM { get; }
         }
     #endregion

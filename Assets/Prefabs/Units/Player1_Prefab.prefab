@@ -133,9 +133,11 @@ MonoBehaviour:
     m_RemainingCooldown: 0
   m_UnitName: Player1
   m_UnitNickname: 
+  m_Faction: Allies
   m_MaxMana: 5
   m_MaxDefense: 3
   m_MaxHealth: 10
+  m_Experience: 0
   m_Speed: 5
   m_Nameplate: {fileID: 11465284, guid: 5846026beed07984eba03daa6cd87c58, type: 2}
   m_Parent: {fileID: 0}

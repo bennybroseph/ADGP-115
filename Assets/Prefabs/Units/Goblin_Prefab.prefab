@@ -79,8 +79,8 @@ MonoBehaviour:
   m_ControllerType: 3
   m_Skills: []
   m_UnitName: Goblin
-  m_UnitNickname: 
-  m_Faction: 
+  m_UnitNickname: Goblin
+  m_Faction: Enemies
   m_MaxMana: 2
   m_MaxDefense: 4
   m_MaxHealth: 10

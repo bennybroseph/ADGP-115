@@ -99,9 +99,9 @@ MonoBehaviour:
     m_SkillIndex: 0
     m_CooldownReduction: 0
     m_RemainingCooldown: 0
-  m_UnitName: 
-  m_UnitNickname: 
-  m_Faction: 
+  m_UnitName: GoblinMage
+  m_UnitNickname: Goblin Mage
+  m_Faction: Enemies
   m_MaxMana: 5
   m_MaxDefense: 12
   m_MaxHealth: 12
