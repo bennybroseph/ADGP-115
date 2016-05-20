@@ -12,11 +12,13 @@ public enum AnimationType
     Scale,
     Rotate,
     Translate,
+    Colorize,
 }
 
 [Serializable]
 public class AnimationData
 {
+    [Tooltip("Test")]
     public AnimationType animationType;
     public List<AnimationCurve> animationCurves;
 }
@@ -24,8 +26,9 @@ public class AnimationData
 [Serializable]
 public class AnimationLayer
 {
-    public List<AnimationData> animationDataList;
+    [Range(0, 10)]
     public float delayTime;
+    public List<AnimationData> animationDataList;
 }
 
 [Serializable]
