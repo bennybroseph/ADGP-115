@@ -6,7 +6,6 @@ namespace Interfaces
 {
         public interface IParentable
         {
-            Transform transform { get; }
             GameObject gameObject { get; }
         }
 

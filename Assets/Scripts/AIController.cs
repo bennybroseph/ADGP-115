@@ -163,8 +163,8 @@ public class AIController : MonoSingleton<AIController>, IController
 
         if (unit.gameObject.tag == "Enemy")
         {
-            Vector3 healthinstantposition = new Vector3(unit.transform.position.x + 0.5f, unit.transform.position.y, unit.transform.position.z + 1);
-            Vector3 manainstantposition = new Vector3(unit.transform.position.x, unit.transform.position.y, unit.transform.position.z);
+            Vector3 healthinstantposition = new Vector3(unit.gameObject.transform.position.x + 0.5f, unit.gameObject.transform.position.y, unit.gameObject.transform.position.z + 1);
+            Vector3 manainstantposition = new Vector3(unit.gameObject.transform.position.x, unit.gameObject.transform.position.y, unit.gameObject.transform.position.z);
 
             Instantiate(m_HealthPickupPrefab, healthinstantposition, Quaternion.identity);
             Instantiate(m_ManaPickupPrefab, manainstantposition, Quaternion.identity);

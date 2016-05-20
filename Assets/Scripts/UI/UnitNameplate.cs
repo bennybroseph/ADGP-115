@@ -95,7 +95,7 @@ namespace UI
 
         private void LateUpdate()
         {
-            Vector3 worldPos = m_Parent.transform.position + m_Offset;
+            Vector3 worldPos = m_Parent.gameObject.transform.position + m_Offset;
             Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
             transform.position = new Vector3(screenPos.x, screenPos.y, screenPos.z);
         }

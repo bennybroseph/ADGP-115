@@ -19,7 +19,7 @@ namespace Units
         // Private member variables
         [SerializeField]
         private UnitNameplate m_Nameplate;
-  
+
         [SerializeField]
         private UIManager m_Parent;
 
@@ -165,7 +165,7 @@ namespace Units
                 !(m_Skills[skillIndex].remainingCooldown <= 0.0f) ||
                 !(m_Skills[skillIndex].skillData.cost <= m_Mana))
                 return;
-            
+
             GameObject newObject = Instantiate(m_Skills[skillIndex].skillPrefab);
 
             Physics.IgnoreCollision(GetComponent<Collider>(), newObject.GetComponent<Collider>());
@@ -191,28 +191,24 @@ namespace Units
             ItemDrops item = a_Collision.GetComponent<ItemDrops>();
 
             switch (a_Collision.transform.gameObject.tag)
-                {
-                    case "HealthPickup":
-                        player.health = player.health > 0 && player.health < player.maxHealth 
-                        ? player.health += item.HealthIncrease 
-                        : player.health;
+            {
+                case "HealthPickup":
+                    if (player.damageFSM.currentState == DamageState.Dead)
+                        return;
 
-                        player.health = player.health > player.maxHealth
-                        ? player.maxHealth
-                        : player.health;
-                        break;
-
-                    case "ManaPickup":
-                    player.mana = player.mana > 0 && player.mana < player.maxMana
-                    ? player.mana += item.ManaIncrease
-                    : player.mana;
-
-                    player.mana = player.mana > player.maxMana
-                    ? player.maxMana
-                    : player.mana;
+                    player.health += item.healthIncrease;
+                    player.health = Mathf.Clamp(player.health, 0, player.maxHealth);
                     break;
-                }
-            Destroy(a_Collision.transform.gameObject);
+
+                case "ManaPickup":
+                    if (player.damageFSM.currentState == DamageState.Dead)
+                        return;
+
+                    player.mana += item.manaIncrease;
+                    player.mana = Mathf.Clamp(player.mana, 0, player.maxMana);
+                    break;
+            }
+            //Destroy(a_Collision.transform.gameObject);
         }
 
         #endregion
