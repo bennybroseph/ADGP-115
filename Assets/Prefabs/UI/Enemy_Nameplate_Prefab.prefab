@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 920dd1c6cfdd6894fbba6ae1a7e5fcba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Offset: {x: 0, y: 0, z: -1}
+  m_Offset: {x: 0, y: 0, z: -1.25}
   m_BarAnimationCurve:
     serializedVersion: 2
     m_Curve:
@@ -216,8 +216,61 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 0
   m_DamageAnimationSequence:
-    animationLayers: []
-  m_DamageTextPrefab: {fileID: 0}
+    animationLayers:
+    - delayTime: 0
+      animationDataList:
+      - animationType: 0
+        animationCurves:
+        - serializedVersion: 2
+          m_Curve:
+          - time: 0
+            value: 0
+            inSlope: 1.3333334
+            outSlope: 1.3333334
+            tangentMode: 10
+          - time: 0.75
+            value: 1
+            inSlope: 1.3333334
+            outSlope: 1.3333334
+            tangentMode: 10
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+      - animationType: 1
+        animationCurves:
+        - serializedVersion: 2
+          m_Curve:
+          - time: 0
+            value: 0
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 10
+          - time: 1.5
+            value: 1.5
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 10
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+      - animationType: 0
+        animationCurves:
+        - serializedVersion: 2
+          m_Curve:
+          - time: 1.25
+            value: 1
+            inSlope: -4
+            outSlope: -4
+            tangentMode: 10
+          - time: 1.5
+            value: 0
+            inSlope: -4
+            outSlope: -4
+            tangentMode: 10
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+  m_DamageTextPrefab: {fileID: 22391988, guid: 462a64f3fc4b48c40a4c046d91fe14e4, type: 2}
   m_NameText: {fileID: 0}
   m_LevelText: {fileID: 0}
   m_HealthBar: {fileID: 0}

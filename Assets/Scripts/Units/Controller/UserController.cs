@@ -25,26 +25,26 @@ namespace Units.Controller
 
             m_Controllables = new List<IControllable>();
         }
-        
+
         private void FixedUpdate()
         {
             int i = 0;
             foreach (IControllable controlable in m_Controllables)
             {
-                controlable.transform.position += (controlable.velocity + controlable.totalVelocity) * Time.deltaTime;
+                controlable.gameObject.GetComponent<Rigidbody>().velocity = (controlable.velocity + controlable.totalVelocity);
 
 
                 if (controlable.velocity != Vector3.zero &&
-                    (controlable.isMoving == Moving.nowhere ||
-#if !UNITY_WEBGL
-                       (GameManager.self.GetStickValue(i, GameManager.Stick.Left).X == 0.0f &&
-                        GameManager.self.GetStickValue(i, GameManager.Stick.Left).Y == 0.0f)))
-#else
-                    (Input.GetAxisRaw("Horizontal") == 0.0f &&
-                    Input.GetAxisRaw("Vertical") == 0.0f)))
-#endif
+                    (controlable.isMoving == Moving.nowhere)) //||
+                                                              //#if !UNITY_WEBGL
+                                                              //                       (GameManager.self.GetStickValue(i, GameManager.Stick.Left).X == 0.0f &&
+                                                              //                        GameManager.self.GetStickValue(i, GameManager.Stick.Left).Y == 0.0f)))
+                                                              //#else
+                                                              //                    (Input.GetAxisRaw("Horizontal") == 0.0f &&
+                                                              //                    Input.GetAxisRaw("Vertical") == 0.0f)))
+                                                              //#endif
                 {
-                    Movable.Brake(controlable);
+                    controlable.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 }
                 i++;
             }
@@ -60,6 +60,8 @@ namespace Units.Controller
 
                 if (controlable.canMoveWithInput)
                 {
+                    controlable.velocity = Vector3.zero;
+
                     Moving dPad = Moving.nowhere;
 #if !UNITY_WEBGL
                     dPad.forward = GameManager.self.GetButtonState(
@@ -89,22 +91,28 @@ namespace Units.Controller
                     };
 
                     if (controlable.isMoving.forward)
-                        controlable.velocity = new Vector3(0, controlable.velocity.y, controlable.speed);
+                        controlable.velocity += Vector3.forward;
                     if (controlable.isMoving.back)
-                        controlable.velocity = new Vector3(0, controlable.velocity.y, -controlable.speed);
+                        controlable.velocity += Vector3.back;
                     if (controlable.isMoving.left)
-                        controlable.velocity = new Vector3(-controlable.speed, controlable.velocity.y, 0);
+                        controlable.velocity += Vector3.left;
                     if (controlable.isMoving.right)
-                        controlable.velocity = new Vector3(controlable.speed, controlable.velocity.y, 0);
+                        controlable.velocity += Vector3.right;
 
-                    if (controlable.isMoving.forward && controlable.isMoving.left)
-                        controlable.velocity = new Vector3(-Mathf.Sqrt(controlable.speed * 2), controlable.velocity.y, Mathf.Sqrt(controlable.speed * 2));
-                    if (controlable.isMoving.forward && controlable.isMoving.right)
-                        controlable.velocity = new Vector3(Mathf.Sqrt(controlable.speed * 2), controlable.velocity.y, Mathf.Sqrt(controlable.speed * 2));
-                    if (controlable.isMoving.back && controlable.isMoving.left)
-                        controlable.velocity = new Vector3(-Mathf.Sqrt(controlable.speed * 2), controlable.velocity.y, -Mathf.Sqrt(controlable.speed * 2));
-                    if (controlable.isMoving.back && controlable.isMoving.right)
-                        controlable.velocity = new Vector3(Mathf.Sqrt(controlable.speed * 2), controlable.velocity.y, -Mathf.Sqrt(controlable.speed * 2));
+                    if (controlable.velocity != Vector3.zero)
+                    {
+                        float angle = -Mathf.Atan(controlable.velocity.x / controlable.velocity.z) + (Mathf.PI / 2);
+
+                        if ((controlable.velocity.x < 0.0f && controlable.velocity.z < 0.0f) ||
+                            (controlable.velocity.x > 0.0f && controlable.velocity.z < 0.0f) ||
+                            (controlable.velocity.x == 0.0f && controlable.velocity.z < 0.0f))
+                            angle += Mathf.PI;
+                        
+                        controlable.velocity = new Vector3(
+                            controlable.speed * Mathf.Cos(angle),
+                            0,
+                            controlable.speed * Mathf.Sin(angle));
+                    }
 
                     Vector2 leftStick;
 #if !UNITY_WEBGL
@@ -172,7 +180,7 @@ namespace Units.Controller
         public void UnRegister(IControllable a_Controllable)
         {
             m_Controllables.Remove(a_Controllable);
-            if(m_Controllables.Count == 0)
+            if (m_Controllables.Count == 0)
                 Publisher.self.Broadcast(Event.GameOver);
         }
     }
