@@ -8,11 +8,11 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 445938}
-  - 33: {fileID: 3328996}
-  - 65: {fileID: 6519412}
-  - 23: {fileID: 2391116}
   - 114: {fileID: 11467890}
   - 195: {fileID: 19599106}
+  - 65: {fileID: 6519412}
+  - 33: {fileID: 3328996}
+  - 23: {fileID: 2391116}
   m_Layer: 0
   m_Name: Fortress_Prefab
   m_TagString: Fortress
@@ -90,7 +90,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NameplatePrefab: {fileID: 11402176, guid: b98b59482a3996046ba8c9d9f9ebb366, type: 2}
   m_UnitName: Fortress
-  m_UnitNickname: 
+  m_UnitNickname: Fortress
   m_Faction: Allies
   m_MaxHealth: 15
   m_Health: 0

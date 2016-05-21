@@ -42,7 +42,7 @@ MonoBehaviour:
   m_AnnouncementTextPrefab: {fileID: 11446662, guid: ede2390cbf2fc0242b30eda8d36a928d,
     type: 2}
   m_LogTextPrefab: {fileID: 11427998, guid: 350f7a703adb5904da62b9409e691760, type: 2}
-  m_AnimationValues:
+  m_AnnouncementSequence:
     animationLayers:
     - delayTime: 0
       animationDataList:
@@ -76,6 +76,47 @@ MonoBehaviour:
           m_Curve:
           - time: 0
             value: 1
+            inSlope: -1.3333334
+            outSlope: -1.3333334
+            tangentMode: 10
+          - time: 0.75
+            value: 0
+            inSlope: -1.3333334
+            outSlope: -1.3333334
+            tangentMode: 10
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+    totalAnimationTime: 1.0247917
+  m_LogSequence:
+    animationLayers:
+    - delayTime: 0
+      animationDataList:
+      - animationType: 0
+        animationCurves:
+        - serializedVersion: 2
+          m_Curve:
+          - time: 0
+            value: 0
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 10
+          - time: 1
+            value: 1
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 10
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+    - delayTime: 0
+      animationDataList:
+      - animationType: 0
+        animationCurves:
+        - serializedVersion: 2
+          m_Curve:
+          - time: 0
+            value: 1
             inSlope: -1
             outSlope: -1
             tangentMode: 10
@@ -87,6 +128,10 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 0
+    totalAnimationTime: 2
+  m_SpaceBetweenLogItems: 15
+  m_MaxNumberOfLogItems: 10
+  m_LogItemLifetime: -1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

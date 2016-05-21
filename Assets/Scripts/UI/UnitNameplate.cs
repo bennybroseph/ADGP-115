@@ -242,7 +242,8 @@ namespace UI
 
         private void CreateFloatingDamage(IStats a_Unit)
         {
-            if (a_Unit.health > m_HealthBar.fillAmount * a_Unit.maxHealth)
+            if (a_Unit.health >= m_HealthBar.fillAmount * a_Unit.maxHealth ||
+                Mathf.Round(m_HealthBar.fillAmount * a_Unit.maxHealth - a_Unit.health) == 0)
                 return;
 
             Canvas newObject = Instantiate(m_DamageTextPrefab);
