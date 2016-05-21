@@ -44,24 +44,8 @@ MonoBehaviour:
   m_LogTextPrefab: {fileID: 11427998, guid: 350f7a703adb5904da62b9409e691760, type: 2}
   m_AnimationValues:
     animationLayers:
-    - animationDataList:
-      - animationType: 0
-        animationCurves:
-        - serializedVersion: 2
-          m_Curve:
-          - time: 0
-            value: 0
-            inSlope: 3.1034482
-            outSlope: 3.1034482
-            tangentMode: 0
-          - time: 0.15
-            value: 1
-            inSlope: 0.20588256
-            outSlope: 0.20588256
-            tangentMode: 0
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 0
+    - delayTime: 0
+      animationDataList:
       - animationType: 1
         animationCurves:
         - serializedVersion: 2
@@ -71,21 +55,21 @@ MonoBehaviour:
             inSlope: 0
             outSlope: 0
             tangentMode: 0
-          - time: 0.1999012
-            value: 1.0527216
-            inSlope: 1.1332333
-            outSlope: 1.1332333
+          - time: 0.1864025
+            value: 1.081041
+            inSlope: 1.8349974
+            outSlope: 1.8349974
             tangentMode: 0
-          - time: 0.4
-            value: 1
-            inSlope: 2
-            outSlope: 2
+          - time: 0.27479166
+            value: 1.0069042
+            inSlope: 3.754567
+            outSlope: 3.754567
             tangentMode: 0
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 0
-      delayTime: 0
-    - animationDataList:
+    - delayTime: 2
+      animationDataList:
       - animationType: 0
         animationCurves:
         - serializedVersion: 2
@@ -103,7 +87,6 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 0
-      delayTime: 2
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

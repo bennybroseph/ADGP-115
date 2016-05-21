@@ -1,26 +1,34 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Net.Sockets;
 using Interfaces;
-using Units;
 using UnityEngine;
 using UnityEngine.UI;
 
 using Library;
 
+using Random = UnityEngine.Random;
 using Event = Define.Event;
 
 namespace UI
 {
     public class UnitNameplate : MonoBehaviour, IChildable<IStats>
     {
+        private delegate void VoidFunction();
+
         #region -- PRIVATE VARIABLES --
         [SerializeField]
         private IStats m_Parent;
 
         [SerializeField]
         private Vector3 m_Offset;
+
+        [SerializeField]
+        private AnimationCurve m_BarAnimationCurve;
+
+        [SerializeField]
+        private AnimationSequence m_DamageAnimationSequence;
+        [SerializeField]
+        private Canvas m_DamageTextPrefab;
 
         [SerializeField]
         private Text m_NameText;
@@ -46,7 +54,7 @@ namespace UI
         private bool m_ManaCoroutineIsRunning;
         #endregion
 
-        #region -- ISTATS PARENT --
+        #region -- PROPERTIES --
         public IStats parent
         {
             get { return m_Parent; }
@@ -101,7 +109,8 @@ namespace UI
         }
         #endregion
 
-        #region -- PRIVATE VOID FUNCTIONS --
+        #region -- PRIVATE FUNCTIONS --
+        #region -- EVENTS --
         private void GetComponents()
         {
             foreach (Transform child in transform)
@@ -174,6 +183,7 @@ namespace UI
                     SetText(m_LevelText, unit.level.ToString(), true);
                     break;
                 case Event.UnitHealthChanged:
+                    CreateFloatingDamage(unit);
                     SetBar(m_HealthBar, unit.health, unit.maxHealth);
 
                     if (m_NegativeHealthBar.fillAmount < m_HealthBar.fillAmount)
@@ -195,6 +205,17 @@ namespace UI
                     break;
             }
         }
+        private void OnUnitDied(Event a_Event, params object[] a_Params)
+        {
+            IStats unit = a_Params[0] as IStats;
+
+            // The 'this == null' call is surprisingly necessary when in the editor...
+            if (unit == null || unit != m_Parent || this == null)
+                return;
+
+            Destroy(gameObject);
+        }
+        #endregion
 
         private void SetText(Text a_Text, string a_String, bool a_AddLevel = false)
         {
@@ -219,15 +240,36 @@ namespace UI
             a_Bar.GetComponentInChildren<Text>().text = a_CurrentValue + "/" + a_MaxValue;
         }
 
-        private void OnUnitDied(Event a_Event, params object[] a_Params)
+        private void CreateFloatingDamage(IStats a_Unit)
         {
-            IStats unit = a_Params[0] as IStats;
-
-            // The 'this == null' call is surprisingly necessary when in the editor...
-            if (unit == null || unit != m_Parent || this == null)
+            if (a_Unit.health > m_HealthBar.fillAmount * a_Unit.maxHealth)
                 return;
 
-            Destroy(gameObject);
+            Canvas newObject = Instantiate(m_DamageTextPrefab);
+
+            newObject.transform.SetAsLastSibling();
+
+            newObject.transform.position = new Vector3(
+                m_Parent.gameObject.transform.position.x,
+                9,
+                m_Parent.gameObject.transform.position.z);
+            newObject.transform.position += new Vector3(
+                Random.value * -1 + Random.value,
+                0,
+                Random.value * -1 + Random.value);
+            Debug.Log(Math.Round(m_HealthBar.fillAmount * a_Unit.maxHealth - a_Unit.health, 2));
+            newObject.GetComponentInChildren<Text>().text =
+                string.Format("{0:0.0}", Math.Round(m_HealthBar.fillAmount * a_Unit.maxHealth - a_Unit.health, 2));
+
+            newObject.GetComponent<MonoBehaviour>().StartCoroutine(
+                Animations.Animate(m_DamageAnimationSequence, newObject.GetComponentInChildren<Text>()));
+            newObject.GetComponent<MonoBehaviour>().StartCoroutine(
+                WaitAndDoThis(
+                    2.0f,
+                    delegate
+                    {
+                        Destroy(newObject.gameObject);
+                    }));
         }
         #endregion
 
@@ -235,19 +277,31 @@ namespace UI
         private IEnumerator ReduceNegativeHealthSpace()
         {
             m_HealthCoroutineIsRunning = true;
-            while (m_HealthBar.fillAmount != m_NegativeHealthBar.fillAmount)
+
+            float amountToReduce = 0;
+            float originalFill = m_NegativeHealthBar.fillAmount;
+
+            float deltaTime = 0;
+            while (deltaTime < m_BarAnimationCurve[m_BarAnimationCurve.length - 1].time)
             {
                 while (m_LastHealthChange < 1.5f)
                 {
                     m_LastHealthChange += Time.deltaTime;
+
+                    deltaTime = 0;
+
+                    amountToReduce = m_NegativeHealthBar.fillAmount - m_HealthBar.fillAmount;
+                    originalFill = m_NegativeHealthBar.fillAmount;
+
                     yield return false;
                 }
 
-                m_LastHealthChange += Time.deltaTime;
-                m_NegativeHealthBar.fillAmount -= Mathf.Sqrt(m_LastHealthChange - 1.5f) * Time.deltaTime;
+                deltaTime += Time.deltaTime;
 
-                if (m_NegativeHealthBar.fillAmount < m_HealthBar.fillAmount)
-                    m_NegativeHealthBar.fillAmount = m_HealthBar.fillAmount;
+                m_NegativeHealthBar.fillAmount =
+                    originalFill
+                    - m_BarAnimationCurve.Evaluate(deltaTime)
+                    * amountToReduce;
 
                 yield return false;
             }
@@ -256,23 +310,47 @@ namespace UI
         private IEnumerator ReduceNegativeManaSpace()
         {
             m_ManaCoroutineIsRunning = true;
-            while (m_ManaBar.fillAmount != m_NegativeManaBar.fillAmount)
+
+            float amountToReduce = 0;
+            float originalFill = m_NegativeManaBar.fillAmount;
+
+            float deltaTime = 0;
+            while (deltaTime < m_BarAnimationCurve[m_BarAnimationCurve.length - 1].time)
             {
-                while (m_LastManaChange < 1.5f)
+                while (m_LastManaChange < 0.5f)
                 {
                     m_LastManaChange += Time.deltaTime;
+
+                    deltaTime = 0;
+
+                    amountToReduce = m_NegativeManaBar.fillAmount - m_ManaBar.fillAmount;
+                    originalFill = m_NegativeManaBar.fillAmount;
+
                     yield return false;
                 }
 
-                m_LastManaChange += Time.deltaTime;
-                m_NegativeManaBar.fillAmount -= Mathf.Sqrt(m_LastManaChange - 1.5f) * Time.deltaTime;
-
-                if (m_NegativeManaBar.fillAmount < m_ManaBar.fillAmount)
-                    m_NegativeManaBar.fillAmount = m_ManaBar.fillAmount;
+                deltaTime += Time.deltaTime;
+                m_NegativeManaBar.fillAmount = originalFill
+                    - m_BarAnimationCurve.Evaluate(deltaTime)
+                    * amountToReduce;
 
                 yield return false;
             }
             m_ManaCoroutineIsRunning = false;
+        }
+
+        private IEnumerator WaitAndDoThis(
+            float a_TimeToWait, 
+            VoidFunction a_Delegate, 
+            bool a_CallDelegateFirst = false)
+        {
+            if (a_CallDelegateFirst)
+                a_Delegate();
+
+            yield return new WaitForSeconds(a_TimeToWait);
+
+            if (!a_CallDelegateFirst)
+                a_Delegate();
         }
         #endregion
     }

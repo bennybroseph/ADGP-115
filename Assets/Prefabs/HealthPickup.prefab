@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 445872}
   - 33: {fileID: 3353206}
   - 135: {fileID: 13569542}
+  - 135: {fileID: 13500426}
   - 23: {fileID: 2317202}
   - 114: {fileID: 11450320}
   m_Layer: 0
@@ -77,6 +78,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HealthIncrease: 5
   m_ManaIncrease: 0
+--- !u!135 &13500426
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 106706}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &13569542
 SphereCollider:
   m_ObjectHideFlags: 1

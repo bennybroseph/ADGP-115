@@ -199,6 +199,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Offset: {x: 0, y: 0, z: -1}
+  m_BarAnimationCurve:
+    serializedVersion: 2
+    m_Curve:
+    - time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - time: 1
+      value: 1
+      inSlope: 2.873278
+      outSlope: 2.873278
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  m_DamageAnimationSequence:
+    animationLayers: []
+  m_DamageTextPrefab: {fileID: 0}
   m_NameText: {fileID: 0}
   m_LevelText: {fileID: 0}
   m_HealthBar: {fileID: 0}

@@ -80,10 +80,7 @@ public class AIController : MonoSingleton<AIController>, IController
                 {
                     Publisher.self.Broadcast(Event.UseSkill, skillUser, 0);
                 }
-
-                
             }
-
         }
     }
 
@@ -168,7 +165,6 @@ public class AIController : MonoSingleton<AIController>, IController
 
             Instantiate(m_HealthPickupPrefab, healthinstantposition, Quaternion.identity);
             Instantiate(m_ManaPickupPrefab, manainstantposition, Quaternion.identity);
-
         }
         
 

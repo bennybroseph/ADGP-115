@@ -12,6 +12,7 @@ GameObject:
   - 65: {fileID: 6519412}
   - 23: {fileID: 2391116}
   - 114: {fileID: 11467890}
+  - 195: {fileID: 19599106}
   m_Layer: 0
   m_Name: Fortress_Prefab
   m_TagString: Fortress
@@ -95,6 +96,26 @@ MonoBehaviour:
   m_Health: 0
   m_MaxDefense: 5
   m_Defense: 0
+--- !u!195 &19599106
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 147792}
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 0
+  m_AutoBraking: 0
+  m_AutoRepath: 0
+  m_Height: 1
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
