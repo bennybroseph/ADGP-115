@@ -110,7 +110,6 @@ namespace Units.Skills
         }
         #endregion
 
-
         #region -- OTHER VOID FUNCTIONS
         private void CalculateRotation()
         {
@@ -132,7 +131,7 @@ namespace Units.Skills
             transform.rotation = Quaternion.Euler(m_CurrentRotation);
         }
 
-        private void OnCollisionEnter(Collision a_Collision)
+        private void OnTriggerEnter(Collider a_Collision)
         {
             if (a_Collision.transform.gameObject != m_Parent.gameObject)
             {

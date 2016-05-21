@@ -14,7 +14,7 @@ public class Goblin : Enemy
     {
         if (a_Collision.transform.gameObject.tag == "Player")
         {
-            IAttackable attackableObject = a_Collision.transform.gameObject.GetComponent<IAttackable>();
+            IAttackable attackableObject = a_Collision.gameObject.GetComponent<IAttackable>();
             if (attackableObject != null)
             {
                 attackableObject.damageFSM.Transition(DamageState.TakingDamge);
@@ -24,11 +24,11 @@ public class Goblin : Enemy
                     StartCoroutine(AttackDelay(attackableObject));
             }
         }
-
     }
 
     private IEnumerator AttackDelay(IAttackable a_Attackable)
-    {// Set to true
+    {
+        // Set to true
         m_CoroutineIsRunning = true;
 
         yield return StartCoroutine(
@@ -36,7 +36,6 @@ public class Goblin : Enemy
                 0.5f,
                     delegate
                     {
-                        Debug.Log("Taking damage");
                         a_Attackable.health -= 1;
                     }, 
                 true));

@@ -67,7 +67,7 @@ public static class Animations
             deltaTime += Time.deltaTime;
             foreach (AnimationData animationData in a_AnimationLayer.animationDataList)
             {
-                if(animationData.animationCurves.Count < 2)
+                while (animationData.animationCurves.Count < 2)
                     animationData.animationCurves.Add(animationData.animationCurves[0]);
 
                 switch (animationData.animationType)
@@ -79,7 +79,7 @@ public static class Animations
                                 a_Object.color.g,
                                 a_Object.color.b,
                                 animationData.animationCurves[0].Evaluate(deltaTime));
-                            
+
                         }
                         break;
                     case AnimationType.Scale:
@@ -87,6 +87,14 @@ public static class Animations
                             a_Object.transform.localScale = new Vector3(
                                 animationData.animationCurves[0].Evaluate(deltaTime),
                                 animationData.animationCurves[1].Evaluate(deltaTime));
+                        }
+                        break;
+                    case AnimationType.Rotate:
+                        {
+                            a_Object.transform.eulerAngles = new Vector3(
+                                animationData.animationCurves[0].Evaluate(deltaTime) * 360,
+                                a_Object.transform.eulerAngles.y,
+                                animationData.animationCurves[1].Evaluate(deltaTime) * 360);
                         }
                         break;
                     default:
@@ -197,7 +205,8 @@ public static class Animations
     //    return true;
     //}
 
-    //private static IEnumerator ParseAnimation(Keyframe a_Keyframe, AnimationCurve[] a_AnimationCurves, Animate a_Delegate)
+    //private static IEnumerator ParseAnimation(
+    //Keyframe a_Keyframe, AnimationCurve[] a_AnimationCurves, Animate a_Delegate)
     //{
     //    float deltaTime = 0.0f;
     //    while (deltaTime < a_Keyframe.time)
