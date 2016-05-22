@@ -10,7 +10,8 @@ namespace UI
     public class UIAnnouncer : MonoSingleton<UIAnnouncer>
     {
         private delegate void VoidFunction();
-        
+
+        #region -- VARIABLES --
         [Header("Prefabs")]
         [SerializeField]
         private Text m_AnnouncementTextPrefab;
@@ -24,7 +25,7 @@ namespace UI
         private List<Text> m_LogItems;
 
         private Queue<string> m_QueuedAnnouncements;
-        
+
         [Header("Announcement Animation")]
         [SerializeField]
         private AnimationSequence m_AnnouncementSequence;
@@ -39,9 +40,10 @@ namespace UI
         [SerializeField, Tooltip("The time until the log item is deleted. Set to -1 for an infinite lifetime")]
         private float m_LogItemLifetime;
 
-        //[SerializeField]
         private bool m_CoroutineIsRunning;
+        #endregion
 
+        #region -- UNITY FUNCTIONS --
         private void OnValidate()
         {
             m_AnnouncementSequence.CacheAnimationTime();
@@ -68,17 +70,13 @@ namespace UI
             m_LogItems = new List<Text>();
         }
 
-        private void Start()
-        {
-
-        }
-
         // Update is called once per frame
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.F4))
                 Announce("Test Announcement Incoming! " + Time.time);
         }
+        #endregion
 
         public void Announce(string a_Announcement)
         {
@@ -123,6 +121,7 @@ namespace UI
             }
         }
 
+        #region -- COROUTINES --
         private IEnumerator AnimateText()
         {
             m_CoroutineIsRunning = true;
@@ -146,7 +145,7 @@ namespace UI
                         {
                             StartCoroutine(
                                 Animations.AnimateLayer(
-                                    m_LogSequence.animationLayers[m_LogSequence.animationLayers.Count - 1], 
+                                    m_LogSequence.animationLayers[m_LogSequence.animationLayers.Count - 1],
                                     newLogItem));
                         }));
                 StartCoroutine(WaitThenDoThis(m_LogItemLifetime,
@@ -177,7 +176,7 @@ namespace UI
             SortAnnouncementLog();
 
             yield return StartCoroutine(Animations.AnimateLayer(
-                m_LogSequence.animationLayers[0], 
+                m_LogSequence.animationLayers[0],
                 m_LogItems[m_LogItems.Count - 1]));
         }
 
@@ -187,5 +186,6 @@ namespace UI
 
             a_Delegate();
         }
+        #endregion
     }
 }

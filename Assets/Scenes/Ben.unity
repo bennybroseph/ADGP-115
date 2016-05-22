@@ -331,6 +331,18 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11492120, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
+      propertyPath: m_AnnouncementSequence.animationLayers.Array.data[0].animationDataList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11492120, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
+      propertyPath: m_AnnouncementSequence.animationLayers.Array.data[0].animationDataList.Array.data[1].animationCurves.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 11492120, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
+      propertyPath: m_AnnouncementSequence.animationLayers.Array.data[0].animationDataList.Array.data[1].animationCurves.Array.data[0].m_Curve.Array.size
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 435770, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -364,24 +376,44 @@ Prefab:
       value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 11492120, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
-      propertyPath: m_AnimationValues.animationLayers.Array.data[1].animationDataList.Array.data[0].animationCurves.Array.data[0].m_Curve.Array.data[0].inSlope
-      value: -1.3333334
+      propertyPath: m_AnnouncementSequence.animationLayers.Array.data[0].animationDataList.Array.data[1].animationCurves.Array.data[0].m_Curve.Array.data[1].time
+      value: 0.1864025
       objectReference: {fileID: 0}
     - target: {fileID: 11492120, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
-      propertyPath: m_AnimationValues.animationLayers.Array.data[1].animationDataList.Array.data[0].animationCurves.Array.data[0].m_Curve.Array.data[0].outSlope
-      value: -1.3333334
+      propertyPath: m_AnnouncementSequence.animationLayers.Array.data[0].animationDataList.Array.data[1].animationCurves.Array.data[0].m_Curve.Array.data[1].value
+      value: 1.081041
       objectReference: {fileID: 0}
     - target: {fileID: 11492120, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
-      propertyPath: m_AnimationValues.animationLayers.Array.data[1].animationDataList.Array.data[0].animationCurves.Array.data[0].m_Curve.Array.data[1].time
-      value: 0.75
+      propertyPath: m_AnnouncementSequence.animationLayers.Array.data[0].animationDataList.Array.data[1].animationCurves.Array.data[0].m_Curve.Array.data[1].inSlope
+      value: 1.8349974
       objectReference: {fileID: 0}
     - target: {fileID: 11492120, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
-      propertyPath: m_AnimationValues.animationLayers.Array.data[1].animationDataList.Array.data[0].animationCurves.Array.data[0].m_Curve.Array.data[1].inSlope
-      value: -1.3333334
+      propertyPath: m_AnnouncementSequence.animationLayers.Array.data[0].animationDataList.Array.data[1].animationCurves.Array.data[0].m_Curve.Array.data[1].outSlope
+      value: 1.8349974
       objectReference: {fileID: 0}
     - target: {fileID: 11492120, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
-      propertyPath: m_AnimationValues.animationLayers.Array.data[1].animationDataList.Array.data[0].animationCurves.Array.data[0].m_Curve.Array.data[1].outSlope
-      value: -1.3333334
+      propertyPath: m_AnnouncementSequence.animationLayers.Array.data[0].animationDataList.Array.data[1].animationCurves.Array.data[0].m_Curve.Array.data[2].time
+      value: 0.27479166
+      objectReference: {fileID: 0}
+    - target: {fileID: 11492120, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
+      propertyPath: m_AnnouncementSequence.animationLayers.Array.data[0].animationDataList.Array.data[1].animationCurves.Array.data[0].m_Curve.Array.data[2].value
+      value: 1.0069042
+      objectReference: {fileID: 0}
+    - target: {fileID: 11492120, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
+      propertyPath: m_AnnouncementSequence.animationLayers.Array.data[0].animationDataList.Array.data[1].animationCurves.Array.data[0].m_Curve.Array.data[2].inSlope
+      value: 3.754567
+      objectReference: {fileID: 0}
+    - target: {fileID: 11492120, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
+      propertyPath: m_AnnouncementSequence.animationLayers.Array.data[0].animationDataList.Array.data[1].animationCurves.Array.data[0].m_Curve.Array.data[2].outSlope
+      value: 3.754567
+      objectReference: {fileID: 0}
+    - target: {fileID: 11492120, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
+      propertyPath: m_AnnouncementSequence.animationLayers.Array.data[0].animationDataList.Array.data[1].animationCurves.Array.data[0].m_PreInfinity
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 11492120, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
+      propertyPath: m_AnnouncementSequence.animationLayers.Array.data[0].animationDataList.Array.data[1].animationCurves.Array.data[0].m_PostInfinity
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b0c00c7bf9671184d8bd5da908f87d77, type: 2}
@@ -604,6 +636,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1264153338}
   - 114: {fileID: 1264153337}
+  - 114: {fileID: 1264153339}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -634,6 +667,108 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
+--- !u!114 &1264153339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1264153336}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dde7d17a5fc35e341929f8c67ee301b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Data:
+    animationType: 0
+    animationCurves:
+    - serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+    - serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 0
+      m_PostInfinity: 0
+      m_RotationOrder: 0
+  m_Layer:
+    name: Layer Delay
+    delayTime: 0
+    animationDataList:
+    - animationType: 0
+      animationCurves:
+      - serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      - serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      - serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      - serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+    - animationType: 0
+      animationCurves:
+      - serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+    - animationType: 0
+      animationCurves:
+      - serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  m_Sequence:
+    animationLayers:
+    - name: Layer 3 Delay
+      delayTime: 2
+      animationDataList:
+      - animationType: 0
+        animationCurves:
+        - serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+    - name: Layer 2 Delay
+      delayTime: 2
+      animationDataList:
+      - animationType: 1
+        animationCurves:
+        - serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+        - serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+    - name: Layer 1 Delay
+      delayTime: 1
+      animationDataList:
+      - animationType: 0
+        animationCurves:
+        - serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 0
+          m_PostInfinity: 0
+          m_RotationOrder: 0
+    totalAnimationTime: 0
 --- !u!1001 &1424417041
 Prefab:
   m_ObjectHideFlags: 0

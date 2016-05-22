@@ -25,6 +25,8 @@ public class AnimationData
 [Serializable]
 public class AnimationLayer
 {
+    public string name = "";
+
     [Range(0, 10)]
     public float delayTime;
     public List<AnimationData> animationDataList;

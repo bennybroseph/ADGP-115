@@ -258,7 +258,7 @@ namespace UI
                 Random.value * -1 + Random.value,
                 0,
                 Random.value * -1 + Random.value);
-            Debug.Log(Math.Round(m_HealthBar.fillAmount * a_Unit.maxHealth - a_Unit.health, 2));
+
             newObject.GetComponentInChildren<Text>().text =
                 string.Format("{0:0.0}", Math.Round(m_HealthBar.fillAmount * a_Unit.maxHealth - a_Unit.health, 2));
 
