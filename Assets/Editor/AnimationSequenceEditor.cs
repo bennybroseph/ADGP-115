@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Rotorz.ReorderableList;
+using UnityEditor;
 using UnityEngine;
 
 /// <summary>
@@ -13,7 +14,11 @@ public static class Globals
     public static readonly float SPACING_WIDTH = 5f;
     public static readonly float SPACING_HEIGHT = EditorGUIUtility.singleLineHeight + 5;
 
-    public const float FOLDOUT_WIDTH = 50;
+    public const float FOLDOUT_WIDTH = 30;
+
+    public const float MAX_ANIMATION_CURVE_SIZE = 75f;
+
+    public const float NEGATIVE_LIST_SPACE = 30f;
 }
 
 [CustomPropertyDrawer(typeof(AnimationSequence))]
@@ -36,50 +41,30 @@ public class AnimationSequenceEditor : PropertyDrawer
         // Let Unity know you are starting this property
         EditorGUI.BeginProperty(a_Position, a_Label, a_Property);
         {
+            string name = a_Property.isExpanded ? " " : a_Property.displayName;
+
             // Setup the Rect 'foldoutRect' with the current value of 'a_Position'
             Rect foldoutRect = a_Position;
 
             // Set the size of the foldout, create it, and store its return value into this property
             foldoutRect.size = new Vector2(Globals.FOLDOUT_WIDTH, Globals.DEFAULT_HEIGHT);
             a_Property.isExpanded = EditorGUI.Foldout(
-                foldoutRect, a_Property.isExpanded, a_Property.displayName);
+                foldoutRect, a_Property.isExpanded, name);
 
             // if the foldout is expanded by the user
             if (a_Property.isExpanded)
             {
                 // Move to the 'AnimationLayer' array: 'animationLayers'
                 a_Property.Next(true);
-                a_Property.Next(true);
 
-                // Sets the correct amount of space after a label even after inspector resizing
-                // It's empty because we want to use new this position without displaying information
-                Rect buttonRect = EditorGUI.PrefixLabel(a_Position, new GUIContent(" "));
+                a_Position.height = ReorderableListGUI.DefaultItemHeight;
+                ReorderableListGUI.Title(a_Position, a_Property.displayName);
 
-                // Set the size of and create button that will increase the size of the 'animationLayers' array
-                buttonRect.size = new Vector2(Globals.BUTTON_WIDTH, Globals.DEFAULT_HEIGHT);
-                if (GUI.Button(buttonRect, new GUIContent("+", "Add Animation Layer")))
-                    a_Property.arraySize++;
+                EditorGUI.indentLevel = 1;
 
-                // Set the position of and create button that will
-                // decrease the size of the 'animationLayers' array
-                buttonRect.x += buttonRect.width + Globals.SPACING_WIDTH;
-                if (GUI.Button(buttonRect, new GUIContent("-", "Remove Animation Layer")))
-                    a_Property.arraySize--;
-
-                // Back to using the original 'position' variable
-                // Move down below the buttons that were just placed
-                a_Position.y += Globals.SPACING_HEIGHT;
-
-                EditorGUI.indentLevel++;
-                for (int i = 0; i < a_Property.arraySize; ++i)
-                {
-                    // Draw the 'AnimationLayer' according to my custom drawer
-                    EditorGUI.PropertyField(a_Position, a_Property.GetArrayElementAtIndex(i));
-
-                    // Let the child property do all the hard work to calculate the next y value
-                    // In this case, it calls 'AnimationLayerEditor.GetPropertyHeight' and passes this property
-                    a_Position.y += EditorGUI.GetPropertyHeight(a_Property.GetArrayElementAtIndex(i));
-                }
+                a_Position.y += ReorderableListGUI.DefaultItemHeight;
+                a_Position.height = ReorderableListGUI.CalculateListFieldHeight(a_Property);
+                ReorderableListGUI.ListFieldAbsolute(a_Position, a_Property);
             }
         }
         // Let Unity know you are finished with the property
@@ -99,20 +84,15 @@ public class AnimationSequenceEditor : PropertyDrawer
     public override float GetPropertyHeight(SerializedProperty a_Property, GUIContent a_Label)
     {
         // Sets up a variable to add space to our property
-        float extraSpace = 0;
+        float extraSpace = 0f;
 
-        // if the foldout is expanded by the user
         if (a_Property.isExpanded)
         {
-            // Move to the 'AnimationLayer' array: 'animationLayers'
+            extraSpace += ReorderableListGUI.DefaultItemHeight;
             a_Property.Next(true);
-            for (int i = 0; i < a_Property.arraySize; ++i)
-            {
-                // Let the child property do all the hard work to calculate its height
-                // In this case, it calls 'AnimationLayerEditor.GetPropertyHeight' and gives it this property
-                extraSpace += EditorGUI.GetPropertyHeight(a_Property.GetArrayElementAtIndex(i));
-            }
+            extraSpace += ReorderableListGUI.CalculateListFieldHeight(a_Property);
         }
+
         // return the base height plus our 'extraSpace'
         return base.GetPropertyHeight(a_Property, a_Label) + extraSpace;
     }

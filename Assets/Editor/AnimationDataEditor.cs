@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using Rotorz.ReorderableList;
+using UnityEditor;
 using UnityEngine;
 
 [CustomPropertyDrawer(typeof(AnimationData))]
@@ -18,13 +19,15 @@ public class AnimationDataEditor : PropertyDrawer
         // Store the value of the original indent to be restored later
         int originalIndent = EditorGUI.indentLevel;
 
+        int originalDepth = a_Property.depth;
+
         // Let Unity know you are starting this property
         EditorGUI.BeginProperty(a_Position, a_Label, a_Property);
         {
             // Set a variable to hold the foldout label and set it to this property's display name by default
             string name = a_Property.displayName;
             // if this property is part of an array
-            if (a_Property.displayName.Substring(0, 7) == "Element")
+            if (a_Property.displayName.Length > 7 && a_Property.displayName.Substring(0, 7) == "Element")
                 // Parse the array index from the string Unity gives you and concatenate it to "Animation "
                 name = "Animation " + (int.Parse(a_Property.displayName.Substring(8)) + 1);
 
@@ -42,32 +45,40 @@ public class AnimationDataEditor : PropertyDrawer
             a_Position = EditorGUI.PrefixLabel(a_Position, new GUIContent(name));
 
             EditorGUI.indentLevel = 0;
-            a_Position.size = new Vector2((Screen.width - a_Position.x) / 3, Globals.DEFAULT_HEIGHT);
-            EditorGUI.PropertyField(a_Position, a_Property, GUIContent.none);
+
+            Rect typeRect = a_Position;
+
+            typeRect.size = new Vector2((Screen.width - typeRect.x) / 3, Globals.DEFAULT_HEIGHT);
+            EditorGUI.PropertyField(typeRect, a_Property, GUIContent.none);
 
             // Move to the 'AnimationCurves' array: 'animationCurves'
             a_Property.Next(true);
 
+            Rect buttonRect = typeRect;
             // Set the size of and create button that will increase the size of the 'animationLayers' array
-            a_Position.x += a_Position.width + Globals.SPACING_WIDTH;
-            a_Position.size = new Vector2(Globals.BUTTON_WIDTH, Globals.DEFAULT_HEIGHT);
-            if (GUI.Button(a_Position, new GUIContent("+", "Add Animation Curve")))
+            buttonRect.x += buttonRect.width + Globals.SPACING_WIDTH;
+            buttonRect.size = new Vector2(Globals.BUTTON_WIDTH, Globals.DEFAULT_HEIGHT);
+            if (GUI.Button(buttonRect, new GUIContent("+", "Add Animation Curve")))
                 a_Property.arraySize++;
 
             // Set the position of and create button that will decrease the size of the 'animationLayers' array
-            a_Position.x = a_Position.x + a_Position.width + Globals.SPACING_WIDTH;
-            if (GUI.Button(a_Position, new GUIContent("-", "Remove Animation Curve")))
+            buttonRect.x = buttonRect.x + buttonRect.width + Globals.SPACING_WIDTH;
+            if (GUI.Button(buttonRect, new GUIContent("-", "Remove Animation Curve")))
                 a_Property.arraySize--;
-
-            // Move past the buttons
-            a_Position.x = a_Position.x + a_Position.width + Globals.SPACING_WIDTH;
 
             // Set up an anchor point for all the 'AnimationCurve' properties to be drawn
             Rect curvesAnchor = a_Position;
+
+            if (!isExpanded)
+            {
+                curvesAnchor = buttonRect;
+                // Move past the buttons
+                curvesAnchor.x = curvesAnchor.x + curvesAnchor.width + Globals.SPACING_WIDTH;
+            }
             for (int i = 0; i < a_Property.arraySize; ++i)
             {
                 if (isExpanded)
-                    a_Position = GetCurvesRect(curvesAnchor, a_Property.arraySize, i);
+                    a_Position = GetCurvesRect(curvesAnchor, a_Property.arraySize, i, originalDepth);
                 else
                 {
                     a_Position.x = curvesAnchor.x + Globals.DEFAULT_HEIGHT * i;
@@ -99,32 +110,41 @@ public class AnimationDataEditor : PropertyDrawer
         // Sets up a variable to add space to our property
         float extraSpace = Globals.SPACING_HEIGHT - EditorGUIUtility.singleLineHeight;
 
+        int depth = a_Property.depth;
         if (a_Property.isExpanded)
         {
             a_Property = a_Property.FindPropertyRelative("animationCurves");
             if (a_Property.arraySize > 0)
             {
                 Rect position = EditorGUI.PrefixLabel(new Rect(14, 0, 0, 0), new GUIContent(" "));
-                position.size = new Vector2((Screen.width - position.x) / 3, Globals.DEFAULT_HEIGHT);
-                position.x += position.width + Globals.SPACING_WIDTH;
-                position.size = new Vector2(Globals.BUTTON_WIDTH, Globals.DEFAULT_HEIGHT);
-                position.x = position.x + position.width + Globals.SPACING_WIDTH;
-                position.x = position.x + position.width + Globals.SPACING_WIDTH;
-                position = GetCurvesRect(position, a_Property.arraySize, 0);
-                extraSpace += position.height - Globals.DEFAULT_HEIGHT;
+                position = GetCurvesRect(position, a_Property.arraySize, 0, depth);
+                extraSpace += position.height;
+                if (depth == 4)
+                    extraSpace += 
+                        Mathf.Abs(ReorderableListGUI.DefaultItemHeight - Globals.SPACING_HEIGHT);
             }
         }
 
         return base.GetPropertyHeight(a_Property, a_Label) + extraSpace;
     }
 
-    private static Rect GetCurvesRect(Rect a_Anchor, int a_Size, int a_Index)
+    private static Rect GetCurvesRect(Rect a_Anchor, int a_Size, int a_Index, int a_Depth)
     {
         Rect position = a_Anchor;
 
-        position.width = (Screen.width - a_Anchor.x) / a_Size - Globals.SPACING_WIDTH;
+        float negativeSpace = 0f;
+
+        if (a_Depth == 4)
+            negativeSpace = Globals.NEGATIVE_LIST_SPACE;
+
+        position.width = (Screen.width - negativeSpace - a_Anchor.x) / a_Size - Globals.SPACING_WIDTH;
+
+        if (position.width > Globals.MAX_ANIMATION_CURVE_SIZE)
+            position.width = Globals.MAX_ANIMATION_CURVE_SIZE;
+
         position.height = position.width;
         position.x += (position.width + Globals.SPACING_WIDTH) * a_Index;
+        position.y += Globals.SPACING_HEIGHT;
 
         return position;
     }
