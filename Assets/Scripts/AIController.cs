@@ -59,6 +59,7 @@ public class AIController : MonoSingleton<AIController>, IController
 
         Publisher.self.UnSubscribe(Event.SpawnWaveClicked, SpawnWaves);
         Publisher.self.UnSubscribe(Event.UnitDied, OnUnitDied);
+        Publisher.self.UnSubscribe(Event.UnitLevelUp, OnLevelUp);
     }
 
     private void Search()

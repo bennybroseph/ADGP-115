@@ -170,8 +170,11 @@ public class GameManager : MonoSingleton<GameManager>
     private void OnNewGame(Event a_Event, params object[] a_Params)
     {
         Debug.Log("Works New Game Clicked");
+
+        
         //Loads the first scene.
         SceneManager.LoadScene(1);
+
         
     }
 

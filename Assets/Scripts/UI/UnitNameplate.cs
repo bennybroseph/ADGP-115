@@ -213,6 +213,14 @@ namespace UI
             if (unit == null || unit != m_Parent || this == null)
                 return;
 
+            Publisher.self.UnSubscribe(Event.UnitInitialized, OnInit);
+
+            Publisher.self.UnSubscribe(Event.UnitHealthChanged, OnValueChanged);
+            Publisher.self.UnSubscribe(Event.UnitManaChanged, OnValueChanged);
+            Publisher.self.UnSubscribe(Event.UnitLevelChanged, OnValueChanged);
+
+            Publisher.self.UnSubscribe(Event.UnitDied, OnUnitDied);
+
             Destroy(gameObject);
         }
         #endregion

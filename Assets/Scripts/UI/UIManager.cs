@@ -290,6 +290,7 @@ namespace UI
 
         private void OnMainMenu(Event a_Event, params object[] a_Params)
         {
+           
             SceneManager.LoadScene(0);
         }
 
@@ -369,6 +370,8 @@ namespace UI
             if (this == null)
                 return;
             m_GameOverMenu.gameObject.SetActive(true);
+
+            Publisher.self.Broadcast(Event.PauseGame);
         }
 #endregion
     }
