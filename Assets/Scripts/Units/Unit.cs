@@ -119,7 +119,7 @@ namespace Units
         public float maxMana
         {
             get { return m_MaxMana; }
-            set { m_MaxMana = value; Publisher.self.Broadcast(Event.UnitManaChanged, this); }
+            set { m_MaxMana = value; Publisher.self.Broadcast(Event.UnitMaxManaChanged, this); }
         }
 
         //mana int property
@@ -146,7 +146,7 @@ namespace Units
         public float maxHealth
         {
             get { return m_MaxHealth; }
-            set { m_MaxHealth = value; Publisher.self.Broadcast(Event.UnitHealthChanged, this); }
+            set { m_MaxHealth = value; Publisher.self.Broadcast(Event.UnitMaxHealthChanged, this); }
         }
 
         //health int property

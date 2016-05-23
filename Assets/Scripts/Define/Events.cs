@@ -52,8 +52,12 @@ namespace Define
 
         /// <param name="Unit"> IStats: which unit's health changed</param>
         UnitHealthChanged,
+        /// <param name="Unit"> IStats: which unit's max health changed</param>
+        UnitMaxHealthChanged,
         /// <param name="Unit"> IStats: which unit's mana changed</param>
         UnitManaChanged,
+        /// <param name="Unit"> IStats: which unit's max mana changed</param>
+        UnitMaxManaChanged,
         /// <param name="Unit"> IStats: which unit's level changed</param>
         UnitLevelChanged,
         /// <param name="Unit"> IStats: which unit leveled up</param>
