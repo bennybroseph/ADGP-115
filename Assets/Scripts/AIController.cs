@@ -92,7 +92,7 @@ public class AIController : MonoSingleton<AIController>, IController
         switch (a_Controllable.controllerType)
         {
             case ControllerType.GoblinMage:
-                a_Controllable.following = GameObject.FindGameObjectWithTag("Player");
+                a_Controllable.following = GameObject.FindGameObjectWithTag("Fortress");
                 m_Controlables.Add(a_Controllable);
                 break;
 
