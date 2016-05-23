@@ -269,15 +269,12 @@ namespace UI
                                 //Displays a debug log warning detecting if the instructions tag is missing.
                                 Debug.LogWarning("UIManager is missing an object with the 'Quit Game' tag parented to it");
                                 continue;
-
                             }
 
                             m_QuitGame.onClick.AddListener(delegate { Application.Quit(); });
                         }
                         break;
                 }
-
-
             }
         }
         #endregion
@@ -290,8 +287,8 @@ namespace UI
 
         private void OnMainMenu(Event a_Event, params object[] a_Params)
         {
-           
-            SceneManager.LoadScene(0);
+            Publisher.self.Broadcast(Event.UnPauseGame);  
+            SceneManager.LoadScene("Donte");
         }
 
         private void OnToggleQuitMenu(Event a_Event, params object[] a_Params)
