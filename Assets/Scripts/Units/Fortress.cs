@@ -83,7 +83,7 @@ namespace Units
         private void Awake()
         {
             m_DamageFSM = new FiniteStateMachine<DamageState>();
-
+            //Checks to see if NameplatePRefab not equal to null
             if (m_NameplatePrefab != null)
             {
                 FortressNameplate nameplate = Instantiate(m_NameplatePrefab);
@@ -94,7 +94,7 @@ namespace Units
         private void Start()
         {
             m_Health = m_MaxHealth;
-
+            //Broadcast the FortressInitialized event in the console
             Publisher.self.Broadcast(Event.FortressInitialized, this);
         }
 
@@ -116,7 +116,7 @@ namespace Units
         }
 
         private void OnDestroy()
-        {
+        {   //Broadcasts the fortressdied event in the console.
             Publisher.self.Broadcast(Event.FortressDied, this);
         }
     }
