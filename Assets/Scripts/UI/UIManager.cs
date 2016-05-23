@@ -270,7 +270,6 @@ namespace UI
 
         private void OnUnitInitialized(Event a_Event, params object[] a_Params)
         {
-
         }
 
         private void OnMainMenu(Event a_Event, params object[] a_Params)

@@ -39,6 +39,7 @@ namespace Units
             if (m_NavMeshAgent == null)
                 m_NavMeshAgent = GetComponent<NavMeshAgent>();
 
+            m_Level = 1;
             m_Health = m_MaxHealth;
             m_Mana = m_MaxMana;
             m_Defense = m_MaxDefense;
@@ -134,6 +135,7 @@ namespace Units
 
             m_Skills[skillIndex].PutOnCooldown();
         }
+
     }
     #endregion
 }

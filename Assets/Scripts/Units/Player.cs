@@ -59,6 +59,7 @@ namespace Units
             m_OriginalRotation = transform.eulerAngles;
             m_CurrentRotation = m_OriginalRotation;
 
+            m_Level = 1;
             m_Health = m_MaxHealth;
             m_Mana = m_MaxMana;
             m_Defense = m_MaxDefense;
@@ -184,7 +185,11 @@ namespace Units
 
             m_Skills[skillIndex].PutOnCooldown();
         }
+
+        
         #endregion
     }
+
+
 }
 

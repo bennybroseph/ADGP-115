@@ -56,6 +56,8 @@ namespace Define
         UnitManaChanged,
         /// <param name="Unit"> IStats: which unit's level changed</param>
         UnitLevelChanged,
+        /// <param name="Unit"> IStats: which unit leveled up</param>
+        UnitLevelUp,
 
         /// <param name="Fortress"> IAttackable: which fortress was initialized</param>
         FortressInitialized,

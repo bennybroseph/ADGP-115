@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using Interfaces;
@@ -6,6 +7,7 @@ using Library;
 using Units;
 using Units.Controller;
 using Event = Define.Event;
+using Random = UnityEngine.Random;
 
 public class AIController : MonoSingleton<AIController>, IController
 {
@@ -36,6 +38,7 @@ public class AIController : MonoSingleton<AIController>, IController
 
         Publisher.self.Subscribe(Event.SpawnWaveClicked, SpawnWaves);
         Publisher.self.Subscribe(Event.UnitDied, OnUnitDied);
+        Publisher.self.Subscribe(Event.UnitLevelUp, OnLevelUp);
     }
 
     // Use this for initialization
@@ -89,7 +92,7 @@ public class AIController : MonoSingleton<AIController>, IController
         switch (a_Controllable.controllerType)
         {
             case ControllerType.GoblinMage:
-                a_Controllable.following = GameObject.FindGameObjectWithTag("Fortress");
+                a_Controllable.following = GameObject.FindGameObjectWithTag("Player");
                 m_Controlables.Add(a_Controllable);
                 break;
 
@@ -166,12 +169,23 @@ public class AIController : MonoSingleton<AIController>, IController
             Instantiate(m_HealthPickupPrefab, healthinstantposition, Quaternion.identity);
             Instantiate(m_ManaPickupPrefab, manainstantposition, Quaternion.identity);
         }
-        
 
         if (unit == null)
             return;
 
         m_Enemies.Remove(unit);
+    }
+
+    private void OnLevelUp(Event a_Event, params object[] a_Params)
+    {
+        Unit unit = a_Params[0] as Unit;
+
+        unit.level = (int)Mathf.Sqrt((int)unit.experience);
+        unit.maxHealth += 10 * unit.level;
+        unit.maxMana += 3 * unit.level;
+        unit.maxDefense += 2 * unit.level;
+        unit.speed += 1 * unit.level;
+
     }
 
 }

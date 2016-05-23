@@ -119,7 +119,7 @@ namespace Units
         public float maxMana
         {
             get { return m_MaxMana; }
-            set { m_MaxMana = value; }
+            set { m_MaxMana = value; Publisher.self.DelayedBroadcast(Event.UnitHealthChanged, this); }
         }
 
         //mana int property
@@ -146,7 +146,7 @@ namespace Units
         public float maxHealth
         {
             get { return m_MaxHealth; }
-            set { m_MaxHealth = value; }
+            set { m_MaxHealth = value; Publisher.self.DelayedBroadcast(Event.UnitHealthChanged, this); }
         }
 
         //health int property
@@ -159,7 +159,7 @@ namespace Units
         public float experience
         {
             get { return m_Experience; }
-            set { m_Experience = value; }
+            set { m_Experience = value; if (experience >= level * level) {Publisher.self.Broadcast(Event.UnitLevelUp, this); } }
         }
 
         //Level int property

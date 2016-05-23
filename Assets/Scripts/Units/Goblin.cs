@@ -2,7 +2,9 @@
 using UnityEngine;
 using System.Collections;
 using Interfaces;
+using Library;
 using Units;
+using Event = Define.Event;
 
 public class Goblin : Enemy
 {
@@ -36,7 +38,9 @@ public class Goblin : Enemy
                 0.5f,
                     delegate
                     {
+                        IStats goblin = gameObject.GetComponent<IStats>();
                         a_Attackable.health -= 1;
+                        if (a_Attackable.health <= 0) { goblin.experience += 10;} 
                     }, 
                 true));
         // When routine starts again set run to false
