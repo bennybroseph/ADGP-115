@@ -36,6 +36,8 @@ namespace Define
         // There are no paramters
         UnPauseGame,
 
+        Options,
+
         /// <param name="Unit"> IUsesSkills: which unit's skill should be upgraded per user input</param> 
         /// <param name="Skill Index"> int: which skill to upgrade</param>
         UpgradeSkill,

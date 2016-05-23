@@ -166,9 +166,11 @@ namespace UI
 
                             Button quitButton = m_QuitMenu.GetComponentsInChildren<Button>()[0];
                             Button resumeButton = m_QuitMenu.GetComponentsInChildren<Button>()[1];
+                            Button optionButton = m_QuitMenu.GetComponentsInChildren<Button>()[1];
 
                             quitButton.onClick.AddListener(OnQuitGameClick);
                             resumeButton.onClick.AddListener(OnResumeClick);
+                            optionButton.onClick.AddListener(OnOptionClick);
 
                             m_QuitMenu.gameObject.SetActive(false);
                         }
@@ -317,6 +319,12 @@ namespace UI
         {
             m_QuitMenu.gameObject.SetActive(false);
             Publisher.self.Broadcast(Event.UnPauseGame);
+        }
+
+        public void OnOptionClick()
+        {
+            m_QuitMenu.gameObject.SetActive(false);
+            Publisher.self.Broadcast(Event.Instructions);
         }
 
         public void OnSpawnWaveClick()
