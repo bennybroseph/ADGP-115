@@ -132,12 +132,14 @@ namespace UI
             {
                 switch (child.tag)
                 {
+                    //Case 'HUD' tag
                     case "HUD":
                         {
                             //if (m_HUD == null)
                                 m_HUD = child.GetComponent<RectTransform>();
                             if (m_HUD == null)
                             {
+                                //Displays a debug log warning detecting if the "HUD" tag is missing.
                                 Debug.LogWarning("UIManager is missing an object with the 'HUD' tag parented to it");
                                 continue;
                             }
@@ -150,12 +152,14 @@ namespace UI
                             m_WaveCounter = m_HUD.GetComponentInChildren<Text>();
                         }
                         break;
+                    //Case 'Quit Menu' tag
                     case "Quit Menu":
                         {
                             //if (m_QuitMenu == null)
                                 m_QuitMenu = child.GetComponent<RectTransform>();
                             if (m_QuitMenu == null)
                             {
+                                //Displays a debug log warning detecting if the "Quit Menu" tag is missing.
                                 Debug.LogWarning("UIManager is missing an object with the 'Quit Menu' tag parented to it");
                                 continue;
                             }
@@ -169,12 +173,14 @@ namespace UI
                             m_QuitMenu.gameObject.SetActive(false);
                         }
                         break;
+                    //Case 'Instructions Menu' tag
                     case "Instructions Menu":
                         {
                             //if (m_InstructionMenu == null)
                                 m_InstructionMenu = child.GetComponent<RectTransform>();
                             if (m_InstructionMenu == null)
                             {
+                                //Displays a debug log warning detecting if the "Instructions Menu" tag is missing.
                                 Debug.LogWarning("UIManager is missing an object with the 'Instructions Menu' tag parented to it");
                                 continue;
                             }
@@ -186,12 +192,14 @@ namespace UI
                             m_InstructionMenu.gameObject.SetActive(false);
                         }
                         break;
+                    //Case 'Game Over Menu' tag
                     case "Game Over Menu":
                         {
                             //if (m_GameOverMenu == null)
                                 m_GameOverMenu = child.GetComponent<RectTransform>();
                             if (m_GameOverMenu == null)
                             {
+                                //Displays a debug log warning detecting if the "Game Over Menu" tag is missing.
                                 Debug.LogWarning("UIManager is missing an object with the 'Game Over Menu' tag parented to it");
                                 continue;
                             }
@@ -205,12 +213,14 @@ namespace UI
                             m_GameOverMenu.gameObject.SetActive(false);
                         }
                         break;
+                    //Case 'New Game' tag
                     case "New Game":
                         {
                             //if (m_NewGame == null)
                                 m_NewGame = child.GetComponent<Button>();
                             if (m_NewGame == null)
                             {
+                                //Displays a debug log warning detecting if the "New Game" tag is missing.
                                 Debug.LogWarning("UIManager is missing an object with the 'New Game' tag parented to it");
                                 continue;
                             }
@@ -218,12 +228,14 @@ namespace UI
                             m_NewGame.onClick.AddListener(delegate {SceneManager.LoadScene("Andrew"); });
                         }
                         break;
+                    //Case 'Load Game' tag
                     case "Load Game":
                         {
                             //if (m_LoadGame == null)
                                 m_LoadGame = child.GetComponent<Button>();
                             if (m_LoadGame == null)
                             {
+                                //Displays a debug log warning detecting if the "Load Game" tag is missing.
                                 Debug.LogWarning("UIManager is missing an object with the 'Load Game' tag parented to it");
                                 continue;
                             }
@@ -231,12 +243,14 @@ namespace UI
                             m_LoadGame.onClick.AddListener(OnLoadGameClick);
                         }
                         break;
+                    //Case 'Instructions' tag
                     case "Instructions":
                         {
                             //if (m_Instructions == null)
                                 m_Instructions = child.GetComponent<Button>();
                             if (m_Instructions == null)
                             {
+                                //Displays a debug log warning detecting if the "Instructions tag is missing.
                                 Debug.LogWarning("UIManager is missing an object with the 'Instructions' tag parented to it");
                                 continue;
 
@@ -245,12 +259,14 @@ namespace UI
                             m_Instructions.onClick.AddListener(OnInstructionsClick);
                         }
                         break;
+                     //Case 'Quit Game' tag
                     case "Quit Game":
                         {
                             //if (m_QuitGame == null)
                                 m_QuitGame = child.GetComponent<Button>();
                             if (m_QuitGame == null)
                             {
+                                //Displays a debug log warning detecting if the instructions tag is missing.
                                 Debug.LogWarning("UIManager is missing an object with the 'Quit Game' tag parented to it");
                                 continue;
 
