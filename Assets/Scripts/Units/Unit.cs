@@ -119,7 +119,7 @@ namespace Units
         public float maxMana
         {
             get { return m_MaxMana; }
-            set { m_MaxMana = value; Publisher.self.DelayedBroadcast(Event.UnitHealthChanged, this); }
+            set { m_MaxMana = value; Publisher.self.Broadcast(Event.UnitManaChanged, this); }
         }
 
         //mana int property
@@ -146,7 +146,7 @@ namespace Units
         public float maxHealth
         {
             get { return m_MaxHealth; }
-            set { m_MaxHealth = value; Publisher.self.DelayedBroadcast(Event.UnitHealthChanged, this); }
+            set { m_MaxHealth = value; Publisher.self.Broadcast(Event.UnitHealthChanged, this); }
         }
 
         //health int property
@@ -166,7 +166,7 @@ namespace Units
         public int level
         {
             get { return m_Level; }
-            set { m_Level = value; Publisher.self.DelayedBroadcast(Event.UnitLevelChanged, this); }
+            set { m_Level = value; Publisher.self.Broadcast(Event.UnitLevelChanged, this); }
         }
 
         //totalVelecotiy Vector3 property 
