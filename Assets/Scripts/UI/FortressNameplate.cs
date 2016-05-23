@@ -135,6 +135,12 @@ namespace UI
             if (unit == null || unit != m_Parent || this == null)
                 return;
 
+            Publisher.self.UnSubscribe(Event.FortressInitialized, OnInit);
+
+            Publisher.self.UnSubscribe(Event.FortressHealthChanged, OnValueChanged);
+
+            Publisher.self.UnSubscribe(Event.FortressDied, OnUnitDied);
+
             Destroy(gameObject);
         }
 
