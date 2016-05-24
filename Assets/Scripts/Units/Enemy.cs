@@ -17,7 +17,7 @@ namespace Units
         {
             base.Start();
 
-            if (Random.value * 10 >= 7)
+            if (Random.value * 10 >= 8)
                 UIAnnouncer.self.Chat(m_UnitNickname, m_Taunt, transform.position);
         }
 

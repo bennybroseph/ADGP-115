@@ -139,7 +139,7 @@ namespace UI
                     break;
             }
 
-            CreateFloatingText(newLogItem.text, newLogItem.color, a_Position);
+            CreateFloatingText(a_Message, newLogItem.color, a_Position);
             StartCoroutine(AnimateToLog(newLogItem));
         }
 
@@ -147,6 +147,9 @@ namespace UI
         {
             switch (a_Type)
             {
+                case FloatingTextType.Overhead:
+                    CreateFloatingText(a_Message, Color.black, a_Anchor);
+                    break;
                 case FloatingTextType.PhysicalDamage:
                     CreateFloatingText(a_Message, new Color(1, 0, 0), a_Anchor);
                     break;
