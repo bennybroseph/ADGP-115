@@ -190,7 +190,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 401134, guid: c36d620397dcd0c42bf49a13d4b1e7bf, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 10887592, guid: c36d620397dcd0c42bf49a13d4b1e7bf, type: 2}
       propertyPath: m_Enabled
@@ -217,14 +217,6 @@ Prefab:
     - target: {fileID: 154216, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 11468738, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
-      propertyPath: m_Skills.Array.data[0].m_SkillData.cost
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 11468738, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
-      propertyPath: m_Skills.Array.data[0].m_SkillData.damage
-      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 11468738, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
       propertyPath: m_UnitNickname
@@ -425,10 +417,6 @@ Prefab:
     - target: {fileID: 11468738, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
       propertyPath: m_UnitNickname
       value: Player 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 11468738, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
-      propertyPath: m_Skills.Array.data[0].m_SkillData.cost
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 480986, guid: 5955ebb8661bd5943aa07219359193b7, type: 2}
       propertyPath: m_RootOrder
@@ -905,7 +893,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 495716, guid: 12d7dc0d5131ca748a2ae1ac3607f1d7, type: 2}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 11448928, guid: 12d7dc0d5131ca748a2ae1ac3607f1d7, type: 2}
       propertyPath: m_Following
