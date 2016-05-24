@@ -39,12 +39,89 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 182fdc4b8e91cfa4f8d18bc468246fa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_FloatingTextPrefab: {fileID: 11419430, guid: 887a16643cd2a534997555222726d51c,
+    type: 2}
   m_AnnouncementTextPrefab: {fileID: 11446662, guid: ede2390cbf2fc0242b30eda8d36a928d,
     type: 2}
   m_LogTextPrefab: {fileID: 11427998, guid: 350f7a703adb5904da62b9409e691760, type: 2}
+  m_FloatingTextSequence:
+    animationLayers:
+    - name: Layer 1 Delay
+      delayTime: 0
+      animationDataList:
+      - animationType: 0
+        animationCurves:
+        - serializedVersion: 2
+          m_Curve:
+          - time: 0
+            value: 0
+            inSlope: 2
+            outSlope: 2
+            tangentMode: 10
+          - time: 0.5
+            value: 1
+            inSlope: 2
+            outSlope: 2
+            tangentMode: 10
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+      - animationType: 1
+        animationCurves:
+        - serializedVersion: 2
+          m_Curve:
+          - time: 0
+            value: 0.5
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 10
+          - time: 1
+            value: 1.5
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 10
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+      - animationType: 0
+        animationCurves:
+        - serializedVersion: 2
+          m_Curve:
+          - time: 1.5
+            value: 1
+            inSlope: -2
+            outSlope: -2
+            tangentMode: 10
+          - time: 2
+            value: 0
+            inSlope: -2
+            outSlope: -2
+            tangentMode: 10
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+      - animationType: 1
+        animationCurves:
+        - serializedVersion: 2
+          m_Curve:
+          - time: 1
+            value: 1.5
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 10
+          - time: 2
+            value: 2.5
+            inSlope: 1
+            outSlope: 1
+            tangentMode: 10
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 0
+    totalAnimationTime: 0
   m_AnnouncementSequence:
     animationLayers:
-    - delayTime: 0
+    - name: 
+      delayTime: 0
       animationDataList:
       - animationType: 1
         animationCurves:
@@ -68,7 +145,8 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 0
-    - delayTime: 2
+    - name: 
+      delayTime: 2
       animationDataList:
       - animationType: 0
         animationCurves:
@@ -90,7 +168,8 @@ MonoBehaviour:
     totalAnimationTime: 1.0247917
   m_LogSequence:
     animationLayers:
-    - delayTime: 0
+    - name: 
+      delayTime: 0
       animationDataList:
       - animationType: 0
         animationCurves:
@@ -109,7 +188,8 @@ MonoBehaviour:
           m_PreInfinity: 2
           m_PostInfinity: 2
           m_RotationOrder: 0
-    - delayTime: 0
+    - name: 
+      delayTime: 0
       animationDataList:
       - animationType: 0
         animationCurves:

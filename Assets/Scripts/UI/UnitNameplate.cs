@@ -26,11 +26,6 @@ namespace UI
         private AnimationCurve m_BarAnimationCurve;
 
         [SerializeField]
-        private AnimationSequence m_DamageAnimationSequence;
-        [SerializeField]
-        private Canvas m_DamageTextPrefab;
-
-        [SerializeField]
         private Text m_NameText;
         [SerializeField]
         private Text m_LevelText;
@@ -88,6 +83,9 @@ namespace UI
 
             Publisher.self.Subscribe(Event.UnitInitialized, OnInit);
 
+            Publisher.self.Subscribe(Event.UnitMaxHealthChanged, OnValueChanged);
+            Publisher.self.Subscribe(Event.UnitMaxHealthChanged, OnValueChanged);
+
             Publisher.self.Subscribe(Event.UnitHealthChanged, OnValueChanged);
             Publisher.self.Subscribe(Event.UnitManaChanged, OnValueChanged);
             Publisher.self.Subscribe(Event.UnitLevelChanged, OnValueChanged);
@@ -110,7 +108,6 @@ namespace UI
         #endregion
 
         #region -- PRIVATE FUNCTIONS --
-        #region -- EVENTS --
         private void GetComponents()
         {
             foreach (Transform child in transform)
@@ -157,6 +154,7 @@ namespace UI
             }
         }
 
+        #region -- EVENTS --
         private void OnInit(Event a_Event, params object[] a_Params)
         {
             IStats unit = a_Params[0] as IStats;
@@ -182,16 +180,25 @@ namespace UI
                 case Event.UnitLevelChanged:
                     SetText(m_LevelText, unit.level.ToString(), true);
                     break;
-                case Event.UnitHealthChanged:
-                    CreateFloatingDamage(unit);
+
+                case Event.UnitMaxHealthChanged:
                     SetBar(m_HealthBar, unit.health, unit.maxHealth);
+                    break;
+                case Event.UnitHealthChanged:
+                    {
+                        SetBar(m_HealthBar, unit.health, unit.maxHealth);
 
-                    if (m_NegativeHealthBar.fillAmount < m_HealthBar.fillAmount)
-                        m_NegativeHealthBar.fillAmount = m_HealthBar.fillAmount;
+                        if (m_NegativeHealthBar.fillAmount < m_HealthBar.fillAmount)
+                            m_NegativeHealthBar.fillAmount = m_HealthBar.fillAmount;
 
-                    m_LastHealthChange = 0;
-                    if (!m_HealthCoroutineIsRunning)
-                        StartCoroutine(ReduceNegativeHealthSpace());
+                        m_LastHealthChange = 0;
+                        if (!m_HealthCoroutineIsRunning)
+                            StartCoroutine(ReduceNegativeHealthSpace());
+                    }
+                    break;
+
+                case Event.UnitMaxManaChanged:
+                    SetBar(m_ManaBar, unit.mana, unit.maxMana);
                     break;
                 case Event.UnitManaChanged:
                     SetBar(m_ManaBar, unit.mana, unit.maxMana);
@@ -247,39 +254,6 @@ namespace UI
                 return;
             a_Bar.GetComponentInChildren<Text>().text = a_CurrentValue + "/" + a_MaxValue;
         }
-
-        private void CreateFloatingDamage(IStats a_Unit)
-        {
-            if (a_Unit.health >= m_HealthBar.fillAmount * a_Unit.maxHealth ||
-                Mathf.Round(m_HealthBar.fillAmount * a_Unit.maxHealth - a_Unit.health) == 0)
-                return;
-
-            Canvas newObject = Instantiate(m_DamageTextPrefab);
-
-            newObject.transform.SetAsLastSibling();
-
-            newObject.transform.position = new Vector3(
-                m_Parent.gameObject.transform.position.x,
-                9,
-                m_Parent.gameObject.transform.position.z);
-            newObject.transform.position += new Vector3(
-                Random.value * -1 + Random.value,
-                0,
-                Random.value * -1 + Random.value);
-
-            newObject.GetComponentInChildren<Text>().text =
-                string.Format("{0:0.0}", Math.Round(m_HealthBar.fillAmount * a_Unit.maxHealth - a_Unit.health, 2));
-
-            newObject.GetComponent<MonoBehaviour>().StartCoroutine(
-                Animations.Animate(m_DamageAnimationSequence, newObject.GetComponentInChildren<Text>()));
-            newObject.GetComponent<MonoBehaviour>().StartCoroutine(
-                WaitAndDoThis(
-                    2.0f,
-                    delegate
-                    {
-                        Destroy(newObject.gameObject);
-                    }));
-        }
         #endregion
 
         #region -- COROUTINES --
@@ -293,7 +267,7 @@ namespace UI
             float deltaTime = 0;
             while (deltaTime < m_BarAnimationCurve[m_BarAnimationCurve.length - 1].time)
             {
-                while (m_LastHealthChange < 1.5f)
+                while (m_LastHealthChange < 0.5f)
                 {
                     m_LastHealthChange += Time.deltaTime;
 
@@ -326,7 +300,7 @@ namespace UI
             float deltaTime = 0;
             while (deltaTime < m_BarAnimationCurve[m_BarAnimationCurve.length - 1].time)
             {
-                while (m_LastManaChange < 0.5f)
+                while (m_LastManaChange < 0.25f)
                 {
                     m_LastManaChange += Time.deltaTime;
 
@@ -349,8 +323,8 @@ namespace UI
         }
 
         private IEnumerator WaitAndDoThis(
-            float a_TimeToWait, 
-            VoidFunction a_Delegate, 
+            float a_TimeToWait,
+            VoidFunction a_Delegate,
             bool a_CallDelegateFirst = false)
         {
             if (a_CallDelegateFirst)
