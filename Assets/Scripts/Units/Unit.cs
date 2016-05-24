@@ -274,6 +274,7 @@ namespace Units
 
             m_DamageFSM.Transition(DamageState.Idle);
 
+            Publisher.self.Subscribe(Event.UpgradeSkill, OnUpgradeSkill);
             Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
         }
 
@@ -415,6 +416,18 @@ namespace Units
 
             m_Skills[skillIndex].PutOnCooldown();
         }
+
+        private void OnUpgradeSkill(Event a_Event, params object[] a_Params)
+        {
+           IUsesSkills unit = a_Params[0] as IUsesSkills;
+            int skillIndex = (int)a_Params[1];
+
+            unit.skills[skillIndex].skillData.cost += 1f;
+            unit.skills[skillIndex].skillData.damage += 1.5f;
+            unit.skills[skillIndex].skillData.maxCooldown -= 0.08f;
+
+        }
+
         #endregion
     }
 }

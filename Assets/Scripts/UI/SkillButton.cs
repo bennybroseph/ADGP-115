@@ -20,10 +20,13 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
 
     [SerializeField]
     private Sprite m_Sprite;
+
+    private Button m_UpgradeSkillButton;
+
     #endregion
 
     #region -- PUBLIC Properties --
-        public IUsesSkills parent
+    public IUsesSkills parent
         {
             get { return m_Parent; }
             set { m_Parent = value; }
@@ -48,8 +51,13 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         if (GetComponent<Button>() != null)
             GetComponent<Button>().onClick.AddListener(OnClick);
 
+        m_UpgradeSkillButton = GetComponentsInChildren<Button>()[1];
         Publisher.self.Subscribe(Event.SkillCooldownChanged, OnSkillCooldownChanged);
         Publisher.self.Subscribe(Event.UnitManaChanged, OnUnitManaChanged);
+        Publisher.self.Subscribe(Event.UnitLevelUp, OnLevelUp);
+
+        m_UpgradeSkillButton.onClick.AddListener(OnSkillUpgradeClicked);
+        m_UpgradeSkillButton.gameObject.SetActive(false);
     }
     
     // Use this for initialization
@@ -117,5 +125,19 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
 
         GetComponentInChildren<Text>().text = parsedCooldown;
     }
-#endregion
+
+    private void OnLevelUp(Event a_Event, params object[] a_Params)
+    {
+        IUsesSkills player = a_Params[0] as IUsesSkills;
+        m_UpgradeSkillButton.gameObject.SetActive(true);
+
+    }
+
+    private void OnSkillUpgradeClicked()
+    {
+        Publisher.self.Broadcast(Event.UpgradeSkill, m_Parent, m_SkillIndex);
+        m_UpgradeSkillButton.gameObject.SetActive(false);
+    }
+
+    #endregion
 }
