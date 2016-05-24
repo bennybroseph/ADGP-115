@@ -8,22 +8,58 @@ using Event = Define.Event;
 
 namespace Units.Skills
 {
+
+    public enum BuffType
+    {
+        Buff,
+        DeBuff,
+        None
+    }
+
+    public enum DamageType
+    {
+        Physical,
+        Magical,
+        None
+    }
+
     [Serializable]
     public class SkillData
     {
         #region -- Skill DATA Struct --
+        public Sprite sprite;
+
         public float maxCooldown;
 
         public float damage;
         public float cost;
 
-        public SkillData(float a_MaxCooldown, float a_Damage, float a_Cost)
-        {
-            maxCooldown = a_MaxCooldown;
+        public BuffType buffType;
+        public DamageType damageType;
 
-            damage = a_Damage;
-            cost = a_Cost;
+        public SkillData Clone()
+        {
+            SkillData clone = new SkillData();
+
+            clone.sprite = sprite;
+
+            clone.maxCooldown = maxCooldown;
+
+            clone.damage = damage;
+            clone.cost = cost;
+
+            clone.buffType = buffType;
+            clone.damageType = damageType;
+
+            return clone;
         }
+        //public SkillData(float a_MaxCooldown, float a_Damage, float a_Cost)
+        //{
+        //    maxCooldown = a_MaxCooldown;
+
+        //    damage = a_Damage;
+        //    cost = a_Cost;
+        //}
         #endregion
     }
 
@@ -35,9 +71,10 @@ namespace Units.Skills
         private IUsesSkills m_Parent;
 
         [SerializeField]
-        private GameObject m_SkillPrefab;
+        public int m_Level;
+
         [SerializeField]
-        private Sprite m_Sprite;
+        private GameObject m_SkillPrefab;
 
         [SerializeField]
         private SkillData m_SkillData;
@@ -57,15 +94,16 @@ namespace Units.Skills
             set { m_Parent = value; }
         }
 
+        public int level
+        {
+            get { return m_Level;}
+            set { m_Level = value; }
+        }
+
         public GameObject skillPrefab
         {
             get { return m_SkillPrefab; }
-            private set { m_SkillPrefab = value; }
-        }
-        public Sprite sprite
-        {
-            get { return m_Sprite; }
-            set { m_Sprite = value; }
+            set { m_SkillPrefab = value; }
         }
 
         public SkillData skillData
@@ -91,7 +129,6 @@ namespace Units.Skills
         #endregion
 
         #region -- PUBLIC FUNCTIONS --
-
         public void ChangeCoolDown(float a_RemainingCooldown)
         {
             m_RemainingCooldown = a_RemainingCooldown;

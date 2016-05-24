@@ -5,7 +5,7 @@ using Library;
 using UI;
 using Units.Controller;
 using Units.Skills;
-
+using UnityEditor;
 using Event = Define.Event;
 
 namespace Units
@@ -26,8 +26,12 @@ namespace Units
         protected FiniteStateMachine<DamageState> m_DamageFSM;
         protected FiniteStateMachine<MovementState> m_MovementFSM;
 
-        [SerializeField]
+        [SerializeField, ReadOnly]
         protected List<Skill> m_Skills;
+        [SerializeField]
+        protected List<GameObject> m_SkillPrefabs;
+
+        protected int m_StoredSkillUpgrades = 0;
 
         [SerializeField]
         protected string m_UnitName;
@@ -244,22 +248,22 @@ namespace Units
             if (m_Skills == null)
                 m_Skills = new List<Skill>();
             else
-                for (int i = 0; i < m_Skills.Count; i++)
+            {
+                foreach (GameObject skillPrefab in m_SkillPrefabs)
                 {
-                    m_Skills[i].skillIndex = i;
-                    m_Skills[i].parent = this;
+                    if (skillPrefab.GetComponent<ICastable<IUsesSkills>>() == null)
+                        m_SkillPrefabs.Remove(skillPrefab);
                 }
-
-            SetLevel(m_BaseLevel);
-
-            m_MaxHealth = m_BaseHealth;
-            m_Health = m_MaxHealth;
-
-            m_MaxMana = m_BaseMana;
-            m_Mana = m_MaxMana;
-
-            m_MaxDefense = m_BaseDefense;
-            m_Defense = m_MaxDefense;
+                for (int i = 0, j = 0; i < m_SkillPrefabs.Count; ++i)
+                {
+                    m_Skills.Add(new Skill());
+                    m_Skills[j].skillIndex = j;
+                    m_Skills[j].skillData = m_SkillPrefabs[i].GetComponent<ICastable<IUsesSkills>>().skillData.Clone();
+                    m_Skills[j].skillPrefab = m_SkillPrefabs[i].gameObject;
+                    m_Skills[j].parent = this;
+                    ++j;
+                }
+            }
 
             //GetComponent<NavMeshAgent>().updateRotation = false;
 
@@ -280,6 +284,17 @@ namespace Units
 
         protected virtual void Start()
         {
+            SetLevel(m_BaseLevel);
+
+            m_MaxHealth = m_BaseHealth;
+            m_Health = m_MaxHealth;
+
+            m_MaxMana = m_BaseMana;
+            m_Mana = m_MaxMana;
+
+            m_MaxDefense = m_BaseDefense;
+            m_Defense = m_MaxDefense;
+
             Publisher.self.Broadcast(Event.UnitInitialized, this);
         }
 
@@ -342,11 +357,13 @@ namespace Units
 
             if (oldLevel < m_Level)
             {
+                m_StoredSkillUpgrades += m_Level - oldLevel;
                 Publisher.self.Broadcast(Event.UnitLevelUp, this);
+                Publisher.self.Broadcast(Event.UnitCanUpgradeSkill, this);
                 UIAnnouncer.self.FloatingText("Level Up!", transform.position, FloatingTextType.Overhead);
             }
         }
-        
+
         private void SetController()
         {
             m_MovementFSM = new FiniteStateMachine<MovementState>();
@@ -394,23 +411,16 @@ namespace Units
 
             if (unit.GetHashCode() != GetHashCode() ||
                 m_Skills.Count <= skillIndex ||
+                m_Skills[skillIndex].level <= 0 ||
                 !(m_Skills[skillIndex].remainingCooldown <= 0.0f) ||
                 !(m_Skills[skillIndex].skillData.cost <= m_Mana))
                 return;
 
             GameObject newObject = Instantiate(m_Skills[skillIndex].skillPrefab);
+            ICastable<IUsesSkills> newSkill = newObject.GetComponent<ICastable<IUsesSkills>>();
 
-            Physics.IgnoreCollision(GetComponent<Collider>(), newObject.GetComponent<Collider>());
-
-            newObject.transform.position = transform.position;
-            newObject.GetComponent<IChildable<IUsesSkills>>().parent = this;
-
-            newObject.GetComponent<IMovable>().velocity = new Vector3(
-                Mathf.Cos((-transform.eulerAngles.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
-                0,
-                Mathf.Sin((-transform.eulerAngles.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed);
-
-            newObject.GetComponent<ICastable<IUsesSkills>>().skillData = m_Skills[skillIndex].skillData;
+            newSkill.parent = this;
+            newSkill.skillData = m_Skills[skillIndex].skillData.Clone();
 
             mana -= m_Skills[skillIndex].skillData.cost;
 
@@ -419,13 +429,26 @@ namespace Units
 
         private void OnUpgradeSkill(Event a_Event, params object[] a_Params)
         {
-           IUsesSkills unit = a_Params[0] as IUsesSkills;
+            IUsesSkills unit = a_Params[0] as IUsesSkills;
             int skillIndex = (int)a_Params[1];
 
-            unit.skills[skillIndex].skillData.cost += 1f;
-            unit.skills[skillIndex].skillData.damage += 1.5f;
-            unit.skills[skillIndex].skillData.maxCooldown -= 0.08f;
+            if (unit == null || unit.GetHashCode() != GetHashCode())
+                return;
 
+            Skill skill = unit.skills[skillIndex];
+
+            ICastable<IUsesSkills> castable = m_SkillPrefabs[skillIndex].GetComponent<ICastable<IUsesSkills>>();
+
+            ++skill.level;
+
+            skill.skillData.cost = castable.baseCost + skill.level * castable.costGrowth;
+
+            skill.skillData.damage = castable.baseDamage + skill.level * castable.damageGrowth;
+            skill.skillData.maxCooldown = castable.baseMaxCooldown - skill.level * castable.maxCooldownGrowth;
+
+            --m_StoredSkillUpgrades;
+            if (m_StoredSkillUpgrades != 0)
+                Publisher.self.Broadcast(Event.UnitCanUpgradeSkill, this);
         }
 
         #endregion

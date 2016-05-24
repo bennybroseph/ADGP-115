@@ -54,7 +54,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         m_UpgradeSkillButton = GetComponentsInChildren<Button>()[1];
         Publisher.self.Subscribe(Event.SkillCooldownChanged, OnSkillCooldownChanged);
         Publisher.self.Subscribe(Event.UnitManaChanged, OnUnitManaChanged);
-        Publisher.self.Subscribe(Event.UnitLevelUp, OnLevelUp);
+        Publisher.self.Subscribe(Event.UnitCanUpgradeSkill, OnCanUpgradeSkill);
 
         m_UpgradeSkillButton.onClick.AddListener(OnSkillUpgradeClicked);
         m_UpgradeSkillButton.gameObject.SetActive(false);
@@ -73,7 +73,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         GetComponentInChildren<Text>().text = "";
         GetComponent<Image>().sprite = m_Sprite;
 
-        OnUnitManaChanged(Event.UnitManaChanged, parent);
+        OnUnitManaChanged(Event.UnitManaChanged, m_Parent);
     }
 
     // Update is called once per frame
@@ -89,6 +89,18 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         Publisher.self.Broadcast(Event.UseSkill, m_Parent, m_SkillIndex);
     }
 
+    private void SetColor()
+    {
+        Color newColor = Color.white;
+
+        if (m_Parent.mana < m_Parent.skills[m_SkillIndex].skillData.cost)
+            newColor = new Color32(33, 150, 243, 255);
+        if (m_Parent.skills[m_SkillIndex].level <= 0)
+            newColor = Color.gray;
+
+        GetComponent<Image>().color = newColor;
+    }
+
     private void OnUnitManaChanged(Event a_Event, params object[] a_Params)
     {
         IStats unit = a_Params[0] as IStats;
@@ -96,10 +108,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         if (unit == null || unit != m_Parent)
             return;
 
-        GetComponent<Image>().color = 
-            unit.mana < m_Parent.skills[m_SkillIndex].skillData.cost ? 
-                new Color32(33, 150, 243, 255) : 
-                new Color32(255, 255, 255, 255);
+        SetColor();
     }
 
     private void OnSkillCooldownChanged(Event a_Event, params object[] a_Params)
@@ -126,7 +135,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         GetComponentInChildren<Text>().text = parsedCooldown;
     }
 
-    private void OnLevelUp(Event a_Event, params object[] a_Params)
+    private void OnCanUpgradeSkill(Event a_Event, params object[] a_Params)
     {
         IUsesSkills player = a_Params[0] as IUsesSkills;
         m_UpgradeSkillButton.gameObject.SetActive(true);
@@ -135,8 +144,11 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
 
     private void OnSkillUpgradeClicked()
     {
-        Publisher.self.Broadcast(Event.UpgradeSkill, m_Parent, m_SkillIndex);
+        
         m_UpgradeSkillButton.gameObject.SetActive(false);
+        Publisher.self.Broadcast(Event.UpgradeSkill, m_Parent, m_SkillIndex);
+
+        SetColor();
     }
 
     #endregion
