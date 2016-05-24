@@ -378,6 +378,7 @@ namespace UI
 
         public void OnInstructionsClick()
         {
+            m_OptionsMenu.gameObject.SetActive(false);
             Publisher.self.Broadcast(Event.Instructions);
         }
 
@@ -399,6 +400,7 @@ namespace UI
         public void OnResumeClick()
         {
             m_QuitMenu.gameObject.SetActive(false);
+            m_OptionsMenu.gameObject.SetActive(false);
             Publisher.self.Broadcast(Event.UnPauseGame);
         }
 
