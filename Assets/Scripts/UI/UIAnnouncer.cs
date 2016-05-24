@@ -7,21 +7,27 @@ using UnityEngine.UI;
 
 namespace UI
 {
+    public enum FloatingTextType
+    {
+        Overhead,
+        ExperienceGained,
+        ExperienceLost,
+        HealthGained,
+        MagicDamage,
+        PhysicalDamage,
+        ManaGained,
+        ManaLost,
+    }
+
+    public enum ChatType
+    {
+        Say,
+        Yell,
+        Whisper,
+    }
+
     public class UIAnnouncer : MonoSingleton<UIAnnouncer>
     {
-        public enum AnnouncementType
-        {
-            Overhead,
-            ExperienceGained,
-            ExperienceLost,
-            HealthGained,
-            MagicDamage,
-            PhysicalDamage,
-            ManaGained,
-            ManaLost,
-            LevelUp
-        }
-
         private delegate void VoidFunction();
 
         #region -- VARIABLES --
@@ -95,10 +101,10 @@ namespace UI
             if (Input.GetKeyDown(KeyCode.F4))
                 Announce("Test Announcement Incoming! " + Time.time);
             if (Input.GetKeyDown(KeyCode.F5))
-                Announce(
+                FloatingText(
                     10 * Random.value,
                     new Vector3(10 * Random.value, 0, 10 * Random.value),
-                    AnnouncementType.MagicDamage);
+                    FloatingTextType.MagicDamage);
         }
         #endregion
         public void Announce(string a_Announcement)
@@ -108,8 +114,59 @@ namespace UI
             if (!m_CoroutineIsRunning)
                 CreateNewAnnouncement();
         }
+        public void DelayedAnnouncement(string a_Announcement, float a_TimeToWait)
+        {
+            StartCoroutine(
+                WaitThenDoThis(
+                    a_TimeToWait,
+                    delegate { Announce(a_Announcement); }));
+        }
 
-        public void Announce(string a_Announcemnt, Vector3 a_Anchor, AnnouncementType a_Type)
+        public void Chat(string a_Nickname, string a_Message, Vector3 a_Position, ChatType a_ChatType = ChatType.Say)
+        {
+            Text newLogItem = Instantiate(m_LogTextPrefab);
+            newLogItem.transform.SetParent(UIManager.self.transform, false);
+
+            switch (a_ChatType)
+            {
+                case ChatType.Say:
+                    newLogItem.color = Color.black;
+                    newLogItem.text = a_Nickname + " says: " + a_Message;
+                    break;
+                case ChatType.Yell:
+                    newLogItem.color = Color.red;
+                    newLogItem.text = a_Nickname + " yells: " + a_Message;
+                    break;
+            }
+
+            CreateFloatingText(newLogItem.text, newLogItem.color, a_Position);
+            StartCoroutine(AnimateToLog(newLogItem));
+        }
+
+        public void FloatingText(string a_Message, Vector3 a_Anchor, FloatingTextType a_Type)
+        {
+            switch (a_Type)
+            {
+                case FloatingTextType.PhysicalDamage:
+                    CreateFloatingText(a_Message, new Color(1, 0, 0), a_Anchor);
+                    break;
+                case FloatingTextType.MagicDamage:
+                    CreateFloatingText(a_Message, new Color(0, 0, 1), a_Anchor);
+                    break;
+            }
+        }
+        public void FloatingText(float a_Message, Vector3 a_Anchor, FloatingTextType a_Type)
+        {
+            switch (a_Type)
+            {
+                case FloatingTextType.MagicDamage:
+                case FloatingTextType.PhysicalDamage:
+                    FloatingText(string.Format("-{0:0.0}", a_Message), a_Anchor, a_Type);
+                    break;
+            }
+        }
+
+        private void CreateFloatingText(string a_Message, Color a_Color, Vector3 a_Anchor)
         {
             FloatingText newObject = Instantiate(m_FloatingTextPrefab);
             newObject.transform.SetParent(UIManager.self.transform, false);
@@ -117,38 +174,10 @@ namespace UI
             newObject.anchor = a_Anchor;
 
             Text newText = newObject.GetComponent<Text>();
-            newText.text = a_Announcemnt;
-
-            switch (a_Type)
-            {
-                case AnnouncementType.PhysicalDamage:
-                    newText.color = new Color(1, 0, 0);
-                    break;
-                case AnnouncementType.MagicDamage:
-                    newText.color = new Color(0, 0, 1);
-                    break;
-            }
+            newText.text = a_Message;
+            newText.color = a_Color;
 
             StartCoroutine(Animations.Animate(m_FloatingTextSequence, newText));
-        }
-        public void Announce(float a_Announcemnt, Vector3 a_Anchor, AnnouncementType a_Type)
-        {
-            switch (a_Type)
-            {
-                case AnnouncementType.MagicDamage:
-                case AnnouncementType.PhysicalDamage:
-                    Announce(string.Format("-{0:0.0}", a_Announcemnt), a_Anchor, a_Type);
-                    break;
-            }
-        }
-
-
-        public void DelayedAnnouncement(string a_Announcement, float a_TimeToWait)
-        {
-            StartCoroutine(
-                WaitThenDoThis(
-                    a_TimeToWait,
-                    delegate { Announce(a_Announcement); }));
         }
 
         private void CreateNewAnnouncement()
@@ -191,9 +220,19 @@ namespace UI
             newLogItem.transform.SetParent(UIManager.self.transform, false);
             newLogItem.text = m_CurrentAnnouncementObject.text;
 
-            m_LogItems.Add(newLogItem);
-
             Destroy(m_CurrentAnnouncementObject.gameObject);
+
+            m_CoroutineIsRunning = false;
+
+            if (m_QueuedAnnouncements.Count > 0)
+                CreateNewAnnouncement();
+
+            StartCoroutine(AnimateToLog(newLogItem));
+        }
+
+        private IEnumerator AnimateToLog(Text a_LogItem)
+        {
+            m_LogItems.Add(a_LogItem);
 
             if (m_LogItemLifetime != -1.0f)
             {
@@ -203,27 +242,18 @@ namespace UI
                             StartCoroutine(
                                 Animations.AnimateLayer(
                                     m_LogSequence.animationLayers[m_LogSequence.animationLayers.Count - 1],
-                                    newLogItem));
+                                    a_LogItem));
                         }));
                 StartCoroutine(WaitThenDoThis(m_LogItemLifetime,
                         delegate
                         {
-                            Destroy(newLogItem.gameObject);
-                            m_LogItems.Remove(newLogItem);
+                            Destroy(a_LogItem.gameObject);
+                            m_LogItems.Remove(a_LogItem);
 
                             SortAnnouncementLog();
                         }));
             }
 
-            m_CoroutineIsRunning = false;
-
-            if (m_QueuedAnnouncements.Count > 0)
-                CreateNewAnnouncement();
-
-            StartCoroutine(AnimateToLog());
-        }
-        private IEnumerator AnimateToLog()
-        {
             while (m_LogItems.Count > m_MaxNumberOfLogItems)
             {
                 Destroy(m_LogItems[0].gameObject);

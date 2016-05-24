@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.22, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -88,6 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7808bd5d8efc81e44a431291bbae6617, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Nameplate: {fileID: 11409874, guid: bdd14ad98f93f3a449cd18a355cc6dad, type: 2}
   m_ControllerType: 2
   m_Skills:
   - m_SkillPrefab: {fileID: 167634, guid: e4edc7fe0341b644c835f75acf8dad64, type: 2}
@@ -95,19 +97,23 @@ MonoBehaviour:
     m_SkillData:
       maxCooldown: 1
       damage: 1
-      cost: 5
+      cost: 1
     m_SkillIndex: 0
     m_CooldownReduction: 0
     m_RemainingCooldown: 0
   m_UnitName: GoblinMage
   m_UnitNickname: Goblin Mage
   m_Faction: Enemies
-  m_MaxMana: 5
-  m_MaxDefense: 12
-  m_MaxHealth: 12
-  m_Experience: 10
-  m_Speed: 5
-  m_Nameplate: {fileID: 11409874, guid: bdd14ad98f93f3a449cd18a355cc6dad, type: 2}
+  m_BaseHealth: 5
+  m_HealthGrowth: 2.5
+  m_BaseMana: 2
+  m_ManaGrowth: 1
+  m_BaseDefense: 2
+  m_DefenseGrowth: 1
+  m_BaseLevel: 1
+  m_BaseSpeed: 5
+  m_SpeedGrowth: 0.2
+  m_Taunt: I burn them ok?
 --- !u!195 &19511350
 NavMeshAgent:
   m_ObjectHideFlags: 1

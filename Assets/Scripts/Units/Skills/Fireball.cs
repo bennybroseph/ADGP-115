@@ -1,6 +1,7 @@
 ﻿using Interfaces;
 using UnityEngine;
 using Library;
+using UI;
 using Event = Define.Event;
 
 namespace Units.Skills
@@ -107,17 +108,17 @@ namespace Units.Skills
 
         private void LateUpdate()
         {
-            CalculateRotation();
+            SetRotation();
         }
         #endregion
 
         #region -- OTHER VOID FUNCTIONS
-        private void CalculateRotation()
+        private void SetRotation()
         {
             if (m_Velocity == Vector3.zero)
                 return;
 
-            float rotationY = 90 + (Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180.0f / Mathf.PI));
+            float rotationY = 90 + Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180.0f / Mathf.PI);
 
             if ((m_Velocity.x < 0.0f && m_Velocity.z < 0.0f) ||
                 (m_Velocity.x > 0.0f && m_Velocity.z < 0.0f) ||
@@ -143,6 +144,10 @@ namespace Units.Skills
                     attackableObject.damageFSM.Transition(DamageState.TakingDamge);
                     Debug.Log("Hit " + attackableObject.unitName);
                     attackableObject.health -= m_SkillData.damage;
+                    UIAnnouncer.self.FloatingText(
+                        m_SkillData.damage,
+                        a_Collision.transform.position,
+                        FloatingTextType.MagicDamage);
 
                     if (a_Collision.transform.GetComponent<IStats>() != null && attackableObject.health <= 0)
                         m_Parent.experience += a_Collision.transform.GetComponent<IStats>().experience;
@@ -155,6 +160,6 @@ namespace Units.Skills
         {
             transform.position += (m_Velocity + m_TotalVelocity) * Time.deltaTime;
         }
-    #endregion
+        #endregion
     }
 }

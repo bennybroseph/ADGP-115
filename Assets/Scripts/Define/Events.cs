@@ -33,7 +33,7 @@ namespace Define
 
         // There are no parameters
         PauseGame,
-        // There are no paramters
+        // There are no parameters
         UnPauseGame,
 
         Options,

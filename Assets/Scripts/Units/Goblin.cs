@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Collections;
 using Interfaces;
 using Library;
+using UI;
 using Units;
 using Event = Define.Event;
 
@@ -23,12 +24,12 @@ public class Goblin : Enemy
                 // If routine is not running
                 if (!m_CoroutineIsRunning)
                     // Run it
-                    StartCoroutine(AttackDelay(attackableObject));
+                    StartCoroutine(AttackDelay(attackableObject, a_Collision.transform.position));
             }
         }
     }
 
-    private IEnumerator AttackDelay(IAttackable a_Attackable)
+    private IEnumerator AttackDelay(IAttackable a_Attackable, Vector3 a_Position)
     {
         // Set to true
         m_CoroutineIsRunning = true;
@@ -40,6 +41,7 @@ public class Goblin : Enemy
                     {
                         IStats goblin = gameObject.GetComponent<IStats>();
                         a_Attackable.health -= 1;
+                        UIAnnouncer.self.FloatingText(1, a_Position, FloatingTextType.PhysicalDamage);
                         if (a_Attackable.health <= 0) { goblin.experience += 10;} 
                     }, 
                 true));
