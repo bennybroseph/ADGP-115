@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Interfaces;
 using Library;
 using Units;
@@ -35,10 +36,8 @@ public class AIController : MonoSingleton<AIController>, IController
 
         m_Controlables = new List<IControllable>();
         m_Enemies = new List<IStats>();
-
         Publisher.self.Subscribe(Event.SpawnWaveClicked, SpawnWaves);
         Publisher.self.Subscribe(Event.UnitDied, OnUnitDied);
-        Publisher.self.Subscribe(Event.UnitLevelUp, OnLevelUp);
     }
 
     // Use this for initialization
@@ -59,18 +58,14 @@ public class AIController : MonoSingleton<AIController>, IController
 
         Publisher.self.UnSubscribe(Event.SpawnWaveClicked, SpawnWaves);
         Publisher.self.UnSubscribe(Event.UnitDied, OnUnitDied);
-        Publisher.self.UnSubscribe(Event.UnitLevelUp, OnLevelUp);
     }
 
     private void Search()
     {
         foreach (IControllable controlable in m_Controlables)
         {
-            if (controlable.controllerType == ControllerType.Goblin && controlable.following == null)           
-                controlable.following = GameObject.FindGameObjectWithTag("Player");
-
-            if (controlable.controllerType == ControllerType.GoblinMage && controlable.following == null)
-                controlable.following = GameObject.FindGameObjectWithTag("Fortress");
+            if (controlable.following == null)
+                SetFollowing(controlable);
 
             if (controlable.following != null)
             {
@@ -80,7 +75,7 @@ public class AIController : MonoSingleton<AIController>, IController
 
                 float distanceFromEnemyToTarget = Vector3.Distance(controlable.following.transform.position, controlable.transform.position);
 
-                if (distanceFromEnemyToTarget < 7)
+                if (distanceFromEnemyToTarget < 7 && controlable.controllerType == ControllerType.GoblinMage)
                 {
                     Publisher.self.Broadcast(Event.UseSkill, skillUser, 0);
                 }
@@ -93,12 +88,12 @@ public class AIController : MonoSingleton<AIController>, IController
         switch (a_Controllable.controllerType)
         {
             case ControllerType.GoblinMage:
-                a_Controllable.following = GameObject.FindGameObjectWithTag("Fortress");
+                SetFollowing(a_Controllable);
                 m_Controlables.Add(a_Controllable);
                 break;
 
             case ControllerType.Goblin:
-                a_Controllable.following = GameObject.FindGameObjectWithTag("Player");
+                SetFollowing(a_Controllable);
                 m_Controlables.Add(a_Controllable);
                 break;
         }
@@ -109,6 +104,50 @@ public class AIController : MonoSingleton<AIController>, IController
         m_Controlables.Remove(a_Controllable);
     }
 
+    private void SetFollowing(IControllable a_Controllable)
+    {
+        if (a_Controllable.controllerType == ControllerType.Goblin)
+        {
+            List<GameObject> players = GameObject.FindGameObjectsWithTag("Player").ToList();
+            players.Sort(
+                delegate (GameObject a, GameObject b)
+                {
+                    float distanceA = Vector3.Distance(a.transform.position, a_Controllable.transform.position);
+                    Debug.Log(distanceA);
+
+                    float distanceB = Vector3.Distance(b.transform.position, a_Controllable.transform.position);
+                    Debug.Log(distanceB);
+                    if (distanceA > distanceB)
+                        return 1;
+                    if (distanceA < distanceB)
+                        return -1;
+
+                    return 0;
+                });
+            a_Controllable.following = players[0];
+        }
+
+        if (a_Controllable.controllerType == ControllerType.GoblinMage)
+        {
+            List<GameObject> fortresses = GameObject.FindGameObjectsWithTag("Fortress").ToList();
+            fortresses.Sort(
+                delegate (GameObject a, GameObject b)
+                {
+                    float distanceA = Vector3.Distance(a.transform.position, a_Controllable.transform.position);
+                    Debug.Log(distanceA);
+
+                    float distanceB = Vector3.Distance(b.transform.position, a_Controllable.transform.position);
+                    Debug.Log(distanceB);
+                    if (distanceA > distanceB)
+                        return 1;
+                    if (distanceA < distanceB)
+                        return -1;
+
+                    return 0;
+                });
+            a_Controllable.following = fortresses[0];
+        }
+    }
     public void SpawnWaves(Event a_Event, params object[] a_Params)
     {
         if (m_Enemies.Count != 0)
@@ -177,17 +216,6 @@ public class AIController : MonoSingleton<AIController>, IController
         m_Enemies.Remove(unit);
     }
 
-    private void OnLevelUp(Event a_Event, params object[] a_Params)
-    {
-        Unit unit = a_Params[0] as Unit;
-
-        unit.level = (int)Mathf.Sqrt((int)unit.experience);
-
-        unit.maxHealth = 10 + (5 * unit.level);
-        unit.maxMana = 5 + (3 * unit.level);
-        unit.maxDefense = 3 + (2 * unit.level);
-        unit.speed = 5 + (0.12f * unit.level);
-
-    }
+    
 
 }

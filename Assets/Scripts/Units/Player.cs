@@ -78,6 +78,7 @@ namespace Units
             m_DamageFSM.Transition(DamageState.Idle);
 
             Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
+            Publisher.self.Subscribe(Event.UnitLevelUp, OnLevelUp);
         }
 
         private void Start()
@@ -106,6 +107,7 @@ namespace Units
         {
             m_Controller.UnRegister(this);
             Publisher.self.UnSubscribe(Event.UseSkill, OnUseSkill);
+            Publisher.self.UnSubscribe(Event.UnitLevelUp, OnLevelUp);
             Publisher.self.Broadcast(Event.UnitDied, this);
         }
         #endregion
@@ -186,7 +188,19 @@ namespace Units
             m_Skills[skillIndex].PutOnCooldown();
         }
 
-        
+        private void OnLevelUp(Event a_Event, params object[] a_Params)
+        {
+            Unit unit = a_Params[0] as Unit;
+
+            unit.level = (int)Mathf.Sqrt((int)unit.experience);
+
+            unit.maxHealth = 10 + (5 * unit.level);
+            unit.maxMana = 5 + (3 * unit.level);
+            unit.maxDefense = 3 + (2 * unit.level);
+            unit.speed = 5 + (0.12f * unit.level);
+
+            UIAnnouncer.self.Announce("Level Up", transform.position, UIAnnouncer.AnnouncementType.LevelUp);
+        }
         #endregion
     }
 
