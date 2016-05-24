@@ -11,6 +11,7 @@ public class ItemDrops : MonoBehaviour, IChildable<IControllable>
     private int m_ManaIncrease;
     [SerializeField]
     private IControllable m_Parent;
+    private float m_Speed = 0;
 
     public int healthIncrease
     {
@@ -36,8 +37,15 @@ public class ItemDrops : MonoBehaviour, IChildable<IControllable>
         transform.Rotate(new Vector3(0, 45, 0) * Time.deltaTime * 5);
         transform.Translate(new Vector3(0, Mathf.Sin(Time.time * 9)) * Time.deltaTime, 0);
 
+
         if (m_Parent != null)
-            transform.position = Vector3.Lerp(transform.position, m_Parent.transform.position, Time.deltaTime * 2);
+        {
+            m_Speed += Time.deltaTime;
+            transform.position += new Vector3(
+                (m_Parent.transform.position.x - transform.position.x) * m_Speed,
+                0, 
+                (m_Parent.transform.position.z - transform.position.z) * m_Speed);
+        }
     }
 
     void OnTriggerEnter(Collider a_Collision)

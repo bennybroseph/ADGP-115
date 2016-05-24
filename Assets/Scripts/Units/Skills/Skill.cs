@@ -9,7 +9,7 @@ using Event = Define.Event;
 namespace Units.Skills
 {
     [Serializable]
-    public struct SkillData
+    public class SkillData
     {
         #region -- Skill DATA Struct --
         public float maxCooldown;
