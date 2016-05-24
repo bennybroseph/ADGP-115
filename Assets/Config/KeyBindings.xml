@@ -1,55 +1,151 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Config>
-    <Player>
-        <Keyboard>
-            <Skill Name="Skill 1" Description="First Skill" KeyCode="Q" />
-            <Skill Name="Skill 2" Description="Second Skill" KeyCode="E" />
-            <Axis>
-                <Positive Name="Up" Description="Up Key" KeyCode="W" />
-                <Negative Name="Down" Description="Down Key" KeyCode="S" />
-            </Axis>
-            <Axis>
-                <Positive Name="Right" Description="Right Key" KeyCode="D" />
-                <Negative Name="Left" Description="Left Key" KeyCode="A" />
-            </Axis>
-        </Keyboard>
-        <XInput>
-            <Skill Name="Skill 1" Description="First Skill" KeyCode="X" />
-            <Skill Name="Skill 2" Description="First Skill" KeyCode="A" />
-            <Axis>
-                <Positive Name="Up" Description="Up Key" KeyCode="DpadUp" />
-                <Negative Name="Down" Description="Down Key" KeyCode="DpadDown" />
-            </Axis>
-            <Axis>
-                <Positive Name="Right" Description="Right Key" KeyCode="DpadRight" />
-                <Negative Name="Left" Description="Left Key" KeyCode="DpadLeft" />
-            </Axis>
-        </XInput>
-    </Player>
-    <Player>
-        <Keyboard>
-            <Skill Name="Skill 1" Description="First SKill" KeyCode="Keypad1" />
-            <Skill Name="Skill 2" Description="Second SKill" KeyCode="Keypad0" />
-            <Axis>
-                <Positive Name="Up" Description="Up Key" KeyCode="UpArrow" />
-                <Negative Name="Down" Description="Down Key" KeyCode="DownArrow" />
-            </Axis>
-            <Axis>
-                <Positive Name="Right" Description="Right Key" KeyCode="RightArrow" />
-                <Negative Name="Left" Description="Left Key" KeyCode="LeftArrow" />
-            </Axis>
-        </Keyboard>
-        <XInput>
-            <Skill Name="Skill 1" Description="First Skill" KeyCode="X" />
-            <Skill Name="Skill 2" Description="First Skill" KeyCode="A" />
-            <Axis>
-                <Positive Name="Up" Description="Up Key" KeyCode="DpadUp" />
-                <Negative Name="Down" Description="Down Key" KeyCode="DpadDown" />
-            </Axis>
-            <Axis>
-                <Positive Name="Right" Description="Right Key" KeyCode="DpadRight" />
-                <Negative Name="Left" Description="Left Key" KeyCode="DpadLeft" />
-            </Axis>
-        </XInput>
-    </Player>
-</Config>
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfUserConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <UserConfiguration>
+    <skillKeyCodes>
+      <KeyOfKeyCode>
+        <name>Skill 1</name>
+        <description>First Skill</description>
+        <keyCode>Q</keyCode>
+      </KeyOfKeyCode>
+      <KeyOfKeyCode>
+        <name>Skill 2</name>
+        <description>Second Skill</description>
+        <keyCode>E</keyCode>
+      </KeyOfKeyCode>
+    </skillKeyCodes>
+    <skillButtonCodes>
+      <KeyOfButtonCode>
+        <name>Skill 1</name>
+        <description>First Skill</description>
+        <keyCode>X</keyCode>
+      </KeyOfButtonCode>
+      <KeyOfButtonCode>
+        <name>Skill 2</name>
+        <description>First Skill</description>
+        <keyCode>A</keyCode>
+      </KeyOfButtonCode>
+    </skillButtonCodes>
+    <verticalKeyAxis>
+      <positive>
+        <name>Up</name>
+        <description>Up Key</description>
+        <keyCode>W</keyCode>
+      </positive>
+      <negative>
+        <name>Down</name>
+        <description>Down Key</description>
+        <keyCode>S</keyCode>
+      </negative>
+    </verticalKeyAxis>
+    <horizontalKeyAxis>
+      <positive>
+        <name>Right</name>
+        <description>Right Key</description>
+        <keyCode>D</keyCode>
+      </positive>
+      <negative>
+        <name>Left</name>
+        <description>Left Key</description>
+        <keyCode>A</keyCode>
+      </negative>
+    </horizontalKeyAxis>
+    <verticalButtonAxis>
+      <positive>
+        <name>Up</name>
+        <description>Up Key</description>
+        <keyCode>DpadUp</keyCode>
+      </positive>
+      <negative>
+        <name>Down</name>
+        <description>Down Key</description>
+        <keyCode>DpadDown</keyCode>
+      </negative>
+    </verticalButtonAxis>
+    <horizontalButtonAxis>
+      <positive>
+        <name>Right</name>
+        <description>Right Key</description>
+        <keyCode>DpadRight</keyCode>
+      </positive>
+      <negative>
+        <name>Left</name>
+        <description>Left Key</description>
+        <keyCode>DpadLeft</keyCode>
+      </negative>
+    </horizontalButtonAxis>
+  </UserConfiguration>
+  <UserConfiguration>
+    <skillKeyCodes>
+      <KeyOfKeyCode>
+        <name>Skill 1</name>
+        <description>First SKill</description>
+        <keyCode>Keypad1</keyCode>
+      </KeyOfKeyCode>
+      <KeyOfKeyCode>
+        <name>Skill 2</name>
+        <description>Second SKill</description>
+        <keyCode>Keypad0</keyCode>
+      </KeyOfKeyCode>
+    </skillKeyCodes>
+    <skillButtonCodes>
+      <KeyOfButtonCode>
+        <name>Skill 1</name>
+        <description>First Skill</description>
+        <keyCode>X</keyCode>
+      </KeyOfButtonCode>
+      <KeyOfButtonCode>
+        <name>Skill 2</name>
+        <description>First Skill</description>
+        <keyCode>A</keyCode>
+      </KeyOfButtonCode>
+    </skillButtonCodes>
+    <verticalKeyAxis>
+      <positive>
+        <name>Up</name>
+        <description>Up Key</description>
+        <keyCode>UpArrow</keyCode>
+      </positive>
+      <negative>
+        <name>Down</name>
+        <description>Down Key</description>
+        <keyCode>DownArrow</keyCode>
+      </negative>
+    </verticalKeyAxis>
+    <horizontalKeyAxis>
+      <positive>
+        <name>Right</name>
+        <description>Right Key</description>
+        <keyCode>RightArrow</keyCode>
+      </positive>
+      <negative>
+        <name>Left</name>
+        <description>Left Key</description>
+        <keyCode>LeftArrow</keyCode>
+      </negative>
+    </horizontalKeyAxis>
+    <verticalButtonAxis>
+      <positive>
+        <name>Up</name>
+        <description>Up Key</description>
+        <keyCode>DpadUp</keyCode>
+      </positive>
+      <negative>
+        <name>Down</name>
+        <description>Down Key</description>
+        <keyCode>DpadDown</keyCode>
+      </negative>
+    </verticalButtonAxis>
+    <horizontalButtonAxis>
+      <positive>
+        <name>Right</name>
+        <description>Right Key</description>
+        <keyCode>DpadRight</keyCode>
+      </positive>
+      <negative>
+        <name>Left</name>
+        <description>Left Key</description>
+        <keyCode>DpadLeft</keyCode>
+      </negative>
+    </horizontalButtonAxis>
+  </UserConfiguration>
+</ArrayOfUserConfiguration>

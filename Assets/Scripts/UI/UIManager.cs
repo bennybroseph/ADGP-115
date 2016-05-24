@@ -119,7 +119,7 @@ namespace UI
 
                     skillButton.parent = skillUsers[i];
                     skillButton.skillIndex = j;
-                    skillButton.sprite = skillUsers[i].skills[j].sprite;
+                    skillButton.sprite = skillUsers[i].skills[j].skillData.sprite;
 
                     m_SkillButtons.Add(skillButton);
 

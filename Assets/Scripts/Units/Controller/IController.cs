@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 using Interfaces;
 using Library;
 using UnityEngine;
@@ -116,7 +117,7 @@ namespace Units.Controller
         {
             if (!File.Exists(Globals.FILE_NAME))
             {
-                new XDocument().Save(Globals.FILE_NAME);
+                //new XDocument().Save(Globals.FILE_NAME);
                 SetValuesToDefault();
                 WriteConfig();
             }
@@ -126,142 +127,167 @@ namespace Units.Controller
         #region -- READ XML --
         private void ReadConfig()
         {
-            m_UserConfigurations = new List<UserConfiguration>();
+            Debug.Log("Reading");
 
-            using (XmlReader reader = XmlReader.Create(Globals.FILE_NAME))
-            {
-                while (reader.Read())
-                {
-                    if (reader.IsStartElement())
-                    {
-                        switch (reader.Name)
-                        {
-                            case "Player":
-                                {
-                                    List<Key<KeyCode>> keySkills = new List<Key<KeyCode>>();
-                                    List<Axis<KeyCode>> keyAxii = new List<Axis<KeyCode>>();
+            XmlSerializer serializer = new XmlSerializer(typeof(List<UserConfiguration>));
 
-                                    List<Key<ButtonCode>> buttonSkills = new List<Key<ButtonCode>>();
-                                    List<Axis<ButtonCode>> buttonAxii = new List<Axis<ButtonCode>>();
+            FileStream fileStream = new FileStream(Globals.FILE_NAME, FileMode.Open);
+            XmlReader reader = XmlReader.Create(fileStream);
 
-                                    while (reader.Read())
-                                    {
-                                        if (reader.IsStartElement())
-                                        {
-                                            switch (reader.Name)
-                                            {
-                                                case "Keyboard":
-                                                    {
-                                                        while (reader.Read())
-                                                        {
-                                                            if (reader.IsStartElement())
-                                                            {
-                                                                if (reader.Name == "Axis")
-                                                                    break;
-                                                                keySkills.Add(ReadKey<KeyCode>(reader));
-                                                            }
-                                                        }
+            m_UserConfigurations = ((List<UserConfiguration>)serializer.Deserialize(reader));
 
-                                                        for (int i = 0; i < 2; i++)
-                                                        {
-                                                            Axis<KeyCode> axis = new Axis<KeyCode>();
-                                                            while (reader.Read())
-                                                            {
-                                                                if (reader.IsStartElement())
-                                                                {
-                                                                    switch (reader.Name)
-                                                                    {
-                                                                        case "Positive":
-                                                                            axis.positive = ReadKey<KeyCode>(reader);
-                                                                            break;
-                                                                        case "Negative":
-                                                                            axis.negative = ReadKey<KeyCode>(reader);
-                                                                            break;
-                                                                    }
-                                                                }
-                                                                else if (reader.Name == "Axis")
-                                                                    break;
-                                                            }
-                                                            keyAxii.Add(new Axis<KeyCode>(axis.positive, axis.negative));
-                                                        }
-                                                    }
-                                                    break;
-                                                case "XInput":
-                                                    {
-                                                        while (reader.Read())
-                                                        {
-                                                            if (reader.IsStartElement())
-                                                            {
-                                                                if (reader.Name == "Axis")
-                                                                    break;
-                                                                buttonSkills.Add(ReadKey<ButtonCode>(reader));
-                                                            }
-                                                        }
-
-                                                        for (int i = 0; i < 2; i++)
-                                                        {
-                                                            Axis<ButtonCode> axis = new Axis<ButtonCode>();
-                                                            while (reader.Read())
-                                                            {
-                                                                if (reader.IsStartElement())
-                                                                {
-                                                                    switch (reader.Name)
-                                                                    {
-                                                                        case "Positive":
-                                                                            axis.positive = ReadKey<ButtonCode>(reader);
-                                                                            break;
-                                                                        case "Negative":
-                                                                            axis.negative = ReadKey<ButtonCode>(reader);
-                                                                            break;
-                                                                    }
-                                                                }
-                                                                else if (reader.Name == "Axis")
-                                                                    break;
-                                                            }
-                                                            buttonAxii.Add(new Axis<ButtonCode>(axis.positive, axis.negative));
-                                                        }
-                                                    }
-                                                    break;
-                                            }
-                                        }
-                                        else if (reader.Name == "Player")
-                                            break;
-                                    }
-                                    m_UserConfigurations.Add(
-                                        new UserConfiguration(
-                                            keySkills,
-                                            buttonSkills,
-                                            keyAxii[0],
-                                            keyAxii[1],
-                                            buttonAxii[0],
-                                            buttonAxii[1]));
-                                }
-                                break;
-                        }
-                    }
-                }
-            }
+            fileStream.Close();
         }
 
-        private Key<TCode> ReadKey<TCode>(XmlReader a_Reader)
+        private void WriteConfig()
         {
-            Key<TCode> key;
+            XmlSerializer serializer = new XmlSerializer(typeof(List<UserConfiguration>));
 
-            //a_Reader.Read();
+            TextWriter writer = new StreamWriter(Globals.FILE_NAME);
+            serializer.Serialize(writer, m_UserConfigurations);
+            writer.Close();
 
-            a_Reader.MoveToNextAttribute();
-            string name = a_Reader.Value;
-
-            a_Reader.MoveToNextAttribute();
-            string description = a_Reader.Value;
-
-            a_Reader.MoveToNextAttribute();
-            TCode keyCode = (TCode)Enum.Parse(typeof(TCode), a_Reader.Value);
-
-            key = new Key<TCode>(name, description, keyCode);
-            //Debug.Log(name + " " + description + " " + keyCode);
-            return key;
+            Debug.Log("Written");
         }
+
+        //private void ReadConfig()
+        //{
+        //    m_UserConfigurations = new List<UserConfiguration>();
+
+        //    using (XmlReader reader = XmlReader.Create(Globals.FILE_NAME))
+        //    {
+        //        while (reader.Read())
+        //        {
+        //            if (reader.IsStartElement())
+        //            {
+        //                switch (reader.Name)
+        //                {
+        //                    case "Player":
+        //                        {
+        //                            List<Key<KeyCode>> keySkills = new List<Key<KeyCode>>();
+        //                            List<Axis<KeyCode>> keyAxii = new List<Axis<KeyCode>>();
+
+        //                            List<Key<ButtonCode>> buttonSkills = new List<Key<ButtonCode>>();
+        //                            List<Axis<ButtonCode>> buttonAxii = new List<Axis<ButtonCode>>();
+
+        //                            while (reader.Read())
+        //                            {
+        //                                if (reader.IsStartElement())
+        //                                {
+        //                                    switch (reader.Name)
+        //                                    {
+        //                                        case "Keyboard":
+        //                                            {
+        //                                                while (reader.Read())
+        //                                                {
+        //                                                    if (reader.IsStartElement())
+        //                                                    {
+        //                                                        if (reader.Name == "Axis")
+        //                                                            break;
+        //                                                        keySkills.Add(ReadKey<KeyCode>(reader));
+        //                                                    }
+        //                                                }
+
+        //                                                for (int i = 0; i < 2; i++)
+        //                                                {
+        //                                                    Axis<KeyCode> axis = new Axis<KeyCode>();
+        //                                                    while (reader.Read())
+        //                                                    {
+        //                                                        if (reader.IsStartElement())
+        //                                                        {
+        //                                                            switch (reader.Name)
+        //                                                            {
+        //                                                                case "Positive":
+        //                                                                    axis.positive = ReadKey<KeyCode>(reader);
+        //                                                                    break;
+        //                                                                case "Negative":
+        //                                                                    axis.negative = ReadKey<KeyCode>(reader);
+        //                                                                    break;
+        //                                                            }
+        //                                                        }
+        //                                                        else if (reader.Name == "Axis")
+        //                                                            break;
+        //                                                    }
+        //                                                    keyAxii.Add(new Axis<KeyCode>(axis.positive, axis.negative));
+        //                                                }
+        //                                            }
+        //                                            break;
+        //                                        case "XInput":
+        //                                            {
+        //                                                while (reader.Read())
+        //                                                {
+        //                                                    if (reader.IsStartElement())
+        //                                                    {
+        //                                                        if (reader.Name == "Axis")
+        //                                                            break;
+        //                                                        buttonSkills.Add(ReadKey<ButtonCode>(reader));
+        //                                                    }
+        //                                                }
+
+        //                                                for (int i = 0; i < 2; i++)
+        //                                                {
+        //                                                    Axis<ButtonCode> axis = new Axis<ButtonCode>();
+        //                                                    while (reader.Read())
+        //                                                    {
+        //                                                        if (reader.IsStartElement())
+        //                                                        {
+        //                                                            switch (reader.Name)
+        //                                                            {
+        //                                                                case "Positive":
+        //                                                                    axis.positive = ReadKey<ButtonCode>(reader);
+        //                                                                    break;
+        //                                                                case "Negative":
+        //                                                                    axis.negative = ReadKey<ButtonCode>(reader);
+        //                                                                    break;
+        //                                                            }
+        //                                                        }
+        //                                                        else if (reader.Name == "Axis")
+        //                                                            break;
+        //                                                    }
+        //                                                    buttonAxii.Add(new Axis<ButtonCode>(axis.positive, axis.negative));
+        //                                                }
+        //                                            }
+        //                                            break;
+        //                                    }
+        //                                }
+        //                                else if (reader.Name == "Player")
+        //                                    break;
+        //                            }
+        //                            m_UserConfigurations.Add(
+        //                                new UserConfiguration(
+        //                                    keySkills,
+        //                                    buttonSkills,
+        //                                    keyAxii[0],
+        //                                    keyAxii[1],
+        //                                    buttonAxii[0],
+        //                                    buttonAxii[1]));
+        //                        }
+        //                        break;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
+
+        //private Key<TCode> ReadKey<TCode>(XmlReader a_Reader)
+        //{
+        //    Key<TCode> key;
+
+        //    //a_Reader.Read();
+
+        //    a_Reader.MoveToNextAttribute();
+        //    string name = a_Reader.Value;
+
+        //    a_Reader.MoveToNextAttribute();
+        //    string description = a_Reader.Value;
+
+        //    a_Reader.MoveToNextAttribute();
+        //    TCode keyCode = (TCode)Enum.Parse(typeof(TCode), a_Reader.Value);
+
+        //    key = new Key<TCode>(name, description, keyCode);
+        //    //Debug.Log(name + " " + description + " " + keyCode);
+        //    return key;
+        //}
         #endregion
 
         #region -- WRITE TO XML --
@@ -319,96 +345,96 @@ namespace Units.Controller
             };
         }
 
-        public void WriteConfig()
-        {
-            using (XmlWriter writer = XmlWriter.Create(Globals.FILE_NAME))
-            {
-                writer.WriteStartDocument();
-                {
-                    writer.WriteStartElement("Config");
-                    {
-                        foreach (UserConfiguration keyConfiguration in m_UserConfigurations)
-                        {
-                            writer.WriteStartElement("Player");
-                            {
-                                writer.WriteStartElement("Keyboard");
-                                {
-                                    foreach (Key<KeyCode> key in keyConfiguration.skillKeyCodes)
-                                    {
-                                        writer.WriteStartElement("Skill");
-                                        {
-                                            WriteKey(writer, key);
-                                        }
-                                        writer.WriteEndElement();
-                                    }
-                                    WriteAxii(writer,
-                                        new List<Axis<KeyCode>>
-                                        {
-                                            keyConfiguration.verticalKeyAxis,
-                                            keyConfiguration.horizontalKeyAxis,
-                                        });
-                                }
-                                writer.WriteEndElement();
+        //public void WriteConfig()
+        //{
+        //    using (XmlWriter writer = XmlWriter.Create(Globals.FILE_NAME))
+        //    {
+        //        writer.WriteStartDocument();
+        //        {
+        //            writer.WriteStartElement("Config");
+        //            {
+        //                foreach (UserConfiguration keyConfiguration in m_UserConfigurations)
+        //                {
+        //                    writer.WriteStartElement("Player");
+        //                    {
+        //                        writer.WriteStartElement("Keyboard");
+        //                        {
+        //                            foreach (Key<KeyCode> key in keyConfiguration.skillKeyCodes)
+        //                            {
+        //                                writer.WriteStartElement("Skill");
+        //                                {
+        //                                    WriteKey(writer, key);
+        //                                }
+        //                                writer.WriteEndElement();
+        //                            }
+        //                            WriteAxii(writer,
+        //                                new List<Axis<KeyCode>>
+        //                                {
+        //                                    keyConfiguration.verticalKeyAxis,
+        //                                    keyConfiguration.horizontalKeyAxis,
+        //                                });
+        //                        }
+        //                        writer.WriteEndElement();
 
-                                writer.WriteStartElement("XInput");
-                                {
-                                    foreach (Key<ButtonCode> key in keyConfiguration.skillButtonCodes)
-                                    {
-                                        writer.WriteStartElement("Skill");
-                                        {
-                                            WriteKey(writer, key);
-                                        }
-                                        writer.WriteEndElement();
-                                    }
-                                    WriteAxii(writer,
-                                        new List<Axis<ButtonCode>>
-                                        {
-                                            keyConfiguration.verticalButtonAxis,
-                                            keyConfiguration.horizontalButtonAxis,
-                                        });
-                                }
-                                writer.WriteEndElement();
-                            }
-                            writer.WriteEndElement();
-                        }
-                    }
-                    writer.WriteEndElement();
-                }
-                writer.WriteEndDocument();
-            }
-        }
-        private static void WriteKey<TCode>(XmlWriter a_Writer, Key<TCode> a_Key)
-        {
-            a_Writer.WriteAttributeString("Name", a_Key.name);
-            a_Writer.WriteAttributeString("Description", a_Key.description);
-            a_Writer.WriteAttributeString("KeyCode", a_Key.keyCode.ToString());
-        }
+        //                        writer.WriteStartElement("XInput");
+        //                        {
+        //                            foreach (Key<ButtonCode> key in keyConfiguration.skillButtonCodes)
+        //                            {
+        //                                writer.WriteStartElement("Skill");
+        //                                {
+        //                                    WriteKey(writer, key);
+        //                                }
+        //                                writer.WriteEndElement();
+        //                            }
+        //                            WriteAxii(writer,
+        //                                new List<Axis<ButtonCode>>
+        //                                {
+        //                                    keyConfiguration.verticalButtonAxis,
+        //                                    keyConfiguration.horizontalButtonAxis,
+        //                                });
+        //                        }
+        //                        writer.WriteEndElement();
+        //                    }
+        //                    writer.WriteEndElement();
+        //                }
+        //            }
+        //            writer.WriteEndElement();
+        //        }
+        //        writer.WriteEndDocument();
+        //    }
+        //}
+        //private static void WriteKey<TCode>(XmlWriter a_Writer, Key<TCode> a_Key)
+        //{
+        //    a_Writer.WriteAttributeString("Name", a_Key.name);
+        //    a_Writer.WriteAttributeString("Description", a_Key.description);
+        //    a_Writer.WriteAttributeString("KeyCode", a_Key.keyCode.ToString());
+        //}
 
-        private static void WriteAxis<TCode>(XmlWriter a_Writer, Axis<TCode> a_Axis)
-        {
-            a_Writer.WriteStartElement("Positive");
-            {
-                WriteKey(a_Writer, a_Axis.positive);
-            }
-            a_Writer.WriteEndElement();
-            a_Writer.WriteStartElement("Negative");
-            {
-                WriteKey(a_Writer, a_Axis.negative);
-            }
-            a_Writer.WriteEndElement();
-        }
+        //private static void WriteAxis<TCode>(XmlWriter a_Writer, Axis<TCode> a_Axis)
+        //{
+        //    a_Writer.WriteStartElement("Positive");
+        //    {
+        //        WriteKey(a_Writer, a_Axis.positive);
+        //    }
+        //    a_Writer.WriteEndElement();
+        //    a_Writer.WriteStartElement("Negative");
+        //    {
+        //        WriteKey(a_Writer, a_Axis.negative);
+        //    }
+        //    a_Writer.WriteEndElement();
+        //}
 
-        private static void WriteAxii<TCode>(XmlWriter a_Writer, List<Axis<TCode>> a_Axii)
-        {
-            foreach (Axis<TCode> axis in a_Axii)
-            {
-                a_Writer.WriteStartElement("Axis");
-                {
-                    WriteAxis(a_Writer, axis);
-                }
-                a_Writer.WriteEndElement();
-            }
-        }
+        //private static void WriteAxii<TCode>(XmlWriter a_Writer, List<Axis<TCode>> a_Axii)
+        //{
+        //    foreach (Axis<TCode> axis in a_Axii)
+        //    {
+        //        a_Writer.WriteStartElement("Axis");
+        //        {
+        //            WriteAxis(a_Writer, axis);
+        //        }
+        //        a_Writer.WriteEndElement();
+        //    }
+        //}
         #endregion
     }
 }

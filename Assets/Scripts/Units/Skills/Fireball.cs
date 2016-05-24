@@ -9,13 +9,25 @@ namespace Units.Skills
     public class Fireball : MonoBehaviour, IMovable, ICastable<IUsesSkills>
     {
         #region -- VARIABLES --
-        [SerializeField, ReadOnly]
+        [SerializeField]
         private SkillData m_SkillData;
 
         [SerializeField]
         private float m_CurrentLifetime;
         [SerializeField]
         private float m_MaxLifetime;
+        [SerializeField]
+        private float m_BaseMaxCooldown;
+        [SerializeField]
+        private float m_MaxCooldownGrowth;
+        [SerializeField]
+        private float m_BaseDamage;
+        [SerializeField]
+        private float m_DamageGrowth;
+        [SerializeField]
+        private float m_BaseCost;
+        [SerializeField]
+        private float m_CostGrowth;
 
         [SerializeField]
         private Vector3 m_TotalVelocity;
@@ -41,6 +53,36 @@ namespace Units.Skills
         {
             get { return m_SkillData; }
             set { m_SkillData = value; }
+        }
+
+        public float baseMaxCooldown
+        {
+            get { return m_BaseMaxCooldown; }
+        }
+
+        public float maxCooldownGrowth
+        {
+            get { return m_MaxCooldownGrowth;}
+        }
+
+        public float baseDamage
+        {
+            get { return m_BaseDamage;}
+        }
+
+        public float damageGrowth
+        {
+            get { return m_DamageGrowth;}
+        }
+
+        public float baseCost
+        {
+            get { return m_BaseCost;}
+        }
+
+        public float costGrowth
+        {
+            get { return m_CostGrowth; }
         }
 
         public float currentLifetime
@@ -74,7 +116,7 @@ namespace Units.Skills
         public IUsesSkills parent
         {
             get { return m_Parent; }
-            set { m_Parent = value; }
+            set { m_Parent = value; Awake(); }
         }
 
         public float speed
@@ -85,11 +127,25 @@ namespace Units.Skills
         #endregion
 
         #region -- UNITY FUNCTIONS --
+
+        private void Awake()
+        {
+            if (m_Parent == null)
+                return;
+
+            Physics.IgnoreCollision(GetComponent<Collider>(), m_Parent.gameObject.GetComponent<Collider>());
+
+            transform.position = m_Parent.gameObject.transform.position;
+
+            m_Velocity = new Vector3(
+                Mathf.Cos((m_Parent.gameObject.transform.eulerAngles.y) * (Mathf.PI / 180)) * m_Speed,
+                0,
+                Mathf.Sin(-(m_Parent.gameObject.transform.eulerAngles.y) * (Mathf.PI / 180)) * m_Speed);
+        }
         // Use this for initialization
         private void Start()
         {
-            m_OriginalRotation = transform.eulerAngles;
-            m_CurrentRotation = m_OriginalRotation;
+
         }
 
         private void FixedUpdate()
@@ -122,15 +178,10 @@ namespace Units.Skills
 
             if ((m_Velocity.x < 0.0f && m_Velocity.z < 0.0f) ||
                 (m_Velocity.x > 0.0f && m_Velocity.z < 0.0f) ||
-                (m_Velocity.x == 0.0f && m_Velocity.z < 0.0f))
+                (m_Velocity.x > 0.0f && m_Velocity.z == 0.0f))
                 rotationY += 180;
 
-            m_CurrentRotation = new Vector3(
-                m_OriginalRotation.x,
-                rotationY,
-                m_OriginalRotation.z);
-
-            transform.rotation = Quaternion.Euler(m_CurrentRotation);
+            transform.rotation = Quaternion.Euler(new Vector3(90, rotationY, 0));
         }
 
         private void OnTriggerEnter(Collider a_Collision)
