@@ -9,10 +9,25 @@ namespace UI
 {
     public class UIAnnouncer : MonoSingleton<UIAnnouncer>
     {
+        public enum AnnouncementType
+        {
+            Overhead,
+            ExperienceGained,
+            ExperienceLost,
+            HealthGained,
+            MagicDamage,
+            PhysicalDamage,
+            ManaGained,
+            ManaLost,
+            LevelUp
+        }
+
         private delegate void VoidFunction();
 
         #region -- VARIABLES --
         [Header("Prefabs")]
+        [SerializeField]
+        private FloatingText m_FloatingTextPrefab;
         [SerializeField]
         private Text m_AnnouncementTextPrefab;
         [SerializeField]
@@ -25,6 +40,10 @@ namespace UI
         private List<Text> m_LogItems;
 
         private Queue<string> m_QueuedAnnouncements;
+
+        [Header("Floating Text")]
+        [SerializeField]
+        private AnimationSequence m_FloatingTextSequence;
 
         [Header("Announcement Animation")]
         [SerializeField]
@@ -71,13 +90,17 @@ namespace UI
         }
 
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             if (Input.GetKeyDown(KeyCode.F4))
                 Announce("Test Announcement Incoming! " + Time.time);
+            if (Input.GetKeyDown(KeyCode.F5))
+                Announce(
+                    10 * Random.value,
+                    new Vector3(10 * Random.value, 0, 10 * Random.value),
+                    AnnouncementType.MagicDamage);
         }
         #endregion
-
         public void Announce(string a_Announcement)
         {
             m_QueuedAnnouncements.Enqueue(a_Announcement);
@@ -85,6 +108,40 @@ namespace UI
             if (!m_CoroutineIsRunning)
                 CreateNewAnnouncement();
         }
+
+        public void Announce(string a_Announcemnt, Vector3 a_Anchor, AnnouncementType a_Type)
+        {
+            FloatingText newObject = Instantiate(m_FloatingTextPrefab);
+            newObject.transform.SetParent(UIManager.self.transform, false);
+
+            newObject.anchor = a_Anchor;
+
+            Text newText = newObject.GetComponent<Text>();
+            newText.text = a_Announcemnt;
+
+            switch (a_Type)
+            {
+                case AnnouncementType.PhysicalDamage:
+                    newText.color = new Color(1, 0, 0);
+                    break;
+                case AnnouncementType.MagicDamage:
+                    newText.color = new Color(0, 0, 1);
+                    break;
+            }
+
+            StartCoroutine(Animations.Animate(m_FloatingTextSequence, newText));
+        }
+        public void Announce(float a_Announcemnt, Vector3 a_Anchor, AnnouncementType a_Type)
+        {
+            switch (a_Type)
+            {
+                case AnnouncementType.MagicDamage:
+                case AnnouncementType.PhysicalDamage:
+                    Announce(string.Format("-{0:0.0}", a_Announcemnt), a_Anchor, a_Type);
+                    break;
+            }
+        }
+
 
         public void DelayedAnnouncement(string a_Announcement, float a_TimeToWait)
         {

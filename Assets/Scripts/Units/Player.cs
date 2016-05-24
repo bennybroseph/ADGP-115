@@ -199,6 +199,7 @@ namespace Units
             unit.maxDefense = 3 + (2 * unit.level);
             unit.speed = 5 + (0.12f * unit.level);
 
+            UIAnnouncer.self.Announce("Level Up", transform.position, UIAnnouncer.AnnouncementType.LevelUp);
         }
         #endregion
     }
