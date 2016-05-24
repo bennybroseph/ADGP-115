@@ -64,6 +64,8 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
 
         GetComponentInChildren<Text>().text = "";
         GetComponent<Image>().sprite = m_Sprite;
+
+        OnUnitManaChanged(Event.UnitManaChanged, parent);
     }
 
     // Update is called once per frame

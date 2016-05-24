@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -44,10 +45,9 @@ MonoBehaviour:
   m_GoblinMagePrefab: {fileID: 155792, guid: d8949c9d58a2d684ea071c58cf2cc2af, type: 2}
   m_GoblinPrefab: {fileID: 121338, guid: 25615d83f1227ce4cbcfefb0ef1921d1, type: 2}
   m_WaveCounter: 0
-  m_Variance: {x: 10, y: 0, z: 0}
+  m_Variance: {x: 5, y: 0, z: 5}
   m_ManaPickupPrefab: {fileID: 113702, guid: dc8efd8c47981a846ada4fff81b980fc, type: 2}
   m_HealthPickupPrefab: {fileID: 106706, guid: 6542f39da4feb4f468a1355ba0ff2e27, type: 2}
-  m_ExpPickupPrefab: {fileID: 196750, guid: c4a2847127883dd4abf2b536de3370fd, type: 2}
 --- !u!114 &11473028
 MonoBehaviour:
   m_ObjectHideFlags: 1

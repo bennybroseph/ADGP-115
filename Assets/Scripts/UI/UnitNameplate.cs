@@ -252,7 +252,8 @@ namespace UI
 
             if (a_Bar.GetComponentInChildren<Text>() == null)
                 return;
-            a_Bar.GetComponentInChildren<Text>().text = a_CurrentValue + "/" + a_MaxValue;
+            a_Bar.GetComponentInChildren<Text>().text = 
+                Math.Ceiling(a_CurrentValue) + "/" + Math.Ceiling(a_MaxValue);
         }
         #endregion
 

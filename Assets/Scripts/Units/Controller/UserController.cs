@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
 
@@ -33,16 +34,15 @@ namespace Units.Controller
             {
                 controlable.gameObject.GetComponent<Rigidbody>().velocity = (controlable.velocity + controlable.totalVelocity);
 
-
                 if (controlable.velocity != Vector3.zero &&
-                    (controlable.isMoving == Moving.nowhere)) //||
-                                                              //#if !UNITY_WEBGL
-                                                              //                       (GameManager.self.GetStickValue(i, GameManager.Stick.Left).X == 0.0f &&
-                                                              //                        GameManager.self.GetStickValue(i, GameManager.Stick.Left).Y == 0.0f)))
-                                                              //#else
-                                                              //                    (Input.GetAxisRaw("Horizontal") == 0.0f &&
-                                                              //                    Input.GetAxisRaw("Vertical") == 0.0f)))
-                                                              //#endif
+                    (controlable.isMoving == Moving.nowhere) &&
+#if !UNITY_WEBGL
+                    (GameManager.self.GetStickValue(i, GameManager.Stick.Left).X == 0.0f &&
+                     GameManager.self.GetStickValue(i, GameManager.Stick.Left).Y == 0.0f))
+#else
+                    (Input.GetAxisRaw("Horizontal") == 0.0f &&
+                     Input.GetAxisRaw("Vertical") == 0.0f))
+#endif
                 {
                     controlable.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 }
@@ -65,7 +65,7 @@ namespace Units.Controller
                     Moving dPad = Moving.nowhere;
 #if !UNITY_WEBGL
                     dPad.forward = GameManager.self.GetButtonState(
-                        i, 
+                        i,
                         KeyConfiguration.self.userConfigurations[i].verticalButtonAxis.positive.keyCode);
                     dPad.back = GameManager.self.GetButtonState(
                         i,
@@ -107,7 +107,7 @@ namespace Units.Controller
                             (controlable.velocity.x > 0.0f && controlable.velocity.z < 0.0f) ||
                             (controlable.velocity.x == 0.0f && controlable.velocity.z < 0.0f))
                             angle += Mathf.PI;
-                        
+
                         controlable.velocity = new Vector3(
                             controlable.speed * Mathf.Cos(angle),
                             0,
@@ -115,9 +115,27 @@ namespace Units.Controller
                     }
 
                     Vector2 leftStick;
+                    Vector2 rightStick;
 #if !UNITY_WEBGL
                     leftStick.x = GameManager.self.GetStickValue(i, GameManager.Stick.Left).X;
                     leftStick.y = GameManager.self.GetStickValue(i, GameManager.Stick.Left).Y;
+
+                    rightStick.x = GameManager.self.GetStickValue(i, GameManager.Stick.Right).X;
+                    rightStick.y = GameManager.self.GetStickValue(i, GameManager.Stick.Right).Y;
+
+                    if (rightStick.x != 0.0f ||
+                        rightStick.y != 0.0f)
+                    {
+                        float rotationY = -(Mathf.Atan(rightStick.y / rightStick.x) * (180 / Mathf.PI));
+                        
+                        if ((rightStick.x < 0.0f && rightStick.y > 0.0f) ||
+                            (rightStick.x < 0.0f && rightStick.y < 0.0f) ||
+                            (rightStick.x < 0.0f && rightStick.y == 0.0f))
+                            rotationY += 180;
+
+                        controlable.transform.rotation = Quaternion.Euler(
+                            new Vector3(0, rotationY, 0));
+                    }
 #else
                     leftStick.x = Input.GetAxisRaw("Horizontal");
                     leftStick.y = Input.GetAxisRaw("Vertical");
@@ -136,7 +154,7 @@ namespace Units.Controller
                 bool[] isPressed =
                 {
                     GameManager.self.GetButtonState(
-                        i, 
+                        i,
                         KeyConfiguration.self.userConfigurations[i].skillButtonCodes[0].keyCode),
                     GameManager.self.GetButtonState(
                         i,

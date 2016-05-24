@@ -1,14 +1,7 @@
 ﻿// Unit class used for storing Player Data.
-using System.Collections.Generic;
 using Interfaces;
 using UI;
 using UnityEngine;
-
-using Library;
-using Units.Controller;
-using Units.Skills;
-
-using Event = Define.Event;
 
 namespace Units
 {
@@ -16,21 +9,11 @@ namespace Units
     public class Player : Unit, IChildable<UIManager>
     {
         #region -- VARIABLES --
-        // Private member variables
-        [SerializeField]
-        private UnitNameplate m_Nameplate;
-
         [SerializeField]
         private UIManager m_Parent;
-
-        [SerializeField]
-        private Vector3 m_CurrentRotation;
-        [SerializeField]
-        private Vector3 m_OriginalRotation;
         #endregion
 
         #region -- PROPERTIES --
-        // Mana/Currency int property
         public UIManager parent
         {
             get { return m_Parent; }
@@ -39,171 +22,43 @@ namespace Units
         #endregion
 
         #region -- UNITY FUNCTIONS --
-        private void Awake()
+        // protected override void Awake() { base.Awake(); }
+
+        protected override void Start()
         {
-            if (m_Nameplate != null)
-            {
-                UnitNameplate nameplate = Instantiate(m_Nameplate);
-                nameplate.parent = this;
-            }
-
-            if (m_Skills == null)
-                m_Skills = new List<Skill>();
-            else
-                for (int i = 0; i < m_Skills.Count; i++)
-                {
-                    m_Skills[i].skillIndex = i;
-                    m_Skills[i].parent = this;
-                }
-
-            m_OriginalRotation = transform.eulerAngles;
-            m_CurrentRotation = m_OriginalRotation;
-
-            m_Level = 1;
-            m_Health = m_MaxHealth;
-            m_Mana = m_MaxMana;
-            m_Defense = m_MaxDefense;
-
-            GetComponent<NavMeshAgent>().updateRotation = false;
-
-            SetController();
-
-            m_DamageFSM = new FiniteStateMachine<DamageState>();
-
-            m_DamageFSM.AddTransition(DamageState.Init, DamageState.Idle);
-            m_DamageFSM.AddTransitionFromAny(DamageState.Dead);
-
-            m_MovementFSM.Transition(MovementState.Idle);
-
-            m_DamageFSM.Transition(DamageState.Idle);
-
-            Publisher.self.Subscribe(Event.UseSkill, OnUseSkill);
-            Publisher.self.Subscribe(Event.UnitLevelUp, OnLevelUp);
-        }
-
-        private void Start()
-        {
-            Publisher.self.Broadcast(Event.UnitInitialized, this);
+            base.Start();
 
             UIAnnouncer.self.DelayedAnnouncement(m_UnitNickname + " has entered the arena!", 1.0f);
         }
 
-        private void Update()
+        // protected override void Update() { base.Update(); }
+        protected override void LateUpdate()
         {
-            foreach (Skill skill in m_Skills)
-                skill.UpdateCooldown();
-
-            if (m_Health <= 0.0f)
-                Destroy(gameObject);
-        }
-
-        public void LateUpdate()
-        {
+            base.LateUpdate();
             SetRotation();
-            SetMovementFSM();
         }
-
-        private void OnDestroy()
-        {
-            m_Controller.UnRegister(this);
-            Publisher.self.UnSubscribe(Event.UseSkill, OnUseSkill);
-            Publisher.self.UnSubscribe(Event.UnitLevelUp, OnLevelUp);
-            Publisher.self.Broadcast(Event.UnitDied, this);
-        }
+        // protected override void OnDestroy() { base.OnDestroy(); }
         #endregion
-
-        #region -- OTHER PRIVATE FUNCTIONS --
-        private void SetController()
-        {
-            m_MovementFSM = new FiniteStateMachine<MovementState>();
-
-            switch (m_ControllerType)
-            {
-                default:
-                    m_Controller = UserController.self;
-                    m_CanMoveWithInput = true;
-                    m_Controller.Register(this);
-                    break;
-            }
-        }
 
         private void SetRotation()
         {
             if (m_Velocity == Vector3.zero)
                 return;
 
-            float rotationY = (Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180.0f / Mathf.PI)) - 90;
+            float rotationY = Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180.0f / Mathf.PI) - 90;
 
             if ((m_Velocity.x < 0.0f && m_Velocity.z < 0.0f) ||
                 (m_Velocity.x > 0.0f && m_Velocity.z < 0.0f) ||
                 (m_Velocity.x == 0.0f && m_Velocity.z < 0.0f))
                 rotationY += 180;
 
-            m_CurrentRotation = new Vector3(
-                m_OriginalRotation.x,
-                rotationY,
-                m_OriginalRotation.z);
-
-            transform.rotation = Quaternion.Euler(m_CurrentRotation);
-        }
-
-        private void SetMovementFSM()
-        {
-            if (m_Velocity == Vector3.zero)
-                m_MovementFSM.Transition(MovementState.Idle);
-            else
-                m_MovementFSM.Transition(MovementState.Walking);
-
-            if (m_Velocity.magnitude >= m_Speed / 2.0f)
-                m_MovementFSM.Transition(MovementState.Running);
-        }
-
-        private void OnUseSkill(Event a_Event, params object[] a_Params)
-        {
-            IUsesSkills unit = a_Params[0] as IUsesSkills;
-            int skillIndex = (int)a_Params[1];
-
-            if (unit.GetHashCode() != GetHashCode() ||
-                m_Skills.Count <= skillIndex ||
-                !(m_Skills[skillIndex].remainingCooldown <= 0.0f) ||
-                !(m_Skills[skillIndex].skillData.cost <= m_Mana))
-                return;
-
-            GameObject newObject = Instantiate(m_Skills[skillIndex].skillPrefab);
-
-            Physics.IgnoreCollision(GetComponent<Collider>(), newObject.GetComponent<Collider>());
-
-            newObject.transform.position = transform.position;
-            newObject.GetComponent<IChildable<IUsesSkills>>().parent = this;
-
-            newObject.GetComponent<IMovable>().velocity = new Vector3(
-                Mathf.Cos((-m_CurrentRotation.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed,
+            Vector3 rotation = new Vector3(
                 0,
-                Mathf.Sin((-m_CurrentRotation.y) * (Mathf.PI / 180)) * newObject.GetComponent<IMovable>().speed);
+                rotationY,
+                0);
 
-            newObject.GetComponent<ICastable<IUsesSkills>>().skillData = m_Skills[skillIndex].skillData;
-
-            mana -= m_Skills[skillIndex].skillData.cost;
-
-            m_Skills[skillIndex].PutOnCooldown();
+            transform.rotation = Quaternion.Euler(rotation);
         }
-
-        private void OnLevelUp(Event a_Event, params object[] a_Params)
-        {
-            Unit unit = a_Params[0] as Unit;
-
-            unit.level = (int)Mathf.Sqrt((int)unit.experience);
-
-            unit.maxHealth = 10 + (5 * unit.level);
-            unit.maxMana = 5 + (3 * unit.level);
-            unit.maxDefense = 3 + (2 * unit.level);
-            unit.speed = 5 + (0.12f * unit.level);
-
-            UIAnnouncer.self.Announce("Level Up", transform.position, UIAnnouncer.AnnouncementType.LevelUp);
-        }
-        #endregion
     }
-
-
 }
 
