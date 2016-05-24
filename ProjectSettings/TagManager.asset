@@ -26,6 +26,7 @@ TagManager:
   - ManaPickup
   - Enemy
   - Background UI
+  - Options Menu
   layers:
   - Default
   - TransparentFX
