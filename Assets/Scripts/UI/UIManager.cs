@@ -38,11 +38,15 @@ namespace UI
         [SerializeField]
         private RectTransform m_GameOverMenu;
         [SerializeField]
+        private RectTransform m_OptionsMenu;
+        [SerializeField]
         private Button m_NewGame;
         [SerializeField]
         private Button m_LoadGame;
         [SerializeField]
         private Button m_Instructions;
+        [SerializeField]
+        private Button m_Options;
         [SerializeField]
         private Button m_QuitGame;
         [SerializeField]
@@ -66,10 +70,12 @@ namespace UI
             GetComponents();
 
             Publisher.self.Subscribe(Event.Instructions, OnInstructions);
+            Publisher.self.Subscribe(Event.Options, OnOptions);
             Publisher.self.Subscribe(Event.ToggleQuitMenu, OnToggleQuitMenu);
             Publisher.self.Subscribe(Event.SpawnWave, OnSpawnWave);
             Publisher.self.Subscribe(Event.MainMenu, OnMainMenu);
             Publisher.self.Subscribe(Event.GameOver, OnGameOver);
+            
 
             if (m_SkillButtonPrefab != null)
                 Publisher.self.Subscribe(Event.UnitInitialized, OnUnitInitialized);
@@ -133,6 +139,7 @@ namespace UI
             base.OnDestroy();
 
             Publisher.self.UnSubscribe(Event.Instructions, OnInstructions);
+            Publisher.self.UnSubscribe(Event.Options, OnOptions);
             Publisher.self.UnSubscribe(Event.ToggleQuitMenu, OnToggleQuitMenu);
             Publisher.self.UnSubscribe(Event.SpawnWave, OnSpawnWave);
             Publisher.self.UnSubscribe(Event.MainMenu, OnMainMenu);
@@ -187,7 +194,7 @@ namespace UI
 
                             quitButton.onClick.AddListener(OnQuitGameClick);
                             resumeButton.onClick.AddListener(OnResumeClick);
-                            optionButton.onClick.AddListener(OnOptionClick);
+                            optionButton.onClick.AddListener(OnOptionsClick);
 
                             m_QuitMenu.gameObject.SetActive(false);
                         }
@@ -209,6 +216,35 @@ namespace UI
                             closeButton.onClick.AddListener(OnInstructionsCloseClick);
 
                             m_InstructionMenu.gameObject.SetActive(false);
+                        }
+                        break;
+                    case "Options Menu":
+                        {
+                            if (m_OptionsMenu== null)
+                                m_OptionsMenu = child.GetComponent<RectTransform>();
+                            if (m_OptionsMenu == null)
+                            {
+                                //Displays a debug log warning detecting if the "Op" tag is missing.
+                                Debug.LogWarning("UIManager is missing an object with the 'Options Menu' tag parented to it");
+                                continue;
+                            }
+
+                            Button closeButton = m_OptionsMenu.GetComponentsInChildren<Button>()[0];
+                            Button resumeButton = m_OptionsMenu.GetComponentsInChildren<Button>()[1];
+                            Button instructionsButton = m_OptionsMenu.GetComponentsInChildren<Button>()[2];
+                            Button mainmenuButton = m_OptionsMenu.GetComponentsInChildren<Button>()[3];
+                            Button quitButton = m_OptionsMenu.GetComponentsInChildren<Button>()[4];
+
+
+
+                            closeButton.onClick.AddListener(OnOptionsCloseClick);
+                            resumeButton.onClick.AddListener(OnResumeClick);
+                            instructionsButton.onClick.AddListener(OnInstructionsClick);
+                            mainmenuButton.onClick.AddListener(OnMainMenuClick);
+                            quitButton.onClick.AddListener(OnQuitGameClick);
+
+
+                            m_OptionsMenu.gameObject.SetActive(false);
                         }
                         break;
                     //Case 'Game Over Menu' tag
@@ -278,6 +314,19 @@ namespace UI
                             m_Instructions.onClick.AddListener(OnInstructionsClick);
                         }
                         break;
+                    case "Options":
+                    {
+                        if (m_Options == null)
+                            m_Options = child.GetComponent<Button>();
+                        if (m_Options == null)
+                        {
+                            Debug.LogWarning("UIManger is missing an object with the 'Options' tag parented to it");
+                        }
+
+                        m_Options.onClick.AddListener(OnOptionsClick);
+
+                    }
+                        break;
                     //Case 'Quit Game' tag
                     case "Quit Game":
                         {
@@ -322,14 +371,29 @@ namespace UI
             m_InstructionMenu.gameObject.SetActive(true);
         }
 
+        private void OnOptions(Event a_Event, params object[] a_Params)
+        {
+            m_OptionsMenu.gameObject.SetActive(true);
+        }
+
         public void OnInstructionsClick()
         {
             Publisher.self.Broadcast(Event.Instructions);
         }
 
+        public void OnOptionsClick()
+        {
+            Publisher.self.Broadcast(Event.Options);
+        }
+
         public void OnInstructionsCloseClick()
         {
             m_InstructionMenu.gameObject.SetActive(false);
+        }
+
+        public void OnOptionsCloseClick()
+        {
+            m_OptionsMenu.gameObject.SetActive(false);
         }
 
         public void OnResumeClick()
