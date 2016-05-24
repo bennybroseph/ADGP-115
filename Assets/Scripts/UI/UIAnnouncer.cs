@@ -125,7 +125,7 @@ namespace UI
         public void Chat(string a_Nickname, string a_Message, Vector3 a_Position, ChatType a_ChatType = ChatType.Say)
         {
             Text newLogItem = Instantiate(m_LogTextPrefab);
-            newLogItem.transform.SetParent(UIManager.self.transform, false);
+            newLogItem.transform.SetParent(UIManager.self.backgroundUI.transform, false);
 
             switch (a_ChatType)
             {
@@ -169,7 +169,7 @@ namespace UI
         private void CreateFloatingText(string a_Message, Color a_Color, Vector3 a_Anchor)
         {
             FloatingText newObject = Instantiate(m_FloatingTextPrefab);
-            newObject.transform.SetParent(UIManager.self.transform, false);
+            newObject.transform.SetParent(UIManager.self.backgroundUI.transform, false);
 
             newObject.anchor = a_Anchor;
 
@@ -183,7 +183,7 @@ namespace UI
         private void CreateNewAnnouncement()
         {
             m_CurrentAnnouncementObject = Instantiate(m_AnnouncementTextPrefab);
-            m_CurrentAnnouncementObject.transform.SetParent(UIManager.self.transform, false);
+            m_CurrentAnnouncementObject.transform.SetParent(UIManager.self.backgroundUI.transform, false);
 
             m_CurrentAnnouncementObject.text = m_QueuedAnnouncements.Dequeue();
 
@@ -217,7 +217,7 @@ namespace UI
             yield return StartCoroutine(Animations.Animate(m_AnnouncementSequence, m_CurrentAnnouncementObject));
 
             Text newLogItem = Instantiate(m_LogTextPrefab);
-            newLogItem.transform.SetParent(UIManager.self.transform, false);
+            newLogItem.transform.SetParent(UIManager.self.backgroundUI.transform, false);
             newLogItem.text = m_CurrentAnnouncementObject.text;
 
             Destroy(m_CurrentAnnouncementObject.gameObject);

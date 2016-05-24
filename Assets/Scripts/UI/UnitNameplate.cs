@@ -69,7 +69,7 @@ namespace UI
             if (!gameObject.activeInHierarchy)
                 gameObject.SetActive(true);
 
-            transform.SetParent(UIManager.self.transform, false);
+            transform.SetParent(UIManager.self.backgroundUI.transform, false);
 
             transform.SetAsFirstSibling();
 
