@@ -25,6 +25,7 @@ TagManager:
   - HealthPickup
   - ManaPickup
   - Enemy
+  - Background UI
   layers:
   - Default
   - TransparentFX
