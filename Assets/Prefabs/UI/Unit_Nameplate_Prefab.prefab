@@ -345,7 +345,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 920dd1c6cfdd6894fbba6ae1a7e5fcba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Offset: {x: 0, y: 0, z: -1.75}
+  m_Offset: {x: 0, y: 0, z: -3}
   m_BarAnimationCurve:
     serializedVersion: 2
     m_Curve:
@@ -362,62 +362,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  m_DamageAnimationSequence:
-    animationLayers:
-    - delayTime: 0
-      animationDataList:
-      - animationType: 0
-        animationCurves:
-        - serializedVersion: 2
-          m_Curve:
-          - time: 0
-            value: 0
-            inSlope: 1.3333334
-            outSlope: 1.3333334
-            tangentMode: 10
-          - time: 0.75
-            value: 1
-            inSlope: 1.3333334
-            outSlope: 1.3333334
-            tangentMode: 10
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 0
-      - animationType: 1
-        animationCurves:
-        - serializedVersion: 2
-          m_Curve:
-          - time: 0
-            value: 0
-            inSlope: 1
-            outSlope: 1
-            tangentMode: 10
-          - time: 1.5
-            value: 1.5
-            inSlope: 1
-            outSlope: 1
-            tangentMode: 10
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 0
-      - animationType: 0
-        animationCurves:
-        - serializedVersion: 2
-          m_Curve:
-          - time: 1.25
-            value: 1
-            inSlope: -4
-            outSlope: -4
-            tangentMode: 10
-          - time: 1.5
-            value: 0
-            inSlope: -4
-            outSlope: -4
-            tangentMode: 10
-          m_PreInfinity: 2
-          m_PostInfinity: 2
-          m_RotationOrder: 0
-  m_DamageTextPrefab: {fileID: 22391988, guid: 462a64f3fc4b48c40a4c046d91fe14e4, type: 2}
   m_NameText: {fileID: 0}
   m_LevelText: {fileID: 0}
   m_HealthBar: {fileID: 0}
@@ -650,6 +594,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22435388}
   - {fileID: 22445230}
@@ -675,6 +620,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22404936}
   m_RootOrder: 0
@@ -692,6 +638,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22404936}
   m_RootOrder: 1
@@ -709,6 +656,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22474776}
   m_RootOrder: 0
@@ -726,6 +674,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22404936}
   m_RootOrder: 6
@@ -743,6 +692,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22404936}
   m_RootOrder: 2
@@ -760,6 +710,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22404936}
   m_RootOrder: 5
@@ -777,6 +728,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22496046}
   m_RootOrder: 0
@@ -794,6 +746,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22451496}
   m_Father: {fileID: 22404936}
@@ -812,6 +765,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22404936}
   m_RootOrder: 3
@@ -829,6 +783,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22467976}
   m_Father: {fileID: 22404936}

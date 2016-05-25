@@ -63,7 +63,7 @@ public class Melee : BaseSkills
 
     private void SetPosition()
     {
-        transform.position = new Vector3(
+        transform.localPosition = new Vector3(
             Mathf.Cos(transform.eulerAngles.y * (Mathf.PI / 180)) * -0.5f,
             0,
             Mathf.Sin(-transform.eulerAngles.y * (Mathf.PI / 180)) * -0.5f);
