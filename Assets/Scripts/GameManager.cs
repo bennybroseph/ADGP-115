@@ -97,6 +97,12 @@ public class GameManager : MonoSingleton<GameManager>
 
     #region -- PUBLIC FUNCTIONS --
 #if !UNITY_WEBGL
+    public enum Stick
+    {
+        Left,
+        Right,
+    };
+
     public bool GetButtonState(int a_Index, ButtonCode a_Button)
     {
         if (m_PlayerIndices.Count <= a_Index)
@@ -140,12 +146,6 @@ public class GameManager : MonoSingleton<GameManager>
                 return false;
         }
     }
-
-    public enum Stick
-    {
-        Left,
-        Right,
-    };
 
     public GamePadThumbSticks.StickValue GetStickValue(int a_Index, Stick a_Stick)
     {

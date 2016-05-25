@@ -50,6 +50,8 @@ namespace UI
         [Header("Floating Text")]
         [SerializeField]
         private AnimationSequence m_FloatingTextSequence;
+        [SerializeField]
+        private AnimationSequence m_ChatSequence;
 
         [Header("Announcement Animation")]
         [SerializeField]
@@ -139,7 +141,7 @@ namespace UI
                     break;
             }
 
-            CreateFloatingText(a_Message, newLogItem.color, a_Position);
+            CreateFloatingText(a_Message, newLogItem.color, a_Position, true);
             StartCoroutine(AnimateToLog(newLogItem));
         }
 
@@ -148,6 +150,7 @@ namespace UI
             switch (a_Type)
             {
                 case FloatingTextType.Overhead:
+                    a_Anchor.z += 0.5f;
                     CreateFloatingText(a_Message, Color.black, a_Anchor);
                     break;
                 case FloatingTextType.PhysicalDamage:
@@ -169,7 +172,7 @@ namespace UI
             }
         }
 
-        private void CreateFloatingText(string a_Message, Color a_Color, Vector3 a_Anchor)
+        private void CreateFloatingText(string a_Message, Color a_Color, Vector3 a_Anchor, bool a_IsChat = false)
         {
             FloatingText newObject = Instantiate(m_FloatingTextPrefab);
             newObject.transform.SetParent(UIManager.self.backgroundUI.transform, false);
@@ -180,7 +183,10 @@ namespace UI
             newText.text = a_Message;
             newText.color = a_Color;
 
-            StartCoroutine(Animations.Animate(m_FloatingTextSequence, newText));
+            StartCoroutine(
+                a_IsChat
+                    ? Animations.Animate(m_ChatSequence, newText)
+                    : Animations.Animate(m_FloatingTextSequence, newText));
         }
 
         private void CreateNewAnnouncement()

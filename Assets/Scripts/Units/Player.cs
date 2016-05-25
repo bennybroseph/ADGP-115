@@ -28,8 +28,8 @@ namespace Units
         {
             base.Start();
 
-            UIAnnouncer.self.DelayedAnnouncement(m_UnitNickname + ", Pick a skill bellow!", 1.0f);
-            UIAnnouncer.self.DelayedAnnouncement(m_UnitNickname + " has entered the arena!", 1.0f);
+            UIAnnouncer.self.DelayedAnnouncement(m_UnitNickname + ", Pick a skill below!", 1.0f);
+            UIAnnouncer.self.DelayedAnnouncement(m_UnitNickname + " has entered the arena!", 1.5f);
         }
 
         // protected override void Update() { base.Update(); }
