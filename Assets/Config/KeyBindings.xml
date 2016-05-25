@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ArrayOfUserConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <UserConfiguration>
-    <skillKeyCodes>
+    <pauseKey>
+      <name>Pause</name>
+      <description>Pause Key</description>
+      <keyCode>P</keyCode>
+    </pauseKey>
+    <pauseButton>
+      <name>Pause</name>
+      <description>Pause Controller Button</description>
+      <keyCode>Start</keyCode>
+    </pauseButton>
+    <skillKeys>
       <KeyOfKeyCode>
         <name>Skill 1</name>
         <description>First Skill</description>
@@ -12,8 +22,8 @@
         <description>Second Skill</description>
         <keyCode>E</keyCode>
       </KeyOfKeyCode>
-    </skillKeyCodes>
-    <skillButtonCodes>
+    </skillKeys>
+    <skillButtons>
       <KeyOfButtonCode>
         <name>Skill 1</name>
         <description>First Skill</description>
@@ -24,7 +34,12 @@
         <description>First Skill</description>
         <keyCode>A</keyCode>
       </KeyOfButtonCode>
-    </skillButtonCodes>
+    </skillButtons>
+    <strafeKey>
+      <name>Strafe</name>
+      <description>Strafe Key</description>
+      <keyCode>LeftShift</keyCode>
+    </strafeKey>
     <verticalKeyAxis>
       <positive>
         <name>Up</name>
@@ -75,7 +90,17 @@
     </horizontalButtonAxis>
   </UserConfiguration>
   <UserConfiguration>
-    <skillKeyCodes>
+    <pauseKey>
+      <name>Pause</name>
+      <description>Pause Key</description>
+      <keyCode>None</keyCode>
+    </pauseKey>
+    <pauseButton>
+      <name>Pause</name>
+      <description>Pause Controller Button</description>
+      <keyCode>Start</keyCode>
+    </pauseButton>
+    <skillKeys>
       <KeyOfKeyCode>
         <name>Skill 1</name>
         <description>First SKill</description>
@@ -86,8 +111,8 @@
         <description>Second SKill</description>
         <keyCode>Keypad0</keyCode>
       </KeyOfKeyCode>
-    </skillKeyCodes>
-    <skillButtonCodes>
+    </skillKeys>
+    <skillButtons>
       <KeyOfButtonCode>
         <name>Skill 1</name>
         <description>First Skill</description>
@@ -98,7 +123,12 @@
         <description>First Skill</description>
         <keyCode>A</keyCode>
       </KeyOfButtonCode>
-    </skillButtonCodes>
+    </skillButtons>
+    <strafeKey>
+      <name>Strafe</name>
+      <description>Strafe Key</description>
+      <keyCode>RightShift</keyCode>
+    </strafeKey>
     <verticalKeyAxis>
       <positive>
         <name>Up</name>
