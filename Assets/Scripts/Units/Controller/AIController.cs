@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Interfaces;
 using Library;
@@ -165,31 +166,8 @@ namespace Units.Controller
                 m_SpawnPoints.Add(spawnPoint3);
             }
 
-            foreach (Vector3 spawnPoint in m_SpawnPoints)
-            {
-                for (int i = 0; i < m_WaveCounter; i++)
-                {
-                    float x = Random.Range(-m_Variance.x, m_Variance.x);
-                    float z = Random.Range(-m_Variance.z, m_Variance.z);
+            StartCoroutine(Spawn());
 
-                    GameObject goblin = Instantiate(m_GoblinPrefab);
-                    goblin.transform.position = new Vector3(
-                        spawnPoint.x + x,
-                        spawnPoint.y,
-                        spawnPoint.z + z);
-
-                    GameObject goblinMage = Instantiate(m_GoblinMagePrefab);
-                    goblinMage.transform.position = new Vector3(
-                        spawnPoint.x + x,
-                        spawnPoint.y,
-                        spawnPoint.z + z);
-
-                    m_Enemies.Add(goblinMage.GetComponent<IStats>());
-                    m_Enemies.Add(goblin.GetComponent<IStats>());
-                }
-
-
-            }
             Publisher.self.Broadcast(Event.SpawnWave, m_WaveCounter);
 
         }
@@ -211,6 +189,39 @@ namespace Units.Controller
                 return;
 
             m_Enemies.Remove(unit);
+        }
+
+        private IEnumerator Spawn()
+        {
+
+            foreach (Vector3 spawnPoint in m_SpawnPoints)
+            {
+                for (int i = 0; i < m_WaveCounter; i++)
+                {
+                    float x = Random.Range(-m_Variance.x, m_Variance.x);
+                    float z = Random.Range(-m_Variance.z, m_Variance.z);
+
+                    GameObject goblin = Instantiate(m_GoblinPrefab);
+
+                    goblin.transform.position = new Vector3(
+                        spawnPoint.x + x,
+                        spawnPoint.y,
+                        spawnPoint.z + z);
+
+                    GameObject goblinMage = Instantiate(m_GoblinMagePrefab);
+                    goblinMage.transform.position = new Vector3(
+                        spawnPoint.x + x,
+                        spawnPoint.y,
+                        spawnPoint.z + z);
+
+                    m_Enemies.Add(goblinMage.GetComponent<IStats>());
+                    m_Enemies.Add(goblin.GetComponent<IStats>());
+                    yield return null;
+                }
+
+
+            }
+          
         }
     }
 }
