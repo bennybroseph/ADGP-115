@@ -41,9 +41,10 @@ public class AnimationSequence
     public void CacheAnimationTime()
     {
         totalAnimationTime = 0f;
+
         foreach (AnimationLayer animationLayer in animationLayers)
         {
-            totalAnimationTime += Animations.GetEndTime(animationLayer.animationDataList);
+            totalAnimationTime += Animations.GetEndTime(animationLayer.animationDataList) + animationLayer.delayTime;
         }
     }
 }
@@ -55,7 +56,53 @@ public static class Animations
         AnimationSequence a_AnimationSequence,
         TObject a_Object) where TObject : Graphic
     {
-        //yield return new WaitForEndOfFrame();
+        Vector3 originalPosition = a_Object.transform.position;
+        foreach (AnimationData animationData in a_AnimationSequence.animationLayers[0].animationDataList)
+        {
+            while (animationData.animationCurves.Count < 2)
+                animationData.animationCurves.Add(animationData.animationCurves[0]);
+
+            switch (animationData.animationType)
+            {
+                case AnimationType.Fade:
+                    {
+                        a_Object.color = new Color(
+                            a_Object.color.r,
+                            a_Object.color.g,
+                            a_Object.color.b,
+                            animationData.animationCurves[0].Evaluate(
+                                animationData.animationCurves[0].keys[0].time));
+                    }
+                    break;
+                case AnimationType.Scale:
+                    {
+                        a_Object.transform.localScale = new Vector3(
+                            animationData.animationCurves[0].Evaluate(
+                                animationData.animationCurves[0].keys[0].time),
+                            animationData.animationCurves[1].Evaluate(
+                                animationData.animationCurves[1].keys[0].time));
+                    }
+                    break;
+                case AnimationType.Rotate:
+                    {
+                        a_Object.transform.eulerAngles = new Vector3(
+                            animationData.animationCurves[0].Evaluate(
+                                animationData.animationCurves[0].keys[0].time) * 360,
+                            animationData.animationCurves[1].Evaluate(
+                                animationData.animationCurves[1].keys[0].time) * 360);
+                    }
+                    break;
+                case AnimationType.Translate:
+                    {
+                        a_Object.transform.position = new Vector3(
+                            originalPosition.x
+                            + animationData.animationCurves[0].Evaluate(animationData.animationCurves[0].keys[0].time),
+                            originalPosition.y
+                            + animationData.animationCurves[1].Evaluate(animationData.animationCurves[1].keys[0].time));
+                    }
+                    break;
+            }
+        }
         foreach (AnimationLayer animationLayer in a_AnimationSequence.animationLayers)
         {
             yield return new WaitForSeconds(animationLayer.delayTime);
@@ -78,9 +125,6 @@ public static class Animations
             deltaTime += Time.deltaTime;
             foreach (AnimationData animationData in a_AnimationLayer.animationDataList)
             {
-                while (animationData.animationCurves.Count < 2)
-                    animationData.animationCurves.Add(animationData.animationCurves[0]);
-
                 switch (animationData.animationType)
                 {
                     case AnimationType.Fade:
@@ -106,7 +150,6 @@ public static class Animations
                             if (animationData.animationCurves[0][0].time <= deltaTime)
                                 a_Object.transform.eulerAngles = new Vector3(
                                     animationData.animationCurves[0].Evaluate(deltaTime) * 360,
-                                    a_Object.transform.eulerAngles.y,
                                     animationData.animationCurves[1].Evaluate(deltaTime) * 360);
                         }
                         break;
@@ -115,7 +158,7 @@ public static class Animations
                             if (animationData.animationCurves[0][0].time <= deltaTime)
                                 a_Object.transform.position = new Vector3(
                                     originalPosition.x + animationData.animationCurves[0].Evaluate(deltaTime),
-                                    originalPosition.y + animationData.animationCurves[0].Evaluate(deltaTime));
+                                    originalPosition.y + animationData.animationCurves[1].Evaluate(deltaTime));
                         }
                         break;
                     default:
