@@ -395,6 +395,7 @@ GameObject:
   - 224: {fileID: 22499684}
   - 222: {fileID: 22264042}
   - 114: {fileID: 11459554}
+  - 114: {fileID: 11408638}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -807,6 +808,18 @@ MonoBehaviour:
   m_Text: 'Instructions
 
 '
+--- !u!114 &11408638
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 153624}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b604fd68fb421c4bbd114e057f91017, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InstructionsText: {fileID: 11459554}
 --- !u!114 &11408976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1756,10 +1769,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: " Instructions:\n \n Controls:\n Esc - Pauses Game and Opens Quit Menu\n
-    Spawn Wave - Spawns next wave\n Skill 1 - Activate Skill \n Skill 2 - Activate
-    Skill\n Q - Activate Skill 1\n E - Activate Skill 2\n\n Upgrade:\n \"+\" - Allows
-    upgrade of specific skill\n (Only available when able to level up)\n"
+  m_Text: 
 --- !u!114 &11459900
 MonoBehaviour:
   m_ObjectHideFlags: 1
