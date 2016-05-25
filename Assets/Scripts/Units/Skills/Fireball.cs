@@ -6,95 +6,16 @@ using Event = Define.Event;
 
 namespace Units.Skills
 {
-    public class Fireball : MonoBehaviour, IMovable, ICastable<IUsesSkills>
+    public class Fireball : BaseSkills, IMovable
     {
         #region -- VARIABLES --
-        [SerializeField]
-        private SkillData m_SkillData;
-
-        [SerializeField]
-        private float m_CurrentLifetime;
-        [SerializeField]
-        private float m_MaxLifetime;
-        [SerializeField]
-        private float m_BaseMaxCooldown;
-        [SerializeField]
-        private float m_MaxCooldownGrowth;
-        [SerializeField]
-        private float m_BaseDamage;
-        [SerializeField]
-        private float m_DamageGrowth;
-        [SerializeField]
-        private float m_BaseCost;
-        [SerializeField]
-        private float m_CostGrowth;
-
-        [SerializeField]
         private Vector3 m_TotalVelocity;
-        [SerializeField]
         private Vector3 m_Velocity;
         [SerializeField]
         private float m_Speed;
-
-        [SerializeField]
-        private Moving m_IsMoving;
-
-        [SerializeField]
-        private IUsesSkills m_Parent;
-
-        [SerializeField]
-        private Vector3 m_CurrentRotation;
-        [SerializeField]
-        private Vector3 m_OriginalRotation;
         #endregion
 
         #region -- PROPERTIES --
-        public SkillData skillData
-        {
-            get { return m_SkillData; }
-            set { m_SkillData = value; }
-        }
-
-        public float baseMaxCooldown
-        {
-            get { return m_BaseMaxCooldown; }
-        }
-
-        public float maxCooldownGrowth
-        {
-            get { return m_MaxCooldownGrowth;}
-        }
-
-        public float baseDamage
-        {
-            get { return m_BaseDamage;}
-        }
-
-        public float damageGrowth
-        {
-            get { return m_DamageGrowth;}
-        }
-
-        public float baseCost
-        {
-            get { return m_BaseCost;}
-        }
-
-        public float costGrowth
-        {
-            get { return m_CostGrowth; }
-        }
-
-        public float currentLifetime
-        {
-            get { return m_CurrentLifetime; }
-        }
-        public float maxLifetime
-        {
-            get { return m_MaxLifetime; }
-            set { m_MaxLifetime = value; }
-        }
-
         public Vector3 totalVelocity
         {
             get { return m_TotalVelocity; }
@@ -106,19 +27,6 @@ namespace Units.Skills
             set { m_Velocity = value; }
         }
 
-        public Moving isMoving
-        {
-            get { return m_IsMoving; }
-            set { m_IsMoving = value; }
-        }
-        public bool canMoveWithInput { get; set; }
-
-        public IUsesSkills parent
-        {
-            get { return m_Parent; }
-            set { m_Parent = value; Awake(); }
-        }
-
         public float speed
         {
             get { return m_Speed; }
@@ -127,9 +35,10 @@ namespace Units.Skills
         #endregion
 
         #region -- UNITY FUNCTIONS --
-
-        private void Awake()
+        // Use this for initialization
+        private void Start()
         {
+
             if (m_Parent == null)
                 return;
 
@@ -141,11 +50,6 @@ namespace Units.Skills
                 Mathf.Cos((m_Parent.gameObject.transform.eulerAngles.y) * (Mathf.PI / 180)) * m_Speed,
                 0,
                 Mathf.Sin(-(m_Parent.gameObject.transform.eulerAngles.y) * (Mathf.PI / 180)) * m_Speed);
-        }
-        // Use this for initialization
-        private void Start()
-        {
-
         }
 
         private void FixedUpdate()
@@ -211,6 +115,14 @@ namespace Units.Skills
         {
             transform.position += (m_Velocity + m_TotalVelocity) * Time.deltaTime;
         }
+
+        public override string UpdateDescription(Skill a_Skill)
+        {
+            string description = skillData.name + " is a magical skill that does " + a_Skill.skillData.damage + " damage!";
+            return description;
+        } 
         #endregion
+
+
     }
 }

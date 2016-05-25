@@ -440,11 +440,12 @@ namespace Units
             ICastable<IUsesSkills> castable = m_SkillPrefabs[skillIndex].GetComponent<ICastable<IUsesSkills>>();
 
             ++skill.level;
-
             skill.skillData.cost = castable.baseCost + skill.level * castable.costGrowth;
 
             skill.skillData.damage = castable.baseDamage + skill.level * castable.damageGrowth;
             skill.skillData.maxCooldown = castable.baseMaxCooldown - skill.level * castable.maxCooldownGrowth;
+
+            skill.skillData.description = castable.UpdateDescription(skill);
 
             --m_StoredSkillUpgrades;
             if (m_StoredSkillUpgrades != 0)

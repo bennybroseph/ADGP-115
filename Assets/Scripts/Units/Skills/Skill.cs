@@ -27,6 +27,9 @@ namespace Units.Skills
     public class SkillData
     {
         #region -- Skill DATA Struct --
+        public string name;
+        public string description;
+
         public Sprite sprite;
 
         public float maxCooldown;
@@ -40,6 +43,9 @@ namespace Units.Skills
         public SkillData Clone()
         {
             SkillData clone = new SkillData();
+
+            clone.name = name;
+            clone.description = description;
 
             clone.sprite = sprite;
 
@@ -71,7 +77,7 @@ namespace Units.Skills
         private IUsesSkills m_Parent;
 
         [SerializeField]
-        public int m_Level;
+        private int m_Level;
 
         [SerializeField]
         private GameObject m_SkillPrefab;

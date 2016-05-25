@@ -78,7 +78,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HealthIncrease: 0
-  m_ManaIncrease: 2
+  m_ManaIncrease: 3
 --- !u!135 &13520812
 SphereCollider:
   m_ObjectHideFlags: 1
