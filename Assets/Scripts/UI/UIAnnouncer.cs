@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Library;
+using Units;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -75,6 +76,8 @@ namespace UI
         {
             m_AnnouncementSequence.CacheAnimationTime();
             m_LogSequence.CacheAnimationTime();
+            m_ChatSequence.CacheAnimationTime();
+            m_FloatingTextSequence.CacheAnimationTime();
         }
 
         // Use this for initialization
@@ -100,15 +103,10 @@ namespace UI
         // Update is called once per frame
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F4))
-                Announce("Test Announcement Incoming! " + Time.time);
-            if (Input.GetKeyDown(KeyCode.F5))
-                FloatingText(
-                    10 * Random.value,
-                    new Vector3(10 * Random.value, 0, 10 * Random.value),
-                    FloatingTextType.MagicDamage);
+
         }
         #endregion
+
         public void Announce(string a_Announcement)
         {
             m_QueuedAnnouncements.Enqueue(a_Announcement);
@@ -124,7 +122,7 @@ namespace UI
                     delegate { Announce(a_Announcement); }));
         }
 
-        public void Chat(string a_Nickname, string a_Message, Vector3 a_Position, ChatType a_ChatType = ChatType.Say)
+        public void Chat(string a_Nickname, string a_Message, Unit a_Unit, ChatType a_ChatType = ChatType.Say)
         {
             Text newLogItem = Instantiate(m_LogTextPrefab);
             newLogItem.transform.SetParent(UIManager.self.backgroundUI.transform, false);
@@ -141,7 +139,23 @@ namespace UI
                     break;
             }
 
-            CreateFloatingText(a_Message, newLogItem.color, a_Position, true);
+            FloatingText newObject = Instantiate(m_FloatingTextPrefab);
+            newObject.transform.SetParent(UIManager.self.backgroundUI.transform, false);
+            newObject.anchor = new Vector3(0, 0, 0.45f);
+
+            newObject.parent = a_Unit;
+
+            Text newText = newObject.GetComponent<Text>();
+            newText.text = a_Message + "\n|";
+            newText.color = newLogItem.color;
+
+            StartCoroutine(Animations.Animate(m_ChatSequence, newText));
+            StartCoroutine(WaitThenDoThis(m_ChatSequence.totalAnimationTime,
+                delegate
+                {
+                    Destroy(newText);
+                }));
+
             StartCoroutine(AnimateToLog(newLogItem));
         }
 
@@ -172,7 +186,7 @@ namespace UI
             }
         }
 
-        private void CreateFloatingText(string a_Message, Color a_Color, Vector3 a_Anchor, bool a_IsChat = false)
+        private void CreateFloatingText(string a_Message, Color a_Color, Vector3 a_Anchor)
         {
             FloatingText newObject = Instantiate(m_FloatingTextPrefab);
             newObject.transform.SetParent(UIManager.self.backgroundUI.transform, false);
@@ -183,10 +197,12 @@ namespace UI
             newText.text = a_Message;
             newText.color = a_Color;
 
-            StartCoroutine(
-                a_IsChat
-                    ? Animations.Animate(m_ChatSequence, newText)
-                    : Animations.Animate(m_FloatingTextSequence, newText));
+            StartCoroutine(Animations.Animate(m_FloatingTextSequence, newText));
+            StartCoroutine(WaitThenDoThis(m_FloatingTextSequence.totalAnimationTime,
+                delegate
+                {
+                    Destroy(newText);
+                }));
         }
 
         private void CreateNewAnnouncement()

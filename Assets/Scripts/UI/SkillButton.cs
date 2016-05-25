@@ -137,9 +137,12 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
 
     private void OnCanUpgradeSkill(Event a_Event, params object[] a_Params)
     {
-        IUsesSkills player = a_Params[0] as IUsesSkills;
-        m_UpgradeSkillButton.gameObject.SetActive(true);
+        IUsesSkills unit = a_Params[0] as IUsesSkills;
 
+        if (unit == null || unit != m_Parent)
+            return;
+
+        m_UpgradeSkillButton.gameObject.SetActive(true);
     }
 
     private void OnSkillUpgradeClicked()

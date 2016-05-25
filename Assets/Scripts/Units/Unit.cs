@@ -360,6 +360,8 @@ namespace Units
                 m_StoredSkillUpgrades += m_Level - oldLevel;
                 Publisher.self.Broadcast(Event.UnitLevelUp, this);
                 Publisher.self.Broadcast(Event.UnitCanUpgradeSkill, this);
+
+                if(oldLevel > 0)
                 UIAnnouncer.self.FloatingText("Level Up!", transform.position, FloatingTextType.Overhead);
             }
         }

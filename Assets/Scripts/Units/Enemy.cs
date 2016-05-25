@@ -16,9 +16,8 @@ namespace Units
         protected override void Start()
         {
             base.Start();
-
-            if (Random.value * 10 >= 8)
-                UIAnnouncer.self.Chat(m_UnitNickname, m_Taunt, transform.position);
+            if (Random.value > 0.875)
+                UIAnnouncer.self.Chat(m_UnitNickname, m_Taunt, this);
         }
 
         // protected override void Update() { base.Update(); }
