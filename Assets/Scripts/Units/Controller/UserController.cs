@@ -155,10 +155,10 @@ namespace Units.Controller
                 {
                     GameManager.self.GetButtonState(
                         i,
-                        KeyConfiguration.self.userConfigurations[i].skillButtonCodes[0].keyCode),
+                        KeyConfiguration.self.userConfigurations[i].skillButtons[0].keyCode),
                     GameManager.self.GetButtonState(
                         i,
-                        KeyConfiguration.self.userConfigurations[i].skillButtonCodes[1].keyCode),
+                        KeyConfiguration.self.userConfigurations[i].skillButtons[1].keyCode),
                 };
 #else
                 bool[] isPressed =
