@@ -6,20 +6,20 @@ using System;
 public class ItemDrops : MonoBehaviour, IChildable<IControllable>
 {
     [SerializeField]
-    private int m_HealthIncrease;
+    private float m_HealthIncrease;
     [SerializeField]
-    private int m_ManaIncrease;
+    private float m_ManaIncrease;
     [SerializeField]
     private IControllable m_Parent;
     private float m_Speed = 0;
 
-    public int healthIncrease
+    public float healthIncrease
     {
         get { return m_HealthIncrease; }
         set { m_HealthIncrease = value; }
     }
 
-    public int manaIncrease
+    public float manaIncrease
     {
         get { return m_ManaIncrease; }
         set { m_ManaIncrease = value; }
@@ -30,6 +30,7 @@ public class ItemDrops : MonoBehaviour, IChildable<IControllable>
         get { return m_Parent; }
         set { m_Parent = value; }
     }
+
 
     // Update is called once per frame
     void Update()
@@ -63,7 +64,7 @@ public class ItemDrops : MonoBehaviour, IChildable<IControllable>
                 if (unit.damageFSM.currentState == DamageState.Dead)
                     return;
 
-                unit.health += m_HealthIncrease;
+                unit.health += m_HealthIncrease * unit.maxHealth;
                 unit.health = Mathf.Clamp(unit.health, 0, unit.maxHealth);
 
                 unit.mana += m_ManaIncrease;
@@ -77,6 +78,7 @@ public class ItemDrops : MonoBehaviour, IChildable<IControllable>
         {
             gameObject.GetComponents<Collider>()[0].enabled = false;
             m_Parent = controllable;
+
         }
 
     }

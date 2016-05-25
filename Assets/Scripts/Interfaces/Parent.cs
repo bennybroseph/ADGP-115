@@ -29,5 +29,7 @@ namespace Interfaces
         float maxLifetime { get; set; }
 
         SkillData skillData { get; set; }
+
+        string UpdateDescription(Skill a_Skill);
     }
 }
