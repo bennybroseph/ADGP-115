@@ -96,7 +96,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         if (m_Parent.mana < m_Parent.skills[m_SkillIndex].skillData.cost)
             newColor = new Color32(33, 150, 243, 255);
         if (m_Parent.skills[m_SkillIndex].level <= 0)
-            newColor = Color.gray;
+            newColor = new Color32(66, 66, 66, 255);
 
         GetComponent<Image>().color = newColor;
     }
