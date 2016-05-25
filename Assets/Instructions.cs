@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using Units.Controller;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,8 +22,23 @@ public class Instructions : MonoBehaviour
                 Enum.GetName(typeof(KeyCode), skillKey.keyCode) +
                 " - Use Fireball" + "\n";
         }
-        
-       
+        m_InstructionsText.text +=
+                Enum.GetName(typeof(KeyCode), KeyConfiguration.self.userConfigurations[0].verticalKeyAxis.positive.keyCode) +
+                " - Moves Character Up " + "\n";
+        m_InstructionsText.text +=
+        Enum.GetName(typeof(KeyCode), KeyConfiguration.self.userConfigurations[0].verticalKeyAxis.negative.keyCode) +
+               " - Move Character Down" + "\n";
+        m_InstructionsText.text +=
+             Enum.GetName(typeof(KeyCode), KeyConfiguration.self.userConfigurations[0].horizontalKeyAxis.positive.keyCode) +
+                " - Moves Character Right " + "\n";
+        m_InstructionsText.text +=
+        Enum.GetName(typeof(KeyCode), KeyConfiguration.self.userConfigurations[0].horizontalKeyAxis.negative.keyCode) +
+               " - Move Character Left " + "\n";
+
+
+
+
+
         m_InstructionsText.text +=
 
         "Controller Controls:" + "\n";
@@ -32,6 +48,19 @@ public class Instructions : MonoBehaviour
                 Enum.GetName(typeof(ButtonCode), skillButton.keyCode) +
                 " Use Fireball" + "\n";
         }
+       m_InstructionsText.text +=
+        Enum.GetName(typeof(ButtonCode), KeyConfiguration.self.userConfigurations[0].verticalButtonAxis.positive.keyCode) +
+                " - Move Character Up " + "\n";
+        m_InstructionsText.text +=
+       Enum.GetName(typeof(ButtonCode), KeyConfiguration.self.userConfigurations[0].verticalButtonAxis.negative.keyCode) +
+               " - Move Character Down " + "\n";
+        m_InstructionsText.text +=
+       Enum.GetName(typeof(ButtonCode), KeyConfiguration.self.userConfigurations[0].horizontalButtonAxis.positive.keyCode) +
+               " - Move Character Right " + "\n";
+        m_InstructionsText.text +=
+       Enum.GetName(typeof(ButtonCode), KeyConfiguration.self.userConfigurations[0].horizontalButtonAxis.negative.keyCode) +
+               " - Move Character Left " + "\n";
+
         m_InstructionsText.text +=
           
 
