@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Skills: []
   m_SkillPrefabs:
   - {fileID: 167634, guid: e4edc7fe0341b644c835f75acf8dad64, type: 2}
+  - {fileID: 101988, guid: a06d5e5a4e6761a4ea489491a7d7f8e2, type: 2}
   m_UnitName: Player1
   m_UnitNickname: Player 1
   m_Faction: Allies

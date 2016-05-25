@@ -3,32 +3,16 @@ using System.Collections;
 using Interfaces;
 using Units.Skills;
 
-public class Melee : BaseSkills, IMovable {
+public class Melee : BaseSkills
+{
 
     #region -- VARIABLES --
-    private Vector3 m_TotalVelocity;
-    private Vector3 m_Velocity;
     [SerializeField]
-    private float m_Speed;
+    private float m_CurrentAngle;
     #endregion
 
     #region -- PROPERTIES --
-    public Vector3 totalVelocity
-    {
-        get { return m_TotalVelocity; }
-        set { m_TotalVelocity = value; }
-    }
-    public Vector3 velocity
-    {
-        get { return m_Velocity; }
-        set { m_Velocity = value; }
-    }
 
-    public float speed
-    {
-        get { return m_Speed; }
-        set { m_Speed = value; }
-    }
     #endregion
 
     #region -- UNITY FUNCTIONS --
@@ -39,21 +23,23 @@ public class Melee : BaseSkills, IMovable {
         if (m_Parent == null)
             return;
 
-        Physics.IgnoreCollision(GetComponent<Collider>(), m_Parent.gameObject.GetComponent<Collider>());
+        Physics.IgnoreCollision(GetComponentInChildren<Collider>(), m_Parent.gameObject.GetComponent<Collider>());
 
         transform.SetParent(m_Parent.gameObject.transform, false);
-        transform.position = m_Parent.gameObject.transform.position;
-        transform.localPosition += new Vector3(0.5f,0,-0.5f);
-        
-        m_Velocity = new Vector3(
-            Mathf.Cos((m_Parent.gameObject.transform.eulerAngles.y) * (Mathf.PI / 180)) * m_Speed,
+        transform.localPosition += new Vector3(
             0,
-            Mathf.Sin(-(m_Parent.gameObject.transform.eulerAngles.y) * (Mathf.PI / 180)) * m_Speed);
+            0,
+            0.5f);
+
+        //m_Velocity = new Vector3(
+        //    Mathf.Cos((m_Parent.gameObject.transform.eulerAngles.y) * (Mathf.PI / 180)) * m_Speed,
+        //    0,
+        //    Mathf.Sin(-(m_Parent.gameObject.transform.eulerAngles.y) * (Mathf.PI / 180)) * m_Speed);
     }
 
     private void FixedUpdate()
     {
-        //Move();
+
     }
 
     // Update is called once per frame
@@ -61,35 +47,26 @@ public class Melee : BaseSkills, IMovable {
     {
         m_CurrentLifetime += Time.deltaTime;
 
+        transform.eulerAngles += new Vector3(
+            0,
+            (180f / m_MaxLifetime) * Time.deltaTime);
+
         if (m_CurrentLifetime >= m_MaxLifetime)
             Destroy(gameObject);
     }
 
     private void LateUpdate()
     {
-        SetRotation();
+        SetPosition();
     }
     #endregion
 
-    private void SetRotation()
+    private void SetPosition()
     {
-        if (m_Velocity == Vector3.zero)
-            return;
-
-        float rotationY = 90 + Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180.0f / Mathf.PI);
-
-        if ((m_Velocity.x < 0.0f && m_Velocity.z < 0.0f) ||
-            (m_Velocity.x > 0.0f && m_Velocity.z < 0.0f) ||
-            (m_Velocity.x > 0.0f && m_Velocity.z == 0.0f))
-            rotationY += 180;
-
-        transform.rotation = Quaternion.Euler(new Vector3(90, rotationY, 0));
-    }
-
-
-    public void Move()
-    {
-        transform.position += (m_Velocity + m_TotalVelocity) * Time.deltaTime;
+        transform.position = new Vector3(
+            Mathf.Cos(transform.eulerAngles.y * (Mathf.PI / 180)) * -0.5f,
+            0,
+            Mathf.Sin(-transform.eulerAngles.y * (Mathf.PI / 180)) * -0.5f);
     }
 
     public override string UpdateDescription(Skill a_Skill)
