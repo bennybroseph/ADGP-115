@@ -72,10 +72,15 @@ namespace Units.Controller
         }
     }
 
-    public struct UserConfiguration
+    public class UserConfiguration
     {
-        public List<Key<KeyCode>> skillKeyCodes;
-        public List<Key<ButtonCode>> skillButtonCodes;
+        public Key<KeyCode> pauseKey;
+        public Key<ButtonCode> pauseButton;
+
+        public List<Key<KeyCode>> skillKeys;
+        public List<Key<ButtonCode>> skillButtons;
+
+        public Key<KeyCode> strafeKey;
 
         public Axis<KeyCode> verticalKeyAxis;
         public Axis<KeyCode> horizontalKeyAxis;
@@ -83,16 +88,30 @@ namespace Units.Controller
         public Axis<ButtonCode> verticalButtonAxis;
         public Axis<ButtonCode> horizontalButtonAxis;
 
+        public UserConfiguration() { }
+
         public UserConfiguration(
-            List<Key<KeyCode>> a_SkillKeyCodes,
-            List<Key<ButtonCode>> a_SkillButtonCodes,
+            Key<KeyCode> a_PauseKey,
+            Key<ButtonCode> a_PauseButton,
+            
+            List<Key<KeyCode>> a_SkillKeys,
+            List<Key<ButtonCode>> a_SkillButtons,
+
+            Key<KeyCode> a_StrafeKey,
+
             Axis<KeyCode> a_VerticalKeyAxis,
             Axis<KeyCode> a_HorizontalKeyAxis,
+
             Axis<ButtonCode> a_VerticalButtonAxis,
             Axis<ButtonCode> a_HorizontalButtonAxis)
         {
-            skillKeyCodes = a_SkillKeyCodes;
-            skillButtonCodes = a_SkillButtonCodes;
+            pauseKey = a_PauseKey;
+            pauseButton = a_PauseButton;
+
+            skillKeys = a_SkillKeys;
+            skillButtons = a_SkillButtons;
+
+            strafeKey = a_StrafeKey;
 
             verticalKeyAxis = a_VerticalKeyAxis;
             horizontalKeyAxis = a_HorizontalKeyAxis;
@@ -117,7 +136,6 @@ namespace Units.Controller
         {
             if (!File.Exists(Globals.FILE_NAME))
             {
-                //new XDocument().Save(Globals.FILE_NAME);
                 SetValuesToDefault();
                 WriteConfig();
             }
@@ -134,7 +152,7 @@ namespace Units.Controller
             FileStream fileStream = new FileStream(Globals.FILE_NAME, FileMode.Open);
             XmlReader reader = XmlReader.Create(fileStream);
 
-            m_UserConfigurations = ((List<UserConfiguration>)serializer.Deserialize(reader));
+            m_UserConfigurations = (List<UserConfiguration>)serializer.Deserialize(reader);
 
             fileStream.Close();
         }
@@ -297,6 +315,9 @@ namespace Units.Controller
             m_UserConfigurations = new List<UserConfiguration>
             {
                 new UserConfiguration(
+                    new Key<KeyCode>("Pause", "Pause Key", KeyCode.P),
+                    new Key<ButtonCode>("Pause", "Pause Controller Button", ButtonCode.Start),
+
                     new List<Key<KeyCode>>
                     {
                         new Key<KeyCode>("Skill 1", "First Skill", KeyCode.Q),
@@ -307,12 +328,16 @@ namespace Units.Controller
                         new Key<ButtonCode>("Skill 1", "First Skill", ButtonCode.X),
                         new Key<ButtonCode>("Skill 2", "First Skill", ButtonCode.A),
                     },
+
+                    new Key<KeyCode>("Strafe", "Strafe Key", KeyCode.LeftShift),
+
                     new Axis<KeyCode>(
                         new Key<KeyCode>("Up", "Up Key", KeyCode.W),
                         new Key<KeyCode>("Down", "Down Key", KeyCode.S)),
                     new Axis<KeyCode>(
                         new Key<KeyCode>("Right", "Right Key", KeyCode.D),
                         new Key<KeyCode>("Left", "Left Key", KeyCode.A)),
+
                     new Axis<ButtonCode>(
                         new Key<ButtonCode>("Up", "Up Key", ButtonCode.DpadUp),
                         new Key<ButtonCode>("Down", "Down Key", ButtonCode.DpadDown)),
@@ -320,6 +345,9 @@ namespace Units.Controller
                         new Key<ButtonCode>("Right", "Right Key", ButtonCode.DpadRight),
                         new Key<ButtonCode>("Left", "Left Key", ButtonCode.DpadLeft))),
                 new UserConfiguration(
+                    new Key<KeyCode>("Pause", "Pause Key", KeyCode.None),
+                    new Key<ButtonCode>("Pause", "Pause Controller Button", ButtonCode.Start),
+
                     new List<Key<KeyCode>>
                     {
                         new Key<KeyCode>("Skill 1", "First SKill", KeyCode.Keypad1),
@@ -330,12 +358,16 @@ namespace Units.Controller
                         new Key<ButtonCode>("Skill 1", "First Skill", ButtonCode.X),
                         new Key<ButtonCode>("Skill 2", "First Skill", ButtonCode.A),
                     },
+
+                    new Key<KeyCode>("Strafe", "Strafe Key", KeyCode.RightShift),
+
                     new Axis<KeyCode>(
                         new Key<KeyCode>("Up", "Up Key", KeyCode.UpArrow),
                         new Key<KeyCode>("Down", "Down Key", KeyCode.DownArrow)),
                     new Axis<KeyCode>(
                         new Key<KeyCode>("Right", "Right Key", KeyCode.RightArrow),
                         new Key<KeyCode>("Left", "Left Key", KeyCode.LeftArrow)),
+
                     new Axis<ButtonCode>(
                         new Key<ButtonCode>("Up", "Up Key", ButtonCode.DpadUp),
                         new Key<ButtonCode>("Down", "Down Key", ButtonCode.DpadDown)),
