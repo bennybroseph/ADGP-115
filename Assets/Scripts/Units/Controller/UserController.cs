@@ -173,9 +173,9 @@ namespace Units.Controller
 
                 if (skillUser != null)
                 {
-                    if (Input.GetKeyDown(KeyConfiguration.self.userConfigurations[i].skillKeyCodes[0].keyCode) || isPressed[0])
+                    if (Input.GetKeyDown(KeyConfiguration.self.userConfigurations[i].skillKeys[0].keyCode) || isPressed[0])
                         Publisher.self.Broadcast(Event.UseSkill, skillUser, 0);
-                    if (Input.GetKeyDown(KeyConfiguration.self.userConfigurations[i].skillKeyCodes[1].keyCode) || isPressed[1])
+                    if (Input.GetKeyDown(KeyConfiguration.self.userConfigurations[i].skillKeys[1].keyCode) || isPressed[1])
                         Publisher.self.Broadcast(Event.UseSkill, skillUser, 1);
                 }
 
