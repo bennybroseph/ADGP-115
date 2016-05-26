@@ -2,7 +2,7 @@
 using Units.Controller;
 using UnityEngine;
 
-public class Camera3rdPerson : MonoSingleton<Camera3rdPerson>
+public class ThirdPersonCamera : MonoSingleton<ThirdPersonCamera>
 {
     [SerializeField]
     private GameObject m_Following;
@@ -44,11 +44,6 @@ public class Camera3rdPerson : MonoSingleton<Camera3rdPerson>
 
         transform.position = m_Following.transform.position;
         m_Camera.transform.localPosition = m_Offset;
-
-        //transform.eulerAngles = new Vector3(
-        //    transform.eulerAngles.x, 
-        //    Mathf.Lerp(transform.eulerAngles.y, m_Following.transform.eulerAngles.y, 0.5f * Time.deltaTime),
-        //    transform.eulerAngles.z);
 
         transform.position = new Vector3(
             Mathf.Clamp(transform.position.x, m_ScreenBorders.m_Min.x, m_ScreenBorders.m_Max.x),

@@ -10,6 +10,7 @@ namespace UI
 {
     public class FortressNameplate : MonoBehaviour, IChildable<Fortress>
     {
+        #region -- VARIABLES
         [SerializeField]
         private Fortress m_Parent;
 
@@ -28,6 +29,7 @@ namespace UI
         private float m_LastHealthChange;
         [SerializeField]
         private bool m_HealthCoroutineIsRunning;
+        #endregion
 
         public Fortress parent
         {
@@ -85,7 +87,7 @@ namespace UI
         // Update is called once per frame
         void Update()
         {
-            
+
         }
 
         private void LateUpdate()
@@ -100,7 +102,7 @@ namespace UI
             m_HealthBar.fillAmount = a_CurrentValue / a_MaxValue;
             m_HealthText.text = a_CurrentValue + "/" + a_MaxValue;
         }
-    
+
         private void OnValueChanged(Event a_Event, object[] a_Params)
         {
             IAttackable unit = a_Params[0] as IAttackable;
