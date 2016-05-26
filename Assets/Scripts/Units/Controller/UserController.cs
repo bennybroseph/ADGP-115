@@ -98,22 +98,33 @@ namespace Units.Controller
                 SetCursorPos((int)m_MouseAnchor.x, (int)m_MouseAnchor.y);
                 GetCursorPos(out currentMousePosition);
 
-                Camera3rdPerson.self.transform.eulerAngles +=
+                Vector3 newAngle = ThirdPersonCamera.self.transform.eulerAngles;
+                newAngle +=
                     new Vector3(
-                        m_DeltaMousePosition.y * Time.deltaTime * 5f,
-                        m_DeltaMousePosition.x * Time.deltaTime * 5f,
+                        m_DeltaMousePosition.y * Time.deltaTime * 8f,
+                        m_DeltaMousePosition.x * Time.deltaTime * 12f,
                         0);
+
+                newAngle =
+                        new Vector3(
+                            Mathf.Clamp(newAngle.x, 10, 90),
+                            newAngle.y,
+                            newAngle.z);
+
+                ThirdPersonCamera.self.transform.eulerAngles = newAngle;
             }
             else
                 Cursor.visible = true;
 
             m_PrevMousePosition = new Vector2(currentMousePosition.X, currentMousePosition.Y);
 #else
-            if(m_EventSystem.currentSelectedGameObject == null)
+            if (m_EventSystem.currentSelectedGameObject == null)
             {
                 Vector2 currentMousePosition = Input.mousePosition;
                 m_DeltaMousePosition =
-                    new Vector2(Input.GetAxis("Mouse X")/2*Time.deltaTime, -Input.GetAxis("Mouse Y")/2*Time.deltaTime);
+                    new Vector2(
+                        Input.GetAxis("Mouse X") * Time.deltaTime * 1.2f, 
+                        -Input.GetAxis("Mouse Y") * Time.deltaTime * 0.8f);
 
                 if (Input.GetMouseButtonDown(1))
                 {
@@ -123,11 +134,20 @@ namespace Units.Controller
                 }
                 if (Input.GetMouseButton(1))
                 {
-                    Camera3rdPerson.self.transform.eulerAngles +=
+                    Vector3 newAngle = ThirdPersonCamera.self.transform.eulerAngles;
+                    newAngle +=
                         new Vector3(
-                            m_DeltaMousePosition.y*Time.deltaTime,
-                            m_DeltaMousePosition.x*Time.deltaTime,
+                            m_DeltaMousePosition.y * Time.deltaTime,
+                            m_DeltaMousePosition.x * Time.deltaTime,
                             0);
+
+                    newAngle =
+                            new Vector3(
+                                Mathf.Clamp(newAngle.x, 10, 90),
+                                newAngle.y,
+                                newAngle.z);
+
+                    ThirdPersonCamera.self.transform.eulerAngles = newAngle;
                 }
                 else
                 {
@@ -188,7 +208,7 @@ namespace Units.Controller
 
                     if (controlable.velocity != Vector3.zero)
                     {
-                        float angle = Camera3rdPerson.self.transform.eulerAngles.y * (Mathf.PI / 180);
+                        float angle = ThirdPersonCamera.self.transform.eulerAngles.y * (Mathf.PI / 180);
                         angle += Mathf.Atan(controlable.velocity.x / controlable.velocity.z);
 
                         if ((controlable.velocity.x < 0.0f && controlable.velocity.z < 0.0f) ||
@@ -205,7 +225,7 @@ namespace Units.Controller
                     {
                         controlable.transform.eulerAngles = new Vector3(
                             controlable.transform.eulerAngles.x,
-                            Camera3rdPerson.self.transform.eulerAngles.y,
+                            ThirdPersonCamera.self.transform.eulerAngles.y,
                             controlable.transform.eulerAngles.z);
                     }
 
@@ -236,7 +256,7 @@ namespace Units.Controller
                             (rightStick.x < 0.0f && rightStick.y == 0.0f))
                             rotationY += 180;
 
-                        Camera3rdPerson.self.transform.eulerAngles += new Vector3(
+                        ThirdPersonCamera.self.transform.eulerAngles += new Vector3(
                             rightStick.y * 100 * Time.deltaTime,
                             rightStick.x * 100 * Time.deltaTime, 0);
                     }
@@ -249,7 +269,7 @@ namespace Units.Controller
                             controlable.velocity.y,
                             leftStick.y * controlable.speed);
 
-                        float angle = Camera3rdPerson.self.transform.eulerAngles.y * (Mathf.PI / 180);
+                        float angle = ThirdPersonCamera.self.transform.eulerAngles.y * (Mathf.PI / 180);
                         angle += Mathf.Atan(controlable.velocity.x / controlable.velocity.z);
 
                         if ((controlable.velocity.x < 0.0f && controlable.velocity.z < 0.0f) ||
