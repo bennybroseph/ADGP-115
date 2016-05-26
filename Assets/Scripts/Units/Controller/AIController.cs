@@ -14,6 +14,8 @@ namespace Units.Controller
         [SerializeField]
         private List<Vector3> m_SpawnPoints;
         [SerializeField]
+        private List<GameObject> m_EnemyBases;
+        [SerializeField]
         private GameObject m_GoblinMagePrefab;
         [SerializeField]
         private GameObject m_GoblinPrefab;
@@ -22,8 +24,6 @@ namespace Units.Controller
         [SerializeField]
         private int m_WaveCounter;
         private List<IControllable> m_Controlables; 
-        [SerializeField]
-        private Vector3 m_Variance;
         [SerializeField]
         private GameObject m_ManaPickupPrefab;
         [SerializeField]
@@ -37,6 +37,8 @@ namespace Units.Controller
 
             m_Controlables = new List<IControllable>();
             m_Enemies = new List<IStats>();
+            m_EnemyBases = new List<GameObject>();
+
             Publisher.self.Subscribe(Event.SpawnWaveClicked, SpawnWaves);
             Publisher.self.Subscribe(Event.UnitDied, OnUnitDied);
             Publisher.self.Subscribe(Event.UnitCanUpgradeSkill, OnCanUpgradeSkill);
@@ -45,7 +47,7 @@ namespace Units.Controller
         // Use this for initialization
         void Start()
         {
-
+            m_EnemyBases = GameObject.FindGameObjectsWithTag("EnemySpawn").ToList();
         }
 
         // Update is called once per frame
@@ -166,13 +168,13 @@ namespace Units.Controller
 
             if (m_SpawnPoints.Count == 0)
             {
-                Vector3 spawnPoint1 = new Vector3(-14.25f, 0.5f, 0f);
-                Vector3 spawnPoint2 = new Vector3(-0.50f, 0.5f, 7.50f);
-                Vector3 spawnPoint3 = new Vector3(0f, 0.5f, -8.5f);
+                for (int BasesIndex = 0; BasesIndex <= m_EnemyBases.Count - 1; BasesIndex++)
+                {
+                    Vector3 spawnPoints = new Vector3(m_EnemyBases[BasesIndex].transform.position.x, m_EnemyBases[BasesIndex].transform.position.y + 0.5f, m_EnemyBases[BasesIndex].transform.position.z - 3.1f);
+                    m_SpawnPoints.Add(spawnPoints);
+                }
+               
 
-                m_SpawnPoints.Add(spawnPoint1);
-                m_SpawnPoints.Add(spawnPoint2);
-                m_SpawnPoints.Add(spawnPoint3);
             }
 
             StartCoroutine(Spawn());
@@ -211,21 +213,19 @@ namespace Units.Controller
             {
                 for (int i = 0; i < m_WaveCounter; i++)
                 {
-                    float x = Random.Range(-m_Variance.x, m_Variance.x);
-                    float z = Random.Range(-m_Variance.z, m_Variance.z);
 
                     GameObject goblin = Instantiate(m_GoblinPrefab);
 
                     goblin.transform.position = new Vector3(
-                        spawnPoint.x + x,
+                        spawnPoint.x,
                         spawnPoint.y,
-                        spawnPoint.z + z);
+                        spawnPoint.z);
 
                     GameObject goblinMage = Instantiate(m_GoblinMagePrefab);
                     goblinMage.transform.position = new Vector3(
-                        spawnPoint.x + x,
+                        spawnPoint.x,
                         spawnPoint.y,
-                        spawnPoint.z + z);
+                        spawnPoint.z);
 
                     m_Enemies.Add(goblinMage.GetComponent<IStats>());
                     m_Enemies.Add(goblin.GetComponent<IStats>());

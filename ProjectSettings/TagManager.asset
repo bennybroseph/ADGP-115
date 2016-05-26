@@ -28,6 +28,7 @@ TagManager:
   - Background UI
   - Options Menu
   - Options
+  - EnemySpawn
   layers:
   - Default
   - TransparentFX
