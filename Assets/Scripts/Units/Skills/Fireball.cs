@@ -94,7 +94,7 @@ namespace Units.Skills
             if (m_IsDestroyed)
                 return;
 
-            IAttackable attackableObject = a_Collision.transform.gameObject.GetComponent<IAttackable>();
+            IAttackable attackableObject = a_Collision.transform.gameObject.GetComponentInParent<IAttackable>();
 
             if (attackableObject != null && attackableObject.faction != m_Parent.faction)
             {

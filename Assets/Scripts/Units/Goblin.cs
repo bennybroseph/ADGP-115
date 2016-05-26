@@ -39,7 +39,8 @@ public class Goblin : Enemy
                         IStats goblin = gameObject.GetComponent<IStats>();
                         a_Attackable.health -= 1;
                         UIAnnouncer.self.FloatingText(1, a_Position, FloatingTextType.PhysicalDamage);
-                        if (a_Attackable.health <= 0) { goblin.experience += 10;} 
+                        if (a_Attackable.health <= 0)
+                        {goblin.experience += 100;}
                     }, 
                 true));
         // When routine starts again set run to false

@@ -39,6 +39,7 @@ namespace Units.Controller
             m_Enemies = new List<IStats>();
             Publisher.self.Subscribe(Event.SpawnWaveClicked, SpawnWaves);
             Publisher.self.Subscribe(Event.UnitDied, OnUnitDied);
+            Publisher.self.Subscribe(Event.UnitCanUpgradeSkill, OnCanUpgradeSkill);
         }
 
         // Use this for initialization
@@ -59,6 +60,7 @@ namespace Units.Controller
 
             Publisher.self.UnSubscribe(Event.SpawnWaveClicked, SpawnWaves);
             Publisher.self.UnSubscribe(Event.UnitDied, OnUnitDied);
+            Publisher.self.UnSubscribe(Event.UnitCanUpgradeSkill, OnCanUpgradeSkill);
         }
 
         private void OnApplicationQuit()
@@ -155,7 +157,7 @@ namespace Units.Controller
                 a_Controllable.following = fortresses[0];
             }
         }
-        public void SpawnWaves(Event a_Event, params object[] a_Params)
+        private void SpawnWaves(Event a_Event, params object[] a_Params)
         {
             if (m_Enemies.Count != 0)
                 return;
@@ -198,6 +200,7 @@ namespace Units.Controller
                 newManaPickup.GetComponent<Rigidbody>().AddExplosionForce(250 + Random.value * 750, unit.gameObject.transform.position, 10);
             }
 
+            
             m_Enemies.Remove(unit);
         }
 
@@ -231,7 +234,18 @@ namespace Units.Controller
 
 
             }
-          
+
+        }
+        private void OnCanUpgradeSkill(Event a_Event, params object[] a_Params)
+        {
+            IUsesSkills unit = a_Params[0] as IUsesSkills;
+
+            if (unit == null)
+                return;
+
+            int skillindex = Random.Range(0, unit.skills.Count - 1);
+
+            Publisher.self.Broadcast(Event.UpgradeSkill, unit, skillindex);
         }
     }
 }
