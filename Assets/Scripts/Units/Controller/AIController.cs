@@ -243,9 +243,13 @@ namespace Units.Controller
             if (unit == null)
                 return;
 
-            int skillindex = Random.Range(0, unit.skills.Count - 1);
+            if (m_Controlables.Contains(unit as IControllable))
+            {
+                int skillindex = Random.Range(0, unit.skills.Count - 1);
 
-            Publisher.self.Broadcast(Event.UpgradeSkill, unit, skillindex);
+                Publisher.self.Broadcast(Event.UpgradeSkill, unit, skillindex);
+            }
+            
         }
     }
 }
