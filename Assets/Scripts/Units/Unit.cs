@@ -434,7 +434,7 @@ namespace Units
             IUsesSkills unit = a_Params[0] as IUsesSkills;
             int skillIndex = (int)a_Params[1];
 
-            if (unit == null || unit.GetHashCode() != GetHashCode())
+            if (unit == null || unit.GetHashCode() != GetHashCode() || m_SkillPrefabs.Count == 0)
                 return;
 
             Skill skill = unit.skills[skillIndex];
