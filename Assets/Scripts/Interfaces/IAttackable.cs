@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-using Library;
+﻿using Library;
 
 namespace Interfaces
 {

@@ -43,22 +43,22 @@ namespace Units
 
         private void SetRotation()
         {
-            if (m_Velocity == Vector3.zero)
-                return;
+            //if (m_Velocity == Vector3.zero)
+            //    return;
 
-            float rotationY = Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180.0f / Mathf.PI) - 90;
+            //float rotationY = Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180.0f / Mathf.PI);
 
-            if ((m_Velocity.x < 0.0f && m_Velocity.z < 0.0f) ||
-                (m_Velocity.x > 0.0f && m_Velocity.z < 0.0f) ||
-                (m_Velocity.x == 0.0f && m_Velocity.z < 0.0f))
-                rotationY += 180;
+            //if ((m_Velocity.x < 0.0f && m_Velocity.z < 0.0f) ||
+            //    (m_Velocity.x > 0.0f && m_Velocity.z < 0.0f) ||
+            //    (m_Velocity.x == 0.0f && m_Velocity.z < 0.0f))
+            //    rotationY += 180;
 
-            Vector3 rotation = new Vector3(
-                0,
-                rotationY,
-                0);
+            //Vector3 rotation = new Vector3(
+            //    0,
+            //    rotationY,
+            //    0);
 
-            transform.rotation = Quaternion.Euler(rotation);
+            //transform.rotation = Quaternion.Euler(rotation);
         }
     }
 }

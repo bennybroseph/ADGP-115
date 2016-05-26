@@ -1,18 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
 
 using Library;
-
+using UnityEngine.EventSystems;
 using Event = Define.Event;
 
 namespace Units.Controller
 {
     public sealed class UserController : MonoSingleton<UserController>, IController
     {
+#if !UNITY_WEBGL
+        public struct POINT
+        {
+            public int X;
+            public int Y;
+
+            public POINT(int x, int y)
+            {
+                this.X = x;
+                this.Y = y;
+            }
+        }
+        [DllImport("user32.dll")]
+        public static extern bool GetCursorPos(out POINT lpPoint);
+        [DllImport("user32.dll")]
+        public static extern bool SetCursorPos(int X, int Y);
+#endif
         [SerializeField]
         private List<IControllable> m_Controllables;
+        [SerializeField]
+        private EventSystem m_EventSystem;
+
+        private Vector2 m_MouseAnchor;
+
+        private Vector2 m_PrevMousePosition;
+        private Vector2 m_DeltaMousePosition;
 
         public List<IControllable> controllables
         {
@@ -25,6 +48,11 @@ namespace Units.Controller
             base.Awake();
 
             m_Controllables = new List<IControllable>();
+        }
+
+        private void Start()
+        {
+            m_EventSystem = FindObjectOfType(typeof(EventSystem)) as EventSystem;
         }
 
         private void FixedUpdate()
@@ -52,6 +80,64 @@ namespace Units.Controller
 
         private void Update()
         {
+#if !UNITY_WEBGL
+            POINT currentMousePosition;
+            GetCursorPos(out currentMousePosition);
+
+            m_DeltaMousePosition =
+                new Vector2(currentMousePosition.X, currentMousePosition.Y) - m_PrevMousePosition;
+
+            if (Input.GetMouseButtonDown(1))
+                m_MouseAnchor = new Vector2(currentMousePosition.X, currentMousePosition.Y);
+
+            if (Input.GetMouseButton(1))
+            {
+                Cursor.visible = false;
+
+                SetCursorPos((int)m_MouseAnchor.x, (int)m_MouseAnchor.y);
+                GetCursorPos(out currentMousePosition);
+
+                Camera3rdPerson.self.transform.eulerAngles +=
+                    new Vector3(
+                        m_DeltaMousePosition.y * Time.deltaTime * 5f,
+                        m_DeltaMousePosition.x * Time.deltaTime * 5f,
+                        0);
+            }
+            else
+                Cursor.visible = true;
+
+            m_PrevMousePosition = new Vector2(currentMousePosition.X, currentMousePosition.Y);
+#else
+            if(m_EventSystem.currentSelectedGameObject == null)
+            {
+                Vector2 currentMousePosition = Input.mousePosition;
+                m_DeltaMousePosition =
+                    new Vector2(Input.GetAxis("Mouse X")/2*Time.deltaTime, -Input.GetAxis("Mouse Y")/2*Time.deltaTime);
+
+                if (Input.GetMouseButtonDown(1))
+                {
+                    Cursor.visible = false;
+                    Cursor.lockState = CursorLockMode.Locked;
+                    m_MouseAnchor = currentMousePosition;
+                }
+                if (Input.GetMouseButton(1))
+                {
+                    Camera3rdPerson.self.transform.eulerAngles +=
+                        new Vector3(
+                            m_DeltaMousePosition.y*Time.deltaTime,
+                            m_DeltaMousePosition.x*Time.deltaTime,
+                            0);
+                }
+                else
+                {
+                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.None;
+                }
+
+                if (currentMousePosition != m_MouseAnchor)
+                    m_PrevMousePosition = currentMousePosition;
+            }
+#endif
             int i = 0;
             foreach (IControllable controlable in m_Controllables)
             {
@@ -101,7 +187,8 @@ namespace Units.Controller
 
                     if (controlable.velocity != Vector3.zero)
                     {
-                        float angle = -Mathf.Atan(controlable.velocity.x / controlable.velocity.z) + (Mathf.PI / 2);
+                        float angle = Camera3rdPerson.self.transform.eulerAngles.y * (Mathf.PI / 180);
+                        angle += Mathf.Atan(controlable.velocity.x / controlable.velocity.z);
 
                         if ((controlable.velocity.x < 0.0f && controlable.velocity.z < 0.0f) ||
                             (controlable.velocity.x > 0.0f && controlable.velocity.z < 0.0f) ||
@@ -109,9 +196,16 @@ namespace Units.Controller
                             angle += Mathf.PI;
 
                         controlable.velocity = new Vector3(
-                            controlable.speed * Mathf.Cos(angle),
+                            controlable.speed * Mathf.Sin(angle),
                             0,
-                            controlable.speed * Mathf.Sin(angle));
+                            controlable.speed * Mathf.Cos(angle));
+                    }
+                    if (Input.GetMouseButton(1))
+                    {
+                        controlable.transform.eulerAngles = new Vector3(
+                            controlable.transform.eulerAngles.x,
+                            Camera3rdPerson.self.transform.eulerAngles.y,
+                            controlable.transform.eulerAngles.z);
                     }
 
                     Vector2 leftStick;
@@ -123,23 +217,29 @@ namespace Units.Controller
                     rightStick.x = GameManager.self.GetStickValue(i, GameManager.Stick.Right).X;
                     rightStick.y = GameManager.self.GetStickValue(i, GameManager.Stick.Right).Y;
 
+                    
+#else
+                    leftStick.x = Input.GetAxisRaw("Horizontal");
+                    leftStick.y = Input.GetAxisRaw("Vertical");
+
+                    rightStick.x = Input.GetAxisRaw("Right Stick X");
+                    rightStick.y = Input.GetAxisRaw("Right Stick Y");
+#endif
                     if (rightStick.x != 0.0f ||
                         rightStick.y != 0.0f)
                     {
                         float rotationY = -(Mathf.Atan(rightStick.y / rightStick.x) * (180 / Mathf.PI));
-                        
+
                         if ((rightStick.x < 0.0f && rightStick.y > 0.0f) ||
                             (rightStick.x < 0.0f && rightStick.y < 0.0f) ||
                             (rightStick.x < 0.0f && rightStick.y == 0.0f))
                             rotationY += 180;
 
-                        controlable.transform.rotation = Quaternion.Euler(
-                            new Vector3(0, rotationY, 0));
+                        Camera3rdPerson.self.transform.eulerAngles += new Vector3(
+                            rightStick.y * 100 * Time.deltaTime,
+                            rightStick.x * 100 * Time.deltaTime, 0);
                     }
-#else
-                    leftStick.x = Input.GetAxisRaw("Horizontal");
-                    leftStick.y = Input.GetAxisRaw("Vertical");
-#endif
+
                     if (leftStick.x != 0.0f ||
                         leftStick.y != 0.0f)
                     {
@@ -147,6 +247,24 @@ namespace Units.Controller
                             leftStick.x * controlable.speed,
                             controlable.velocity.y,
                             leftStick.y * controlable.speed);
+
+                        float angle = Camera3rdPerson.self.transform.eulerAngles.y * (Mathf.PI / 180);
+                        angle += Mathf.Atan(controlable.velocity.x / controlable.velocity.z);
+
+                        if ((controlable.velocity.x < 0.0f && controlable.velocity.z < 0.0f) ||
+                            (controlable.velocity.x > 0.0f && controlable.velocity.z < 0.0f) ||
+                            (controlable.velocity.x == 0.0f && controlable.velocity.z < 0.0f))
+                            angle += Mathf.PI;
+
+                        controlable.velocity = new Vector3(
+                            controlable.speed * Mathf.Sin(angle),
+                            0,
+                            controlable.speed * Mathf.Cos(angle));
+
+                        controlable.transform.eulerAngles = new Vector3(
+                            controlable.transform.eulerAngles.x,
+                            angle * (180f / Mathf.PI),
+                            controlable.transform.eulerAngles.z);
                     }
                 }
 

@@ -1,8 +1,6 @@
 ﻿using Interfaces;
 using UnityEngine;
-using Library;
 using UI;
-using Event = Define.Event;
 
 namespace Units.Skills
 {
@@ -13,6 +11,9 @@ namespace Units.Skills
         private Vector3 m_Velocity;
         [SerializeField]
         private float m_Speed;
+
+        [SerializeField]
+        private bool m_IsDestroyed;
         #endregion
 
         #region -- PROPERTIES --
@@ -47,9 +48,9 @@ namespace Units.Skills
             transform.position = m_Parent.gameObject.transform.position;
 
             m_Velocity = new Vector3(
-                Mathf.Cos((m_Parent.gameObject.transform.eulerAngles.y) * (Mathf.PI / 180)) * m_Speed,
+                Mathf.Cos((m_Parent.gameObject.transform.eulerAngles.y - 90) * (Mathf.PI / 180)) * m_Speed,
                 0,
-                Mathf.Sin(-(m_Parent.gameObject.transform.eulerAngles.y) * (Mathf.PI / 180)) * m_Speed);
+                Mathf.Sin(-(m_Parent.gameObject.transform.eulerAngles.y - 90) * (Mathf.PI / 180)) * m_Speed);
         }
 
         private void FixedUpdate()
@@ -90,24 +91,27 @@ namespace Units.Skills
 
         private void OnTriggerEnter(Collider a_Collision)
         {
-            if (a_Collision.transform.gameObject != m_Parent.gameObject)
+            if (m_IsDestroyed)
+                return;
+
+            IAttackable attackableObject = a_Collision.transform.gameObject.GetComponent<IAttackable>();
+
+            if (attackableObject != null && attackableObject.faction != m_Parent.faction)
             {
-                IAttackable attackableObject = a_Collision.transform.gameObject.GetComponent<IAttackable>();
+                attackableObject.damageFSM.Transition(DamageState.TakingDamge);
 
-                if (attackableObject != null && attackableObject.faction != m_Parent.faction)
-                {
-                    attackableObject.damageFSM.Transition(DamageState.TakingDamge);
-                    Debug.Log("Hit " + attackableObject.unitName);
-                    attackableObject.health -= m_SkillData.damage;
-                    UIAnnouncer.self.FloatingText(
-                        m_SkillData.damage,
-                        a_Collision.transform.position,
-                        FloatingTextType.MagicDamage);
+                attackableObject.health -= m_SkillData.damage;
 
-                    if (a_Collision.transform.GetComponent<IStats>() != null && attackableObject.health <= 0)
-                        m_Parent.experience += a_Collision.transform.GetComponent<IStats>().experience;
-                    Destroy(gameObject);
-                }
+                UIAnnouncer.self.FloatingText(
+                    m_SkillData.damage,
+                    a_Collision.transform.position,
+                    FloatingTextType.MagicDamage);
+
+                if (a_Collision.transform.GetComponent<IStats>() != null && attackableObject.health <= 0)
+                    m_Parent.experience += a_Collision.transform.GetComponent<IStats>().experience;
+
+                m_IsDestroyed = true;
+                Destroy(gameObject);
             }
         }
 
@@ -120,9 +124,7 @@ namespace Units.Skills
         {
             string description = skillData.name + " is a magical skill that does " + a_Skill.skillData.damage + " damage!";
             return description;
-        } 
+        }
         #endregion
-
-
     }
 }

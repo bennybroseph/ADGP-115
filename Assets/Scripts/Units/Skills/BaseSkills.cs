@@ -1,9 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Interfaces;
-using Library;
-using UI;
-using Event = Define.Event;
 
 namespace Units.Skills
 {

@@ -29,6 +29,8 @@ namespace Units.Controller
         [SerializeField]
         private GameObject m_HealthPickupPrefab;
 
+        private bool m_ApplicationIsQuitting;
+
         protected override void Awake()
         {
             base.Awake();
@@ -57,6 +59,11 @@ namespace Units.Controller
 
             Publisher.self.UnSubscribe(Event.SpawnWaveClicked, SpawnWaves);
             Publisher.self.UnSubscribe(Event.UnitDied, OnUnitDied);
+        }
+
+        private void OnApplicationQuit()
+        {
+            m_ApplicationIsQuitting = true;
         }
 
         private void Search()
@@ -176,17 +183,20 @@ namespace Units.Controller
         {
             IStats unit = a_Params[0] as IStats;
 
+            if (unit == null || m_ApplicationIsQuitting)
+                return;
+
             if (unit.gameObject.tag == "Enemy")
             {
-                Vector3 healthinstantposition = new Vector3(unit.gameObject.transform.position.x + 0.5f, unit.gameObject.transform.position.y, unit.gameObject.transform.position.z + 1);
-                Vector3 manainstantposition = new Vector3(unit.gameObject.transform.position.x, unit.gameObject.transform.position.y, unit.gameObject.transform.position.z);
+                Vector3 healthinstantposition = new Vector3(unit.gameObject.transform.position.x + 0.25f, unit.gameObject.transform.position.y, unit.gameObject.transform.position.z);
+                Vector3 manainstantposition = new Vector3(unit.gameObject.transform.position.x - 0.25f, unit.gameObject.transform.position.y, unit.gameObject.transform.position.z);
 
-                Instantiate(m_HealthPickupPrefab, healthinstantposition, Quaternion.identity);
-                Instantiate(m_ManaPickupPrefab, manainstantposition, Quaternion.identity);
+                GameObject newHealthPickup = Instantiate(m_HealthPickupPrefab, healthinstantposition, Quaternion.identity) as GameObject;
+                GameObject newManaPickup = Instantiate(m_ManaPickupPrefab, manainstantposition, Quaternion.identity) as GameObject;
+
+                newHealthPickup.GetComponent<Rigidbody>().AddExplosionForce(250 + Random.value * 750, unit.gameObject.transform.position, 10);
+                newManaPickup.GetComponent<Rigidbody>().AddExplosionForce(250 + Random.value * 750, unit.gameObject.transform.position, 10);
             }
-
-            if (unit == null)
-                return;
 
             m_Enemies.Remove(unit);
         }

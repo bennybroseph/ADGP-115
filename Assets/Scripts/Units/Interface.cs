@@ -1,11 +1,6 @@
 ﻿// Interface
 
 using System;
-using System.Collections.Generic;
-using Library;
-using Units.Controller;
-using Units.Skills;
-using UnityEngine;
 
 namespace Units
 {
