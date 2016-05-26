@@ -31,6 +31,16 @@ ModelImporter:
     400020: wheel02_joint
     400022: wheel03_joint
     400024: wheel04_joint
+    2300000: tire01
+    2300002: tire02
+    2300004: tire03
+    2300006: tire04
+    2300008: van_body_mesh
+    3300000: tire01
+    3300002: tire02
+    3300004: tire03
+    3300006: tire04
+    3300008: van_body_mesh
     4300000: tire01
     4300002: tire02
     4300004: tire03
@@ -43,7 +53,7 @@ ModelImporter:
     13700006: tire04
     13700008: van_body_mesh
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
   animations:
@@ -56,7 +66,7 @@ ModelImporter:
     animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -85,7 +95,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     human: []

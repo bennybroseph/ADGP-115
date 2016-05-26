@@ -10,7 +10,6 @@ GameObject:
   - 4: {fileID: 412546}
   - 33: {fileID: 3395840}
   - 23: {fileID: 2368826}
-  - 95: {fileID: 9523548}
   - 65: {fileID: 6588808}
   m_Layer: 0
   m_Name: TDGoblinSquareBaseLevel02BluePrefab
@@ -77,23 +76,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 7.8800693, y: 9.568914, z: 7.28364}
   m_Center: {x: 0.09575057, y: 4.784457, z: 0.2851522}
---- !u!95 &9523548
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 183600}
-  m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 60963e33f0b397442aee39569800b68c, type: 3}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

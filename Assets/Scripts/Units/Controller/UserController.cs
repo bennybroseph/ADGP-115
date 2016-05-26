@@ -96,10 +96,10 @@ namespace Units.Controller
             m_DeltaMousePosition =
                 new Vector2(currentMousePosition.X, currentMousePosition.Y) - m_PrevMousePosition;
 
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
                 m_MouseAnchor = new Vector2(currentMousePosition.X, currentMousePosition.Y);
 
-            if (Input.GetMouseButton(1))
+            if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
             {
                 Cursor.visible = false;
 
@@ -214,6 +214,13 @@ namespace Units.Controller
                     if (controlable.isMoving.right)
                         controlable.velocity += Vector3.right;
 
+                    if (Input.GetMouseButton(1))
+                    {
+                        controlable.transform.eulerAngles = new Vector3(
+                            controlable.transform.eulerAngles.x,
+                            ThirdPersonCamera.self.transform.eulerAngles.y,
+                            controlable.transform.eulerAngles.z);
+                    }
                     if (controlable.velocity != Vector3.zero)
                     {
                         float angle = ThirdPersonCamera.self.transform.eulerAngles.y * (Mathf.PI / 180);
@@ -228,13 +235,12 @@ namespace Units.Controller
                             controlable.speed * Mathf.Sin(angle),
                             0,
                             controlable.speed * Mathf.Cos(angle));
-                    }
-                    if (Input.GetMouseButton(1))
-                    {
-                        controlable.transform.eulerAngles = new Vector3(
-                            controlable.transform.eulerAngles.x,
-                            ThirdPersonCamera.self.transform.eulerAngles.y,
-                            controlable.transform.eulerAngles.z);
+
+                        if (!Input.GetMouseButton(1))
+                            controlable.transform.eulerAngles = new Vector3(
+                                controlable.transform.eulerAngles.x,
+                                angle * (180 / Mathf.PI),
+                                controlable.transform.eulerAngles.z);
                     }
 
                     Vector2 leftStick;
@@ -246,7 +252,7 @@ namespace Units.Controller
                     rightStick.x = GameManager.self.GetStickValue(i, GameManager.Stick.Right).X;
                     rightStick.y = GameManager.self.GetStickValue(i, GameManager.Stick.Right).Y;
 
-                    
+
 #else
                     leftStick.x = Input.GetAxisRaw("Horizontal");
                     leftStick.y = Input.GetAxisRaw("Vertical");
