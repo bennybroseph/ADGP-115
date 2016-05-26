@@ -9,6 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 436704}
   - 114: {fileID: 11476430}
+  - 65: {fileID: 6538708}
   m_Layer: 0
   m_Name: Melee_Prefab
   m_TagString: Untagged
@@ -26,7 +27,6 @@ GameObject:
   - 4: {fileID: 457088}
   - 212: {fileID: 21279092}
   - 96: {fileID: 9643528}
-  - 65: {fileID: 6584270}
   m_Layer: 0
   m_Name: Sprite Renderer
   m_TagString: Untagged
@@ -54,25 +54,25 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 110630}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071067}
-  m_LocalPosition: {x: 1.5, y: 0, z: 0}
+  m_LocalRotation: {x: -0.50000024, y: 0.49999982, z: -0.4999999, w: -0.5000001}
+  m_LocalPosition: {x: 0, y: 0, z: 1.5}
   m_LocalScale: {x: 3.5, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 270, z: 0}
   m_Children: []
   m_Father: {fileID: 436704}
   m_RootOrder: 0
---- !u!65 &6584270
+--- !u!65 &6538708
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 110630}
+  m_GameObject: {fileID: 101988}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.3, y: 0.33, z: 0.02}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 0.32, y: 0.11, z: 1.1}
+  m_Center: {x: 0, y: 0, z: 0.95}
 --- !u!96 &9643528
 TrailRenderer:
   m_ObjectHideFlags: 1
@@ -108,13 +108,13 @@ TrailRenderer:
       rgba: 4294967295
     m_Color[1]:
       serializedVersion: 2
-      rgba: 4285809919
+      rgba: 2952790015
     m_Color[2]:
       serializedVersion: 2
-      rgba: 4282729797
+      rgba: 1262830917
     m_Color[3]:
       serializedVersion: 2
-      rgba: 4286940549
+      rgba: 8750469
     m_Color[4]:
       serializedVersion: 2
       rgba: 12829635
@@ -141,9 +141,9 @@ MonoBehaviour:
     buffType: 2
     damageType: 0
   m_CurrentLifetime: 0
-  m_MaxLifetime: 2
-  m_BaseMaxCooldown: 0.75
-  m_MaxCooldownGrowth: 0.08
+  m_MaxLifetime: 0.25
+  m_BaseMaxCooldown: 0.35
+  m_MaxCooldownGrowth: 0.005
   m_BaseDamage: 1
   m_DamageGrowth: 0.25
   m_BaseCost: 0

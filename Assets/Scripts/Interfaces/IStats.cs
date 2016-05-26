@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
-using Units;
+﻿using System.Collections.Generic;
 using Units.Skills;
 
 namespace Interfaces

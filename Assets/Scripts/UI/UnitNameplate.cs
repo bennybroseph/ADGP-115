@@ -5,8 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Library;
-
-using Random = UnityEngine.Random;
 using Event = Define.Event;
 
 namespace UI

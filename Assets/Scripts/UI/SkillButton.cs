@@ -25,7 +25,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
 
     #endregion
 
-    #region -- PUBLIC Properties --
+    #region -- PROPERTIES --
     public IUsesSkills parent
         {
             get { return m_Parent; }
@@ -55,6 +55,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         Publisher.self.Subscribe(Event.SkillCooldownChanged, OnSkillCooldownChanged);
         Publisher.self.Subscribe(Event.UnitManaChanged, OnUnitManaChanged);
         Publisher.self.Subscribe(Event.UnitCanUpgradeSkill, OnCanUpgradeSkill);
+        Publisher.self.Subscribe(Event.UpgradeSkill, OnUpgradeSkill);
 
         m_UpgradeSkillButton.onClick.AddListener(OnSkillUpgradeClicked);
         m_UpgradeSkillButton.gameObject.SetActive(false);
@@ -145,9 +146,18 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         m_UpgradeSkillButton.gameObject.SetActive(true);
     }
 
+    private void OnUpgradeSkill(Event a_Event, params object[] a_Params)
+    {
+        IUsesSkills unit = a_Params[0] as IUsesSkills;
+
+        if (unit == null || unit != m_Parent)
+            return;
+
+        m_UpgradeSkillButton.gameObject.SetActive(false);
+    }
+
     private void OnSkillUpgradeClicked()
     {
-        
         m_UpgradeSkillButton.gameObject.SetActive(false);
         Publisher.self.Broadcast(Event.UpgradeSkill, m_Parent, m_SkillIndex);
 

@@ -2,8 +2,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using UI;
 using UnityEngine.UI;
 
 public enum AnimationType
@@ -125,6 +123,9 @@ public static class Animations
             deltaTime += Time.deltaTime;
             foreach (AnimationData animationData in a_AnimationLayer.animationDataList)
             {
+                if (a_Object.IsDestroyed())
+                    yield break;
+
                 switch (animationData.animationType)
                 {
                     case AnimationType.Fade:

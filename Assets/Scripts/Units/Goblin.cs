@@ -1,11 +1,8 @@
-﻿using System.CodeDom;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using Interfaces;
-using Library;
 using UI;
 using Units;
-using Event = Define.Event;
 
 public class Goblin : Enemy
 {

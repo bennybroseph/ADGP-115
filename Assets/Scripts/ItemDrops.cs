@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using Interfaces;
-using System;
 
 public class ItemDrops : MonoBehaviour, IChildable<IControllable>
 {
@@ -31,7 +29,6 @@ public class ItemDrops : MonoBehaviour, IChildable<IControllable>
         set { m_Parent = value; }
     }
 
-
     // Update is called once per frame
     void Update()
     {
@@ -41,10 +38,10 @@ public class ItemDrops : MonoBehaviour, IChildable<IControllable>
 
         if (m_Parent != null)
         {
-            m_Speed += Time.deltaTime;
-            transform.position += new Vector3(
+            m_Speed += Time.deltaTime * 2;
+            GetComponent<Rigidbody>().velocity = new Vector3(
                 (m_Parent.transform.position.x - transform.position.x) * m_Speed,
-                0, 
+                0,
                 (m_Parent.transform.position.z - transform.position.z) * m_Speed);
         }
     }
@@ -64,12 +61,22 @@ public class ItemDrops : MonoBehaviour, IChildable<IControllable>
                 if (unit.damageFSM.currentState == DamageState.Dead)
                     return;
 
-                unit.health += m_HealthIncrease * unit.maxHealth;
-                unit.health = Mathf.Clamp(unit.health, 0, unit.maxHealth);
-
-                unit.mana += m_ManaIncrease;
-                unit.mana = Mathf.Clamp(unit.mana, 0, unit.maxMana);
-                Destroy(gameObject);
+                if ((m_HealthIncrease != 0 && unit.health < unit.maxHealth) ||
+                    (m_ManaIncrease != 0 && unit.mana < unit.maxMana))
+                {
+                    unit.health += m_HealthIncrease * unit.maxHealth;
+                    unit.health = Mathf.Clamp(unit.health, 0, unit.maxHealth);
+                
+                    unit.mana += m_ManaIncrease;
+                    unit.mana = Mathf.Clamp(unit.mana, 0, unit.maxMana);
+                    Destroy(gameObject);
+                }
+                else
+                {
+                    GetComponent<Rigidbody>().velocity = Vector3.zero;
+                    gameObject.GetComponents<Collider>()[0].enabled = true;
+                    m_Parent = null;
+                }
             }
         }
         else if (controllable.controllerType == ControllerType.User &&
@@ -78,7 +85,6 @@ public class ItemDrops : MonoBehaviour, IChildable<IControllable>
         {
             gameObject.GetComponents<Collider>()[0].enabled = false;
             m_Parent = controllable;
-
         }
 
     }

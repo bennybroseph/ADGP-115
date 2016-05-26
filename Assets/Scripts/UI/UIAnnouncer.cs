@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Library;
 using Units;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UI
@@ -141,7 +140,7 @@ namespace UI
 
             FloatingText newObject = Instantiate(m_FloatingTextPrefab);
             newObject.transform.SetParent(UIManager.self.backgroundUI.transform, false);
-            newObject.anchor = new Vector3(0, 0, 0.45f);
+            newObject.anchor = new Vector3(0, 1f, 0);
 
             newObject.parent = a_Unit;
 
