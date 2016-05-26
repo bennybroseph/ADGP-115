@@ -141,6 +141,9 @@ namespace Units.Controller
             if (a_Controllable.controllerType == ControllerType.GoblinMage)
             {
                 List<GameObject> fortresses = GameObject.FindGameObjectsWithTag("Fortress").ToList();
+                if (fortresses.Count == 0)
+                    return;
+
                 fortresses.Sort(
                     delegate (GameObject a, GameObject b)
                     {
@@ -170,7 +173,7 @@ namespace Units.Controller
             {
                 for (int BasesIndex = 0; BasesIndex <= m_EnemyBases.Count - 1; BasesIndex++)
                 {
-                    Vector3 spawnPoints = new Vector3(m_EnemyBases[BasesIndex].transform.position.x, m_EnemyBases[BasesIndex].transform.position.y + 0.5f, m_EnemyBases[BasesIndex].transform.position.z - 3.1f);
+                    Vector3 spawnPoints = m_EnemyBases[BasesIndex].transform.GetChild(0).position;
                     m_SpawnPoints.Add(spawnPoints);
                 }
                
@@ -220,6 +223,7 @@ namespace Units.Controller
                         spawnPoint.x,
                         spawnPoint.y,
                         spawnPoint.z);
+
 
                     GameObject goblinMage = Instantiate(m_GoblinMagePrefab);
                     goblinMage.transform.position = new Vector3(
