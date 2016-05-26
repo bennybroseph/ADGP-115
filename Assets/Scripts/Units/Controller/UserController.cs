@@ -79,6 +79,14 @@ namespace Units.Controller
             }
         }
 
+        private void OnGUI()
+        {
+            if (UnityEngine.Event.current.type == EventType.ScrollWheel)
+            {
+                ThirdPersonCamera.self.offset += new Vector3(0, 0, -UnityEngine.Event.current.delta.y * Time.deltaTime * 18f);
+            }
+        }
+
         private void Update()
         {
 #if !UNITY_WEBGL
