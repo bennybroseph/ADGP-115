@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -38,6 +39,8 @@ public class GameManager : MonoSingleton<GameManager>
         m_Fortresses = new List<IAttackable>();
         m_PreviousTimeScale = Time.timeScale;
 
+        StartCoroutine(CheckControllers());
+
         Application.targetFrameRate = -1;
 
         Publisher.self.Subscribe(Event.NewGame, OnNewGame);
@@ -53,28 +56,6 @@ public class GameManager : MonoSingleton<GameManager>
     private void Update()
     {
         Publisher.self.Update();
-
-#if !UNITY_WEBGL
-        // Find a PlayerIndex, for a single player game
-        // Will find the first controller that is connected ans use it
-        for (int i = 0; i < 4; ++i)
-        {
-            PlayerIndex testPlayerIndex = (PlayerIndex)i;
-            GamePadState testState = GamePad.GetState(testPlayerIndex);
-            if (testState.IsConnected && !m_PlayerIndices.Contains(testPlayerIndex))
-            {
-                Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
-                m_PlayerIndices.Add(testPlayerIndex);
-                m_PlayerIndices.Sort();
-            }
-            else if (!testState.IsConnected && m_PlayerIndices.Contains(testPlayerIndex))
-            {
-                Debug.Log(string.Format("GamePad removed {0}", testPlayerIndex));
-                m_PlayerIndices.Remove(testPlayerIndex);
-                m_PlayerIndices.Sort();
-            }
-        }
-#endif
 
         if (Input.GetKeyDown(KeyCode.P))
             Publisher.self.Broadcast(Event.ToggleQuitMenu);
@@ -212,4 +193,33 @@ public class GameManager : MonoSingleton<GameManager>
 
 
     #endregion
+
+#if !UNITY_WEBGL
+    private IEnumerator CheckControllers()
+    {
+        while (true)
+        {
+            // Find a PlayerIndex, for a single player game
+            // Will find the first controller that is connected ans use it
+            for (int i = 0; i < 4; ++i)
+            {
+                PlayerIndex testPlayerIndex = (PlayerIndex) i;
+                GamePadState testState = GamePad.GetState(testPlayerIndex);
+                if (testState.IsConnected && !m_PlayerIndices.Contains(testPlayerIndex))
+                {
+                    Debug.Log(string.Format("GamePad found {0}", testPlayerIndex));
+                    m_PlayerIndices.Add(testPlayerIndex);
+                    m_PlayerIndices.Sort();
+                }
+                else if (!testState.IsConnected && m_PlayerIndices.Contains(testPlayerIndex))
+                {
+                    Debug.Log(string.Format("GamePad removed {0}", testPlayerIndex));
+                    m_PlayerIndices.Remove(testPlayerIndex);
+                    m_PlayerIndices.Sort();
+                }
+                yield return null;
+            }
+        }
+    }
+#endif
 }

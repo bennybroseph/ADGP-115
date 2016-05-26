@@ -22,6 +22,12 @@ public class ThirdPersonCamera : MonoSingleton<ThirdPersonCamera>
 
     private Camera m_Camera;
 
+    public Vector3 offset
+    {
+        get { return m_Offset; }
+        set { m_Offset = value; }
+    }
+
     private void Start()
     {
         if (m_Following == null)
