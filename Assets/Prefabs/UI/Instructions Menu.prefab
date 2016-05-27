@@ -10,6 +10,7 @@ GameObject:
   - 224: {fileID: 22421022}
   - 222: {fileID: 22230598}
   - 114: {fileID: 11447308}
+  - 114: {fileID: 11483892}
   m_Layer: 5
   m_Name: Instructions Menu
   m_TagString: Instructions Menu
@@ -244,6 +245,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11483892
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 109654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b604fd68fb421c4bbd114e057f91017, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InstructionsText: {fileID: 11415132}
 --- !u!222 &22205606
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -277,6 +290,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22478430}
   - {fileID: 22425570}
@@ -296,6 +310,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 22485324}
   m_Father: {fileID: 22421022}
@@ -314,6 +329,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22421022}
   m_RootOrder: 0
@@ -331,6 +347,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 22425570}
   m_RootOrder: 0

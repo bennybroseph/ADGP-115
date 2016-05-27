@@ -10,7 +10,7 @@ TagManager:
   - Health Bar
   - Mana Bar
   - Level Text
-  - HUD
+  - Battle UI
   - Quit Menu
   - Instructions Menu
   - Cooldown Indicator
@@ -29,6 +29,7 @@ TagManager:
   - Options Menu
   - Options
   - EnemySpawn
+  - HUD
   layers:
   - Default
   - TransparentFX

@@ -74,7 +74,8 @@ namespace UI
             Publisher.self.Subscribe(Event.SpawnWave, OnSpawnWave);
             Publisher.self.Subscribe(Event.MainMenu, OnMainMenu);
             Publisher.self.Subscribe(Event.GameOver, OnGameOver);
-            
+            Publisher.self.Subscribe(Event.ApplyClicked, OnApplyClicked);
+            Publisher.self.Subscribe(Event.CancelClicked, OnCancelClicked);
 
             if (m_SkillButtonPrefab != null)
                 Publisher.self.Subscribe(Event.UnitInitialized, OnUnitInitialized);
@@ -155,8 +156,8 @@ namespace UI
             {
                 switch (child.tag)
                 {
-                    //Case 'HUD' tag
-                    case "HUD":
+                    //Case 'Battle UI' tag
+                    case "Battle UI":
                         {
                             if (m_HUD == null)
                                 m_HUD = child.GetComponent<RectTransform>();
@@ -228,9 +229,12 @@ namespace UI
                                 continue;
                             }
 
-                            
-                            Button closeButton = m_OptionsMenu.GetComponentsInChildren<Button>()[0];
+                            Button applyButton = m_OptionsMenu.GetComponentsInChildren<Button>()[0];
+                            Button cancelButton = m_OptionsMenu.GetComponentsInChildren<Button>()[1];
+                            Button closeButton = m_OptionsMenu.GetComponentsInChildren<Button>()[2];
 
+                            applyButton.onClick.AddListener(OnOptionsApplyClick);
+                            cancelButton.onClick.AddListener(OnOptionsCancelClick);
                             closeButton.onClick.AddListener(OnOptionsCloseClick);
 
                             m_OptionsMenu.gameObject.SetActive(false);
@@ -384,6 +388,26 @@ namespace UI
         public void OnOptionsCloseClick()
         {
             m_OptionsMenu.gameObject.SetActive(false);
+        }
+
+        private void OnOptionsApplyClick()
+        {
+            Publisher.self.Broadcast(Event.ApplyClicked);
+        }
+
+        private void OnApplyClicked(Event a_Event, params object[] a_Params)
+        {
+           Debug.Log("Apply Clicked!");
+        }
+
+        private void OnOptionsCancelClick()
+        {
+            Publisher.self.Broadcast(Event.CancelClicked);
+        }
+
+        private void OnCancelClicked(Event a_Event, params object[] a_Params)
+        {
+            Debug.Log("Cancel Clicked!");
         }
 
         public void OnResumeClick()
