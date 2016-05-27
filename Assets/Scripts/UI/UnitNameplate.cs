@@ -299,10 +299,10 @@ namespace UI
 
         private void OnFortressDied(Event a_Event, params object[] a_Params)
         {
-            IAttackable fortress = a_Params[0] as IAttackable;
+            Fortress fortress = a_Params[0] as Fortress;
 
             // The 'this == null' call is surprisingly necessary when in the editor...
-            if (fortress == null || fortress != m_StatParent || this == null)
+            if (fortress == null || fortress != m_FortressParent || this == null)
                 return;
 
             Destroy(gameObject);

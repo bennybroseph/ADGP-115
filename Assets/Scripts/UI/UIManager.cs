@@ -228,20 +228,10 @@ namespace UI
                                 continue;
                             }
 
+                            
                             Button closeButton = m_OptionsMenu.GetComponentsInChildren<Button>()[0];
-                            Button resumeButton = m_OptionsMenu.GetComponentsInChildren<Button>()[1];
-                            Button instructionsButton = m_OptionsMenu.GetComponentsInChildren<Button>()[2];
-                            Button mainmenuButton = m_OptionsMenu.GetComponentsInChildren<Button>()[3];
-                            Button quitButton = m_OptionsMenu.GetComponentsInChildren<Button>()[4];
-
-
 
                             closeButton.onClick.AddListener(OnOptionsCloseClick);
-                            resumeButton.onClick.AddListener(OnResumeClick);
-                            instructionsButton.onClick.AddListener(OnInstructionsClick);
-                            mainmenuButton.onClick.AddListener(OnMainMenuClick);
-                            quitButton.onClick.AddListener(OnQuitGameClick);
-
 
                             m_OptionsMenu.gameObject.SetActive(false);
                         }
@@ -377,7 +367,7 @@ namespace UI
 
         public void OnInstructionsClick()
         {
-            m_OptionsMenu.gameObject.SetActive(false);
+            //m_OptionsMenu.gameObject.SetActive(false);
             Publisher.self.Broadcast(Event.Instructions);
         }
 
