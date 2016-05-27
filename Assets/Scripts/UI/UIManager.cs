@@ -435,6 +435,7 @@ namespace UI
         {
             SkillButton skillButton = Instantiate(a_RectTransform);
             skillButton.GetComponent<RectTransform>().SetParent(transform, false);
+            skillButton.transform.SetAsFirstSibling();
 
             skillButton.transform.localPosition += a_Position;
 

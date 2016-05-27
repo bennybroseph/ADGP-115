@@ -173,7 +173,11 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         if (unit == null || unit != m_Parent)
             return;
 
-        m_CostText.text = string.Format("{0:0}", m_Parent.skills[m_SkillIndex].skillData.cost);
+        if (m_Parent.skills[m_SkillIndex].skillData.cost == 0)
+            m_CostText.text = "";
+        else
+            m_CostText.text = string.Format("{0:0}", m_Parent.skills[m_SkillIndex].skillData.cost);
+
         m_UpgradeButton.gameObject.SetActive(false);
     }
 
