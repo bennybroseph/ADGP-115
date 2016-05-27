@@ -190,11 +190,11 @@ namespace Units.Controller
         private void OnUnitDied(Event a_Event, params object[] a_Params)
         {
             IStats unit = a_Params[0] as IStats;
-
+     
             if (unit == null || m_ApplicationIsQuitting)
                 return;
 
-            if (m_Controlables.Contains(a_Params[0] as IControllable))
+            if (m_Enemies.Contains(unit))
             {
                 Vector3 healthinstantposition = new Vector3(unit.gameObject.transform.position.x + 0.25f, unit.gameObject.transform.position.y, unit.gameObject.transform.position.z);
                 Vector3 manainstantposition = new Vector3(unit.gameObject.transform.position.x - 0.25f, unit.gameObject.transform.position.y, unit.gameObject.transform.position.z);
