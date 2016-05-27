@@ -450,6 +450,7 @@ GameObject:
   - 136: {fileID: 13690996}
   - 114: {fileID: 11473498}
   - 114: {fileID: 11435792}
+  - 114: {fileID: 11401772}
   m_Layer: 0
   m_Name: TDAIKnight
   m_TagString: Untagged
@@ -2215,6 +2216,34 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &11401772
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 140678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4474093f4b84304d986bebbd4755256, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Nameplate: {fileID: 11409874, guid: bdd14ad98f93f3a449cd18a355cc6dad, type: 2}
+  m_ControllerType: 3
+  m_Skills: []
+  m_SkillPrefabs: []
+  m_UnitName: Goblin
+  m_UnitNickname: Goblin
+  m_Faction: Enemies
+  m_BaseHealth: 5
+  m_HealthGrowth: 2.5
+  m_BaseMana: 2
+  m_ManaGrowth: 1
+  m_BaseDefense: 2
+  m_DefenseGrowth: 1
+  m_BaseLevel: 1
+  m_BaseSpeed: 5
+  m_SpeedGrowth: 0.2
+  m_Taunt: That smell...fear!
 --- !u!114 &11435792
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2227,7 +2256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  autotarget: 1
+  autotarget: 0
 --- !u!114 &11473498
 MonoBehaviour:
   m_ObjectHideFlags: 1

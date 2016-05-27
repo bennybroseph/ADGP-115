@@ -51,25 +51,10 @@ namespace UI
             transform.SetParent(UIManager.self.backgroundUI.transform, false);
             transform.SetAsFirstSibling();
 
-            foreach (Transform child in transform)
-            {
-                switch (child.gameObject.tag)
-                {
-                    case "Health Bar":
-                        if (m_HealthBar == null)
-                            m_HealthBar = child.gameObject.GetComponent<Image>();
-                        if (m_HealthText == null)
-                            m_HealthText = m_HealthBar.GetComponentInChildren<Text>();
-                        break;
-
-                    case "Negative Health Bar":
-                        {
-                            if (m_NegativeHealthBar == null)
-                                m_NegativeHealthBar = child.gameObject.GetComponent<Image>();
-                        }
-                        break;
-                }
-            }
+            if (m_HealthBar == null)
+                Debug.LogWarning(name + " has no health bar!");
+            if (m_NegativeHealthBar == null)
+                Debug.LogWarning(name + " has no mana bar!");
 
             Publisher.self.Subscribe(Event.FortressInitialized, OnInit);
 

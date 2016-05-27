@@ -61,6 +61,8 @@ GameObject:
   - 224: {fileID: 22451678}
   - 222: {fileID: 22232936}
   - 114: {fileID: 11409874}
+  - 50: {fileID: 5034598}
+  - 61: {fileID: 6188740}
   m_Layer: 5
   m_Name: Enemy_Nameplate_Prefab
   m_TagString: Untagged
@@ -204,6 +206,37 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!50 &5034598
+Rigidbody2D:
+  serializedVersion: 2
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 117376}
+  m_UseAutoMass: 1
+  m_Mass: 2568.8892
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!61 &6188740
+BoxCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 117376}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Size: {x: 85, y: 17}
 --- !u!114 &11409874
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -215,7 +248,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 920dd1c6cfdd6894fbba6ae1a7e5fcba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Offset: {x: 0, y: 1, z: 0}
+  m_NameText: {fileID: 11494806}
+  m_LevelText: {fileID: 11483330}
+  m_NegativeManaBar: {fileID: 11450252}
+  m_ManaBar: {fileID: 11467210}
+  m_NegativeHealthBar: {fileID: 11435512}
+  m_HealthBar: {fileID: 11469002}
+  m_Offset: {x: 0, y: 2, z: 0}
   m_BarAnimationCurve:
     serializedVersion: 2
     m_Curve:
@@ -232,12 +271,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  m_NameText: {fileID: 0}
-  m_LevelText: {fileID: 0}
-  m_HealthBar: {fileID: 0}
-  m_ManaBar: {fileID: 0}
-  m_NegativeHealthBar: {fileID: 0}
-  m_NegativeManaBar: {fileID: 0}
   m_LastHealthChange: 0
   m_HealthCoroutineIsRunning: 0
   m_LastManaChange: 0

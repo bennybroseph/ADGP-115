@@ -269,10 +269,20 @@ namespace Units.Controller
                             (rightStick.x < 0.0f && rightStick.y < 0.0f) ||
                             (rightStick.x < 0.0f && rightStick.y == 0.0f))
                             rotationY += 180;
-
-                        ThirdPersonCamera.self.transform.eulerAngles += new Vector3(
+                        
+                        Vector3 newAngle = ThirdPersonCamera.self.transform.eulerAngles;
+                        newAngle +=
+                            new Vector3(
                             rightStick.y * 100 * Time.deltaTime,
                             rightStick.x * 100 * Time.deltaTime, 0);
+
+                        newAngle =
+                                new Vector3(
+                                    Mathf.Clamp(newAngle.x, 10, 90),
+                                    newAngle.y,
+                                    newAngle.z);
+
+                        ThirdPersonCamera.self.transform.eulerAngles = newAngle;
                     }
 
                     if (leftStick.x != 0.0f ||
@@ -326,9 +336,9 @@ namespace Units.Controller
 
                 if (skillUser != null)
                 {
-                    if (Input.GetKeyDown(KeyConfiguration.self.userConfigurations[i].skillKeys[0].keyCode) || isPressed[0])
+                    if (Input.GetKey(KeyConfiguration.self.userConfigurations[i].skillKeys[0].keyCode) || isPressed[0])
                         Publisher.self.Broadcast(Event.UseSkill, skillUser, 0);
-                    if (Input.GetKeyDown(KeyConfiguration.self.userConfigurations[i].skillKeys[1].keyCode) || isPressed[1])
+                    if (Input.GetKey(KeyConfiguration.self.userConfigurations[i].skillKeys[1].keyCode) || isPressed[1])
                         Publisher.self.Broadcast(Event.UseSkill, skillUser, 1);
                 }
 
