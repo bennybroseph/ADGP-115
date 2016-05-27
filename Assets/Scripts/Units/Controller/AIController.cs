@@ -196,11 +196,14 @@ namespace Units.Controller
 
             if (m_Enemies.Contains(unit))
             {
-                Vector3 healthinstantposition = new Vector3(unit.gameObject.transform.position.x + 0.25f, unit.gameObject.transform.position.y, unit.gameObject.transform.position.z);
-                Vector3 manainstantposition = new Vector3(unit.gameObject.transform.position.x - 0.25f, unit.gameObject.transform.position.y, unit.gameObject.transform.position.z);
+                Vector3 healthinstantposition = new Vector3(unit.gameObject.transform.position.x + 0.25f, unit.gameObject.transform.position.y + 0.5f, unit.gameObject.transform.position.z);
+                Vector3 manainstantposition = new Vector3(unit.gameObject.transform.position.x - 0.25f, unit.gameObject.transform.position.y + 0.5f, unit.gameObject.transform.position.z);
 
                 GameObject newHealthPickup = Instantiate(m_HealthPickupPrefab, healthinstantposition, Quaternion.identity) as GameObject;
                 GameObject newManaPickup = Instantiate(m_ManaPickupPrefab, manainstantposition, Quaternion.identity) as GameObject;
+
+                Destroy(newHealthPickup,3.0f);
+                Destroy(newManaPickup, 3.0f);
 
                 newHealthPickup.GetComponent<Rigidbody>().AddExplosionForce(250 + Random.value * 750, unit.gameObject.transform.position, 10);
                 newManaPickup.GetComponent<Rigidbody>().AddExplosionForce(250 + Random.value * 750, unit.gameObject.transform.position, 10);
