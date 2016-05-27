@@ -150,13 +150,16 @@ namespace UI
 
         private void OnDestroy()
         {
-            Publisher.self.Subscribe(Event.FortressInitialized, OnFortressInit);
+            Publisher.self.UnSubscribe(Event.FortressInitialized, OnFortressInit);
 
-            Publisher.self.Subscribe(Event.FortressHealthChanged, OnFortressValueChanged);
+            Publisher.self.UnSubscribe(Event.FortressHealthChanged, OnFortressValueChanged);
 
-            Publisher.self.Subscribe(Event.FortressDied, OnFortressDied);
+            Publisher.self.UnSubscribe(Event.FortressDied, OnFortressDied);
 
             Publisher.self.UnSubscribe(Event.UnitInitialized, OnUnitInit);
+
+            Publisher.self.UnSubscribe(Event.UnitMaxHealthChanged, OnUnitValueChanged);
+            Publisher.self.UnSubscribe(Event.UnitMaxHealthChanged, OnUnitValueChanged);
 
             Publisher.self.UnSubscribe(Event.UnitHealthChanged, OnUnitValueChanged);
             Publisher.self.UnSubscribe(Event.UnitManaChanged, OnUnitValueChanged);

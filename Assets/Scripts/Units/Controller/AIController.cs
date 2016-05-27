@@ -85,7 +85,8 @@ namespace Units.Controller
 
                     float distanceFromEnemyToTarget = Vector3.Distance(controlable.following.transform.position, controlable.transform.position);
 
-                    if (distanceFromEnemyToTarget < 7 && controlable.controllerType == ControllerType.GoblinMage)
+                    if ((distanceFromEnemyToTarget < 7 && controlable.controllerType == ControllerType.GoblinMage) ||
+                        (distanceFromEnemyToTarget < 2 && controlable.controllerType == ControllerType.Goblin))
                     {
                         Publisher.self.Broadcast(Event.UseSkill, skillUser, 0);
                     }

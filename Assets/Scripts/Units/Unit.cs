@@ -317,6 +317,7 @@ namespace Units
             m_Controller.UnRegister(this);
 
             Publisher.self.UnSubscribe(Event.UseSkill, OnUseSkill);
+            Publisher.self.UnSubscribe(Event.UpgradeSkill, OnUpgradeSkill);
             Publisher.self.Broadcast(Event.UnitDied, this);
         }
         #endregion

@@ -80,6 +80,8 @@ MonoBehaviour:
   m_Nameplate: {fileID: 11409874, guid: bdd14ad98f93f3a449cd18a355cc6dad, type: 2}
   m_ControllerType: 3
   m_Skills: []
+  m_SkillPrefabs:
+  - {fileID: 101988, guid: 3448e23a5a3b54847a487c2cb09bab17, type: 2}
   m_UnitName: Goblin
   m_UnitNickname: Goblin
   m_Faction: Enemies

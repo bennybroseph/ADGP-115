@@ -102,6 +102,14 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
     {
 
     }
+
+    private void OnDestroy()
+    {
+        Publisher.self.UnSubscribe(Event.SkillCooldownChanged, OnSkillCooldownChanged);
+        Publisher.self.UnSubscribe(Event.UnitManaChanged, OnUnitManaChanged);
+        Publisher.self.UnSubscribe(Event.UnitCanUpgradeSkill, OnCanUpgradeSkill);
+        Publisher.self.UnSubscribe(Event.UpgradeSkill, OnUpgradeSkill);
+    }
     #endregion
 
     #region -- PRIVATE FUNCTIONS --
