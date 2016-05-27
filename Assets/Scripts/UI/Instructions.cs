@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using Interfaces;
 using Units.Controller;
+using Units.Skills;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,16 +14,23 @@ public class Instructions : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        List<Skill> skills = UserController.self.controllables[0].gameObject.GetComponent<IUsesSkills>().skills;
+
         m_InstructionsText.text =
             "Instructions:" + "\n" +
 
             "Keyboard Controls:" + "\n";
+
+        int i = 0;
         foreach (Key<KeyCode> skillKey in KeyConfiguration.self.userConfigurations[0].skillKeys)
         {
             m_InstructionsText.text +=
                 Enum.GetName(typeof(KeyCode), skillKey.keyCode) +
-                " - Use Fireball" + "\n";
+                " - Use " + skills[i].skillData.name + "\n";
+
+            ++i;
         }
+
         m_InstructionsText.text +=
                 Enum.GetName(typeof(KeyCode), KeyConfiguration.self.userConfigurations[0].verticalKeyAxis.positive.keyCode) +
                 " - Moves Character Up " + "\n";
@@ -33,10 +43,6 @@ public class Instructions : MonoBehaviour
         m_InstructionsText.text +=
         Enum.GetName(typeof(KeyCode), KeyConfiguration.self.userConfigurations[0].horizontalKeyAxis.negative.keyCode) +
                " - Move Character Left " + "\n";
-
-
-
-
 
         m_InstructionsText.text +=
 

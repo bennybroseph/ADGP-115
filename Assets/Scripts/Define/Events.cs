@@ -27,7 +27,10 @@ namespace Define
         QuitGame,
         //There are no parameters
         MainMenu,
-
+        //There are no parameters
+        ApplyClicked,
+        //There are no parameters
+        CancelClicked,
         // There are no parameters
         SpawnWaveClicked,
 
