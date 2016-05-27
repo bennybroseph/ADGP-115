@@ -11,7 +11,7 @@ namespace Units
     public class Fortress : MonoBehaviour, IAttackable, IParentable
     {
         [SerializeField]
-        private FortressNameplate m_NameplatePrefab;
+        private UnitNameplate m_NameplatePrefab = null;
 
         [SerializeField]
         private string m_UnitName;
@@ -85,8 +85,8 @@ namespace Units
             //Checks to see if NameplatePRefab not equal to null
             if (m_NameplatePrefab != null)
             {
-                FortressNameplate nameplate = Instantiate(m_NameplatePrefab);
-                nameplate.parent = this;
+                UnitNameplate nameplate = Instantiate(m_NameplatePrefab);
+                nameplate.fortressParent = this;
             }
         }
 

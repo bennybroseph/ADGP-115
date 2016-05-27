@@ -2,8 +2,16 @@
 //      Define      //
 //////////////////////
 
+using UnityEngine.Events;
+
 namespace Define
 {
+    public static class UnitEvent
+    {
+        public class UpgradeSkill : UnityEvent<int, int> { }
+        public class UseSkill : UnityEvent<int, int> { }
+    }
+
     public enum Event
     {
         // Used for testing purposes
@@ -44,7 +52,7 @@ namespace Define
         /// <param name="Unit"> IUsesSkills: which unit's skill should be used per user input</param> 
         /// <param name="Skill Index"> int: which skill to use</param>
         UseSkill,
-        
+
         /// <param name="Unit"> IStats: which unit's cooldown changed</param> 
         /// <param name="Skill Index"> int: which skill's cooldown changed</param>
         SkillCooldownChanged,
@@ -67,11 +75,11 @@ namespace Define
         /// <param name="Unit"> IStats: which unit leveled up</param>
         UnitLevelUp,
 
-        /// <param name="Fortress"> IAttackable: which fortress was initialized</param>
+        /// <param name="Fortress"> Fortress: which fortress was initialized</param>
         FortressInitialized,
-        /// <param name="Fortress"> IAttackable: which fortress's health changed</param>
+        /// <param name="Fortress"> Fortress: which fortress's health changed</param>
         FortressHealthChanged,
-        /// <param name="Fortress"> IAttackable: which fortress died</param>
+        /// <param name="Fortress"> Fortress: which fortress died</param>
         FortressDied,
 
         /// <param name="Unit"> IStats: which unit died</param>

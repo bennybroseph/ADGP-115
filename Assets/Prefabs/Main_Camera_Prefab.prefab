@@ -124,8 +124,8 @@ MonoBehaviour:
   m_Following: {fileID: 0}
   m_Offset: {x: 0, y: 0, z: -20}
   m_ScreenBorders:
-    m_Min: {x: -20, y: 0, z: -20}
-    m_Max: {x: 20, y: 0, z: 20}
+    m_Min: {x: -35, y: 0, z: -35}
+    m_Max: {x: 35, y: 0, z: 35}
 --- !u!124 &12498732
 Behaviour:
   m_ObjectHideFlags: 1

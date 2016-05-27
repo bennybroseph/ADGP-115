@@ -136,7 +136,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97ab43767e94f1140904eda84a31421e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_NameplatePrefab: {fileID: 11402176, guid: b98b59482a3996046ba8c9d9f9ebb366, type: 2}
+  m_NameplatePrefab: {fileID: 11448454, guid: b98b59482a3996046ba8c9d9f9ebb366, type: 2}
   m_UnitName: Fortress
   m_UnitNickname: Fortress
   m_Faction: Allies
