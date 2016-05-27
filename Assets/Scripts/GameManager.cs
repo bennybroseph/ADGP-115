@@ -39,7 +39,9 @@ public class GameManager : MonoSingleton<GameManager>
         m_Fortresses = new List<IAttackable>();
         m_PreviousTimeScale = Time.timeScale;
 
+#if !UNITY_WEBGL
         StartCoroutine(CheckControllers());
+#endif
 
         Application.targetFrameRate = -1;
 
