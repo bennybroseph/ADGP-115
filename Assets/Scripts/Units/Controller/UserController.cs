@@ -134,13 +134,13 @@ namespace Units.Controller
                         Input.GetAxis("Mouse X") * Time.deltaTime * 1.2f, 
                         -Input.GetAxis("Mouse Y") * Time.deltaTime * 0.8f);
 
-                if (Input.GetMouseButtonDown(1))
+                if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))
                 {
                     Cursor.visible = false;
                     Cursor.lockState = CursorLockMode.Locked;
                     m_MouseAnchor = currentMousePosition;
                 }
-                if (Input.GetMouseButton(1))
+                if (Input.GetMouseButton(0) || Input.GetMouseButton(1))
                 {
                     Vector3 newAngle = ThirdPersonCamera.self.transform.eulerAngles;
                     newAngle +=

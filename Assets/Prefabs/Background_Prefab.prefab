@@ -9,6 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 427668}
   - 218: {fileID: 21876720}
+  - 154: {fileID: 15487442}
   m_Layer: 0
   m_Name: Background_Prefab
   m_TagString: Untagged
@@ -23,12 +24,22 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 118894}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -75, y: 0, z: -77}
+  m_LocalPosition: {x: -74.6, y: 0, z: -47.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!154 &15487442
+TerrainCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 118894}
+  m_Material: {fileID: 0}
+  m_Enabled: 1
+  m_TerrainData: {fileID: 15600000, guid: 2f30c17687c8371418331d9d71e484d1, type: 2}
+  m_EnableTreeColliders: 1
 --- !u!218 &21876720
 Terrain:
   m_ObjectHideFlags: 1
@@ -38,7 +49,7 @@ Terrain:
   m_Enabled: 1
   serializedVersion: 3
   m_TerrainData: {fileID: 15600000, guid: 2f30c17687c8371418331d9d71e484d1, type: 2}
-  m_TreeDistance: 2000
+  m_TreeDistance: 5000
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
   m_TreeMaximumFullLODCount: 50
