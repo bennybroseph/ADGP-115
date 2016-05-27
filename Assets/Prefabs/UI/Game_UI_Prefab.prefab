@@ -383,7 +383,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &158814
 GameObject:
   m_ObjectHideFlags: 0
@@ -928,11 +928,13 @@ MonoBehaviour:
     type: 2}
   m_BackgroundUIPrefab: {fileID: 22397222, guid: 999e657ced1076c41866a978342b4131,
     type: 2}
+  m_HUDPrefab: {fileID: 11423510, guid: 628a04973c07c684abf0737aba4696a8, type: 2}
   m_SkillButtonPrefab: {fileID: 11444974, guid: d95a9a2a8113b4743a15a902df0f9e28,
     type: 2}
   m_SkillButtons: []
   m_WaveCounter: {fileID: 0}
   m_HUD: {fileID: 0}
+  m_BattleUI: {fileID: 0}
   m_QuitMenu: {fileID: 0}
   m_InstructionMenu: {fileID: 0}
   m_GameOverMenu: {fileID: 0}
@@ -1511,8 +1513,8 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 509ac187d8f060a48b4286090fa4d522, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
