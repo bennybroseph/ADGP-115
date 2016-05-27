@@ -4,6 +4,7 @@ using Interfaces;
 using UnityEngine;
 
 using Library;
+using Units.Controller;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -21,6 +22,8 @@ namespace UI
         [SerializeField]
         private Canvas m_BackgroundUIPrefab;
         [SerializeField]
+        private UnitNameplate m_HUDPrefab;
+        [SerializeField]
         private SkillButton m_SkillButtonPrefab;
 
         [Header("Other")]
@@ -29,7 +32,9 @@ namespace UI
         [SerializeField]
         private Text m_WaveCounter;
         [SerializeField]
-        private RectTransform m_HUD;
+        private UnitNameplate m_HUD;
+        [SerializeField]
+        private RectTransform m_BattleUI;
         [SerializeField]
         private RectTransform m_QuitMenu;
         [SerializeField]
@@ -52,10 +57,12 @@ namespace UI
         private Canvas m_BackgroundUI;
         #endregion
 
+        #region -- PROPERTIES --
         public Canvas backgroundUI
         {
             get { return m_BackgroundUI; }
         }
+        #endregion
 
         #region -- UNITY FUNCTIONS --
         protected override void Awake()
@@ -66,6 +73,7 @@ namespace UI
 
             Instantiate(m_UIAnnouncerPrefab);
             m_BackgroundUI = Instantiate(m_BackgroundUIPrefab);
+
             GetComponents();
 
             Publisher.self.Subscribe(Event.Instructions, OnInstructions);
@@ -87,6 +95,10 @@ namespace UI
         // Use this for initialization
         private void Start()
         {
+            m_HUD = Instantiate(m_HUDPrefab);
+            m_HUD.transform.SetParent(transform, false);
+            m_HUD.parent = UserController.self.controllables[0].gameObject.GetComponent<IStats>();
+
             if (m_SkillButtonPrefab.GetComponent<RectTransform>() == null)
                 return;
 
@@ -156,34 +168,32 @@ namespace UI
             {
                 switch (child.tag)
                 {
-                    //Case 'Battle UI' tag
                     case "Battle UI":
                         {
-                            if (m_HUD == null)
-                                m_HUD = child.GetComponent<RectTransform>();
-                            if (m_HUD == null)
+                            // Grab the child only if it wasn't set in the inspector
+                            if (m_BattleUI == null)
+                                m_BattleUI = child.GetComponent<RectTransform>();
+                            // If component could not be found
+                            if (m_BattleUI == null)
                             {
-                                //Displays a debug log warning detecting if the "HUD" tag is missing.
-                                Debug.LogWarning("UIManager is missing an object with the 'HUD' tag parented to it");
+                                Debug.LogWarning("UIManager is missing an object with the 'Battle UI' tag parented to it");
                                 continue;
                             }
 
-                            Button spawnWaveButton = m_HUD.GetComponentsInChildren<Button>()[0];
-                            Button instructionsButton = m_HUD.GetComponentsInChildren<Button>()[1];
+                            Button spawnWaveButton = m_BattleUI.GetComponentsInChildren<Button>()[0];
+                            Button instructionsButton = m_BattleUI.GetComponentsInChildren<Button>()[1];
 
                             spawnWaveButton.onClick.AddListener(OnSpawnWaveClick);
                             instructionsButton.onClick.AddListener(OnInstructionsClick);
-                            m_WaveCounter = m_HUD.GetComponentInChildren<Text>();
+                            m_WaveCounter = m_BattleUI.GetComponentInChildren<Text>();
                         }
                         break;
-                    //Case 'Quit Menu' tag
                     case "Quit Menu":
                         {
                             if (m_QuitMenu == null)
                                 m_QuitMenu = child.GetComponent<RectTransform>();
                             if (m_QuitMenu == null)
                             {
-                                //Displays a debug log warning detecting if the "Quit Menu" tag is missing.
                                 Debug.LogWarning("UIManager is missing an object with the 'Quit Menu' tag parented to it");
                                 continue;
                             }
@@ -199,14 +209,13 @@ namespace UI
                             m_QuitMenu.gameObject.SetActive(false);
                         }
                         break;
-                    //Case 'Instructions Menu' tag
                     case "Instructions Menu":
                         {
                             if (m_InstructionMenu == null)
                                 m_InstructionMenu = child.GetComponent<RectTransform>();
                             if (m_InstructionMenu == null)
                             {
-                                //Displays a debug log warning detecting if the "Instructions Menu" tag is missing.
+                                //Displays a debug log warning detecting if the "Instructions Menu" tag is missing
                                 Debug.LogWarning("UIManager is missing an object with the 'Instructions Menu' tag parented to it");
                                 continue;
                             }
@@ -220,11 +229,11 @@ namespace UI
                         break;
                     case "Options Menu":
                         {
-                            if (m_OptionsMenu== null)
+                            if (m_OptionsMenu == null)
                                 m_OptionsMenu = child.GetComponent<RectTransform>();
                             if (m_OptionsMenu == null)
                             {
-                                //Displays a debug log warning detecting if the "Op" tag is missing.
+                                //Displays a debug log warning detecting if the "Op" tag is missing
                                 Debug.LogWarning("UIManager is missing an object with the 'Options Menu' tag parented to it");
                                 continue;
                             }
@@ -240,14 +249,13 @@ namespace UI
                             m_OptionsMenu.gameObject.SetActive(false);
                         }
                         break;
-                    //Case 'Game Over Menu' tag
                     case "Game Over Menu":
                         {
                             if (m_GameOverMenu == null)
                                 m_GameOverMenu = child.GetComponent<RectTransform>();
                             if (m_GameOverMenu == null)
                             {
-                                //Displays a debug log warning detecting if the "Game Over Menu" tag is missing.
+                                //Displays a debug log warning detecting if the "Game Over Menu" tag is missing
                                 Debug.LogWarning("UIManager is missing an object with the 'Game Over Menu' tag parented to it");
                                 continue;
                             }
@@ -261,14 +269,13 @@ namespace UI
                             m_GameOverMenu.gameObject.SetActive(false);
                         }
                         break;
-                    //Case 'New Game' tag
                     case "New Game":
                         {
                             if (m_NewGame == null)
                                 m_NewGame = child.GetComponent<Button>();
                             if (m_NewGame == null)
                             {
-                                //Displays a debug log warning detecting if the "New Game" tag is missing.
+                                //Displays a debug log warning detecting if the "New Game" tag is missing
                                 Debug.LogWarning("UIManager is missing an object with the 'New Game' tag parented to it");
                                 continue;
                             }
@@ -276,14 +283,13 @@ namespace UI
                             m_NewGame.onClick.AddListener(delegate { SceneManager.LoadScene("Andrew"); });
                         }
                         break;
-                    //Case 'Load Game' tag
                     case "Load Game":
                         {
                             if (m_LoadGame == null)
                                 m_LoadGame = child.GetComponent<Button>();
                             if (m_LoadGame == null)
                             {
-                                //Displays a debug log warning detecting if the "Load Game" tag is missing.
+                                //Displays a debug log warning detecting if the "Load Game" tag is missing
                                 Debug.LogWarning("UIManager is missing an object with the 'Load Game' tag parented to it");
                                 continue;
                             }
@@ -291,14 +297,13 @@ namespace UI
                             m_LoadGame.onClick.AddListener(OnLoadGameClick);
                         }
                         break;
-                    //Case 'Instructions' tag
                     case "Instructions":
                         {
                             if (m_Instructions == null)
                                 m_Instructions = child.GetComponent<Button>();
                             if (m_Instructions == null)
                             {
-                                //Displays a debug log warning detecting if the "Instructions tag is missing.
+                                //Displays a debug log warning detecting if the "Instructions tag is missing
                                 Debug.LogWarning("UIManager is missing an object with the 'Instructions' tag parented to it");
                                 continue;
 
@@ -308,26 +313,25 @@ namespace UI
                         }
                         break;
                     case "Options":
-                    {
-                        if (m_Options == null)
-                            m_Options = child.GetComponent<Button>();
-                        if (m_Options == null)
                         {
-                            Debug.LogWarning("UIManger is missing an object with the 'Options' tag parented to it");
+                            if (m_Options == null)
+                                m_Options = child.GetComponent<Button>();
+                            if (m_Options == null)
+                            {
+                                Debug.LogWarning("UIManger is missing an object with the 'Options' tag parented to it");
+                            }
+
+                            m_Options.onClick.AddListener(OnOptionsClick);
+
                         }
-
-                        m_Options.onClick.AddListener(OnOptionsClick);
-
-                    }
                         break;
-                    //Case 'Quit Game' tag
                     case "Quit Game":
                         {
                             if (m_QuitGame == null)
                                 m_QuitGame = child.GetComponent<Button>();
                             if (m_QuitGame == null)
                             {
-                                //Displays a debug log warning detecting if the instructions tag is missing.
+                                //Displays a debug log warning detecting if the instructions tag is missing
                                 Debug.LogWarning("UIManager is missing an object with the 'Quit Game' tag parented to it");
                                 continue;
                             }
@@ -369,23 +373,23 @@ namespace UI
             m_OptionsMenu.gameObject.SetActive(true);
         }
 
-        public void OnInstructionsClick()
+        private void OnInstructionsClick()
         {
             //m_OptionsMenu.gameObject.SetActive(false);
             Publisher.self.Broadcast(Event.Instructions);
         }
 
-        public void OnOptionsClick()
+        private void OnOptionsClick()
         {
             Publisher.self.Broadcast(Event.Options);
         }
 
-        public void OnInstructionsCloseClick()
+        private void OnInstructionsCloseClick()
         {
             m_InstructionMenu.gameObject.SetActive(false);
         }
 
-        public void OnOptionsCloseClick()
+        private void OnOptionsCloseClick()
         {
             m_OptionsMenu.gameObject.SetActive(false);
         }
@@ -397,7 +401,7 @@ namespace UI
 
         private void OnApplyClicked(Event a_Event, params object[] a_Params)
         {
-           Debug.Log("Apply Clicked!");
+            Debug.Log("Apply Clicked!");
         }
 
         private void OnOptionsCancelClick()
@@ -410,7 +414,7 @@ namespace UI
             Debug.Log("Cancel Clicked!");
         }
 
-        public void OnResumeClick()
+        private void OnResumeClick()
         {
             m_QuitMenu.gameObject.SetActive(false);
             m_OptionsMenu.gameObject.SetActive(false);
@@ -422,18 +426,18 @@ namespace UI
             m_QuitMenu.gameObject.SetActive(false);
         }
 
-        public void OnSpawnWaveClick()
+        private void OnSpawnWaveClick()
         {
             Publisher.self.Broadcast(Event.SpawnWaveClicked);
         }
 
-        public void OnMainMenuClick()
+        private void OnMainMenuClick()
         {
             Publisher.self.Broadcast(Event.MainMenu);
         }
 
         //Function for LoadGame button
-        public void OnLoadGameClick()
+        private void OnLoadGameClick()
         {
             //Load Game Function
             //Publisher Subscriber for LoadGame/ Broadcast
@@ -441,7 +445,7 @@ namespace UI
         }
 
         //Function for QuitGame button
-        public void OnQuitGameClick()
+        private void OnQuitGameClick()
         {
             //Publisher Subscriber or QuitGame / Broadcast 
             Publisher.self.Broadcast(Event.QuitGame);
@@ -458,7 +462,7 @@ namespace UI
         private SkillButton InstantiateRectTransform(SkillButton a_RectTransform, Vector3 a_Position)
         {
             SkillButton skillButton = Instantiate(a_RectTransform);
-            skillButton.GetComponent<RectTransform>().SetParent(transform, false);
+            skillButton.GetComponent<RectTransform>().SetParent(m_HUD.transform, false);
             skillButton.transform.SetAsFirstSibling();
 
             skillButton.transform.localPosition += a_Position;

@@ -42,10 +42,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SpawnPoints: []
+  m_EnemyBases: []
   m_GoblinMagePrefab: {fileID: 155792, guid: d8949c9d58a2d684ea071c58cf2cc2af, type: 2}
-  m_GoblinPrefab: {fileID: 121338, guid: 25615d83f1227ce4cbcfefb0ef1921d1, type: 2}
+  m_GoblinPrefab: {fileID: 140678, guid: 7e00f56026b371e4bbdf7dd2e52e3d90, type: 2}
   m_WaveCounter: 0
-  m_Variance: {x: 5, y: 0, z: 5}
   m_ManaPickupPrefab: {fileID: 113702, guid: dc8efd8c47981a846ada4fff81b980fc, type: 2}
   m_HealthPickupPrefab: {fileID: 106706, guid: 6542f39da4feb4f468a1355ba0ff2e27, type: 2}
 --- !u!114 &11473028
@@ -59,6 +59,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff1bbcfed12b844a981fe57d41a4bc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_EventSystem: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

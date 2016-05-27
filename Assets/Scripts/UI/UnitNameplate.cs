@@ -52,6 +52,9 @@ namespace UI
 
         private IStats m_StatParent;
         private Fortress m_FortressParent;
+
+        [SerializeField]
+        private bool m_IsStationary;
         #endregion
 
         #region -- PROPERTIES --
@@ -75,7 +78,7 @@ namespace UI
         #endregion
 
         #region -- UNITY FUNCTIONS --
-        public void Awake()
+        private void Awake()
         {
             transform.SetParent(UIManager.self.backgroundUI.transform, false);
 
@@ -108,18 +111,21 @@ namespace UI
         // Use this for initialization
         void Start()
         {
-            if (m_StatParent == null && m_FortressParent == null)
-            {
-                gameObject.SetActive(false);
-                return;
-            }
+            //if (m_StatParent == null && m_FortressParent == null)
+            //{
+            //    gameObject.SetActive(false);
+            //    return;
+            //}
 
-            if (!gameObject.activeInHierarchy)
-                gameObject.SetActive(true);
+            //if (!gameObject.activeInHierarchy)
+            //    gameObject.SetActive(true);
         }
 
         private void LateUpdate()
         {
+            if (m_IsStationary)
+                return;
+
             GameObject tempParent = m_StatParent != null ? m_StatParent.gameObject : m_FortressParent.gameObject;
 
             Vector3 worldPos = tempParent.gameObject.transform.position + m_Offset;
