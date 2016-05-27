@@ -91,16 +91,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Nameplate: {fileID: 11409874, guid: bdd14ad98f93f3a449cd18a355cc6dad, type: 2}
   m_ControllerType: 2
-  m_Skills:
-  - m_SkillPrefab: {fileID: 167634, guid: e4edc7fe0341b644c835f75acf8dad64, type: 2}
-    m_Sprite: {fileID: 21300000, guid: 04c6b09ab8e07464c838aaed8d220c73, type: 3}
-    m_SkillData:
-      maxCooldown: 1
-      damage: 1
-      cost: 1
-    m_SkillIndex: 0
-    m_CooldownReduction: 0
-    m_RemainingCooldown: 0
+  m_Skills: []
+  m_SkillPrefabs:
+  - {fileID: 167634, guid: e4edc7fe0341b644c835f75acf8dad64, type: 2}
   m_UnitName: GoblinMage
   m_UnitNickname: Goblin Mage
   m_Faction: Enemies
