@@ -194,7 +194,7 @@ namespace Units.Controller
             if (unit == null || m_ApplicationIsQuitting)
                 return;
 
-            if (unit.gameObject.tag == "Enemy")
+            if (m_Controlables.Contains(a_Params[0] as IControllable))
             {
                 Vector3 healthinstantposition = new Vector3(unit.gameObject.transform.position.x + 0.25f, unit.gameObject.transform.position.y, unit.gameObject.transform.position.z);
                 Vector3 manainstantposition = new Vector3(unit.gameObject.transform.position.x - 0.25f, unit.gameObject.transform.position.y, unit.gameObject.transform.position.z);
@@ -206,7 +206,6 @@ namespace Units.Controller
                 newManaPickup.GetComponent<Rigidbody>().AddExplosionForce(250 + Random.value * 750, unit.gameObject.transform.position, 10);
             }
 
-            
             m_Enemies.Remove(unit);
         }
 
