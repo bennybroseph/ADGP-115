@@ -215,7 +215,7 @@ namespace UI
 
             float lastLevel, nextLevel;
             unit.GetLevelBar(out lastLevel, out nextLevel);
-            SetBar(m_EXPBar, unit.experience - lastLevel, nextLevel);
+            SetBar(m_EXPBar, unit.experience - lastLevel, nextLevel - lastLevel);
         }
         #endregion
 
@@ -276,7 +276,7 @@ namespace UI
                     float lastLevel, nextLevel;
                     unit.GetLevelBar(out lastLevel, out nextLevel);
 
-                    SetBar(m_EXPBar, unit.experience - lastLevel, nextLevel);
+                    SetBar(m_EXPBar, unit.experience - lastLevel, nextLevel - lastLevel);
                     break;
                 case Event.UnitMaxHealthChanged:
                     SetBar(m_HealthBar, unit.health, unit.maxHealth);

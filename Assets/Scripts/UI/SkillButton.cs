@@ -1,6 +1,7 @@
 ﻿using System;
 using Interfaces;
 using Library;
+using Units.Controller;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,6 +21,8 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
     private Text m_CooldownTimer;
     [SerializeField]
     private Text m_CostText;
+    [SerializeField]
+    private Text m_ButtonText;
     [SerializeField]
     private Button m_UpgradeButton;
 
@@ -83,6 +86,8 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
             Debug.LogWarning(name + " has no cooldown timer!");
         if (m_CostText == null)
             Debug.LogWarning(name + " has no cost text!");
+        if(m_ButtonText == null)
+            Debug.LogWarning(name + " has no button text!");
 
         if (m_UpgradeButton == null)
             Debug.LogWarning(name + " has no upgrade button!");
@@ -91,6 +96,10 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
             m_CostText.text = "";
         else
             m_CostText.text = string.Format("{0:0}", m_Parent.skills[m_SkillIndex].skillData.cost);
+
+        m_ButtonText.text = Enum.GetName(
+            typeof(KeyCode),
+            KeyConfiguration.self.userConfigurations[0].skillKeys[m_SkillIndex].keyCode);
 
         m_CooldownTimer.text = "";
 
