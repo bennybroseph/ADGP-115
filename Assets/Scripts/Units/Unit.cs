@@ -196,7 +196,7 @@ namespace Units
         public int level
         {
             get { return m_Level; }
-            set { m_Level = value; Publisher.self.DelayedBroadcast(Event.UnitLevelChanged, this); }
+            private set { m_Level = value; Publisher.self.DelayedBroadcast(Event.UnitLevelChanged, this); }
         }
 
         //totalVelecotiy Vector3 property 

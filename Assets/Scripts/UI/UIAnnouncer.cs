@@ -152,7 +152,7 @@ namespace UI
             StartCoroutine(WaitThenDoThis(m_ChatSequence.totalAnimationTime,
                 delegate
                 {
-                    Destroy(newText);
+                    Destroy(newText.gameObject);
                 }));
 
             StartCoroutine(AnimateToLog(newLogItem));
@@ -200,7 +200,7 @@ namespace UI
             StartCoroutine(WaitThenDoThis(m_FloatingTextSequence.totalAnimationTime,
                 delegate
                 {
-                    Destroy(newText);
+                    Destroy(newText.gameObject);
                 }));
         }
 
