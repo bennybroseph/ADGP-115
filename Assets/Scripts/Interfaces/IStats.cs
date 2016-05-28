@@ -14,6 +14,8 @@ namespace Interfaces
         float experience { get; set; }
         // Level property
         int level { get; }
+
+        void GetLevelBar(out float a_LastLevel, out float a_NextLevel);
     }
 
     public interface IUsesSkills : IStats

@@ -71,6 +71,10 @@ namespace Define
         UnitManaChanged,
         /// <param name="Unit"> IStats: which unit's max mana changed</param>
         UnitMaxManaChanged,
+
+        /// <param name="Unit"> IStats: which unit's max mana changed</param>
+        UnitEXPChanged,
+
         /// <param name="Unit"> IStats: which unit's level changed</param>
         UnitLevelChanged,
         /// <param name="Unit"> IStats: which unit leveled up</param>
