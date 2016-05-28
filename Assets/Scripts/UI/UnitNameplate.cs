@@ -21,6 +21,10 @@ namespace UI
         [SerializeField]
         private Text m_LevelText;
         [SerializeField]
+        private Image m_NegativeEXPBar;
+        [SerializeField]
+        private Image m_EXPBar;
+        [SerializeField]
         private Image m_NegativeManaBar;
         [SerializeField]
         private Image m_ManaBar;
@@ -101,24 +105,13 @@ namespace UI
             Publisher.self.Subscribe(Event.UnitMaxHealthChanged, OnUnitValueChanged);
             Publisher.self.Subscribe(Event.UnitMaxHealthChanged, OnUnitValueChanged);
 
+            Publisher.self.Subscribe(Event.UnitEXPChanged, OnUnitValueChanged);
+
             Publisher.self.Subscribe(Event.UnitHealthChanged, OnUnitValueChanged);
             Publisher.self.Subscribe(Event.UnitManaChanged, OnUnitValueChanged);
             Publisher.self.Subscribe(Event.UnitLevelChanged, OnUnitValueChanged);
 
             Publisher.self.Subscribe(Event.UnitDied, OnUnitDied);
-        }
-
-        // Use this for initialization
-        void Start()
-        {
-            //if (m_StatParent == null && m_FortressParent == null)
-            //{
-            //    gameObject.SetActive(false);
-            //    return;
-            //}
-
-            //if (!gameObject.activeInHierarchy)
-            //    gameObject.SetActive(true);
         }
 
         private void LateUpdate()
@@ -167,6 +160,8 @@ namespace UI
             Publisher.self.UnSubscribe(Event.UnitMaxHealthChanged, OnUnitValueChanged);
             Publisher.self.UnSubscribe(Event.UnitMaxHealthChanged, OnUnitValueChanged);
 
+            Publisher.self.UnSubscribe(Event.UnitEXPChanged, OnUnitValueChanged);
+
             Publisher.self.UnSubscribe(Event.UnitHealthChanged, OnUnitValueChanged);
             Publisher.self.UnSubscribe(Event.UnitManaChanged, OnUnitValueChanged);
             Publisher.self.UnSubscribe(Event.UnitLevelChanged, OnUnitValueChanged);
@@ -192,7 +187,7 @@ namespace UI
             if (a_Bar == null)
                 return;
 
-            a_Bar.fillAmount = a_CurrentValue / a_MaxValue;
+            a_Bar.fillAmount = Mathf.Ceil(a_CurrentValue) / Mathf.Ceil(a_MaxValue);
 
             if (a_Bar.GetComponentInChildren<Text>() == null)
                 return;
@@ -217,6 +212,10 @@ namespace UI
 
             SetText(m_LevelText, unit.level.ToString(), true);
             SetBar(m_ManaBar, unit.mana, unit.maxMana);
+
+            float lastLevel, nextLevel;
+            unit.GetLevelBar(out lastLevel, out nextLevel);
+            SetBar(m_EXPBar, unit.experience - lastLevel, nextLevel);
         }
         #endregion
 
@@ -273,7 +272,12 @@ namespace UI
                 case Event.UnitLevelChanged:
                     SetText(m_LevelText, unit.level.ToString(), true);
                     break;
+                case Event.UnitEXPChanged:
+                    float lastLevel, nextLevel;
+                    unit.GetLevelBar(out lastLevel, out nextLevel);
 
+                    SetBar(m_EXPBar, unit.experience - lastLevel, nextLevel);
+                    break;
                 case Event.UnitMaxHealthChanged:
                     SetBar(m_HealthBar, unit.health, unit.maxHealth);
                     break;

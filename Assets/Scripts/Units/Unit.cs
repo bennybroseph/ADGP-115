@@ -187,6 +187,7 @@ namespace Units
             set
             {
                 m_Experience = value;
+                Publisher.self.DelayedBroadcast(Event.UnitEXPChanged, this);
                 SetLevel();
             }
         }
@@ -323,6 +324,11 @@ namespace Units
         #endregion
 
         #region -- PRIVATE FUNCTIONS --
+        public void GetLevelBar(out float a_LastLevel, out float a_NextLevel)
+        {
+            a_LastLevel = Mathf.Pow(m_Level, 2f) * 10f;
+            a_NextLevel = Mathf.Pow(m_Level + 1, 2f) * 10f;
+        }
         /// <summary>
         /// Use this function to set the unit's level. Do NOT set it manually
         /// </summary>
