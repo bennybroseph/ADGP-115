@@ -10,7 +10,6 @@ public class Melee : BaseSkills
     #region -- VARIABLES --
     [SerializeField]
     private float m_CurrentAngle;
-
     private List<IAttackable> m_HitUnits;
     #endregion
 
@@ -30,6 +29,8 @@ public class Melee : BaseSkills
         if (m_Parent == null)
             return;
 
+
+        AudioManager.instance.PlaySound("Melee");
         Physics.IgnoreCollision(GetComponentInChildren<Collider>(), m_Parent.gameObject.GetComponent<Collider>());
         transform.SetParent(m_Parent.gameObject.transform, false);
     }

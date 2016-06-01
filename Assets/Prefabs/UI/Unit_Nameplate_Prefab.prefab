@@ -397,6 +397,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NameText: {fileID: 11486886}
   m_LevelText: {fileID: 11446826}
+  m_NegativeEXPBar: {fileID: 0}
+  m_EXPBar: {fileID: 0}
   m_NegativeManaBar: {fileID: 11401308}
   m_ManaBar: {fileID: 11444574}
   m_NegativeHealthBar: {fileID: 11466832}
@@ -424,6 +426,7 @@ MonoBehaviour:
   m_HealthCoroutineIsRunning: 0
   m_LastManaChange: 0
   m_ManaCoroutineIsRunning: 0
+  m_IsStationary: 1
 --- !u!114 &11465330
 MonoBehaviour:
   m_ObjectHideFlags: 1

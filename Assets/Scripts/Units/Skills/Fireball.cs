@@ -1,6 +1,7 @@
 ﻿using Interfaces;
 using UnityEngine;
 using UI;
+using Units.Controller;
 
 namespace Units.Skills
 {
@@ -39,6 +40,8 @@ namespace Units.Skills
         // Use this for initialization
         private void Start()
         {
+            AudioManager.instance.PlaySound("Fireball");
+            
             if (m_Parent == null)
                 return;
 
