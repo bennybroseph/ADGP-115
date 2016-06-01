@@ -167,6 +167,8 @@ namespace UI
             Publisher.self.UnSubscribe(Event.UnitLevelChanged, OnUnitValueChanged);
 
             Publisher.self.UnSubscribe(Event.UnitDied, OnUnitDied);
+
+            StopAllCoroutines();
         }
         #endregion
 

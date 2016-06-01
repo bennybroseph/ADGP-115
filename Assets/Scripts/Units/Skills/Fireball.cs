@@ -39,7 +39,6 @@ namespace Units.Skills
         // Use this for initialization
         private void Start()
         {
-
             if (m_Parent == null)
                 return;
 
@@ -56,15 +55,6 @@ namespace Units.Skills
         private void FixedUpdate()
         {
             Move();
-        }
-
-        // Update is called once per frame
-        private void Update()
-        {
-            m_CurrentLifetime += Time.deltaTime;
-
-            if (m_CurrentLifetime >= m_MaxLifetime)
-                Destroy(gameObject);
         }
 
         private void LateUpdate()

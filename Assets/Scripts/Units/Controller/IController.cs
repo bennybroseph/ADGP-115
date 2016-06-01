@@ -20,7 +20,10 @@ namespace Units.Controller
     public interface IController
     {
         void Register(IControllable a_Controllable);
+        void Register(Player a_Player);
+
         void UnRegister(IControllable a_Controllable);
+        void UnRegister(Player a_Player);
     }
 
     #region -- CONTROLS STRUCTS --
@@ -78,7 +81,10 @@ namespace Units.Controller
         public List<Key<KeyCode>> skillKeys;
         public List<Key<ButtonCode>> skillButtons;
 
-        public Key<KeyCode> strafeKey;
+        public Key<KeyCode> targetModeKey;
+        public Key<KeyCode> switchTargetKey;
+
+        public Key<ButtonCode> targetModeButton;
 
         public Axis<KeyCode> verticalKeyAxis;
         public Axis<KeyCode> horizontalKeyAxis;
@@ -91,11 +97,14 @@ namespace Units.Controller
         public UserConfiguration(
             Key<KeyCode> a_PauseKey,
             Key<ButtonCode> a_PauseButton,
-            
+
             List<Key<KeyCode>> a_SkillKeys,
             List<Key<ButtonCode>> a_SkillButtons,
 
-            Key<KeyCode> a_StrafeKey,
+            Key<KeyCode> a_TargetModeKey,
+            Key<KeyCode> a_SwitchTargetKey,
+
+            Key<ButtonCode> a_TargetModeButton,
 
             Axis<KeyCode> a_VerticalKeyAxis,
             Axis<KeyCode> a_HorizontalKeyAxis,
@@ -109,7 +118,10 @@ namespace Units.Controller
             skillKeys = a_SkillKeys;
             skillButtons = a_SkillButtons;
 
-            strafeKey = a_StrafeKey;
+            targetModeKey = a_TargetModeKey;
+            switchTargetKey = a_SwitchTargetKey;
+
+            targetModeButton = a_TargetModeButton;
 
             verticalKeyAxis = a_VerticalKeyAxis;
             horizontalKeyAxis = a_HorizontalKeyAxis;
@@ -320,14 +332,19 @@ namespace Units.Controller
                     {
                         new Key<KeyCode>("Skill 1", "First Skill", KeyCode.Q),
                         new Key<KeyCode>("Skill 2", "Second Skill", KeyCode.E),
+                        new Key<KeyCode>("Skill 3", "Third Skill", KeyCode.R),
                     },
                     new List<Key<ButtonCode>>
                     {
                         new Key<ButtonCode>("Skill 1", "First Skill", ButtonCode.X),
                         new Key<ButtonCode>("Skill 2", "First Skill", ButtonCode.A),
+                        new Key<ButtonCode>("Skill 3", "Third Skill", ButtonCode.B),
                     },
 
-                    new Key<KeyCode>("Strafe", "Strafe Key", KeyCode.LeftShift),
+                    new Key<KeyCode>("Target", "Target Mode Toggle", KeyCode.F),
+                    new Key<KeyCode>("Target", "Target Mode Toggle", KeyCode.Tab),
+
+                    new Key<ButtonCode>("Target", "Target Mode Toggle", ButtonCode.RStick),
 
                     new Axis<KeyCode>(
                         new Key<KeyCode>("Up", "Up Key", KeyCode.W),
@@ -349,15 +366,20 @@ namespace Units.Controller
                     new List<Key<KeyCode>>
                     {
                         new Key<KeyCode>("Skill 1", "First SKill", KeyCode.Keypad1),
-                        new Key<KeyCode>("Skill 2", "Second SKill", KeyCode.Keypad0),
+                        new Key<KeyCode>("Skill 2", "Second SKill", KeyCode.Keypad2),
+                        new Key<KeyCode>("Skill 3", "Third Skill", KeyCode.Keypad3),
                     },
                     new List<Key<ButtonCode>>
                     {
                         new Key<ButtonCode>("Skill 1", "First Skill", ButtonCode.X),
                         new Key<ButtonCode>("Skill 2", "First Skill", ButtonCode.A),
+                        new Key<ButtonCode>("Skill 3", "Third Skill", ButtonCode.B),
                     },
 
-                    new Key<KeyCode>("Strafe", "Strafe Key", KeyCode.RightShift),
+                    new Key<KeyCode>("Target", "Target Mode Toggle", KeyCode.KeypadPeriod),
+                    new Key<KeyCode>("Target", "Target Mode Toggle", KeyCode.RightShift),
+
+                    new Key<ButtonCode>("Target", "Target Mode Toggle", ButtonCode.RStick),
 
                     new Axis<KeyCode>(
                         new Key<KeyCode>("Up", "Up Key", KeyCode.UpArrow),
