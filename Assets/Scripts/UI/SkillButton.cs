@@ -86,7 +86,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
             Debug.LogWarning(name + " has no cooldown timer!");
         if (m_CostText == null)
             Debug.LogWarning(name + " has no cost text!");
-        if(m_ButtonText == null)
+        if (m_ButtonText == null)
             Debug.LogWarning(name + " has no button text!");
 
         if (m_UpgradeButton == null)
@@ -97,9 +97,16 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         else
             m_CostText.text = string.Format("{0:0}", m_Parent.skills[m_SkillIndex].skillData.cost);
 
-        m_ButtonText.text = Enum.GetName(
-            typeof(KeyCode),
-            KeyConfiguration.self.userConfigurations[0].skillKeys[m_SkillIndex].keyCode);
+#if !UNITY_WEBGL
+        if (GameManager.self.playerIndicies.Count > 0)
+            m_ButtonText.text = Enum.GetName(
+                typeof(ButtonCode),
+                KeyConfiguration.self.userConfigurations[0].skillButtons[m_SkillIndex].keyCode);
+        else
+#endif
+            m_ButtonText.text = Enum.GetName(
+                typeof(KeyCode),
+                KeyConfiguration.self.userConfigurations[0].skillKeys[m_SkillIndex].keyCode);
 
         m_CooldownTimer.text = "";
 

@@ -8,7 +8,6 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 498880}
-  - 114: {fileID: 11473028}
   - 114: {fileID: 11404132}
   m_Layer: 0
   m_Name: Control_Manager_Prefab
@@ -48,18 +47,6 @@ MonoBehaviour:
   m_WaveCounter: 0
   m_ManaPickupPrefab: {fileID: 113702, guid: dc8efd8c47981a846ada4fff81b980fc, type: 2}
   m_HealthPickupPrefab: {fileID: 106706, guid: 6542f39da4feb4f468a1355ba0ff2e27, type: 2}
---- !u!114 &11473028
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 125314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ff1bbcfed12b844a981fe57d41a4bc0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_EventSystem: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

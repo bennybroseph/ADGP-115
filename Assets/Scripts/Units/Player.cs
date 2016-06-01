@@ -1,65 +1,58 @@
 ﻿// Unit class used for storing Player Data.
 using Interfaces;
 using UI;
+using Units.Controller;
 using UnityEngine;
 
 namespace Units
 {
     // Public unit class that takes in IStats and IAttack
-    public class Player : Unit, IChildable<UIManager>
+    public class Player : MonoBehaviour
     {
         #region -- VARIABLES --
+        [Header("Prefabs")]
         [SerializeField]
-        private UIManager m_Parent;
+        private Unit m_PlayerPrefab;
+        [SerializeField]
+        private ThirdPersonCamera m_CameraPrefab;
+
+        [Space]
+        [SerializeField]
+        private Unit m_Unit;
+        [SerializeField]
+        private IController m_Controller;
+        [SerializeField]
+        private ThirdPersonCamera m_PlayerCamera;
         #endregion
 
         #region -- PROPERTIES --
-        public UIManager parent
+        public Unit unit
         {
-            get { return m_Parent; }
-            set { m_Parent = value; }
+            get { return m_Unit; }
+        }
+
+        public ThirdPersonCamera playerCamera
+        {
+            get { return m_PlayerCamera; }
         }
         #endregion
 
         #region -- UNITY FUNCTIONS --
-        // protected override void Awake() { base.Awake(); }
-       
-        protected override void Start()
+        private void Awake()
         {
-            base.Start();
+            m_Unit = Instantiate(m_PlayerPrefab);
+            m_Unit.canMoveWithInput = true;
 
-            UIAnnouncer.self.DelayedAnnouncement(m_UnitNickname + ", Pick a skill below!", 1.0f);
-            UIAnnouncer.self.DelayedAnnouncement(m_UnitNickname + " has entered the arena!", 1.5f);
-        }
+            m_PlayerCamera = Instantiate(m_CameraPrefab);
+            m_PlayerCamera.following = m_Unit.gameObject;
 
-        // protected override void Update() { base.Update(); }
-        protected override void LateUpdate()
-        {
-            base.LateUpdate();
-            SetRotation();
+            m_Controller = new GameObject().AddComponent<UserController>();
+            m_Controller.Register(this);
+
+            UIAnnouncer.self.DelayedAnnouncement(m_Unit.unitNickname + ", Pick a skill below!", 1.0f);
+            UIAnnouncer.self.DelayedAnnouncement(m_Unit.unitNickname + " has entered the arena!", 1.5f);
         }
-        // protected override void OnDestroy() { base.OnDestroy(); }
         #endregion
-
-        private void SetRotation()
-        {
-            //if (m_Velocity == Vector3.zero)
-            //    return;
-
-            //float rotationY = Mathf.Atan(m_Velocity.x / m_Velocity.z) * (180.0f / Mathf.PI);
-
-            //if ((m_Velocity.x < 0.0f && m_Velocity.z < 0.0f) ||
-            //    (m_Velocity.x > 0.0f && m_Velocity.z < 0.0f) ||
-            //    (m_Velocity.x == 0.0f && m_Velocity.z < 0.0f))
-            //    rotationY += 180;
-
-            //Vector3 rotation = new Vector3(
-            //    0,
-            //    rotationY,
-            //    0);
-
-            //transform.rotation = Quaternion.Euler(rotation);
-        }
     }
 }
 

@@ -4,6 +4,7 @@ using Interfaces;
 using UnityEngine;
 
 using Library;
+using Units;
 using Units.Controller;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -96,8 +97,9 @@ namespace UI
         private void Start()
         {
             m_HUD = Instantiate(m_HUDPrefab);
-            m_HUD.transform.SetParent(transform, false);
-            m_HUD.parent = UserController.self.controllables[0].gameObject.GetComponent<IStats>();
+            m_HUD.transform.SetParent(m_BackgroundUI.transform, false);
+            m_HUD.transform.SetAsLastSibling();
+            m_HUD.parent = FindObjectOfType<Player>().unit;
 
             if (m_SkillButtonPrefab.GetComponent<RectTransform>() == null)
                 return;
@@ -462,7 +464,7 @@ namespace UI
         private SkillButton InstantiateRectTransform(SkillButton a_RectTransform, Vector3 a_Position)
         {
             SkillButton skillButton = Instantiate(a_RectTransform);
-            skillButton.GetComponent<RectTransform>().SetParent(m_HUD.transform, false);
+            skillButton.GetComponent<RectTransform>().SetParent(transform, false);
             skillButton.transform.SetAsFirstSibling();
 
             skillButton.transform.localPosition += a_Position;

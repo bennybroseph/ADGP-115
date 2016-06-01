@@ -25,9 +25,16 @@ public class GameManager : MonoSingleton<GameManager>
 
     private GameObject m_Background;
 
+    private Dictionary<ButtonCode, bool> m_ButtonState;
+
 #if !UNITY_WEBGL 
     [SerializeField]
     private List<PlayerIndex> m_PlayerIndices;
+
+    public List<PlayerIndex> playerIndicies
+    {
+        get { return m_PlayerIndices; }
+    }
 #endif
 
     #region -- UNITY FUNCTIONS --
@@ -59,7 +66,12 @@ public class GameManager : MonoSingleton<GameManager>
     {
         Publisher.self.Update();
 
-        if (Input.GetKeyDown(KeyCode.P))
+        if (Input.GetKeyDown(KeyConfiguration.self.userConfigurations[0].pauseKey.keyCode) ||
+#if !UNITY_WEBGL
+            GetButtonState(0, KeyConfiguration.self.userConfigurations[0].pauseButton.keyCode))
+#else
+            Input.GetAxisRaw("Menu") > 0f)
+#endif
             Publisher.self.Broadcast(Event.ToggleQuitMenu);
     }
 
@@ -137,9 +149,9 @@ public class GameManager : MonoSingleton<GameManager>
         switch (a_Stick)
         {
             case Stick.Left:
-                return GamePad.GetState(m_PlayerIndices[a_Index]).ThumbSticks.Left;
+                return GamePad.GetState(m_PlayerIndices[a_Index], GamePadDeadZone.IndependentAxes).ThumbSticks.Left;
             case Stick.Right:
-                return GamePad.GetState(m_PlayerIndices[a_Index]).ThumbSticks.Right;
+                return GamePad.GetState(m_PlayerIndices[a_Index], GamePadDeadZone.IndependentAxes).ThumbSticks.Right;
 
             default:
                 return new GamePadThumbSticks.StickValue();
@@ -153,11 +165,11 @@ public class GameManager : MonoSingleton<GameManager>
     {
         Debug.Log("Works New Game Clicked");
 
-        
+
         //Loads the first scene.
         SceneManager.LoadScene(1);
 
-        
+
     }
 
     private void OnQuitGame(Event a_Event, params object[] a_Params)
@@ -205,7 +217,7 @@ public class GameManager : MonoSingleton<GameManager>
             // Will find the first controller that is connected ans use it
             for (int i = 0; i < 4; ++i)
             {
-                PlayerIndex testPlayerIndex = (PlayerIndex) i;
+                PlayerIndex testPlayerIndex = (PlayerIndex)i;
                 GamePadState testState = GamePad.GetState(testPlayerIndex);
                 if (testState.IsConnected && !m_PlayerIndices.Contains(testPlayerIndex))
                 {

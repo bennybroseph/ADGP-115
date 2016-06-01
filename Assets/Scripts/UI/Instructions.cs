@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Interfaces;
+using Units;
 using Units.Controller;
 using Units.Skills;
 using UnityEngine;
@@ -14,7 +15,7 @@ public class Instructions : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        List<Skill> skills = UserController.self.controllables[0].gameObject.GetComponent<IUsesSkills>().skills;
+        List<Skill> skills = FindObjectOfType<Player>().unit.skills;
 
         m_InstructionsText.text =
             "Instructions:" + "\n" +
@@ -47,15 +48,18 @@ public class Instructions : MonoBehaviour
         m_InstructionsText.text +=
 
         "Controller Controls:" + "\n";
-       foreach (Key<ButtonCode> skillButton in KeyConfiguration.self.userConfigurations[0].skillButtons)
-       {
+        i = 0;
+        foreach (Key<ButtonCode> skillButton in KeyConfiguration.self.userConfigurations[0].skillButtons)
+        {
             m_InstructionsText.text +=
                 Enum.GetName(typeof(ButtonCode), skillButton.keyCode) +
-                " Use Fireball" + "\n";
+                " Use " + skills[i].skillData.name + "\n";
+
+            ++i;
         }
-       m_InstructionsText.text +=
-        Enum.GetName(typeof(ButtonCode), KeyConfiguration.self.userConfigurations[0].verticalButtonAxis.positive.keyCode) +
-                " - Move Character Up " + "\n";
+        m_InstructionsText.text +=
+         Enum.GetName(typeof(ButtonCode), KeyConfiguration.self.userConfigurations[0].verticalButtonAxis.positive.keyCode) +
+                 " - Move Character Up " + "\n";
         m_InstructionsText.text +=
        Enum.GetName(typeof(ButtonCode), KeyConfiguration.self.userConfigurations[0].verticalButtonAxis.negative.keyCode) +
                " - Move Character Down " + "\n";
@@ -67,7 +71,7 @@ public class Instructions : MonoBehaviour
                " - Move Character Left " + "\n";
 
         m_InstructionsText.text +=
-          
+
 
             "Upgrade:" + "\n" +
                 "\t" + "'+' - Allows upgrade of specific skill" + "\n" +

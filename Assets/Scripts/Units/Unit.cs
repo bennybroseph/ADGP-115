@@ -10,7 +10,7 @@ using Event = Define.Event;
 
 namespace Units
 {
-    public abstract class Unit : MonoBehaviour, IUsesSkills, IControllable
+    public class Unit : MonoBehaviour, IUsesSkills, IControllable
     {
         #region -- VARIABLES --
         // Private member variables
@@ -260,6 +260,7 @@ namespace Units
                     m_Skills.Add(new Skill());
                     m_Skills[j].skillIndex = j;
                     m_Skills[j].skillData = m_SkillPrefabs[i].GetComponent<ICastable<IUsesSkills>>().skillData.Clone();
+                    m_Skills[j].skillData.skillIndex = j;
                     m_Skills[j].skillPrefab = m_SkillPrefabs[i].gameObject;
                     m_Skills[j].parent = this;
                     ++j;
@@ -267,8 +268,7 @@ namespace Units
             }
 
             //GetComponent<NavMeshAgent>().updateRotation = false;
-
-            SetController();
+            m_MovementFSM = new FiniteStateMachine<MovementState>();
 
             m_DamageFSM = new FiniteStateMachine<DamageState>();
 
@@ -326,8 +326,8 @@ namespace Units
         #region -- PRIVATE FUNCTIONS --
         public void GetLevelBar(out float a_LastLevel, out float a_NextLevel)
         {
-            a_LastLevel = Mathf.Pow(m_Level, 2f) * 10f;
-            a_NextLevel = Mathf.Pow(m_Level + 1, 2f) * 10f;
+            a_LastLevel = ReverseLevelAlgorithm(m_Level);
+            a_NextLevel = ReverseLevelAlgorithm(m_Level + 1);
         }
         /// <summary>
         /// Use this function to set the unit's level. Do NOT set it manually
@@ -335,16 +335,16 @@ namespace Units
         /// <param name="a_Level"></param>
         private void SetLevel(int a_Level)
         {
-            m_Experience = Mathf.Pow(a_Level, 2) * 10;
+            m_Experience = ReverseLevelAlgorithm(a_Level);
             SetLevel();
         }
         /// <summary>
-        /// Gets called automatically whenever 'experience' get's changed
+        /// Gets called automatically whenever 'experience' gets changed
         /// </summary>
         private void SetLevel()
         {
             int oldLevel = m_Level;
-            int newLevel = (int)Mathf.Sqrt(m_Experience / 10f);
+            int newLevel = LevelAlgorithm(m_Experience);
 
             if (newLevel == m_Level)
                 return;
@@ -368,33 +368,26 @@ namespace Units
                 Publisher.self.Broadcast(Event.UnitLevelUp, this);
                 Publisher.self.Broadcast(Event.UnitCanUpgradeSkill, this);
 
-                if(oldLevel > 0)
-                UIAnnouncer.self.FloatingText("Level Up!", transform.position, FloatingTextType.Overhead);
+                if (oldLevel > 0)
+                    UIAnnouncer.self.FloatingText("Level Up!", transform.position, FloatingTextType.Overhead);
             }
         }
 
-        private void SetController()
+        private int LevelAlgorithm(float a_Experience)
         {
-            m_MovementFSM = new FiniteStateMachine<MovementState>();
+            int newLevel;
 
-            switch (m_ControllerType)
-            {
-                case ControllerType.GoblinMage:
-                    m_Controller = AIController.self;
-                    break;
-                case ControllerType.Goblin:
-                    m_Controller = AIController.self;
-                    break;
-                case ControllerType.Fortress:
-                    m_Controller = UserController.self;
-                    break;
-                case ControllerType.User:
-                    m_CanMoveWithInput = true;
-                    m_Controller = UserController.self;
-                    break;
-            }
+            newLevel = (int)Mathf.Sqrt(a_Experience / 10f);
 
-            m_Controller.Register(this);
+            return newLevel;
+        }
+        private float ReverseLevelAlgorithm(int a_Level)
+        {
+            float newExperience;
+
+            newExperience = Mathf.Pow(a_Level, 2) * 10;
+
+            return newExperience;
         }
 
         private void SetMovementFSM()

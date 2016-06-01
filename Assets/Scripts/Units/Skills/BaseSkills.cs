@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using Interfaces;
 
 namespace Units.Skills
@@ -97,5 +98,16 @@ namespace Units.Skills
 
         public abstract string UpdateDescription(Skill a_Skill);
 
+        protected virtual void Awake()
+        {
+            StartCoroutine(DestroyMe());
+        }
+
+        protected IEnumerator DestroyMe()
+        {
+            yield return new WaitForSeconds(m_MaxLifetime);
+
+            Destroy(gameObject);
+        }
     }
 }

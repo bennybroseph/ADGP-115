@@ -222,12 +222,12 @@ namespace UI
                 m_AnchorIsSet = true;
             }
 
-            for (int i = 0; i < m_LogItems.Count; ++i)
+            for (int i = 0, j = m_LogItems.Count - 1; i < m_LogItems.Count; ++i, --j)
             {
                 m_LogItems[i].transform.position =
                     new Vector3(
                         m_Anchor.x,
-                        m_Anchor.y + i * -m_SpaceBetweenLogItems);
+                        m_Anchor.y + j * m_SpaceBetweenLogItems);
             }
         }
 

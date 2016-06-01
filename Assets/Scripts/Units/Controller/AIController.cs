@@ -109,10 +109,20 @@ namespace Units.Controller
                     break;
             }
         }
+        public void Register(Player a_Player)
+        {
+            //m_Player = a_Player;
+
+            //Register(m_Player.unit);
+        }
 
         public void UnRegister(IControllable a_Controllable)
         {
             m_Controlables.Remove(a_Controllable);
+        }
+        public void UnRegister(Player a_Player)
+        {
+            //m_Player = null;
         }
 
         private void SetFollowing(IControllable a_Controllable)
