@@ -9,6 +9,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 463932}
   - 114: {fileID: 11418778}
+  - 114: {fileID: 11468218}
   m_Layer: 0
   m_Name: Game_Manager_Prefab
   m_TagString: Game Manager
@@ -25,6 +26,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -40,9 +42,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_UIManager: {fileID: 11432312, guid: 759adda1d136a054eb1fed226093f08b, type: 2}
-  m_WaveSpawner: {fileID: 11410708, guid: 19373ffe27e3a35468b531a1bd9887d6, type: 2}
   m_PreviousTimeScale: 0
-  m_PlayerIndex: 0
+  m_PlayerIndices: 
+--- !u!114 &11468218
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 039ddecf90abf4f4688471e1163f4edd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Sounds:
+  - m_Name: Fireball
+    m_Clip: {fileID: 8300000, guid: b51c04a01caef6843b65f95815910242, type: 3}
+  - m_Name: Melee
+    m_Clip: {fileID: 8300000, guid: 3417f91ff93c4cb4a8b4cc4521a93192, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
