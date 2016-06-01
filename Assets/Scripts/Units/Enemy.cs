@@ -1,4 +1,7 @@
-﻿using UI;
+﻿using Interfaces;
+using Library;
+using UI;
+using Units.Controller;
 using UnityEngine;
 
 namespace Units
@@ -11,7 +14,11 @@ namespace Units
         #endregion
 
         #region -- UNITY FUNCTIONS --
-        // protected override void Awake() { base.Awake(); }
+        protected override void Awake()
+        {
+            base.Awake();
+            SetController();
+        }
 
         protected override void Start()
         {
@@ -24,5 +31,27 @@ namespace Units
         // protected override void LateUpdate() { base.LateUpdate(); }
         // protected override void OnDestroy() { base.OnDestroy(); }
         #endregion
+
+        private void SetController()
+        {
+            switch (m_ControllerType)
+            {
+                case ControllerType.GoblinMage:
+                    m_Controller = AIController.self;
+                    break;
+                case ControllerType.Goblin:
+                    m_Controller = AIController.self;
+                    break;
+                case ControllerType.Fortress:
+                    m_Controller = new GameObject().AddComponent<UserController>();
+                    break;
+                case ControllerType.User:
+                    m_CanMoveWithInput = true;
+                    m_Controller = new GameObject().AddComponent<UserController>();
+                    break;
+            }
+
+            m_Controller.Register(this);
+        }
     }
 }

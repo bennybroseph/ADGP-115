@@ -26,12 +26,12 @@ namespace Units.Skills
     [Serializable]
     public class SkillData
     {
-        #region -- Skill DATA Struct --
         public string name;
         public string description;
 
         public Sprite sprite;
 
+        public int skillIndex;
         public float maxCooldown;
 
         public float damage;
@@ -66,7 +66,6 @@ namespace Units.Skills
         //    damage = a_Damage;
         //    cost = a_Cost;
         //}
-        #endregion
     }
 
     [Serializable]
@@ -102,7 +101,7 @@ namespace Units.Skills
 
         public int level
         {
-            get { return m_Level;}
+            get { return m_Level; }
             set { m_Level = value; }
         }
 
@@ -155,7 +154,7 @@ namespace Units.Skills
 
         public void PutOnCooldown()
         {
-            ChangeCoolDown(skillData.maxCooldown*(1.0f - cooldownReduction));
+            ChangeCoolDown(skillData.maxCooldown * (1.0f - cooldownReduction));
         }
 
         #endregion

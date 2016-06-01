@@ -14,23 +14,6 @@ GameObject:
   - 195: {fileID: 19510700}
   m_Layer: 8
   m_Name: Player1_Prefab
-  m_TagString: Player
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!1 &162274
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 4
-  m_Component:
-  - 4: {fileID: 497186}
-  - 33: {fileID: 3310250}
-  - 23: {fileID: 2328618}
-  m_Layer: 8
-  m_Name: Mesh Renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,56 +29,9 @@ Transform:
   m_LocalPosition: {x: -0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_Children:
-  - {fileID: 497186}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!4 &497186
-Transform:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 162274}
-  m_LocalRotation: {x: -0.42261833, y: 0, z: 0, w: 0.9063078}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_LocalEulerAnglesHint: {x: -50, y: 0, z: 0}
-  m_Children: []
-  m_Father: {fileID: 480986}
-  m_RootOrder: 0
---- !u!23 &2328618
-MeshRenderer:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 162274}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_Materials:
-  - {fileID: 2100000, guid: 182b4caa8bf3e474898da40ba8069956, type: 2}
-  m_SubsetIndices: 
-  m_StaticBatchRoot: {fileID: 0}
-  m_UseLightProbes: 1
-  m_ReflectionProbeUsage: 1
-  m_ProbeAnchor: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_PreserveUVs: 1
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
---- !u!33 &3310250
-MeshFilter:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 162274}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!54 &5457100
 Rigidbody:
   m_ObjectHideFlags: 1
@@ -122,25 +58,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f944c61a53426674db03c701eb3babb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Nameplate: {fileID: 11465284, guid: 5846026beed07984eba03daa6cd87c58, type: 2}
-  m_ControllerType: 0
-  m_Skills: []
-  m_SkillPrefabs:
-  - {fileID: 167634, guid: e4edc7fe0341b644c835f75acf8dad64, type: 2}
-  - {fileID: 101988, guid: a06d5e5a4e6761a4ea489491a7d7f8e2, type: 2}
-  m_UnitName: Player1
-  m_UnitNickname: Player 1
-  m_Faction: Allies
-  m_BaseHealth: 5
-  m_HealthGrowth: 2.5
-  m_BaseMana: 2
-  m_ManaGrowth: 1
-  m_BaseDefense: 2
-  m_DefenseGrowth: 1
-  m_BaseLevel: 1
-  m_BaseSpeed: 5
-  m_SpeedGrowth: 0.2
-  m_Parent: {fileID: 0}
+  m_PlayerPrefab: {fileID: 11489274, guid: 71e41b2bf5486d94393ea0f9ac3d1663, type: 2}
+  m_CameraPrefab: {fileID: 11448046, guid: 12d7dc0d5131ca748a2ae1ac3607f1d7, type: 2}
+  m_Unit: {fileID: 0}
+  m_PlayerCamera: {fileID: 0}
 --- !u!135 &13513312
 SphereCollider:
   m_ObjectHideFlags: 1
