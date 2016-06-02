@@ -40,11 +40,12 @@ namespace Units.Skills
         // Use this for initialization
         private void Start()
         {
-            AudioManager.instance.PlaySound("Fireball");
+           
             
             if (m_Parent == null)
                 return;
 
+            AudioManager.self.PlaySound(SoundTypes.Fireball);
             Physics.IgnoreCollision(GetComponent<Collider>(), m_Parent.gameObject.GetComponent<Collider>());
 
             transform.position = m_Parent.gameObject.transform.position;

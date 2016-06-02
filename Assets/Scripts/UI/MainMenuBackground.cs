@@ -8,7 +8,7 @@ public class MainMenuBackground : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-
+        AudioManager.self.PlaySound(SoundTypes.TitleScreenMusic);
     }
 
     // Update is called once per frame

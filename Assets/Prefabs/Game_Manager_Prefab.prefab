@@ -56,10 +56,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Sounds:
-  - m_Name: Fireball
+  - m_SoundType: 0
     m_Clip: {fileID: 8300000, guid: b51c04a01caef6843b65f95815910242, type: 3}
-  - m_Name: Melee
+  - m_SoundType: 1
     m_Clip: {fileID: 8300000, guid: 3417f91ff93c4cb4a8b4cc4521a93192, type: 3}
+  - m_SoundType: 2
+    m_Clip: {fileID: 8300000, guid: 3250292d9dbabc94aaef78d8f16751f0, type: 3}
+  - m_SoundType: 3
+    m_Clip: {fileID: 8300000, guid: ffe6aab3b9b03b743b3f9f148298d5ef, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

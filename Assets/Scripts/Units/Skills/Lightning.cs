@@ -14,6 +14,7 @@ namespace Units.Skills
             if (m_Parent == null)
                 return;
 
+            AudioManager.self.PlaySound(SoundTypes.Lightning);
             RaycastHit objectHit;
 
             Vector3 direction = new Vector3(

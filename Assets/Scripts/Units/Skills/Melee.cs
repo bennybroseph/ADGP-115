@@ -29,8 +29,7 @@ public class Melee : BaseSkills
         if (m_Parent == null)
             return;
 
-
-        AudioManager.instance.PlaySound("Melee");
+        AudioManager.self.PlaySound(SoundTypes.Melee);
         Physics.IgnoreCollision(GetComponentInChildren<Collider>(), m_Parent.gameObject.GetComponent<Collider>());
         transform.SetParent(m_Parent.gameObject.transform, false);
     }
