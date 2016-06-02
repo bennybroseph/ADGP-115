@@ -59,6 +59,8 @@ namespace UI
 
         [Header("Announcement Log")]
         [SerializeField]
+        private RectTransform m_LogBackground;
+        [SerializeField]
         private AnimationSequence m_LogSequence;
         [SerializeField]
         private float m_SpaceBetweenLogItems;
@@ -97,6 +99,24 @@ namespace UI
 
             m_QueuedAnnouncements = new Queue<string>();
             m_LogItems = new List<Text>();
+        }
+
+        private void Start()
+        {
+            foreach (Transform child in UIManager.self.backgroundUI.transform)
+            {
+                switch (child.tag)
+                {
+                    case "Log Background":
+                        m_LogBackground = child.GetComponent<RectTransform>();
+
+                        m_LogBackground.sizeDelta = new Vector2(
+                            m_LogTextPrefab.rectTransform.sizeDelta.x, 
+                            m_SpaceBetweenLogItems 
+                            + m_MaxNumberOfLogItems * m_LogTextPrefab.rectTransform.sizeDelta.y);
+                        break;
+                }
+            }
         }
 
         // Update is called once per frame

@@ -30,6 +30,7 @@ TagManager:
   - Options
   - EnemySpawn
   - HUD
+  - Log Background
   layers:
   - Default
   - TransparentFX
