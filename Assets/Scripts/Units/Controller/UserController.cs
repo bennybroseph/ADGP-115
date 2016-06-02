@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Interfaces;
 using UnityEngine;
@@ -44,7 +45,12 @@ namespace Units.Controller
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyConfiguration.self.userConfigurations[m_PlayerIndex].targetModeKey.keyCode))
+            if (Input.GetKeyDown(KeyConfiguration.self.userConfigurations[m_PlayerIndex].targetModeKey.keyCode) ||
+#if !UNITY_WEBGL
+                GameManager.self.GetButtonState(m_PlayerIndex, KeyConfiguration.self.userConfigurations[m_PlayerIndex].targetModeButton.keyCode))
+#else
+                false)
+#endif
             {
                 if (m_Player.playerCamera.isTargeting)
                     m_Player.playerCamera.target = null;
@@ -72,6 +78,25 @@ namespace Units.Controller
                 }
             }
 
+            if (Input.GetKeyDown(KeyConfiguration.self.userConfigurations[m_PlayerIndex].switchTargetKey.keyCode) &&
+                m_Player.playerCamera.isTargeting)
+            {
+                List<Collider> objectsHit = Physics.OverlapSphere(m_Player.playerCamera.target.transform.position, 10f).ToList();
+
+                List<Collider> parsedUnits = objectsHit.Where(
+                    x => x.gameObject.GetComponent<Unit>() != null &&
+                    x.gameObject.GetComponent<Unit>() != m_Player.unit &&
+                    x.gameObject != m_Player.playerCamera.target).ToList();
+
+                foreach (Collider parsedUnit in parsedUnits)
+                {
+                    Debug.Log(parsedUnit.gameObject.name);
+                }
+
+                if (parsedUnits.Count > 0)
+                    m_Player.playerCamera.target = parsedUnits[0].gameObject;
+            }
+
             if (m_Controllable.canMoveWithInput)
             {
                 m_Controllable.velocity = Vector3.zero;
@@ -91,10 +116,10 @@ namespace Units.Controller
                     m_PlayerIndex,
                     KeyConfiguration.self.userConfigurations[m_PlayerIndex].horizontalButtonAxis.positive.keyCode);
 #else
-                    dPad.forward = Input.GetAxisRaw("POV Vertical") > 0.0f;
-                    dPad.back = Input.GetAxisRaw("POV Vertical") < 0.0f;
-                    dPad.left = Input.GetAxisRaw("POV Horizontal") < 0.0f;
-                    dPad.right = Input.GetAxisRaw("POV Horizontal") > 0.0f;
+                dPad.forward = Input.GetAxisRaw("POV Vertical") > 0.0f;
+                dPad.back = Input.GetAxisRaw("POV Vertical") < 0.0f;
+                dPad.left = Input.GetAxisRaw("POV Horizontal") < 0.0f;
+                dPad.right = Input.GetAxisRaw("POV Horizontal") > 0.0f;
 #endif
                 m_Controllable.isMoving = new Moving
                 {
@@ -160,38 +185,39 @@ namespace Units.Controller
 
                 rightStick.x = GameManager.self.GetStickValue(m_PlayerIndex, GameManager.Stick.Right).X;
                 rightStick.y = GameManager.self.GetStickValue(m_PlayerIndex, GameManager.Stick.Right).Y;
-
-
 #else
-                    leftStick.x = Input.GetAxisRaw("Horizontal");
-                    leftStick.y = Input.GetAxisRaw("Vertical");
+                leftStick.x = Input.GetAxisRaw("Horizontal");
+                leftStick.y = Input.GetAxisRaw("Vertical");
 
-                    rightStick.x = Input.GetAxisRaw("Right Stick X");
-                    rightStick.y = Input.GetAxisRaw("Right Stick Y");
+                rightStick.x = Input.GetAxisRaw("Right Stick X");
+                rightStick.y = Input.GetAxisRaw("Right Stick Y");
 #endif
                 if (rightStick.x != 0.0f ||
                     rightStick.y != 0.0f)
                 {
-                    float rotationY = -(Mathf.Atan(rightStick.y / rightStick.x) * (180 / Mathf.PI));
+                    if (m_Player.playerCamera.isTargeting)
+                    {
+                        if (Mathf.Abs(rightStick.x) > Mathf.Abs(rightStick.y))
+                            ;
+                    }
+                    else
+                    {
+                        Vector3 newAngle = m_Player.playerCamera.transform.eulerAngles;
+                        newAngle += new Vector3(
+                            rightStick.y*100*Time.deltaTime,
+                            rightStick.x*100*Time.deltaTime,
+                            0);
 
-                    if ((rightStick.x < 0.0f && rightStick.y > 0.0f) ||
-                        (rightStick.x < 0.0f && rightStick.y < 0.0f) ||
-                        (rightStick.x < 0.0f && rightStick.y == 0.0f))
-                        rotationY += 180;
+                        newAngle = new Vector3(
+                            Mathf.Clamp(
+                                newAngle.x,
+                                10,
+                                90),
+                            newAngle.y,
+                            newAngle.z);
 
-                    Vector3 newAngle = m_Player.playerCamera.transform.eulerAngles;
-                    newAngle +=
-                        new Vector3(
-                        rightStick.y * 100 * Time.deltaTime,
-                        rightStick.x * 100 * Time.deltaTime, 0);
-
-                    newAngle =
-                            new Vector3(
-                                Mathf.Clamp(newAngle.x, 10, 90),
-                                newAngle.y,
-                                newAngle.z);
-
-                    m_Player.playerCamera.transform.eulerAngles = newAngle;
+                        m_Player.playerCamera.transform.eulerAngles = newAngle;
+                    }
                 }
 
                 if (leftStick.x != 0.0f ||
@@ -233,8 +259,8 @@ namespace Units.Controller
                     KeyConfiguration.self.userConfigurations[m_PlayerIndex].skillButtons[j].keyCode);
             }
 #else
-                bool[] isPressed =
-                {
+            bool[] isPressed =
+            {
                     Input.GetAxisRaw("Skill 1") != 0.0f,
                     Input.GetAxisRaw("Skill 2") != 0.0f,
                     Input.GetAxisRaw("Skill 3") != 0.0f,

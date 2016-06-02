@@ -10,7 +10,7 @@ GameObject:
   - 4: {fileID: 469866}
   - 114: {fileID: 11448046}
   m_Layer: 0
-  m_Name: Main_Camera_Prefab
+  m_Name: Player_Camera_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -122,6 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Following: {fileID: 0}
+  m_Target: {fileID: 0}
   m_Offset: {x: 0, y: 0, z: -20}
   m_ScreenBorders:
     m_Min: {x: -35, y: 0, z: -35}
