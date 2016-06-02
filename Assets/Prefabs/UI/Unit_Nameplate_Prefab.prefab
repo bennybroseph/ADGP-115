@@ -426,7 +426,7 @@ MonoBehaviour:
   m_HealthCoroutineIsRunning: 0
   m_LastManaChange: 0
   m_ManaCoroutineIsRunning: 0
-  m_IsStationary: 1
+  m_IsStationary: 0
 --- !u!114 &11465330
 MonoBehaviour:
   m_ObjectHideFlags: 1
