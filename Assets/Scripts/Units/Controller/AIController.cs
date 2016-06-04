@@ -204,6 +204,9 @@ namespace Units.Controller
             if (unit == null || m_ApplicationIsQuitting)
                 return;
 
+            if(unit.gameObject.tag == "Player")
+               Publisher.self.Broadcast(Event.GameOver);
+
             if (m_Enemies.Contains(unit))
             {
                 Vector3 healthinstantposition = new Vector3(unit.gameObject.transform.position.x + 0.25f, unit.gameObject.transform.position.y + 0.5f, unit.gameObject.transform.position.z);

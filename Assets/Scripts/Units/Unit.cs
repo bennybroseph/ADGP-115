@@ -315,7 +315,8 @@ namespace Units
 
         protected virtual void OnDestroy()
         {
-            m_Controller.UnRegister(this);
+            if(m_Controller != null)
+                m_Controller.UnRegister(this);
 
             Publisher.self.UnSubscribe(Event.UseSkill, OnUseSkill);
             Publisher.self.UnSubscribe(Event.UpgradeSkill, OnUpgradeSkill);

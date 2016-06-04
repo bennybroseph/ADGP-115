@@ -27,7 +27,7 @@ namespace Define
         QuitGame,
         //There are no parameters
         MainMenu,
-        //There are no parameters
+        /// <param name="VolumeSlider"> Slider: the volume slider that will be having its value changed</param>
         ApplyClicked,
         //There are no parameters
         CancelClicked,

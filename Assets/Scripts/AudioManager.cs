@@ -1,5 +1,6 @@
 ﻿using Library;
 using UnityEngine;
+using System.Collections.Generic;
 using UnityEngineInternal;
 
 // Created enum to define different types of sounds
@@ -36,6 +37,11 @@ public class Sound
         get { return m_Volume; }
         set { m_Volume = value; }
     }
+
+    public AudioSource Source
+    {
+        get { return m_Source; }
+    }
     // Function to set the audisource
     public void SetSource(AudioSource a_Source)
     {
@@ -45,11 +51,6 @@ public class Sound
         Mathf.Clamp(m_Volume, 0.0f, 1.0f);
         m_Source.volume = m_Volume;
     }
-    // Function that plays the sound
-    public void Play()
-    {
-        m_Source.Play();
-    }
 }
 
 public class AudioManager : MonoSingleton<AudioManager>
@@ -58,28 +59,32 @@ public class AudioManager : MonoSingleton<AudioManager>
     [SerializeField]
     private Sound[] m_Sounds;
 
-	// Use this for initialization
-	void Start ()
+    public Sound[] Sounds
     {
-	    for (int index = 0; index < m_Sounds.Length; index++)
-	    {// Create game objects 
-	        GameObject _go = new GameObject("Sound_" + index + "_" + m_Sounds[index].Type);
+        get { return m_Sounds; }
+    }
+    // Use this for initialization
+    void Start()
+    {
+        for (int index = 0; index < m_Sounds.Length; index++)
+        {// Create game objects 
+            GameObject _go = new GameObject("Sound_" + index + "_" + m_Sounds[index].Type);
             // Set the objects parent to the game manager
             _go.transform.SetParent(transform);
             // Add an audio source component to the object
             m_Sounds[index].SetSource(_go.AddComponent<AudioSource>());
-	    }
-	}
-	
+        }
+    }
+
     public void PlaySound(SoundTypes a_type)
     {
-        for(int index = 0; index < m_Sounds.Length; index++)
-	    {
-	        if (m_Sounds[index].Type == a_type)
-	        {// Play the sounds
-	            m_Sounds[index].Play();
-	            return;
-	        }
+        foreach (Sound sound in m_Sounds)
+        {
+            if (sound.Type == a_type)
+            {// Play the sounds
+                sound.Source.Play();
+                return;
+            }
         }
 
         Debug.Log("AudioManager: Sound Not found in list: " + a_type);

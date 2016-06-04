@@ -11,6 +11,7 @@ using UnityEngine.UI;
 
 using Button = UnityEngine.UI.Button;
 using Event = Define.Event;
+using System;
 
 namespace UI
 {
@@ -158,6 +159,7 @@ namespace UI
             Publisher.self.UnSubscribe(Event.SpawnWave, OnSpawnWave);
             Publisher.self.UnSubscribe(Event.MainMenu, OnMainMenu);
             Publisher.self.UnSubscribe(Event.GameOver, OnGameOver);
+
             if (m_SkillButtonPrefab != null)
                 Publisher.self.UnSubscribe(Event.UnitInitialized, OnUnitInitialized);
         }
@@ -243,11 +245,13 @@ namespace UI
                             Button applyButton = m_OptionsMenu.GetComponentsInChildren<Button>()[0];
                             Button cancelButton = m_OptionsMenu.GetComponentsInChildren<Button>()[1];
                             Button closeButton = m_OptionsMenu.GetComponentsInChildren<Button>()[2];
+                            Slider volumeSlider = m_OptionsMenu.GetComponentsInChildren<Slider>()[0];
+                            // Set volumeSlider value to default of the first Sound of the Audiomanager class
+                            volumeSlider.value = AudioManager.self.Sounds[0].Volume;
 
-                            applyButton.onClick.AddListener(OnOptionsApplyClick);
+                            applyButton.onClick.AddListener(delegate { OnOptionsApplyClick(volumeSlider); });
                             cancelButton.onClick.AddListener(OnOptionsCancelClick);
                             closeButton.onClick.AddListener(OnOptionsCloseClick);
-
                             m_OptionsMenu.gameObject.SetActive(false);
                         }
                         break;
@@ -350,12 +354,14 @@ namespace UI
 
         private void OnUnitInitialized(Event a_Event, params object[] a_Params)
         {
+                
         }
 
         private void OnMainMenu(Event a_Event, params object[] a_Params)
         {
             Publisher.self.Broadcast(Event.UnPauseGame);
             SceneManager.LoadScene("Donte");
+            AudioManager.self.PlaySound(SoundTypes.TitleScreenMusic);
         }
 
         private void OnToggleQuitMenu(Event a_Event, params object[] a_Params)
@@ -396,14 +402,21 @@ namespace UI
             m_OptionsMenu.gameObject.SetActive(false);
         }
 
-        private void OnOptionsApplyClick()
+        private void OnOptionsApplyClick(Slider a_VolumeSlider)
         {
-            Publisher.self.Broadcast(Event.ApplyClicked);
+            Publisher.self.Broadcast(Event.ApplyClicked, a_VolumeSlider);
         }
 
         private void OnApplyClicked(Event a_Event, params object[] a_Params)
         {
-            Debug.Log("Apply Clicked!");
+            Slider volumeSlider = a_Params[0] as Slider;
+
+            foreach (Sound sound in AudioManager.self.Sounds)
+            {
+                sound.Source.volume = volumeSlider.value;
+            }
+
+            //Debug.Log("Apply Clicked!");
         }
 
         private void OnOptionsCancelClick()
