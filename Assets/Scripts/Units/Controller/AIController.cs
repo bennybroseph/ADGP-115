@@ -200,12 +200,15 @@ namespace Units.Controller
         private void OnUnitDied(Event a_Event, params object[] a_Params)
         {
             IStats unit = a_Params[0] as IStats;
-     
+
             if (unit == null || m_ApplicationIsQuitting)
                 return;
 
-            if(unit.gameObject.tag == "Player")
-               Publisher.self.Broadcast(Event.GameOver);
+            if (unit.gameObject.tag == "Player")
+            {
+                Publisher.self.Broadcast(Event.GameOver);
+            }
+              
 
             if (m_Enemies.Contains(unit))
             {

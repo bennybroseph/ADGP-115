@@ -246,8 +246,8 @@ namespace UI
                             Button cancelButton = m_OptionsMenu.GetComponentsInChildren<Button>()[1];
                             Button closeButton = m_OptionsMenu.GetComponentsInChildren<Button>()[2];
                             Slider volumeSlider = m_OptionsMenu.GetComponentsInChildren<Slider>()[0];
-                            // Set volumeSlider value to default of the first Sound of the Audiomanager class
-                            volumeSlider.value = AudioManager.self.Sounds[0].Volume;
+                            // Set volumeSlider value to a default value
+                            volumeSlider.value = 0.5f;
 
                             applyButton.onClick.AddListener(delegate { OnOptionsApplyClick(volumeSlider); });
                             cancelButton.onClick.AddListener(OnOptionsCancelClick);
@@ -359,9 +359,7 @@ namespace UI
 
         private void OnMainMenu(Event a_Event, params object[] a_Params)
         {
-            Publisher.self.Broadcast(Event.UnPauseGame);
             SceneManager.LoadScene("Donte");
-            AudioManager.self.PlaySound(SoundTypes.TitleScreenMusic);
         }
 
         private void OnToggleQuitMenu(Event a_Event, params object[] a_Params)
@@ -372,7 +370,6 @@ namespace UI
 
         private void OnInstructions(Event a_Event, params object[] a_Params)
         {
-            // Do stuff...
             m_InstructionMenu.gameObject.SetActive(true);
         }
 
@@ -383,7 +380,6 @@ namespace UI
 
         private void OnInstructionsClick()
         {
-            //m_OptionsMenu.gameObject.SetActive(false);
             Publisher.self.Broadcast(Event.Instructions);
         }
 
@@ -448,7 +444,9 @@ namespace UI
 
         private void OnMainMenuClick()
         {
+            Publisher.self.Broadcast(Event.UnPauseGame);
             Publisher.self.Broadcast(Event.MainMenu);
+
         }
 
         //Function for LoadGame button
@@ -487,8 +485,6 @@ namespace UI
 
         private void OnGameOver(Event a_Event, params object[] a_Params)
         {
-            if (this == null)
-                return;
             m_GameOverMenu.gameObject.SetActive(true);
 
             Publisher.self.Broadcast(Event.PauseGame);
