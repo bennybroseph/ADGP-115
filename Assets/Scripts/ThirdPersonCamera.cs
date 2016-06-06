@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
-using Interfaces;
 using Library;
-using Units.Controller;
+using Units;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
@@ -32,7 +31,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private Vector2 m_PrevMousePosition;
     private Vector2 m_DeltaMousePosition;
-
+    
     [SerializeField]
     private GameObject m_Following;
     [SerializeField]
@@ -74,6 +73,14 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         get { return m_Offset; }
         set { m_Offset = value; }
+    }
+
+
+    private void Awake()
+    {
+        Publisher.self.Subscribe(Define.Event.UnitDied, OnUnitDied);
+        Publisher.self.Subscribe(Define.Event.TargetTogglePressed, OnTargetTogglePressed);
+        Publisher.self.Subscribe(Define.Event.TargetChangePressed, OnTargetChangePressed);
     }
 
     private void Start()
@@ -227,5 +234,65 @@ public class ThirdPersonCamera : MonoBehaviour
                 m_PrevMousePosition = currentMousePosition;
         }
 #endif
+    }
+
+    private void OnTargetTogglePressed(Define.Event a_Event, params object[] a_Params)
+    {
+        if (m_Target != null)
+        {
+            m_Target = null;
+            return;
+        }
+
+        List<Collider> objectsHit = Physics.OverlapSphere(m_Following.transform.position, 15f).ToList();
+
+        List<Collider> parsedUnits = objectsHit.Where(
+            x => x.gameObject.GetComponent<Unit>() != null &&
+                 x.gameObject.GetComponent<Unit>() != m_Following.GetComponent<Unit>()).ToList();
+
+        foreach (Collider parsedUnit in parsedUnits)
+        {
+            Debug.Log(parsedUnit.gameObject.name);
+        }
+
+        if (parsedUnits.Count > 0)
+            m_Target = parsedUnits[0].gameObject;
+    }
+    private void OnTargetChangePressed(Define.Event a_Event, params object[] a_Params)
+    {
+        List<Collider> objectsHit = Physics.OverlapSphere(m_Target.transform.position, 15f).ToList();
+
+        List<Collider> parsedUnits = objectsHit.Where(
+            x => x.gameObject.GetComponent<Unit>() != null &&
+                 x.gameObject.GetComponent<Unit>() != m_Following.GetComponent<Unit>() &&
+                 x.gameObject != m_Target).ToList();
+
+        foreach (Collider parsedUnit in parsedUnits)
+        {
+            Debug.Log(parsedUnit.gameObject.name);
+        }
+
+        if (parsedUnits.Count > 0)
+            m_Target = parsedUnits[0].gameObject;
+    }
+
+    private void OnUnitDied(Define.Event a_Event, params object[] a_Params)
+    {
+        Unit unit = a_Params[0] as Unit;
+
+        if (unit == null || unit.gameObject != m_Target || m_Target == null)
+            return;
+        
+        List<Collider> objectsFound = Physics.OverlapSphere(m_Target.transform.position, 15f).Where(
+            x => 
+                x.gameObject.GetComponent<Unit>() != null &&
+                x.gameObject != m_Following).ToList();
+
+        m_Target = null;
+
+        if (objectsFound.Count == 0)
+            return;
+
+        m_Target = objectsFound[0].gameObject;
     }
 }

@@ -8,6 +8,9 @@ namespace Units.Skills
 {
     public class Lightning : BaseSkills
     {
+        [SerializeField]
+
+
         // Use this for initialization
         void Start()
         {
@@ -22,7 +25,7 @@ namespace Units.Skills
                         Mathf.Cos(m_Parent.gameObject.transform.eulerAngles.y * (Mathf.PI / 180f)));
 
             Physics.SphereCast(
-                new Ray(m_Parent.gameObject.transform.position, direction), 3f,
+                new Ray(m_Parent.gameObject.transform.position, direction), 0.3f,
                 out objectHit);
 
             Debug.Log(objectHit.transform.gameObject.name);
@@ -43,7 +46,16 @@ namespace Units.Skills
                     objectFound.transform.gameObject == m_Parent.gameObject)
                     continue;
 
-                objectFound.gameObject.GetComponent<IAttackable>().health -= 2;
+                objectFound.gameObject.GetComponent<IAttackable>().health -= m_SkillData.damage;
+
+                UIAnnouncer.self.FloatingText(
+                m_SkillData.damage,
+                objectFound.transform.position,
+                FloatingTextType.PhysicalDamage);
+
+                if (objectFound.transform.GetComponent<IStats>() != null &&
+                    objectFound.gameObject.GetComponent<IAttackable>().health <= 0)
+                    m_Parent.experience += objectFound.transform.GetComponent<IStats>().experience;
 
                 lineRenderer.SetVertexCount(i + 1);
                 lineRenderer.SetPosition(i, objectFound.transform.position);
