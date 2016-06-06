@@ -24,12 +24,13 @@ namespace Units.Controller
         private List<IStats> m_Enemies;
         [SerializeField]
         private int m_WaveCounter;
+        private int m_MaxWaveCount = 2;
         private List<IControllable> m_Controlables; 
         [SerializeField]
         private GameObject m_ManaPickupPrefab;
         [SerializeField]
         private GameObject m_HealthPickupPrefab;
-
+        private float m_CountdownTimer = 5;
         private bool m_ApplicationIsQuitting;
 
         protected override void Awake()
@@ -49,11 +50,17 @@ namespace Units.Controller
         void Start()
         {
             m_EnemyBases = GameObject.FindGameObjectsWithTag("EnemySpawn").ToList();
+
+            StartCoroutine(AutoSpawn());
         }
 
         // Update is called once per frame
         void Update()
         {
+            m_CountdownTimer -= Time.deltaTime;
+            UIManager.self.AutoSpawnTimer.text = "Spawn Wave(" + Mathf.Ceil(m_CountdownTimer) + ")";
+            if(m_CountdownTimer <= 0)
+                UIManager.self.AutoSpawnTimer.text = "Enemies: " + m_Enemies.Count;
             Search();
         }
 
@@ -179,25 +186,9 @@ namespace Units.Controller
             if (m_Enemies.Count != 0)
                 return;
 
-            m_WaveCounter++;
-
-            if (m_WaveCounter == 2)
-                UIAnnouncer.self.Announce("FINAL WAVE!!");
-
-            if (m_SpawnPoints.Count == 0)
-            {
-                for (int BasesIndex = 0; BasesIndex <= m_EnemyBases.Count - 1; BasesIndex++)
-                {
-                    Vector3 spawnPoints = m_EnemyBases[BasesIndex].transform.GetChild(0).position;
-                    m_SpawnPoints.Add(spawnPoints);
-                }
-               
-
-            }
+            StopAllCoroutines();
 
             StartCoroutine(Spawn());
-
-            Publisher.self.Broadcast(Event.SpawnWave, m_WaveCounter);
 
         }
 
@@ -229,12 +220,32 @@ namespace Units.Controller
 
             m_Enemies.Remove(unit);
 
-            if (m_WaveCounter >= 10 && m_Enemies.Count == 0)
-                Publisher.self.Broadcast(Event.GameOver);
+            if (m_Enemies.Count == 0 && m_WaveCounter != m_MaxWaveCount)
+                StartCoroutine(AutoSpawn());
+
+            if (m_WaveCounter == m_MaxWaveCount && m_Enemies.Count == 0)
+                Publisher.self.Broadcast(Event.GameWin);
         }
 
         private IEnumerator Spawn()
         {
+            
+            m_CountdownTimer = 0;
+            m_WaveCounter++;
+
+            if (m_WaveCounter == m_MaxWaveCount)
+                UIAnnouncer.self.Announce("FINAL WAVE!!");
+
+
+            Publisher.self.Broadcast(Event.SpawnWave, m_WaveCounter);
+            if (m_SpawnPoints.Count == 0)
+            {
+                for (int BasesIndex = 0; BasesIndex <= m_EnemyBases.Count - 1; BasesIndex++)
+                {
+                    Vector3 spawnPoints = m_EnemyBases[BasesIndex].transform.GetChild(0).position;
+                    m_SpawnPoints.Add(spawnPoints);
+                }
+            }
 
             foreach (Vector3 spawnPoint in m_SpawnPoints)
             {
@@ -257,13 +268,19 @@ namespace Units.Controller
 
                     m_Enemies.Add(goblinMage.GetComponent<IStats>());
                     m_Enemies.Add(goblin.GetComponent<IStats>());
-                    yield return null;
+                    yield return new WaitForSeconds(2);
                 }
-
-
             }
 
         }
+        private IEnumerator AutoSpawn()
+        {
+            m_CountdownTimer = 5;
+            yield return new WaitForSeconds(5);
+
+            yield return Spawn();
+        }
+
         private void OnCanUpgradeSkill(Event a_Event, params object[] a_Params)
         {
             IUsesSkills unit = a_Params[0] as IUsesSkills;

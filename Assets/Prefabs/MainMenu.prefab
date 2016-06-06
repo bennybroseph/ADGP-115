@@ -148,6 +148,7 @@ GameObject:
   - 224: {fileID: 22498094}
   - 222: {fileID: 22236336}
   - 114: {fileID: 11416580}
+  - 114: {fileID: 11487616}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -539,10 +540,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: " Instructions:\n \n Controls:\n Esc - Pauses Game and Opens Quit Menu\n
-    Spawn Wave - Spawns next wave\n Skill 1 - Activate Skill \n Skill 2 - Activate
-    Skill\n Q - Activate Skill 1\n E - Activate Skill 2\n\n Upgrade:\n \"+\" - Allows
-    upgrade of specific skill\n (Only available when able to level up)\n"
+  m_Text: 
 --- !u!114 &11416946
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -900,11 +898,13 @@ MonoBehaviour:
     type: 2}
   m_BackgroundUIPrefab: {fileID: 22397222, guid: 999e657ced1076c41866a978342b4131,
     type: 2}
+  m_HUDPrefab: {fileID: 0}
   m_SkillButtonPrefab: {fileID: 11444974, guid: d95a9a2a8113b4743a15a902df0f9e28,
     type: 2}
   m_SkillButtons: []
   m_WaveCounter: {fileID: 0}
   m_HUD: {fileID: 0}
+  m_BattleUI: {fileID: 0}
   m_QuitMenu: {fileID: 0}
   m_InstructionMenu: {fileID: 22453326}
   m_GameOverMenu: {fileID: 0}
@@ -915,6 +915,18 @@ MonoBehaviour:
   m_Options: {fileID: 0}
   m_QuitGame: {fileID: 0}
   m_BackgroundUI: {fileID: 0}
+--- !u!114 &11487616
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 166288}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b604fd68fb421c4bbd114e057f91017, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InstructionsText: {fileID: 11416580}
 --- !u!114 &11489020
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1168,8 +1180,8 @@ RectTransform:
   m_RootOrder: 5
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 350, y: 250}
+  m_AnchoredPosition: {x: 142, y: -11}
+  m_SizeDelta: {x: 364, y: 326}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &22465276
 RectTransform:
@@ -1340,8 +1352,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -10}
-  m_SizeDelta: {x: 467, y: 339}
+  m_AnchoredPosition: {x: 42, y: -10}
+  m_SizeDelta: {x: 425, y: 339}
   m_Pivot: {x: 0, y: 1}
 --- !u!1001 &100100000
 Prefab:
