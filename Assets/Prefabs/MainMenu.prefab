@@ -540,10 +540,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: " Instructions:\n \n Controls:\n Esc - Pauses Game and Opens Quit Menu\n
-    Spawn Wave - Spawns next wave\n Skill 1 - Activate Skill \n Skill 2 - Activate
-    Skill\n Q - Activate Skill 1\n E - Activate Skill 2\n\n Upgrade:\n \"+\" - Allows
-    upgrade of specific skill\n (Only available when able to level up)"
+  m_Text: 
 --- !u!114 &11416946
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1183,8 +1180,8 @@ RectTransform:
   m_RootOrder: 5
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 118, y: -11}
-  m_SizeDelta: {x: 388, y: 326}
+  m_AnchoredPosition: {x: 142, y: -11}
+  m_SizeDelta: {x: 364, y: 326}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &22465276
 RectTransform:
@@ -1355,8 +1352,8 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -31, y: -10}
-  m_SizeDelta: {x: 498, y: 339}
+  m_AnchoredPosition: {x: 42, y: -10}
+  m_SizeDelta: {x: 425, y: 339}
   m_Pivot: {x: 0, y: 1}
 --- !u!1001 &100100000
 Prefab:
