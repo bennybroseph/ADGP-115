@@ -196,6 +196,7 @@ GameObject:
   m_Component:
   - 224: {fileID: 22496564}
   - 114: {fileID: 11423510}
+  - 222: {fileID: 22289972}
   m_Layer: 5
   m_Name: HUD
   m_TagString: Untagged
@@ -394,6 +395,7 @@ MonoBehaviour:
   m_LastManaChange: 0
   m_ManaCoroutineIsRunning: 0
   m_IsStationary: 1
+  m_HideWhenNotTargeted: 0
 --- !u!114 &11430012
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -721,6 +723,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 174832}
+--- !u!222 &22289972
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 190724}
 --- !u!222 &22296376
 CanvasRenderer:
   m_ObjectHideFlags: 1

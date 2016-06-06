@@ -63,7 +63,7 @@ public class ThirdPersonCamera : MonoBehaviour
     public GameObject target
     {
         get { return m_Target; }
-        set { m_Target = value; }
+        private set { m_Target = value; Publisher.self.DelayedBroadcast(Define.Event.PlayerTargetChanged, this, value); }
     }
 
     public bool isTargeting
@@ -240,7 +240,7 @@ public class ThirdPersonCamera : MonoBehaviour
     {
         if (m_Target != null)
         {
-            m_Target = null;
+            target = null;
             m_Offset = m_PrevOffset;
             return;
         }
@@ -259,7 +259,7 @@ public class ThirdPersonCamera : MonoBehaviour
         }
 
         if (parsedUnits.Count > 0)
-            m_Target = parsedUnits[0].gameObject;
+            target = parsedUnits[0].gameObject;
     }
     private void OnTargetChangePressed(Define.Event a_Event, params object[] a_Params)
     {
@@ -276,7 +276,7 @@ public class ThirdPersonCamera : MonoBehaviour
         }
 
         if (parsedUnits.Count > 0)
-            m_Target = parsedUnits[0].gameObject;
+            target = parsedUnits[0].gameObject;
     }
 
     private void OnUnitDied(Define.Event a_Event, params object[] a_Params)
@@ -291,10 +291,10 @@ public class ThirdPersonCamera : MonoBehaviour
                 x.gameObject.GetComponent<Unit>() != null &&
                 x.gameObject != m_Following).ToList();
 
-        m_Target = null;
+        target = null;
 
         if (objectsFound.Count != 0)
-            m_Target = objectsFound[0].gameObject;
+            target = objectsFound[0].gameObject;
 
         if (m_Target == null)
             m_Offset = m_PrevOffset;
