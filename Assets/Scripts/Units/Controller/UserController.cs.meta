@@ -1,10 +1,12 @@
 fileFormatVersion: 2
 guid: 7ff1bbcfed12b844a981fe57d41a4bc0
-timeCreated: 1463525015
+timeCreated: 1465236392
 licenseType: Pro
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - m_TargetingVolume: {fileID: 145432, guid: decc3f7268e041146aa448bbbd552db1, type: 2}
+  - m_Player: {instanceID: 0}
   executionOrder: -30
   icon: {instanceID: 0}
   userData: 

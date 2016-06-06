@@ -267,7 +267,7 @@ namespace Units
                 }
             }
 
-            //GetComponent<NavMeshAgent>().updateRotation = false;
+            m_CanMoveWithInput = true;
             m_MovementFSM = new FiniteStateMachine<MovementState>();
 
             m_DamageFSM = new FiniteStateMachine<DamageState>();
