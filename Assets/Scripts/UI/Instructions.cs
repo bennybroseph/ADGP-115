@@ -44,10 +44,19 @@ public class Instructions : MonoBehaviour
         m_InstructionsText.text +=
         Enum.GetName(typeof(KeyCode), KeyConfiguration.self.userConfigurations[0].horizontalKeyAxis.negative.keyCode) +
                " - Move Character Left " + "\n";
+        m_InstructionsText.text +=
+            Enum.GetName(typeof(KeyCode), KeyConfiguration.self.userConfigurations[0].targetModeKey.keyCode) +
+            "   - Targets Enemy Unit " + "\n";
+
+        m_InstructionsText.text +=
+            Enum.GetName(typeof(KeyCode), KeyConfiguration.self.userConfigurations[0].switchTargetKey.keyCode) +
+            " - Switches Targets " + "\n";
+
+        
 
         m_InstructionsText.text +=
 
-        "Controller Controls:" + "\n";
+        "\n" +"Controller Controls:" + "\n";
         i = 0;
         foreach (Key<ButtonCode> skillButton in KeyConfiguration.self.userConfigurations[0].skillButtons)
         {
@@ -71,9 +80,15 @@ public class Instructions : MonoBehaviour
                " - Move Character Left " + "\n";
 
         m_InstructionsText.text +=
+            Enum.GetName(typeof(ButtonCode), KeyConfiguration.self.userConfigurations[0].targetModeButton.keyCode) +
+            " - Targets Enemy Unit " + "\n";
+
+  
+
+        m_InstructionsText.text +=
 
 
-            "Upgrade:" + "\n" +
+         "\n" + "Upgrade:" + "\n" +
                 "\t" + "'+' - Allows upgrade of specific skill" + "\n" +
                 "\t" + "(Only available when able to level up)";
     }
