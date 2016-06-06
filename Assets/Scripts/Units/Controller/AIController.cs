@@ -30,7 +30,7 @@ namespace Units.Controller
         private GameObject m_ManaPickupPrefab;
         [SerializeField]
         private GameObject m_HealthPickupPrefab;
-
+        private float m_CountdownTimer = 5;
         private bool m_ApplicationIsQuitting;
 
         protected override void Awake()
@@ -57,6 +57,10 @@ namespace Units.Controller
         // Update is called once per frame
         void Update()
         {
+            m_CountdownTimer -= Time.deltaTime;
+            UIManager.self.AutoSpawnTimer.text = "Spawn Wave(" + Mathf.Ceil(m_CountdownTimer) + ")";
+            if(m_CountdownTimer <= 0)
+                UIManager.self.AutoSpawnTimer.text = "Enemies: " + m_Enemies.Count;
             Search();
         }
 
@@ -182,7 +186,7 @@ namespace Units.Controller
             if (m_Enemies.Count != 0)
                 return;
 
-            StopCoroutine(AutoSpawn());
+            StopAllCoroutines();
 
             StartCoroutine(Spawn());
 
@@ -225,10 +229,13 @@ namespace Units.Controller
 
         private IEnumerator Spawn()
         {
+            
+            m_CountdownTimer = 0;
             m_WaveCounter++;
 
-            if (m_WaveCounter == m_MaxWaveCount - 1)
+            if (m_WaveCounter == m_MaxWaveCount)
                 UIAnnouncer.self.Announce("FINAL WAVE!!");
+
 
             Publisher.self.Broadcast(Event.SpawnWave, m_WaveCounter);
             if (m_SpawnPoints.Count == 0)
@@ -268,6 +275,7 @@ namespace Units.Controller
         }
         private IEnumerator AutoSpawn()
         {
+            m_CountdownTimer = 5;
             yield return new WaitForSeconds(5);
 
             yield return Spawn();

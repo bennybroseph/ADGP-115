@@ -35,8 +35,6 @@ namespace UI
         [SerializeField]
         private Text m_WaveCounter;
         [SerializeField]
-        private Text m_CountDownToWave;
-        [SerializeField]
         private UnitNameplate m_HUD;
         [SerializeField]
         private RectTransform m_BattleUI;
@@ -60,6 +58,7 @@ namespace UI
         private Button m_QuitGame;
         [SerializeField]
         private Canvas m_BackgroundUI;
+        private Text m_AutoSpawnTimer;
         #endregion
 
         #region -- PROPERTIES --
@@ -67,6 +66,12 @@ namespace UI
         {
             get { return m_BackgroundUI; }
         }
+        public Text AutoSpawnTimer
+        {
+            get { return m_AutoSpawnTimer; }
+            set { m_AutoSpawnTimer = value; }
+        }
+
         #endregion
 
         #region -- UNITY FUNCTIONS --
@@ -191,6 +196,8 @@ namespace UI
 
                             Button spawnWaveButton = m_BattleUI.GetComponentsInChildren<Button>()[0];
                             Button instructionsButton = m_BattleUI.GetComponentsInChildren<Button>()[1];
+
+                            m_AutoSpawnTimer = spawnWaveButton.GetComponentInChildren<Text>();
 
                             spawnWaveButton.onClick.AddListener(OnSpawnWaveClick);
                             instructionsButton.onClick.AddListener(OnInstructionsClick);
