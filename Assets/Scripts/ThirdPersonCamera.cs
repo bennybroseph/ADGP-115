@@ -31,7 +31,9 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private Vector2 m_PrevMousePosition;
     private Vector2 m_DeltaMousePosition;
-    
+
+    private Vector3 m_PrevOffset;
+
     [SerializeField]
     private GameObject m_Following;
     [SerializeField]
@@ -101,9 +103,7 @@ public class ThirdPersonCamera : MonoBehaviour
     private void OnGUI()
     {
         if (Event.current.type == EventType.ScrollWheel)
-        {
             m_Offset += new Vector3(0, 0, -Event.current.delta.y);
-        }
     }
 
     // Update is called once per frame
@@ -241,8 +241,11 @@ public class ThirdPersonCamera : MonoBehaviour
         if (m_Target != null)
         {
             m_Target = null;
+            m_Offset = m_PrevOffset;
             return;
         }
+
+        m_PrevOffset = m_Offset;
 
         List<Collider> objectsHit = Physics.OverlapSphere(m_Following.transform.position, 15f).ToList();
 
@@ -282,17 +285,18 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (unit == null || unit.gameObject != m_Target || m_Target == null)
             return;
-        
+
         List<Collider> objectsFound = Physics.OverlapSphere(m_Target.transform.position, 15f).Where(
-            x => 
+            x =>
                 x.gameObject.GetComponent<Unit>() != null &&
                 x.gameObject != m_Following).ToList();
 
         m_Target = null;
 
-        if (objectsFound.Count == 0)
-            return;
+        if (objectsFound.Count != 0)
+            m_Target = objectsFound[0].gameObject;
 
-        m_Target = objectsFound[0].gameObject;
+        if (m_Target == null)
+            m_Offset = m_PrevOffset;
     }
 }
