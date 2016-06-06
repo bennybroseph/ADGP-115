@@ -15,7 +15,7 @@ namespace Units.Controller
         [SerializeField]
         private Player m_Player;
         [SerializeField]
-        private IControllable m_Controllable;
+        private Unit m_Controllable;
         [SerializeField]
         private int m_PlayerIndex;
 
@@ -52,49 +52,13 @@ namespace Units.Controller
                 false)
 #endif
             {
-                if (m_Player.playerCamera.isTargeting)
-                    m_Player.playerCamera.target = null;
-                else
-                {
-                    Vector3 direction = new Vector3(
-                        Mathf.Sin(m_Controllable.transform.eulerAngles.y * (Mathf.PI / 180f)),
-                        0,
-                        Mathf.Cos(m_Controllable.transform.eulerAngles.y * (Mathf.PI / 180f)));
-
-                    RaycastHit objectHit;
-                    Physics.SphereCast(
-                        new Ray(m_Controllable.transform.position, direction),
-                        3f,
-                        out objectHit);
-
-                    IAttackable unit = objectHit.transform.gameObject.GetComponent<IAttackable>();
-
-                    if (objectHit.transform.gameObject != null &&
-                        unit != null &&
-                        unit.faction != m_Controllable.gameObject.GetComponent<IAttackable>().faction)
-                    {
-                        m_Player.playerCamera.target = objectHit.transform.gameObject;
-                    }
-                }
+                Publisher.self.Broadcast(Event.TargetTogglePressed);
             }
 
             if (Input.GetKeyDown(KeyConfiguration.self.userConfigurations[m_PlayerIndex].switchTargetKey.keyCode) &&
                 m_Player.playerCamera.isTargeting)
             {
-                List<Collider> objectsHit = Physics.OverlapSphere(m_Player.playerCamera.target.transform.position, 10f).ToList();
-
-                List<Collider> parsedUnits = objectsHit.Where(
-                    x => x.gameObject.GetComponent<Unit>() != null &&
-                    x.gameObject.GetComponent<Unit>() != m_Player.unit &&
-                    x.gameObject != m_Player.playerCamera.target).ToList();
-
-                foreach (Collider parsedUnit in parsedUnits)
-                {
-                    Debug.Log(parsedUnit.gameObject.name);
-                }
-
-                if (parsedUnits.Count > 0)
-                    m_Player.playerCamera.target = parsedUnits[0].gameObject;
+                Publisher.self.Broadcast(Event.TargetChangePressed);
             }
 
             if (m_Controllable.canMoveWithInput)
@@ -204,8 +168,8 @@ namespace Units.Controller
                     {
                         Vector3 newAngle = m_Player.playerCamera.transform.eulerAngles;
                         newAngle += new Vector3(
-                            rightStick.y*100*Time.deltaTime,
-                            rightStick.x*100*Time.deltaTime,
+                            rightStick.y * 100 * Time.deltaTime,
+                            rightStick.x * 100 * Time.deltaTime,
                             0);
 
                         newAngle = new Vector3(
@@ -276,11 +240,12 @@ namespace Units.Controller
                 }
             }
         }
+
         #endregion
 
         public void Register(IControllable a_Controllable)
         {
-            m_Controllable = a_Controllable;
+            m_Controllable = a_Controllable.gameObject.GetComponent<Unit>();
 
             m_Controllable.movementFSM.AddTransition(MovementState.Init, MovementState.Idle);
             m_Controllable.movementFSM.AddTransition(MovementState.Idle, MovementState.Walking);

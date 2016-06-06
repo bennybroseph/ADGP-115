@@ -47,7 +47,13 @@ namespace Define
         // There are no parameters
         UnPauseGame,
 
+        // There are no parameters
         Options,
+
+        // There are no parameters
+        TargetTogglePressed,
+        // There are no parameters
+        TargetChangePressed,
 
         /// <param name="Unit"> IUsesSkills: which unit's skill should be upgraded per user input</param> 
         /// <param name="Skill Index"> int: which skill to upgrade</param>
