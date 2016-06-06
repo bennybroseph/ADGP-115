@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Interfaces;
 using Library;
+using UI;
 using UnityEngine;
 using Event = Define.Event;
 using Random = UnityEngine.Random;
@@ -180,6 +181,9 @@ namespace Units.Controller
 
             m_WaveCounter++;
 
+            if (m_WaveCounter == 2)
+                UIAnnouncer.self.Announce("FINAL WAVE!!");
+
             if (m_SpawnPoints.Count == 0)
             {
                 for (int BasesIndex = 0; BasesIndex <= m_EnemyBases.Count - 1; BasesIndex++)
@@ -205,10 +209,8 @@ namespace Units.Controller
                 return;
 
             if (unit.gameObject.tag == "Player")
-            {
                 Publisher.self.Broadcast(Event.GameOver);
-            }
-              
+
 
             if (m_Enemies.Contains(unit))
             {
@@ -226,6 +228,9 @@ namespace Units.Controller
             }
 
             m_Enemies.Remove(unit);
+
+            if (m_WaveCounter >= 10 && m_Enemies.Count == 0)
+                Publisher.self.Broadcast(Event.GameOver);
         }
 
         private IEnumerator Spawn()
