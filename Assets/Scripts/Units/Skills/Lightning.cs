@@ -25,6 +25,8 @@ namespace Units.Skills
                 new Ray(m_Parent.gameObject.transform.position, direction), 3f,
                 out objectHit);
 
+            Debug.Log(objectHit.transform.gameObject.name);
+
             if (objectHit.transform.gameObject.GetComponent<Unit>() == null ||
                 objectHit.transform.gameObject == m_Parent.gameObject)
                 return;
