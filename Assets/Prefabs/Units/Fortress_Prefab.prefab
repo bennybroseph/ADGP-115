@@ -43,7 +43,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 127702}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 20, y: 0, z: 7}
+  m_LocalPosition: {x: 38.88, y: 0, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
@@ -140,7 +140,7 @@ MonoBehaviour:
   m_UnitName: Fortress
   m_UnitNickname: Fortress
   m_Faction: Allies
-  m_MaxHealth: 15
+  m_MaxHealth: 50
   m_Health: 0
   m_MaxDefense: 5
   m_Defense: 0
