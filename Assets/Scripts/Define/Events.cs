@@ -41,6 +41,8 @@ namespace Define
         ToggleQuitMenu,
         // There are no parameters
         GameOver,
+        // There are no parameters
+        GameWin,
 
         // There are no parameters
         PauseGame,

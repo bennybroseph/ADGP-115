@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Interfaces;
 using UnityEngine;
@@ -57,6 +58,7 @@ namespace UI
         private Button m_QuitGame;
         [SerializeField]
         private Canvas m_BackgroundUI;
+        private Text m_AutoSpawnTimer;
         #endregion
 
         #region -- PROPERTIES --
@@ -64,6 +66,12 @@ namespace UI
         {
             get { return m_BackgroundUI; }
         }
+        public Text AutoSpawnTimer
+        {
+            get { return m_AutoSpawnTimer; }
+            set { m_AutoSpawnTimer = value; }
+        }
+
         #endregion
 
         #region -- UNITY FUNCTIONS --
@@ -84,6 +92,7 @@ namespace UI
             Publisher.self.Subscribe(Event.SpawnWave, OnSpawnWave);
             Publisher.self.Subscribe(Event.MainMenu, OnMainMenu);
             Publisher.self.Subscribe(Event.GameOver, OnGameOver);
+            Publisher.self.Subscribe(Event.GameWin, OnGameWin);
             Publisher.self.Subscribe(Event.ApplyClicked, OnApplyClicked);
             Publisher.self.Subscribe(Event.CancelClicked, OnCancelClicked);
 
@@ -162,6 +171,7 @@ namespace UI
             Publisher.self.UnSubscribe(Event.SpawnWave, OnSpawnWave);
             Publisher.self.UnSubscribe(Event.MainMenu, OnMainMenu);
             Publisher.self.UnSubscribe(Event.GameOver, OnGameOver);
+            Publisher.self.UnSubscribe(Event.GameWin, OnGameWin);
 
             if (m_SkillButtonPrefab != null)
                 Publisher.self.UnSubscribe(Event.UnitInitialized, OnUnitInitialized);
@@ -189,6 +199,8 @@ namespace UI
 
                             Button spawnWaveButton = m_BattleUI.GetComponentsInChildren<Button>()[0];
                             Button instructionsButton = m_BattleUI.GetComponentsInChildren<Button>()[1];
+
+                            m_AutoSpawnTimer = spawnWaveButton.GetComponentInChildren<Text>();
 
                             spawnWaveButton.onClick.AddListener(OnSpawnWaveClick);
                             instructionsButton.onClick.AddListener(OnInstructionsClick);
@@ -491,6 +503,18 @@ namespace UI
             m_GameOverMenu.gameObject.SetActive(true);
 
             Publisher.self.Broadcast(Event.PauseGame);
+        }
+
+        private void OnGameWin(Event a_Event, params object[] a_Params)
+        {
+            StartCoroutine(GameWinbroadcast());
+        }
+
+        private IEnumerator GameWinbroadcast()
+        {
+            UIAnnouncer.self.Announce("You've Won!!");
+            yield return new WaitForSeconds(5);
+            Publisher.self.Broadcast(Event.GameOver);
         }
         #endregion
     }
