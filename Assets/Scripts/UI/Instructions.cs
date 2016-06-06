@@ -15,9 +15,13 @@ public class Instructions : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        List<Skill> skills = FindObjectOfType<Player>().unit.skills;
+        Player player = FindObjectOfType<Player>();
 
-        m_InstructionsText.text =
+        List<Skill> skills = new List<Skill>();
+        if (player != null)
+            skills = FindObjectOfType<Player>().unit.skills;
+
+        m_InstructionsText.text +=
             "Instructions:" + "\n" +
 
             "Keyboard Controls:" + "\n";
@@ -27,8 +31,18 @@ public class Instructions : MonoBehaviour
         {
             m_InstructionsText.text +=
                 Enum.GetName(typeof(KeyCode), skillKey.keyCode) +
-                " - Use " + skills[i].skillData.name + "\n";
+                " - Use ";
 
+            if (skills.Count == 0)
+            {
+                m_InstructionsText.text += "Skill " + (i+1);
+            }
+            else
+            {
+                m_InstructionsText.text += skills[i].skillData.name;
+            }
+
+            m_InstructionsText.text += "\n";
             ++i;
         }
 
@@ -52,20 +66,27 @@ public class Instructions : MonoBehaviour
             Enum.GetName(typeof(KeyCode), KeyConfiguration.self.userConfigurations[0].switchTargetKey.keyCode) +
             " - Switches Targets " + "\n";
 
-        
+
 
         m_InstructionsText.text +=
 
-        "\n" +"Controller Controls:" + "\n";
+        "\n" + "Controller Controls:" + "\n";
         i = 0;
         foreach (Key<ButtonCode> skillButton in KeyConfiguration.self.userConfigurations[0].skillButtons)
         {
             m_InstructionsText.text +=
                 Enum.GetName(typeof(ButtonCode), skillButton.keyCode) +
-                " Use " + skills[i].skillData.name + "\n";
+                " - Use ";
+            if (skills.Count == 0)
+                m_InstructionsText.text += "Skill " + (i+1);
+            else
+                m_InstructionsText.text = skills[i].skillData.name;
 
+
+            m_InstructionsText.text += "\n"; 
             ++i;
         }
+
         m_InstructionsText.text +=
          Enum.GetName(typeof(ButtonCode), KeyConfiguration.self.userConfigurations[0].verticalButtonAxis.positive.keyCode) +
                  " - Move Character Up " + "\n";
@@ -83,7 +104,7 @@ public class Instructions : MonoBehaviour
             Enum.GetName(typeof(ButtonCode), KeyConfiguration.self.userConfigurations[0].targetModeButton.keyCode) +
             " - Targets Enemy Unit " + "\n";
 
-  
+
 
         m_InstructionsText.text +=
 

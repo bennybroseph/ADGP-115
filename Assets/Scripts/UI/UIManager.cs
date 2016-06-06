@@ -106,10 +106,13 @@ namespace UI
         // Use this for initialization
         private void Start()
         {
-            m_HUD = Instantiate(m_HUDPrefab);
-            m_HUD.transform.SetParent(m_BackgroundUI.transform, false);
-            m_HUD.transform.SetAsLastSibling();
-            m_HUD.parent = FindObjectOfType<Player>().unit;
+            if (m_HUD != null)
+            {
+                m_HUD = Instantiate(m_HUDPrefab);
+                m_HUD.transform.SetParent(m_BackgroundUI.transform, false);
+                m_HUD.transform.SetAsLastSibling();
+                m_HUD.parent = FindObjectOfType<Player>().unit;
+            }
 
             if (m_SkillButtonPrefab.GetComponent<RectTransform>() == null)
                 return;
