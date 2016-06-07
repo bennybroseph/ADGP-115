@@ -27,14 +27,16 @@ public class Instructions : MonoBehaviour
             "Keyboard Controls:" + "\n";
 
         int i = 0;
+        //A foreach loop that goes through each skill on the instructions list and assigns them there description.
         foreach (Key<KeyCode> skillKey in KeyConfiguration.self.userConfigurations[0].skillKeys)
         {
             m_InstructionsText.text +=
                 Enum.GetName(typeof(KeyCode), skillKey.keyCode) +
                 " - Use ";
 
+            //Checks to see if skill count = 0
             if (skills.Count == 0)
-            {
+            {   //if skill count = 0 then set skill as its index.
                 m_InstructionsText.text += "Skill " + (i + 1);
             }
             else
@@ -71,6 +73,7 @@ public class Instructions : MonoBehaviour
         m_InstructionsText.text +=
 
         "\n" + "Controller Controls:" + "\n";
+        //sets index to 0
         i = 0;
         foreach (Key<ButtonCode> skillButton in KeyConfiguration.self.userConfigurations[0].skillButtons)
         {
