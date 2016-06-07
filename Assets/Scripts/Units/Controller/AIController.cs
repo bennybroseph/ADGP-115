@@ -30,7 +30,9 @@ namespace Units.Controller
         private GameObject m_ManaPickupPrefab;
         [SerializeField]
         private GameObject m_HealthPickupPrefab;
-        private float m_CountdownTimer = 5;
+        [SerializeField]
+        private float m_MaxCountdownTimer;
+        private float m_CurrentCountdownTimer;
         private bool m_ApplicationIsQuitting;
 
         protected override void Awake()
@@ -40,6 +42,8 @@ namespace Units.Controller
             m_Controlables = new List<IControllable>();
             m_Enemies = new List<IStats>();
             m_EnemyBases = new List<GameObject>();
+
+            m_CurrentCountdownTimer = m_MaxCountdownTimer;
 
             Publisher.self.Subscribe(Event.SpawnWaveClicked, SpawnWaves);
             Publisher.self.Subscribe(Event.UnitDied, OnUnitDied);
@@ -57,9 +61,9 @@ namespace Units.Controller
         // Update is called once per frame
         void Update()
         {
-            m_CountdownTimer -= Time.deltaTime;
-            UIManager.self.AutoSpawnTimer.text = "Spawn Wave(" + Mathf.Ceil(m_CountdownTimer) + ")";
-            if(m_CountdownTimer <= 0)
+            m_CurrentCountdownTimer -= Time.deltaTime;
+            UIManager.self.AutoSpawnTimer.text = "Spawn Wave(" + Mathf.Ceil(m_CurrentCountdownTimer) + ")";
+            if(m_CurrentCountdownTimer <= 0)
                 UIManager.self.AutoSpawnTimer.text = "Enemies: " + m_Enemies.Count;
             Search();
         }
@@ -230,7 +234,7 @@ namespace Units.Controller
         private IEnumerator Spawn()
         {
             
-            m_CountdownTimer = 0;
+            m_CurrentCountdownTimer = 0;
             m_WaveCounter++;
 
             if (m_WaveCounter == m_MaxWaveCount)
@@ -275,8 +279,8 @@ namespace Units.Controller
         }
         private IEnumerator AutoSpawn()
         {
-            m_CountdownTimer = 5;
-            yield return new WaitForSeconds(5);
+            m_CurrentCountdownTimer = m_MaxCountdownTimer;
+            yield return new WaitForSeconds(m_MaxCountdownTimer);
 
             yield return Spawn();
         }

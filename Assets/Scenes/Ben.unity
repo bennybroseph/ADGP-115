@@ -76,9 +76,9 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 2
     agentRadius: 0.5
-    agentHeight: 2
-    agentSlope: 45
-    agentClimb: 0.4
+    agentHeight: 1
+    agentSlope: 25
+    agentClimb: 0.5
     ledgeDropHeight: 0
     maxJumpAcrossDistance: 0
     accuratePlacement: 0
@@ -342,6 +342,10 @@ Prefab:
     - target: {fileID: 127702, guid: 3480bd364991b6d46886ed7738f0325a, type: 2}
       propertyPath: m_Name
       value: Fortress
+      objectReference: {fileID: 0}
+    - target: {fileID: 151594, guid: 3480bd364991b6d46886ed7738f0325a, type: 2}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3480bd364991b6d46886ed7738f0325a, type: 2}
@@ -640,6 +644,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 118894, guid: 16d15cfde3ae32c469f658670109e45d, type: 2}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 16d15cfde3ae32c469f658670109e45d, type: 2}
   m_IsPrefabParent: 0
@@ -732,53 +740,13 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 424380, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}
-      propertyPath: m_LocalPosition.x
-      value: -38
-      objectReference: {fileID: 0}
-    - target: {fileID: 424380, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 424380, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}
-      propertyPath: m_LocalPosition.z
-      value: 8
+    - target: {fileID: 175778, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}
+      propertyPath: m_Name
+      value: Goblin Base
       objectReference: {fileID: 0}
     - target: {fileID: 424380, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}
       propertyPath: m_RootOrder
       value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 424380, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 424380, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: -90
-      objectReference: {fileID: 0}
-    - target: {fileID: 424380, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 424380, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 424380, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}
-      propertyPath: m_LocalRotation.y
-      value: -0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 424380, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 424380, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071067
-      objectReference: {fileID: 0}
-    - target: {fileID: 175778, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}
-      propertyPath: m_Name
-      value: Goblin Base
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5628e38b001ed624ca33b5007d10c909, type: 2}

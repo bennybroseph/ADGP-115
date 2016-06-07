@@ -106,7 +106,7 @@ namespace UI
         // Use this for initialization
         private void Start()
         {
-            if (m_HUD != null)
+            if (m_HUDPrefab != null)
             {
                 m_HUD = Instantiate(m_HUDPrefab);
                 m_HUD.transform.SetParent(m_BackgroundUI.transform, false);

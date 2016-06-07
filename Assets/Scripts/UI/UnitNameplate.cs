@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
@@ -57,8 +58,15 @@ namespace UI
         private IStats m_StatParent;
         private Fortress m_FortressParent;
 
+        private List<Coroutine> m_FadeCoroutines;
+
+        private bool m_CurrentlyTargeted;
+        private float m_CanvasAlpha;
+
         [SerializeField]
         private bool m_IsStationary;
+        [SerializeField]
+        private bool m_HideWhenNotTargeted;
         #endregion
 
         #region -- PROPERTIES --
@@ -88,11 +96,15 @@ namespace UI
 
             transform.SetAsFirstSibling();
 
+            m_FadeCoroutines = new List<Coroutine>();
+
             m_LastHealthChange = 0;
             m_HealthCoroutineIsRunning = false;
 
             m_LastManaChange = 0;
             m_ManaCoroutineIsRunning = false;
+
+            Publisher.self.Subscribe(Event.PlayerTargetChanged, OnPlayerTargetChanged);
 
             Publisher.self.Subscribe(Event.FortressInitialized, OnFortressInit);
 
@@ -149,6 +161,10 @@ namespace UI
 
         private void OnDestroy()
         {
+            StopAllCoroutines();
+
+            Publisher.self.UnSubscribe(Event.PlayerTargetChanged, OnPlayerTargetChanged);
+
             Publisher.self.UnSubscribe(Event.FortressInitialized, OnFortressInit);
 
             Publisher.self.UnSubscribe(Event.FortressHealthChanged, OnFortressValueChanged);
@@ -167,12 +183,32 @@ namespace UI
             Publisher.self.UnSubscribe(Event.UnitLevelChanged, OnUnitValueChanged);
 
             Publisher.self.UnSubscribe(Event.UnitDied, OnUnitDied);
-
-            StopAllCoroutines();
         }
         #endregion
 
         #region -- PRIVATE FUNCTIONS --
+        private void SetAlpha(float a_Value)
+        {
+            foreach (Graphic graphic in GetComponentsInChildren<Graphic>())
+                graphic.canvasRenderer.SetAlpha(a_Value);
+        }
+        private void Fade(float a_FadeTo, float a_Duration)
+        {
+            foreach (Coroutine fadeCoroutine in m_FadeCoroutines)
+                StopCoroutine(fadeCoroutine);
+
+            foreach (Graphic graphic in GetComponentsInChildren<Graphic>())
+                graphic.CrossFadeAlpha(a_FadeTo, a_Duration, false);
+
+            if (a_FadeTo == 0f)
+                m_FadeCoroutines.Add(
+                    StartCoroutine(WaitAndDoThis(a_Duration,
+                        delegate
+                        {
+                            gameObject.SetActive(false);
+                        })));
+        }
+
         private void SetText(Text a_Text, string a_String, bool a_AddLevel = false)
         {
             if (a_Text == null)
@@ -222,6 +258,37 @@ namespace UI
         #endregion
 
         #region -- EVENTS --
+        private void OnPlayerTargetChanged(Event a_Event, params object[] a_Params)
+        {
+            GameObject target = a_Params[1] as GameObject;
+
+            if (!m_HideWhenNotTargeted || this == null)
+                return;
+            
+            IStats unit = null;
+            if (target != null)
+                unit = target.GetComponent<IStats>();
+
+            if (!gameObject.activeInHierarchy && unit != m_StatParent)
+                return;
+            if (!gameObject.activeInHierarchy)
+            {
+                gameObject.SetActive(true);
+                SetAlpha(0f);
+            }
+
+            if (unit == null || unit != m_StatParent)
+            {
+                m_CurrentlyTargeted = false;
+                Fade(0f, 1.5f);
+            }
+            else
+            {
+                m_CurrentlyTargeted = true;
+                Fade(1f, 0.5f);
+            }
+        }
+
         private void OnFortressInit(Event a_Event, params object[] a_Params)
         {
             Fortress fortress = a_Params[0] as Fortress;
@@ -268,6 +335,24 @@ namespace UI
 
             if (unit == null || unit != m_StatParent)
                 return;
+
+            if (m_HideWhenNotTargeted)
+            {
+                if (!gameObject.activeInHierarchy)
+                {
+                    gameObject.SetActive(true);
+                    SetAlpha(0f);
+                }
+
+                Fade(1, 0.5f);
+                m_FadeCoroutines.Add(
+                    StartCoroutine(WaitAndDoThis(3f,
+                        delegate
+                        {
+                            if (!m_CurrentlyTargeted)
+                                Fade(0f, 0.5f);
+                        })));
+            }
 
             switch (a_Event)
             {
@@ -320,6 +405,7 @@ namespace UI
             if (fortress == null || fortress != m_FortressParent || this == null)
                 return;
 
+            StopAllCoroutines();
             Destroy(gameObject);
         }
         private void OnUnitDied(Event a_Event, params object[] a_Params)
@@ -330,6 +416,7 @@ namespace UI
             if (unit == null || unit != m_StatParent || this == null)
                 return;
 
+            StopAllCoroutines();
             Destroy(gameObject);
         }
         #endregion
