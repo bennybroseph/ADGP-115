@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using Library;
 using Units;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class ThirdPersonCamera : MonoBehaviour
 {
@@ -253,10 +254,7 @@ public class ThirdPersonCamera : MonoBehaviour
             x => x.gameObject.GetComponent<Unit>() != null &&
                  x.gameObject.GetComponent<Unit>() != m_Following.GetComponent<Unit>()).ToList();
 
-        foreach (Collider parsedUnit in parsedUnits)
-        {
-            Debug.Log(parsedUnit.gameObject.name);
-        }
+        parsedUnits.Sort(SortByDistance);
 
         if (parsedUnits.Count > 0)
             target = parsedUnits[0].gameObject;
@@ -270,10 +268,7 @@ public class ThirdPersonCamera : MonoBehaviour
                  x.gameObject.GetComponent<Unit>() != m_Following.GetComponent<Unit>() &&
                  x.gameObject != m_Target).ToList();
 
-        foreach (Collider parsedUnit in parsedUnits)
-        {
-            Debug.Log(parsedUnit.gameObject.name);
-        }
+        parsedUnits.Sort(SortByDistance);
 
         if (parsedUnits.Count > 0)
             target = parsedUnits[0].gameObject;
@@ -298,5 +293,18 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (m_Target == null)
             m_Offset = m_PrevOffset;
+    }
+
+    private int SortByDistance(Collider a_FirstCollider, Collider a_SecondCollider)
+    {
+        float distanceA = Vector3.Distance(a_FirstCollider.transform.position, m_Following.transform.position);
+        float distanceB = Vector3.Distance(a_SecondCollider.transform.position, m_Following.transform.position);
+
+        if (distanceA > distanceB)
+            return 1;
+        if (distanceA < distanceB)
+            return -1;
+
+        return 0;
     }
 }

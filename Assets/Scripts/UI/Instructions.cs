@@ -35,7 +35,7 @@ public class Instructions : MonoBehaviour
 
             if (skills.Count == 0)
             {
-                m_InstructionsText.text += "Skill " + (i+1);
+                m_InstructionsText.text += "Skill " + (i + 1);
             }
             else
             {
@@ -78,12 +78,12 @@ public class Instructions : MonoBehaviour
                 Enum.GetName(typeof(ButtonCode), skillButton.keyCode) +
                 " - Use ";
             if (skills.Count == 0)
-                m_InstructionsText.text += "Skill " + (i+1);
+                m_InstructionsText.text += "Skill " + (i + 1);
             else
-                m_InstructionsText.text = skills[i].skillData.name;
+                m_InstructionsText.text += skills[i].skillData.name;
 
 
-            m_InstructionsText.text += "\n"; 
+            m_InstructionsText.text += "\n";
             ++i;
         }
 

@@ -47,6 +47,7 @@ MonoBehaviour:
   m_WaveCounter: 0
   m_ManaPickupPrefab: {fileID: 113702, guid: dc8efd8c47981a846ada4fff81b980fc, type: 2}
   m_HealthPickupPrefab: {fileID: 106706, guid: 6542f39da4feb4f468a1355ba0ff2e27, type: 2}
+  m_MaxCountdownTimer: 15
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
