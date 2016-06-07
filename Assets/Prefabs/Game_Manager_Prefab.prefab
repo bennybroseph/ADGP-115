@@ -62,6 +62,8 @@ MonoBehaviour:
     m_Clip: {fileID: 8300000, guid: 3417f91ff93c4cb4a8b4cc4521a93192, type: 3}
   - m_SoundType: 2
     m_Clip: {fileID: 8300000, guid: 3250292d9dbabc94aaef78d8f16751f0, type: 3}
+  - m_SoundType: 4
+    m_Clip: {fileID: 8300000, guid: 6c330e0e3a77eef44aaaa76f88e5ba29, type: 3}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

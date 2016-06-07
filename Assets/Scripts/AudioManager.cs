@@ -7,7 +7,8 @@ public enum SoundTypes
     Fireball,
     Melee,
     Lightning,
-    TitleScreenMusic
+    TitleScreenMusic,
+    VictorySound
 
 }
 [System.Serializable]
@@ -47,6 +48,8 @@ public class Sound
         m_Source.playOnAwake = false;
         Mathf.Clamp(m_Volume, 0.0f, 1.0f);
         m_Source.volume = m_Volume;
+        if (m_SoundType == SoundTypes.VictorySound)
+            m_Source.volume = 0.5f;
     }
 }
 
