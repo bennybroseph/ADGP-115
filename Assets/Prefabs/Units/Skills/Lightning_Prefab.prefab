@@ -94,8 +94,8 @@ MonoBehaviour:
   m_MaxCooldownGrowth: 0.05
   m_BaseDamage: 2
   m_DamageGrowth: 1.5
-  m_BaseCost: 0
-  m_CostGrowth: 0
+  m_BaseCost: 1
+  m_CostGrowth: 1
   m_IsMoving:
     forward: 0
     back: 0
