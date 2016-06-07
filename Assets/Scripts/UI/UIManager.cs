@@ -262,7 +262,7 @@ namespace UI
                             Button closeButton = m_OptionsMenu.GetComponentsInChildren<Button>()[2];
                             Slider volumeSlider = m_OptionsMenu.GetComponentsInChildren<Slider>()[0];
                             // Set volumeSlider value to a default value
-                            volumeSlider.value = 0.5f;
+                            volumeSlider.value = AudioManager.self.Sounds[0].Volume;
 
                             applyButton.onClick.AddListener(delegate { OnOptionsApplyClick(volumeSlider); });
                             cancelButton.onClick.AddListener(OnOptionsCancelClick);
@@ -512,6 +512,7 @@ namespace UI
 
         private IEnumerator GameWinbroadcast()
         {
+            AudioManager.self.PlaySound(SoundTypes.VictorySound);
             UIAnnouncer.self.Announce("You've Won!!");
             yield return new WaitForSeconds(5);
             Publisher.self.Broadcast(Event.GameOver);
