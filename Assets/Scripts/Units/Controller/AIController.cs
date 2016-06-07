@@ -34,7 +34,7 @@ namespace Units.Controller
         private float m_MaxCountdownTimer;
         private float m_CurrentCountdownTimer;
         private bool m_ApplicationIsQuitting;
-
+        private Player m_Player;
         protected override void Awake()
         {
             base.Awake();
@@ -54,7 +54,7 @@ namespace Units.Controller
         void Start()
         {
             m_EnemyBases = GameObject.FindGameObjectsWithTag("EnemySpawn").ToList();
-
+            m_Player = FindObjectOfType<Player>();
             StartCoroutine(AutoSpawn());
         }
 
@@ -215,8 +215,12 @@ namespace Units.Controller
                 GameObject newHealthPickup = Instantiate(m_HealthPickupPrefab, healthinstantposition, Quaternion.identity) as GameObject;
                 GameObject newManaPickup = Instantiate(m_ManaPickupPrefab, manainstantposition, Quaternion.identity) as GameObject;
 
-                Destroy(newHealthPickup,3.0f);
-                Destroy(newManaPickup, 3.0f);
+
+                if (m_Player.unit.health >= m_Player.unit.maxHealth)
+                    Destroy(newHealthPickup, 3.0f);
+
+                if (m_Player.unit.mana >= m_Player.unit.maxMana)
+                    Destroy(newManaPickup, 3.0f);
 
                 newHealthPickup.GetComponent<Rigidbody>().AddExplosionForce(250 + Random.value * 750, unit.gameObject.transform.position, 10);
                 newManaPickup.GetComponent<Rigidbody>().AddExplosionForce(250 + Random.value * 750, unit.gameObject.transform.position, 10);
