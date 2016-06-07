@@ -18,8 +18,10 @@ public class Melee : BaseSkills
     #endregion
 
     #region -- UNITY FUNCTIONS --
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         m_HitUnits = new List<IAttackable>();
     }
 
@@ -37,14 +39,9 @@ public class Melee : BaseSkills
     // Update is called once per frame
     private void Update()
     {
-        m_CurrentLifetime += Time.deltaTime;
-
         transform.eulerAngles += new Vector3(
             0,
             (180f / m_MaxLifetime) * Time.deltaTime);
-
-        if (m_CurrentLifetime >= m_MaxLifetime)
-            Destroy(gameObject);
     }
 
     private void LateUpdate()

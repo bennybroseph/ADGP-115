@@ -250,11 +250,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NameText: {fileID: 11494806}
   m_LevelText: {fileID: 11483330}
+  m_NegativeEXPBar: {fileID: 0}
+  m_EXPBar: {fileID: 0}
   m_NegativeManaBar: {fileID: 11450252}
   m_ManaBar: {fileID: 11467210}
   m_NegativeHealthBar: {fileID: 11435512}
   m_HealthBar: {fileID: 11469002}
   m_Offset: {x: 0, y: 2, z: 0}
+  m_CollisionOffset: {x: 0, y: 0}
+  m_IsColliding: 0
   m_BarAnimationCurve:
     serializedVersion: 2
     m_Curve:
@@ -275,6 +279,8 @@ MonoBehaviour:
   m_HealthCoroutineIsRunning: 0
   m_LastManaChange: 0
   m_ManaCoroutineIsRunning: 0
+  m_IsStationary: 0
+  m_HideWhenNotTargeted: 1
 --- !u!114 &11432340
 MonoBehaviour:
   m_ObjectHideFlags: 1

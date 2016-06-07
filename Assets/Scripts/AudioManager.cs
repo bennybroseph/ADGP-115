@@ -1,7 +1,5 @@
 ﻿using Library;
 using UnityEngine;
-using System.Collections.Generic;
-using UnityEngineInternal;
 
 // Created enum to define different types of sounds
 public enum SoundTypes
@@ -23,8 +21,7 @@ public class Sound
     private AudioClip m_Clip;
     // AudioSource Component
     private AudioSource m_Source;
-    // Set volume to 0.5f by default
-    private float m_Volume = 0.5f;
+    private float m_Volume = 0.1f;
 
     public SoundTypes Type
     {

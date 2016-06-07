@@ -52,6 +52,10 @@ namespace Define
         // There are no parameters
         Options,
 
+        /// <param name="Player"> Player: which player's target has changed</param> 
+        /// <param name="New Target"> GameObject: the new target unit</param>
+        PlayerTargetChanged,
+
         // There are no parameters
         TargetTogglePressed,
         // There are no parameters
