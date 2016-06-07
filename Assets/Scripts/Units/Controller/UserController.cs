@@ -6,6 +6,7 @@ using UnityEngine;
 
 using Library;
 using UnityEngine.EventSystems;
+using UnityStandardAssets.Characters.ThirdPerson;
 using Event = Define.Event;
 
 namespace Units.Controller
@@ -28,7 +29,9 @@ namespace Units.Controller
         private void FixedUpdate()
         {
             m_Controllable.gameObject.GetComponent<Rigidbody>().velocity = (m_Controllable.velocity + m_Controllable.totalVelocity);
+            
 
+            m_Controllable.gameObject.GetComponent<ThirdPersonCharacter>().Move((m_Controllable.velocity + m_Controllable.totalVelocity).normalized, false, false);
             if (m_Controllable.velocity != Vector3.zero &&
                 (m_Controllable.isMoving == Moving.nowhere) &&
 #if !UNITY_WEBGL
