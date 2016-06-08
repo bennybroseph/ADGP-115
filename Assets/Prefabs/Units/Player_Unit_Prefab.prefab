@@ -8,7 +8,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 435460}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_Spine_01SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23,7 +23,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 467720}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Leg_KneeSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 482068}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Leg_AnkleSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 402936}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Thumb_01_04SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -68,7 +68,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 450272}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Arm_ShoulderSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,7 +83,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 452676}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_03_02SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -98,7 +98,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 464914}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_04_02SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,7 +113,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 476362}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_02_04SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 436776}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Thumb_01_01SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,7 +143,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 453650}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_04_04SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,7 +158,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 454406}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Arm_ClavicleSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 445168}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_03_02SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,7 +188,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 449270}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_Neck_TopSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -203,7 +203,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 411446}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Leg_HipSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -218,7 +218,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 429400}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Arm_ElbowSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +234,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 468258}
   - 137: {fileID: 13788520}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TDKnightSwordMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -249,7 +249,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 455966}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_01_03SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -265,7 +265,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 487076}
   - 137: {fileID: 13753030}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TDKnightShieldMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -280,7 +280,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 494618}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_Head_JawSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -295,7 +295,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 432224}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Leg_KneeSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,7 +311,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 410086}
   - 137: {fileID: 13761794}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TDKnightMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -326,7 +326,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 458610}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_02_03SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -341,7 +341,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 427150}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Arm_ElbowSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -356,7 +356,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 458704}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_02_02SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -371,7 +371,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 493256}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Arm_WristSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -386,7 +386,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 434756}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_03_03SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -401,7 +401,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 424502}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_01_04SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -416,7 +416,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 491304}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_03_01SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -431,7 +431,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 461898}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Leg_ToeSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -446,7 +446,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 415060}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_03_04SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -461,7 +461,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 483814}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_04_01SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -476,7 +476,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 409032}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_02_01SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -491,7 +491,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 434202}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_04_03SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -506,7 +506,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 421426}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Thumb_01_03SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -521,7 +521,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 454050}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_ROOTSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -536,7 +536,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 488526}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_poff_01_03SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -551,7 +551,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 468604}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Thumb_01_02SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -566,7 +566,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 426190}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_02_01SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -581,7 +581,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 433066}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_Head_JawEndSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -596,7 +596,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 487998}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_poff_01_02SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -611,7 +611,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 419414}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_03_03SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -626,7 +626,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 465156}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Leg_BallSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -641,7 +641,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 423858}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_02_02SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -661,7 +661,7 @@ GameObject:
   - 54: {fileID: 5470150}
   - 136: {fileID: 13634612}
   - 114: {fileID: 11492812}
-  m_Layer: 9
+  m_Layer: 8
   m_Name: Player_Unit_Prefab
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -676,7 +676,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 452586}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_04_04SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -691,7 +691,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 458606}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_01_03SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -706,7 +706,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 463978}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Thumb_01_03SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -721,7 +721,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 497668}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Arm_WristSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -736,7 +736,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 424118}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Arm_ClavicleSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -751,7 +751,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 448126}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_01_04SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -766,7 +766,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 463828}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Thumb_01_01SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -781,7 +781,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 446138}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Leg_HipSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -796,7 +796,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 426086}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TDKnightsWeaponsGRP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -811,7 +811,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 428710}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_04_02SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -826,7 +826,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 471300}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Leg_ToeSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -841,7 +841,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 450732}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Thumb_01_04SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -856,7 +856,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 418564}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Thumb_01_02SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -871,7 +871,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 422538}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_03_01SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -886,7 +886,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 433094}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_Spine_TopSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -901,7 +901,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 445582}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_01_02SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -916,7 +916,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 486870}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_Neck_01SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -931,7 +931,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 430172}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Leg_AnkleSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -946,7 +946,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 463270}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Arm_ShoulderSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -961,7 +961,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 488394}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_04_03SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -976,7 +976,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 470194}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_Spine_02SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -991,7 +991,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 444458}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_01_01SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1006,7 +1006,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 404004}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_01_01SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1021,7 +1021,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 410342}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_02_03SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1036,7 +1036,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 488470}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Leg_BallSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1051,7 +1051,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 418974}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_04_01SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1066,7 +1066,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 445782}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_l_Finger_02_04SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1081,7 +1081,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 422562}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_03_04SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1096,7 +1096,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 427436}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_poff_01_01SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1111,7 +1111,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 412528}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_r_Finger_01_02SHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1126,7 +1126,7 @@ GameObject:
   serializedVersion: 4
   m_Component:
   - 4: {fileID: 444642}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Man_Head_TopSHJnt
   m_TagString: Untagged
   m_Icon: {fileID: 0}

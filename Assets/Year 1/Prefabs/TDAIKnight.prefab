@@ -633,7 +633,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 472724}
   - 137: {fileID: 13761130}
-  - 136: {fileID: 13644070}
   m_Layer: 0
   m_Name: TDKnightMesh
   m_TagString: Untagged
@@ -2390,19 +2389,6 @@ MonoBehaviour:
   m_MoveSpeedMultiplier: 1
   m_AnimSpeedMultiplier: 1
   m_GroundCheckDistance: 0.5
---- !u!136 &13644070
-CapsuleCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 150604}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.4917605
-  m_Height: 1.383297
-  m_Direction: 1
-  m_Center: {x: 0.0071170926, y: 0.6390408, z: -0.10225372}
 --- !u!136 &13690996
 CapsuleCollider:
   m_ObjectHideFlags: 1
