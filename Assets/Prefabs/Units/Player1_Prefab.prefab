@@ -42,7 +42,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PlayerPrefab: {fileID: 11489274, guid: 71e41b2bf5486d94393ea0f9ac3d1663, type: 2}
   m_CameraPrefab: {fileID: 11448046, guid: 12d7dc0d5131ca748a2ae1ac3607f1d7, type: 2}
-  m_UserController: {fileID: 11481246, guid: decc3f7268e041146aa448bbbd552db1, type: 2}
+  m_UserControllerInput: {fileID: 11481246, guid: decc3f7268e041146aa448bbbd552db1,
+    type: 2}
   m_Unit: {fileID: 0}
   m_PlayerCamera: {fileID: 0}
 --- !u!1001 &100100000

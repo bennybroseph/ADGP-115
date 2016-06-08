@@ -6,12 +6,11 @@ using UnityEngine;
 
 using Library;
 using UnityEngine.EventSystems;
-using UnityStandardAssets.Characters.ThirdPerson;
 using Event = Define.Event;
 
 namespace Units.Controller
 {
-    public sealed class UserController : MonoBehaviour, IController
+    public sealed class UserControllerInput : MonoBehaviour, IController
     {
         [SerializeField]
         private Player m_Player;
@@ -28,22 +27,23 @@ namespace Units.Controller
         #region -- UNITY FUNCTIONS --
         private void FixedUpdate()
         {
-            m_Controllable.gameObject.GetComponent<Rigidbody>().velocity = (m_Controllable.velocity + m_Controllable.totalVelocity);
+            //m_Controllable.gameObject.GetComponent<Rigidbody>().velocity = (m_Controllable.velocity + m_Controllable.totalVelocity);
             
-
-            m_Controllable.gameObject.GetComponent<ThirdPersonCharacter>().Move((m_Controllable.velocity + m_Controllable.totalVelocity).normalized, false, false);
-            if (m_Controllable.velocity != Vector3.zero &&
-                (m_Controllable.isMoving == Moving.nowhere) &&
-#if !UNITY_WEBGL
-                (GameManager.self.GetStickValue(m_PlayerIndex, GameManager.Stick.Left).X == 0.0f &&
-                 GameManager.self.GetStickValue(m_PlayerIndex, GameManager.Stick.Left).Y == 0.0f))
-#else
-                (Input.GetAxisRaw("Horizontal") == 0.0f &&
-                 Input.GetAxisRaw("Vertical") == 0.0f))
-#endif
-            {
-                m_Controllable.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            }
+            m_Controllable.gameObject.GetComponent<UserControllerMotion>().Move(
+                m_Controllable.velocity + m_Controllable.totalVelocity, 
+                m_Player.playerCamera.isTargeting || Input.GetMouseButton(1));
+//            if (m_Controllable.velocity != Vector3.zero &&
+//                (m_Controllable.isMoving == Moving.nowhere) &&
+//#if !UNITY_WEBGL
+//                (GameManager.self.GetStickValue(m_PlayerIndex, GameManager.Stick.Left).X == 0.0f &&
+//                 GameManager.self.GetStickValue(m_PlayerIndex, GameManager.Stick.Left).Y == 0.0f))
+//#else
+//                (Input.GetAxisRaw("Horizontal") == 0.0f &&
+//                 Input.GetAxisRaw("Vertical") == 0.0f))
+//#endif
+//            {
+//                m_Controllable.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+//            }
         }
 
         private void Update()
@@ -105,17 +105,17 @@ namespace Units.Controller
                 if (m_Controllable.isMoving.right)
                     m_Controllable.velocity += Vector3.right;
 
-                if (m_Player.playerCamera.isTargeting)
-                    m_Controllable.transform.eulerAngles = new Vector3(
-                        m_Controllable.transform.eulerAngles.x,
-                        m_Player.playerCamera.transform.eulerAngles.y + 25f,
-                        m_Controllable.transform.eulerAngles.z);
+                //if (m_Player.playerCamera.isTargeting)
+                //    m_Controllable.transform.eulerAngles = new Vector3(
+                //        m_Controllable.transform.eulerAngles.x,
+                //        m_Player.playerCamera.transform.eulerAngles.y + 25f,
+                //        m_Controllable.transform.eulerAngles.z);
 
-                else if (Input.GetMouseButton(1))
-                    m_Controllable.transform.eulerAngles = new Vector3(
-                        m_Controllable.transform.eulerAngles.x,
-                        m_Player.playerCamera.transform.eulerAngles.y,
-                        m_Controllable.transform.eulerAngles.z);
+                //else if (Input.GetMouseButton(1))
+                //    m_Controllable.transform.eulerAngles = new Vector3(
+                //        m_Controllable.transform.eulerAngles.x,
+                //        m_Player.playerCamera.transform.eulerAngles.y,
+                //        m_Controllable.transform.eulerAngles.z);
 
                 if (m_Controllable.velocity != Vector3.zero)
                 {
@@ -137,11 +137,11 @@ namespace Units.Controller
                         0,
                         m_Controllable.speed * Mathf.Cos(angle));
 
-                    if (!Input.GetMouseButton(1) && !m_Player.playerCamera.isTargeting)
-                        m_Controllable.transform.eulerAngles = new Vector3(
-                            m_Controllable.transform.eulerAngles.x,
-                            angle * (180 / Mathf.PI),
-                            m_Controllable.transform.eulerAngles.z);
+                    //if (!Input.GetMouseButton(1) && !m_Player.playerCamera.isTargeting)
+                    //    m_Controllable.transform.eulerAngles = new Vector3(
+                    //        m_Controllable.transform.eulerAngles.x,
+                    //        angle * (180 / Mathf.PI),
+                    //        m_Controllable.transform.eulerAngles.z);
                 }
 
                 Vector2 leftStick;
@@ -191,9 +191,11 @@ namespace Units.Controller
                     leftStick.y != 0.0f)
                 {
                     m_Controllable.velocity = new Vector3(
-                        leftStick.x * m_Controllable.speed,
+                        leftStick.x,
                         m_Controllable.velocity.y,
-                        leftStick.y * m_Controllable.speed);
+                        leftStick.y);
+
+                    float scale = Mathf.Sqrt(Mathf.Pow(leftStick.x, 2) + Mathf.Pow(leftStick.y, 2));
 
                     float angle = m_Player.playerCamera.transform.eulerAngles.y * (Mathf.PI / 180);
                     angle += Mathf.Atan(m_Controllable.velocity.x / m_Controllable.velocity.z);
@@ -204,14 +206,14 @@ namespace Units.Controller
                         angle += Mathf.PI;
 
                     m_Controllable.velocity = new Vector3(
-                        m_Controllable.speed * Mathf.Sin(angle),
-                        0,
-                        m_Controllable.speed * Mathf.Cos(angle));
+                        scale * Mathf.Sin(angle),
+                        m_Controllable.velocity.y,
+                        scale * Mathf.Cos(angle));
 
-                    m_Controllable.transform.eulerAngles = new Vector3(
-                        m_Controllable.transform.eulerAngles.x,
-                        angle * (180f / Mathf.PI),
-                        m_Controllable.transform.eulerAngles.z);
+                    //m_Controllable.transform.eulerAngles = new Vector3(
+                    //    m_Controllable.transform.eulerAngles.x,
+                    //    angle * (180f / Mathf.PI),
+                    //    m_Controllable.transform.eulerAngles.z);
                 }
             }
 

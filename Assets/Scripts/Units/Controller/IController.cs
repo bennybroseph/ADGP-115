@@ -165,10 +165,14 @@ namespace Units.Controller
             m_UserConfigurations = (List<UserConfiguration>)serializer.Deserialize(reader);
 
             fileStream.Close();
+
+            Debug.Log("Read");
         }
 
         private void WriteConfig()
         {
+            Debug.Log("Writting");
+
             XmlSerializer serializer = new XmlSerializer(typeof(List<UserConfiguration>));
 
             TextWriter writer = new StreamWriter(Globals.FILE_NAME);

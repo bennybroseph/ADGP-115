@@ -43,11 +43,11 @@ namespace Units
                     m_Controller = AIController.self;
                     break;
                 case ControllerType.Fortress:
-                    m_Controller = new GameObject().AddComponent<UserController>();
+                    m_Controller = new GameObject().AddComponent<UserControllerInput>();
                     break;
                 case ControllerType.User:
                     m_CanMoveWithInput = true;
-                    m_Controller = new GameObject().AddComponent<UserController>();
+                    m_Controller = new GameObject().AddComponent<UserControllerInput>();
                     break;
             }
 
