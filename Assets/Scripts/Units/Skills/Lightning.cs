@@ -69,7 +69,8 @@ namespace Units.Skills
 
         public override string UpdateDescription(Skill a_Skill)
         {
-            string description = skillData.name + " is a magical skill" + "\nDamage: " + a_Skill.skillData.damage + "\nCost: " + a_Skill.skillData.cost + "\nMaxCooldown: " + a_Skill.skillData.maxCooldown;
+            string description = skillData.name + " is a magical skill" + "\nLevel: " + a_Skill.level + "\nDamage: " + a_Skill.skillData.damage +
+            "\nCost: " + a_Skill.skillData.cost + "\nMaxCooldown: " + a_Skill.skillData.maxCooldown;
             return description;
         }
     }
