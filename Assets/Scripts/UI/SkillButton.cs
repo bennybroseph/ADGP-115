@@ -209,7 +209,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
     {
         m_UpgradeButton.gameObject.SetActive(false);
         Publisher.self.Broadcast(Event.UpgradeSkill, m_Parent, m_SkillIndex);
-
+        m_Icon.sprite = SpriteManager.self.SetLevelUpSprite(m_Parent.skills[m_SkillIndex]);
         SetIndicators();
     }
 

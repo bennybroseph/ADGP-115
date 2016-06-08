@@ -209,7 +209,7 @@ MonoBehaviour:
   m_SkillData:
     name: Melee
     description: 
-    sprite: {fileID: 21300000, guid: 82ba689db752c74458baffc1d21fb876, type: 3}
+    sprite: {fileID: 21300000, guid: 60d71d90c8e53f041b9058e083062cf5, type: 3}
     skillIndex: 0
     maxCooldown: 0
     damage: 0
