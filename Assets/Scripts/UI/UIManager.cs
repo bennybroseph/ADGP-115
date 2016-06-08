@@ -13,6 +13,8 @@ using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 using Event = Define.Event;
 using System;
+using System.Runtime.Remoting.Messaging;
+using UnityEngine.EventSystems;
 
 namespace UI
 {
@@ -28,7 +30,8 @@ namespace UI
         private UnitNameplate m_HUDPrefab;
         [SerializeField]
         private SkillButton m_SkillButtonPrefab;
-
+        [SerializeField]
+        private RectTransform m_ToolTip;
         [Header("Other")]
         [SerializeField]
         private List<SkillButton> m_SkillButtons;
@@ -71,7 +74,14 @@ namespace UI
             get { return m_AutoSpawnTimer; }
             set { m_AutoSpawnTimer = value; }
         }
-
+        public RectTransform toolTip
+        {
+            get { return m_ToolTip; }
+        }
+        public List<SkillButton> SkillButtons
+        {
+            get { return m_SkillButtons; }
+        }
         #endregion
 
         #region -- UNITY FUNCTIONS --
@@ -143,11 +153,11 @@ namespace UI
                             k * 70 + i * 100 - (numOfSkills * 70 + (skillUsers.Count - 1) * 100) / 2,
                             0,
                             0));
-
+                    skillButton.gameObject.GetComponent<Button>().name += " " + j;
                     skillButton.parent = skillUsers[i];
                     skillButton.skillIndex = j;
                     skillButton.sprite = skillUsers[i].skills[j].skillData.sprite;
-
+                    skillButton.gameObject.AddComponent<EventTrigger>();
                     m_SkillButtons.Add(skillButton);
 
                     k++;

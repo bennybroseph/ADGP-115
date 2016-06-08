@@ -135,6 +135,7 @@ GameObject:
   - 222: {fileID: 22220364}
   - 114: {fileID: 11422608}
   - 114: {fileID: 11490724}
+  - 114: {fileID: 11444784}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -348,6 +349,19 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 0.75, y: 0.75}
   m_UseGraphicAlpha: 1
+--- !u!114 &11444784
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 189476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91f0263662946bf42ba405aa118209e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlGameObject: {fileID: 0}
+  skills: []
 --- !u!114 &11444974
 MonoBehaviour:
   m_ObjectHideFlags: 1

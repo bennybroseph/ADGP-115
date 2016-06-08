@@ -263,6 +263,8 @@ namespace Units
                     m_Skills[j].skillData.skillIndex = j;
                     m_Skills[j].skillPrefab = m_SkillPrefabs[i].gameObject;
                     m_Skills[j].parent = this;
+                    ICastable<IUsesSkills> castable = m_SkillPrefabs[j].GetComponent<ICastable<IUsesSkills>>();
+                    m_Skills[j].skillData.description = castable.UpdateDescription(m_Skills[j]);
                     ++j;
                 }
             }
