@@ -13,6 +13,8 @@ using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 using Event = Define.Event;
 using System;
+using System.Runtime.Remoting.Messaging;
+using UnityEngine.EventSystems;
 
 namespace UI
 {
@@ -28,7 +30,8 @@ namespace UI
         private UnitNameplate m_HUDPrefab;
         [SerializeField]
         private SkillButton m_SkillButtonPrefab;
-
+        [SerializeField]
+        private RectTransform m_ToolTip;
         [Header("Other")]
         [SerializeField]
         private List<SkillButton> m_SkillButtons;
@@ -71,7 +74,14 @@ namespace UI
             get { return m_AutoSpawnTimer; }
             set { m_AutoSpawnTimer = value; }
         }
-
+        public RectTransform toolTip
+        {
+            get { return m_ToolTip; }
+        }
+        public List<SkillButton> SkillButtons
+        {
+            get { return m_SkillButtons; }
+        }
         #endregion
 
         #region -- UNITY FUNCTIONS --
@@ -143,11 +153,11 @@ namespace UI
                             k * 70 + i * 100 - (numOfSkills * 70 + (skillUsers.Count - 1) * 100) / 2,
                             0,
                             0));
-
+                    skillButton.gameObject.GetComponent<Button>().name += " " + j;
                     skillButton.parent = skillUsers[i];
                     skillButton.skillIndex = j;
                     skillButton.sprite = skillUsers[i].skills[j].skillData.sprite;
-
+                    skillButton.gameObject.AddComponent<EventTrigger>();
                     m_SkillButtons.Add(skillButton);
 
                     k++;
@@ -262,7 +272,7 @@ namespace UI
                             Button closeButton = m_OptionsMenu.GetComponentsInChildren<Button>()[2];
                             Slider volumeSlider = m_OptionsMenu.GetComponentsInChildren<Slider>()[0];
                             // Set volumeSlider value to a default value
-                            volumeSlider.value = 0.5f;
+                            volumeSlider.value = AudioManager.self.Sounds[0].Volume;
 
                             applyButton.onClick.AddListener(delegate { OnOptionsApplyClick(volumeSlider); });
                             cancelButton.onClick.AddListener(OnOptionsCancelClick);
@@ -374,7 +384,7 @@ namespace UI
 
         private void OnMainMenu(Event a_Event, params object[] a_Params)
         {
-            SceneManager.LoadScene("Donte");
+            SceneManager.LoadScene(0);
         }
 
         private void OnToggleQuitMenu(Event a_Event, params object[] a_Params)
@@ -512,6 +522,7 @@ namespace UI
 
         private IEnumerator GameWinbroadcast()
         {
+            AudioManager.self.PlaySound(SoundTypes.VictorySound);
             UIAnnouncer.self.Announce("You've Won!!");
             yield return new WaitForSeconds(5);
             Publisher.self.Broadcast(Event.GameOver);

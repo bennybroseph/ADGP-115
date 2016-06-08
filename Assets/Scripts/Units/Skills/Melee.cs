@@ -60,7 +60,7 @@ public class Melee : BaseSkills
 
     public override string UpdateDescription(Skill a_Skill)
     {
-        string description = skillData.name + " is a physical skill that does " + a_Skill.skillData.damage + " damage!";
+        string description = skillData.name + " is a physical skill" + "\nDamage: " + a_Skill.skillData.damage + "\nCost: " + a_Skill.skillData.cost + "\nMaxCooldown: " + a_Skill.skillData.maxCooldown;
         return description;
     }
 
