@@ -945,6 +945,7 @@ MonoBehaviour:
   m_HUDPrefab: {fileID: 0}
   m_SkillButtonPrefab: {fileID: 11444974, guid: d95a9a2a8113b4743a15a902df0f9e28,
     type: 2}
+  m_ToolTip: {fileID: 0}
   m_SkillButtons: []
   m_WaveCounter: {fileID: 0}
   m_HUD: {fileID: 0}
