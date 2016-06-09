@@ -11,8 +11,6 @@ public class ToolTip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
     private IUsesSkills m_Player;
-    [SerializeField]
-    private Sprite m_SkillImage;
     // Use this for initialization
     void Start ()
     {// Grab the player object in the scene

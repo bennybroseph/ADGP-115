@@ -5,7 +5,7 @@ using Units.Controller;
 
 namespace Units.Skills
 {
-    public class Fireball : BaseSkills, IMovable
+    public class Fireball : BaseSkill, IMovable
     {
         #region -- VARIABLES --
         private Vector3 m_TotalVelocity;

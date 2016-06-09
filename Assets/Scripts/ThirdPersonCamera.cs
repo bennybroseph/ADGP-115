@@ -64,7 +64,11 @@ public class ThirdPersonCamera : MonoBehaviour
     public GameObject target
     {
         get { return m_Target; }
-        private set { m_Target = value; Publisher.self.DelayedBroadcast(Define.Event.PlayerTargetChanged, this, value); }
+        private set
+        {
+            m_Target = value;
+            Publisher.self.DelayedBroadcast(Define.Event.PlayerTargetChanged, this, value);
+        }
     }
 
     public bool isTargeting
@@ -140,7 +144,7 @@ public class ThirdPersonCamera : MonoBehaviour
 
             transform.eulerAngles = new Vector3(
                 35f,
-                angle * (180f / Mathf.PI) - 25f,
+                angle * (180f / Mathf.PI),
                 transform.eulerAngles.z);
         }
         else
@@ -248,7 +252,15 @@ public class ThirdPersonCamera : MonoBehaviour
 
         m_PrevOffset = m_Offset;
 
-        List<Collider> objectsHit = Physics.OverlapSphere(m_Following.transform.position, 15f).ToList();
+        Vector3 forward = new Vector3(
+            Mathf.Cos((-transform.eulerAngles.y + 90) * (Mathf.PI / 180f)), 0f, 
+            Mathf.Sin((-transform.eulerAngles.y + 90) * (Mathf.PI / 180f)));
+
+        List<Collider> objectsHit = Physics.OverlapSphere(m_Following.transform.position, 8f).ToList();
+        objectsHit.AddRange(
+            Physics.OverlapSphere(
+                m_Following.transform.position + new Vector3(forward.x * 10f, 0.5f, forward.z * 10f), 10f).
+                    Where(x => !objectsHit.Contains(x)));
 
         List<Collider> parsedUnits = objectsHit.Where(
             x => x.gameObject.GetComponent<Unit>() != null &&
