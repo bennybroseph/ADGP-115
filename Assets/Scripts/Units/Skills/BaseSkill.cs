@@ -4,7 +4,7 @@ using Interfaces;
 
 namespace Units.Skills
 {
-    public abstract class BaseSkills : MonoBehaviour, ICastable<IUsesSkills>
+    public abstract class BaseSkill : MonoBehaviour, ICastable<IUsesSkills>
     {
         #region -- VARIABLES --
         [SerializeField]

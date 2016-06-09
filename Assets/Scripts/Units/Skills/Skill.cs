@@ -42,20 +42,22 @@ namespace Units.Skills
 
         public SkillData Clone()
         {
-            SkillData clone = new SkillData();
+            SkillData clone = new SkillData
+            {
+                name = name,
+                description = description,
 
-            clone.name = name;
-            clone.description = description;
+                sprite = sprite,
 
-            clone.sprite = sprite;
+                skillIndex = skillIndex,
+                maxCooldown = maxCooldown,
 
-            clone.maxCooldown = maxCooldown;
+                damage = damage,
+                cost = cost,
 
-            clone.damage = damage;
-            clone.cost = cost;
-
-            clone.buffType = buffType;
-            clone.damageType = damageType;
+                buffType = buffType,
+                damageType = damageType
+            };
 
             return clone;
         }

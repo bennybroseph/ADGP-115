@@ -317,7 +317,7 @@ namespace Units
 
         protected virtual void OnDestroy()
         {
-            if(m_Controller != null)
+            if (m_Controller != null)
                 m_Controller.UnRegister(this);
 
             Publisher.self.UnSubscribe(Event.UseSkill, OnUseSkill);
@@ -427,7 +427,8 @@ namespace Units
             newSkill.parent = this;
             newSkill.skillData = m_Skills[skillIndex].skillData.Clone();
 
-            mana -= m_Skills[skillIndex].skillData.cost;
+            if (m_Skills[skillIndex].skillData.cost != 0f)
+                mana -= m_Skills[skillIndex].skillData.cost;
 
             m_Skills[skillIndex].PutOnCooldown();
         }

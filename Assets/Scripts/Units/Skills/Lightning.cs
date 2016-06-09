@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class Lightning : BaseSkills
+    public class Lightning : BaseSkill
     {
         [SerializeField]
 

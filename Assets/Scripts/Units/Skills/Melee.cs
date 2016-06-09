@@ -4,7 +4,7 @@ using Interfaces;
 using UI;
 using Units.Skills;
 
-public class Melee : BaseSkills
+public class Melee : BaseSkill
 {
 
     #region -- VARIABLES --

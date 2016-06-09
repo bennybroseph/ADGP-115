@@ -22,10 +22,10 @@ namespace Units.Controller
         private GameObject m_GoblinPrefab;
         [SerializeField]
         private List<IStats> m_Enemies;
-        [SerializeField]
         private int m_WaveCounter;
+        [SerializeField]
         private int m_MaxWaveCount = 2;
-        private List<IControllable> m_Controlables; 
+        private List<IControllable> m_Controllables; 
         [SerializeField]
         private GameObject m_ManaPickupPrefab;
         [SerializeField]
@@ -39,7 +39,7 @@ namespace Units.Controller
         {
             base.Awake();
 
-            m_Controlables = new List<IControllable>();
+            m_Controllables = new List<IControllable>();
             m_Enemies = new List<IStats>();
             m_EnemyBases = new List<GameObject>();
 
@@ -84,7 +84,7 @@ namespace Units.Controller
 
         private void Search()
         {
-            foreach (IControllable controlable in m_Controlables)
+            foreach (IControllable controlable in m_Controllables)
             {
                 if (controlable.following == null)
                     SetFollowing(controlable);
@@ -95,7 +95,8 @@ namespace Units.Controller
 
                     controlable.navMashAgent.SetDestination(controlable.following.transform.position);
 
-                    float distanceFromEnemyToTarget = Vector3.Distance(controlable.following.transform.position, controlable.transform.position);
+                    float distanceFromEnemyToTarget = 
+                        Vector3.Distance(controlable.following.transform.position, controlable.transform.position);
 
                     if ((distanceFromEnemyToTarget < 7 && controlable.controllerType == ControllerType.GoblinMage) ||
                         (distanceFromEnemyToTarget < 2 && controlable.controllerType == ControllerType.Goblin))
@@ -112,12 +113,12 @@ namespace Units.Controller
             {
                 case ControllerType.GoblinMage:
                     SetFollowing(a_Controllable);
-                    m_Controlables.Add(a_Controllable);
+                    m_Controllables.Add(a_Controllable);
                     break;
 
                 case ControllerType.Goblin:
                     SetFollowing(a_Controllable);
-                    m_Controlables.Add(a_Controllable);
+                    m_Controllables.Add(a_Controllable);
                     break;
             }
         }
@@ -130,7 +131,7 @@ namespace Units.Controller
 
         public void UnRegister(IControllable a_Controllable)
         {
-            m_Controlables.Remove(a_Controllable);
+            m_Controllables.Remove(a_Controllable);
         }
         public void UnRegister(Player a_Player)
         {
@@ -209,11 +210,20 @@ namespace Units.Controller
 
             if (m_Enemies.Contains(unit))
             {
-                Vector3 healthinstantposition = new Vector3(unit.gameObject.transform.position.x + 0.25f, unit.gameObject.transform.position.y + 0.5f, unit.gameObject.transform.position.z);
-                Vector3 manainstantposition = new Vector3(unit.gameObject.transform.position.x - 0.25f, unit.gameObject.transform.position.y + 0.5f, unit.gameObject.transform.position.z);
+                Vector3 healthInstantPosition = 
+                    new Vector3(
+                        unit.gameObject.transform.position.x + 0.25f, 
+                        unit.gameObject.transform.position.y + 0.5f, 
+                        unit.gameObject.transform.position.z);
+                Vector3 manaInstantPosition = new Vector3(
+                    unit.gameObject.transform.position.x - 0.25f, 
+                    unit.gameObject.transform.position.y + 0.5f, 
+                    unit.gameObject.transform.position.z);
 
-                GameObject newHealthPickup = Instantiate(m_HealthPickupPrefab, healthinstantposition, Quaternion.identity) as GameObject;
-                GameObject newManaPickup = Instantiate(m_ManaPickupPrefab, manainstantposition, Quaternion.identity) as GameObject;
+                GameObject newHealthPickup = 
+                    Instantiate(m_HealthPickupPrefab, healthInstantPosition, Quaternion.identity) as GameObject;
+                GameObject newManaPickup = 
+                    Instantiate(m_ManaPickupPrefab, manaInstantPosition, Quaternion.identity) as GameObject;
 
 
                 if (m_Player.unit.health >= m_Player.unit.maxHealth)
@@ -222,8 +232,10 @@ namespace Units.Controller
                 if (m_Player.unit.mana >= m_Player.unit.maxMana)
                     Destroy(newManaPickup, 3.0f);
 
-                newHealthPickup.GetComponent<Rigidbody>().AddExplosionForce(250 + Random.value * 750, unit.gameObject.transform.position, 10);
-                newManaPickup.GetComponent<Rigidbody>().AddExplosionForce(250 + Random.value * 750, unit.gameObject.transform.position, 10);
+                newHealthPickup.GetComponent<Rigidbody>().
+                    AddExplosionForce(250 + Random.value * 750, unit.gameObject.transform.position, 10);
+                newManaPickup.GetComponent<Rigidbody>().
+                    AddExplosionForce(250 + Random.value * 750, unit.gameObject.transform.position, 10);
             }
 
             m_Enemies.Remove(unit);
@@ -296,7 +308,7 @@ namespace Units.Controller
             if (unit == null)
                 return;
 
-            if (m_Controlables.Contains(unit as IControllable))
+            if (m_Controllables.Contains(unit as IControllable))
             {
                 int skillindex = Random.Range(0, unit.skills.Count - 1);
 
