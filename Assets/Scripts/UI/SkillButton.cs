@@ -2,6 +2,7 @@
 using Interfaces;
 using Library;
 using Units.Controller;
+using Units.Skills;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -202,6 +203,10 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         else
             m_CostText.text = string.Format("{0:0}", m_Parent.skills[m_SkillIndex].skillData.cost);
 
+        m_Icon.sprite =
+            m_Parent.baseSkills[m_SkillIndex].GetComponent<BaseSkill>().
+                GetSkillData(m_Parent.skills[m_SkillIndex].level).
+                currentSprite;
         m_UpgradeButton.gameObject.SetActive(false);
     }
 
@@ -209,6 +214,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
     {
         m_UpgradeButton.gameObject.SetActive(false);
         Publisher.self.Broadcast(Event.UpgradeSkill, m_Parent, m_SkillIndex);
+        
         //m_Icon.sprite = SpriteManager.self.SetLevelUpSprite(m_Parent.skills[m_SkillIndex]);
         SetIndicators();
     }

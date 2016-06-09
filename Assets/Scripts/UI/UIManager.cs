@@ -156,7 +156,7 @@ namespace UI
                     skillButton.gameObject.GetComponent<Button>().name += " " + j;
                     skillButton.parent = skillUsers[i];
                     skillButton.skillIndex = j;
-                    skillButton.sprite = skillUsers[i].skills[j].skillData.sprite;
+                    skillButton.sprite = skillUsers[i].skills[j].skillData.currentSprite;
                     skillButton.gameObject.AddComponent<EventTrigger>();
                     m_SkillButtons.Add(skillButton);
 

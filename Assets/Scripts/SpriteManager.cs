@@ -17,12 +17,12 @@ public class SpriteManager : MonoSingleton<SpriteManager>
     // Function for setting the appropriate sprite for upgrade
     public Sprite SetLevelUpSprite(Skill a_Skill)
     {
-        Debug.Log(a_Skill.skillData.sprite);
-        Sprite LeveledUpSprite = a_Skill.skillData.sprite;
+        Debug.Log(a_Skill.skillData.currentSprite);
+        Sprite LeveledUpSprite = a_Skill.skillData.currentSprite;
         // Loop through m_Sprites list
         for (int index = 0; index < m_Sprites.Count - 1; index++)
         {// If the current sprite in the lists name is the same as the passed in sprites name
-            if (m_Sprites[index].name == a_Skill.skillData.sprite.name)
+            if (m_Sprites[index].name == a_Skill.skillData.currentSprite.name)
             {// Check the current level of the skill
                 switch (a_Skill.level)
                 {

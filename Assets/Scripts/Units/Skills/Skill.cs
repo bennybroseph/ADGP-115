@@ -1,7 +1,7 @@
 ﻿using System;
 using Interfaces;
 using UnityEngine;
-
+using System.Collections.Generic;
 using Library;
 
 using Event = Define.Event;
@@ -29,7 +29,8 @@ namespace Units.Skills
         public string name;
         public string description;
 
-        public Sprite sprite;
+        public Sprite currentSprite;
+        public List<Sprite> sprites;
 
         public int skillIndex;
         public float maxCooldown;
@@ -47,7 +48,7 @@ namespace Units.Skills
                 name = name,
                 description = description,
 
-                sprite = sprite,
+                currentSprite = currentSprite,
 
                 skillIndex = skillIndex,
                 maxCooldown = maxCooldown,
