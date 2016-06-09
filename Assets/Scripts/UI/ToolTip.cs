@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using Define;
 using Interfaces;
 using UI;
 using Units.Skills;
@@ -23,8 +24,27 @@ public class ToolTip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         Text skillDataText = UIManager.self.toolTip.GetComponentInChildren<Text>();
         // Activate the tooltip menu
         UIManager.self.toolTip.gameObject.SetActive(true);
-        // Update the text with the appropriate skill description
-        skillDataText.text = m_Player.skills[skillindex].skillData.description;
+
+        if (gameObject.name == "Upgrade Button")
+        {
+            // Update the text with the appropriate skill description
+            BaseSkill skill = m_Player.baseSkills[skillindex].GetComponent<BaseSkill>();
+            SkillData skillData = skill.GetSkillData(m_Player.skills[skillindex].level + 1);
+            skillDataText.text =
+                skillData.name + " - Cost: " + skillData.cost + "\n" +
+                "-------------------------------\n" +
+                skillData.description;
+        }
+        else
+        {
+            // Update the text with the appropriate skill description
+            BaseSkill skill = m_Player.baseSkills[skillindex].GetComponent<BaseSkill>();
+            SkillData skillData = skill.GetSkillData(m_Player.skills[skillindex].level);
+            skillDataText.text =
+                skillData.name + " - Cost: " + skillData.cost + "\n" +
+                "-------------------------------\n" +
+                skillData.description;
+        }
     }
     // When the mouse exits the gameobject this object is attached to and its an event trigger
     public void OnPointerExit(PointerEventData a_EventData)

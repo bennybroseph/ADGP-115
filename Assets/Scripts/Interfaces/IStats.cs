@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Units.Skills;
+using UnityEngine;
 
 namespace Interfaces
 {
@@ -21,6 +22,7 @@ namespace Interfaces
     public interface IUsesSkills : IStats
     {
         List<Skill> skills { get; }
+        List<GameObject> baseSkills { get; }
     }
 #endregion
 }

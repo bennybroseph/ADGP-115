@@ -232,6 +232,11 @@ namespace Units
             get { return m_CanMoveWithInput; }
             set { m_CanMoveWithInput = value; }
         }
+
+        public List<GameObject> baseSkills
+        {
+            get { return m_SkillPrefabs; }
+        }
         #endregion
 
         #region -- UNITY FUNCTIONS --
@@ -264,7 +269,6 @@ namespace Units
                     m_Skills[j].skillPrefab = m_SkillPrefabs[i].gameObject;
                     m_Skills[j].parent = this;
                     ICastable<IUsesSkills> castable = m_SkillPrefabs[j].GetComponent<ICastable<IUsesSkills>>();
-                    m_Skills[j].skillData.description = castable.UpdateDescription(m_Skills[j]);
                     ++j;
                 }
             }
@@ -446,12 +450,8 @@ namespace Units
             ICastable<IUsesSkills> castable = m_SkillPrefabs[skillIndex].GetComponent<ICastable<IUsesSkills>>();
 
             ++skill.level;
-            skill.skillData.cost = castable.baseCost + (skill.level - 1) * castable.costGrowth;
 
-            skill.skillData.damage = castable.baseDamage + (skill.level - 1) * castable.damageGrowth;
-            skill.skillData.maxCooldown = castable.baseMaxCooldown - (skill.level - 1) * castable.maxCooldownGrowth;
-
-            skill.skillData.description = castable.UpdateDescription(skill);
+            skill.skillData = m_SkillPrefabs[skillIndex].GetComponent<BaseSkill>().GetSkillData(skill.level);
 
             --m_StoredSkillUpgrades;
             if (m_StoredSkillUpgrades != 0)

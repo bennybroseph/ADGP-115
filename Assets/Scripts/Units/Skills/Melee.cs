@@ -58,10 +58,9 @@ public class Melee : BaseSkill
             Mathf.Cos(transform.eulerAngles.y * (Mathf.PI / 180)) * 0.1f);
     }
 
-    public override string UpdateDescription(Skill a_Skill)
+    public override string UpdateDescription(SkillData a_SkillData)
     {
-        string description = skillData.name + " is a physical skill" + "\nLevel: " + a_Skill.level + "\nDamage: " + a_Skill.skillData.damage +
-        "\nCost: " + a_Skill.skillData.cost + "\nMaxCooldown: " + a_Skill.skillData.maxCooldown;
+        string description = "Does " + a_SkillData.damage + " physical damage";
         return description;
     }
 
