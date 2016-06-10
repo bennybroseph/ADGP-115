@@ -280,7 +280,7 @@ MonoBehaviour:
   m_LastManaChange: 0
   m_ManaCoroutineIsRunning: 0
   m_IsStationary: 0
-  m_HideWhenNotTargeted: 1
+  m_HideWhenInactive: 1
 --- !u!114 &11432340
 MonoBehaviour:
   m_ObjectHideFlags: 1

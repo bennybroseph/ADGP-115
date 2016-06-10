@@ -336,18 +336,14 @@ namespace Units
             a_LastLevel = ReverseLevelAlgorithm(m_Level);
             a_NextLevel = ReverseLevelAlgorithm(m_Level + 1);
         }
-        /// <summary>
-        /// Use this function to set the unit's level. Do NOT set it manually
-        /// </summary>
+        /// <summary> Use this function to set the unit's level. Do NOT set it manually </summary>
         /// <param name="a_Level"></param>
         private void SetLevel(int a_Level)
         {
             m_Experience = ReverseLevelAlgorithm(a_Level);
             SetLevel();
         }
-        /// <summary>
-        /// Gets called automatically whenever 'experience' gets changed
-        /// </summary>
+        /// <summary> Gets called automatically whenever 'experience' gets changed </summary>
         private void SetLevel()
         {
             int oldLevel = m_Level;

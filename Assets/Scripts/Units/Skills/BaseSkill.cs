@@ -107,7 +107,7 @@ namespace Units.Skills
 
             SkillData newSkillData = new SkillData();
             newSkillData.name = m_SkillData.name;
-            newSkillData.currentSprite = m_SkillData.sprites[a_Level];
+            newSkillData.currentSprite = m_SkillData.sprites[a_Level <= 2 ? a_Level : 2];
             newSkillData.damage = m_BaseDamage + m_DamageGrowth * a_Level;
             newSkillData.cost = m_BaseCost + m_CostGrowth * a_Level;
             newSkillData.maxCooldown = m_BaseMaxCooldown + m_MaxCooldownGrowth * a_Level;
