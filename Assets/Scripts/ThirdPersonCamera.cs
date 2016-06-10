@@ -51,7 +51,7 @@ public class ThirdPersonCamera : MonoBehaviour
     private GameObject m_Target;
 
     [Space]
-    [SerializeField, Tooltip("How far away in each axis the camera should offset from the center")]
+    [SerializeField, Tooltip("How far away in each axis the camera should offset from the anchor")]
     private Vector3 m_Offset;
 
     /// <summary> The value of the offset before a target was selected </summary>
@@ -61,12 +61,12 @@ public class ThirdPersonCamera : MonoBehaviour
     /// The difference between the position before a target was selected and where it needs to currently be.
     /// Used to smooth the transition instead of moving immediately.
     /// </summary>
-    private Vector3 m_OffsetPosition;
+    private Vector3 m_OffsetAnchorPosition;
     /// <summary>
     /// The difference between the rotation before a target was selected and where it needs to currently be.
     /// Used to smooth the transition instead of rotating immediately.
     /// </summary>
-    private Vector3 m_OffsetRotation;
+    private Vector3 m_OffsetAnchorRotation;
     /// <summary>
     /// The difference between the camera's position before a target was selected and 
     /// where it needs to currently be.
@@ -84,7 +84,7 @@ public class ThirdPersonCamera : MonoBehaviour
         public Vector3 m_Max;
     }
 
-    [SerializeField, Tooltip("A clamp to the center position of the camera")]
+    [SerializeField, Tooltip("A clamp to the anchor position of the camera")]
     private Box m_ScreenBorders;
     #endregion
 
@@ -95,13 +95,17 @@ public class ThirdPersonCamera : MonoBehaviour
         set { m_Following = value; }
     }
 
-    /// <summary> Always Broadcasts that the target was changed when 'set' is called </summary>
+    /// <summary> 
+    /// Always Broadcasts that the target was changed when 'set' is called and 
+    /// forces a smooth transition to the new position 
+    /// </summary>
     public GameObject target
     {
         get { return m_Target; }
         private set
         {
             m_Target = value;
+            m_ShouldSmoothTransition = true;
             Publisher.self.DelayedBroadcast(Define.Event.PlayerTargetChanged, this, value);
         }
     }
@@ -120,7 +124,7 @@ public class ThirdPersonCamera : MonoBehaviour
     #endregion
 
     #region -- UNITY FUNCTIONS --
-    /// <summary> Updates the camera's position when changed in editor </summary>
+    /// <summary> Updates the camera's position when changed in editor if one exists </summary>
     private void OnValidate()
     {
         if (m_Camera == null && GetComponentInChildren<Camera>() != null)
@@ -130,6 +134,7 @@ public class ThirdPersonCamera : MonoBehaviour
             m_Camera.transform.localPosition = m_Offset;
     }
 
+    /// <summary> Subscribes to the proper events </summary>
     private void Awake()
     {
         Publisher.self.Subscribe(Define.Event.UnitDied, OnUnitDied);
@@ -137,16 +142,18 @@ public class ThirdPersonCamera : MonoBehaviour
         Publisher.self.Subscribe(Define.Event.TargetChangePressed, OnTargetChangePressed);
     }
 
+    /// <summary> Grabs componets and objects in the scene </summary>
     private void Start()
     {
 #if UNITY_WEBGL
         // Grabs the event system in the scene to be used later to determine if a UI element is selected
         m_EventSystem = FindObjectOfType(typeof(EventSystem)) as EventSystem;
 #endif
-
+        // If the user hasn't set a camera object, try to find one
         if (m_Camera == null && GetComponentInChildren<Camera>() != null)
             m_Camera = GetComponentInChildren<Camera>();
 
+        // If one still couldn't be found
         if (m_Camera == null)
         {
             Debug.LogWarning(name + " needs a camera to be parented to this object!");
@@ -154,12 +161,14 @@ public class ThirdPersonCamera : MonoBehaviour
         }
     }
 
+    /// <summary> Grabs the mouse scrollwheel data </summary>
     private void OnGUI()
     {
         if (Event.current.type == EventType.ScrollWheel)
             m_Offset += new Vector3(0, 0, -Event.current.delta.y);
     }
-    
+
+    /// <summary> Updates the positions of the anchor and camera </summary>
     private void Update()
     {
         // If no camera object exists or there is no following, don't try to update
@@ -168,14 +177,14 @@ public class ThirdPersonCamera : MonoBehaviour
 
         CheckMouseInput();
 
-        Vector3 newPosition = Vector3.zero;         // The new position the center needs to go to
-        Vector3 newRotation = Vector3.zero;         // The new rotation the center needs to go to
+        Vector3 newAnchorPosition = Vector3.zero;   // The new position the anchor needs to go to
+        Vector3 newAnchorRotation = Vector3.zero;   // The new rotation the anchor needs to go to
         Vector3 newCameraPosition = Vector3.zero;   // The new position the camera needs to go to
 
         if (m_Target != null)
         {
-            newPosition = m_Following.transform.position + m_Target.transform.position;
-            newPosition /= 2f;
+            newAnchorPosition = m_Following.transform.position + m_Target.transform.position;
+            newAnchorPosition /= 2f;
 
             // The difference between the target's position and the following's position
             Vector3 distanceVector = m_Target.transform.position - m_Following.transform.position;
@@ -185,8 +194,7 @@ public class ThirdPersonCamera : MonoBehaviour
                 Mathf.Pow(distanceVector.x, 2)
                 + Mathf.Pow(distanceVector.y, 2)
                 + Mathf.Pow(distanceVector.z, 2));
-            // Makes the 
-            
+            // Makes the camera position scale with distance to the target
             newCameraPosition = new Vector3(
                 m_Camera.transform.localPosition.x,
                 m_Camera.transform.localPosition.x,
@@ -206,16 +214,16 @@ public class ThirdPersonCamera : MonoBehaviour
             if (angle < 0)
                 angle += 2 * Mathf.PI;
 
-            // 
-            newRotation = new Vector3(
+            // Set the anchor rotaion in degrees with an offset on the x axis
+            newAnchorRotation = new Vector3(
                 35f,
                 angle * (180f / Mathf.PI),
                 transform.eulerAngles.z);
         }
         else
         {
-            newPosition = m_Following.transform.position;
-            newRotation = transform.eulerAngles;
+            newAnchorPosition = m_Following.transform.position;
+            newAnchorRotation = transform.eulerAngles;
             newCameraPosition = m_Offset;
         }
 
@@ -223,24 +231,24 @@ public class ThirdPersonCamera : MonoBehaviour
         {
             m_ShouldSmoothTransition = false;
 
-            m_OffsetPosition = newPosition - transform.position;
-            m_OffsetRotation = newRotation - transform.eulerAngles;
+            m_OffsetAnchorPosition = newAnchorPosition - transform.position;
+            m_OffsetAnchorRotation = newAnchorRotation - transform.eulerAngles;
             m_OffsetCameraPosition = newCameraPosition - m_Camera.transform.localPosition;
         }
 
-        m_OffsetPosition = Vector3.Lerp(m_OffsetPosition, Vector3.zero, Time.deltaTime * 5);
-        m_OffsetRotation = Vector3.Lerp(m_OffsetRotation, Vector3.zero, Time.deltaTime * 5);
+        m_OffsetAnchorPosition = Vector3.Lerp(m_OffsetAnchorPosition, Vector3.zero, Time.deltaTime * 5);
+        m_OffsetAnchorRotation = Vector3.Lerp(m_OffsetAnchorRotation, Vector3.zero, Time.deltaTime * 5);
         m_OffsetCameraPosition = Vector3.Lerp(m_OffsetCameraPosition, Vector3.zero, Time.deltaTime * 5);
 
-        if (m_OffsetPosition.magnitude <= 0.01f)
-            m_OffsetPosition = Vector3.zero;
-        if (m_OffsetRotation.magnitude <= 0.01f)
-            m_OffsetRotation = Vector3.zero;
+        if (m_OffsetAnchorPosition.magnitude <= 0.01f)
+            m_OffsetAnchorPosition = Vector3.zero;
+        if (m_OffsetAnchorRotation.magnitude <= 0.01f)
+            m_OffsetAnchorRotation = Vector3.zero;
         if (m_OffsetCameraPosition.magnitude <= 0.01f)
             m_OffsetCameraPosition = Vector3.zero;
 
-        transform.position = newPosition - m_OffsetPosition;
-        transform.eulerAngles = newRotation - m_OffsetRotation;
+        transform.position = newAnchorPosition - m_OffsetAnchorPosition;
+        transform.eulerAngles = newAnchorRotation - m_OffsetAnchorRotation;
         m_Camera.transform.localPosition = newCameraPosition - m_OffsetCameraPosition;
 
         transform.position = new Vector3(
@@ -250,6 +258,7 @@ public class ThirdPersonCamera : MonoBehaviour
     }
     #endregion
 
+    #region -- PRIVATE FUNCTIONS --
     private void CheckMouseInput()
     {
         if (m_Target != null)
@@ -337,8 +346,6 @@ public class ThirdPersonCamera : MonoBehaviour
 
     private void OnTargetTogglePressed(Define.Event a_Event, params object[] a_Params)
     {
-        m_ShouldSmoothTransition = true;
-
         if (m_Target != null)
         {
             target = null;
@@ -369,8 +376,6 @@ public class ThirdPersonCamera : MonoBehaviour
     }
     private void OnTargetChangePressed(Define.Event a_Event, params object[] a_Params)
     {
-        m_ShouldSmoothTransition = true;
-
         List<Collider> objectsHit = Physics.OverlapSphere(m_Target.transform.position, 15f).ToList();
 
         List<Collider> parsedUnits = objectsHit.Where(
@@ -390,8 +395,6 @@ public class ThirdPersonCamera : MonoBehaviour
 
         if (unit == null || unit.gameObject != m_Target || m_Target == null)
             return;
-
-        m_ShouldSmoothTransition = true;
 
         List<Collider> objectsFound = Physics.OverlapSphere(m_Target.transform.position, 15f).Where(
             x =>
@@ -419,4 +422,5 @@ public class ThirdPersonCamera : MonoBehaviour
 
         return 0;
     }
+    #endregion
 }

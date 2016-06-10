@@ -66,7 +66,7 @@ namespace UI
         [SerializeField]
         private bool m_IsStationary;
         [SerializeField]
-        private bool m_HideWhenNotTargeted;
+        private bool m_HideWhenInactive;
         #endregion
 
         #region -- PROPERTIES --
@@ -104,26 +104,20 @@ namespace UI
             m_LastManaChange = 0;
             m_ManaCoroutineIsRunning = false;
 
+            // These are not the only subscriptions, just the only ones we care about at the start
             Publisher.self.Subscribe(Event.PlayerTargetChanged, OnPlayerTargetChanged);
 
             Publisher.self.Subscribe(Event.FortressInitialized, OnFortressInit);
-
-            Publisher.self.Subscribe(Event.FortressHealthChanged, OnFortressValueChanged);
-
             Publisher.self.Subscribe(Event.FortressDied, OnFortressDied);
 
             Publisher.self.Subscribe(Event.UnitInitialized, OnUnitInit);
-
-            Publisher.self.Subscribe(Event.UnitMaxHealthChanged, OnUnitValueChanged);
-            Publisher.self.Subscribe(Event.UnitMaxHealthChanged, OnUnitValueChanged);
-
-            Publisher.self.Subscribe(Event.UnitEXPChanged, OnUnitValueChanged);
-
-            Publisher.self.Subscribe(Event.UnitHealthChanged, OnUnitValueChanged);
-            Publisher.self.Subscribe(Event.UnitManaChanged, OnUnitValueChanged);
-            Publisher.self.Subscribe(Event.UnitLevelChanged, OnUnitValueChanged);
-
             Publisher.self.Subscribe(Event.UnitDied, OnUnitDied);
+        }
+
+        private void Start()
+        {
+            if (m_HideWhenInactive)
+                SetAlpha(0.0f);
         }
 
         private void LateUpdate()
@@ -187,10 +181,13 @@ namespace UI
         #endregion
 
         #region -- PRIVATE FUNCTIONS --
-        private void SetAlpha(float a_Value)
+        private void SetAlpha(float a_FadeTo)
         {
             foreach (Graphic graphic in GetComponentsInChildren<Graphic>())
-                graphic.canvasRenderer.SetAlpha(a_Value);
+                graphic.canvasRenderer.SetAlpha(a_FadeTo);
+
+            if (a_FadeTo == 0f)
+                gameObject.SetActive(false);
         }
         private void Fade(float a_FadeTo, float a_Duration)
         {
@@ -199,14 +196,6 @@ namespace UI
 
             foreach (Graphic graphic in GetComponentsInChildren<Graphic>())
                 graphic.CrossFadeAlpha(a_FadeTo, a_Duration, false);
-
-            if (a_FadeTo == 0f)
-                m_FadeCoroutines.Add(
-                    StartCoroutine(WaitAndDoThis(a_Duration,
-                        delegate
-                        {
-                            gameObject.SetActive(false);
-                        })));
         }
 
         private void SetText(Text a_Text, string a_String, bool a_AddLevel = false)
@@ -262,19 +251,20 @@ namespace UI
         {
             GameObject target = a_Params[1] as GameObject;
 
-            if (!m_HideWhenNotTargeted || this == null)
+            if (!m_HideWhenInactive || this == null)
                 return;
-            
+
             IStats unit = null;
             if (target != null)
                 unit = target.GetComponent<IStats>();
 
             if (!gameObject.activeInHierarchy && unit != m_StatParent)
                 return;
+
             if (!gameObject.activeInHierarchy)
             {
-                gameObject.SetActive(true);
                 SetAlpha(0f);
+                gameObject.SetActive(true);
             }
 
             if (unit == null || unit != m_StatParent)
@@ -296,6 +286,9 @@ namespace UI
             if (fortress == null || fortress != m_FortressParent)
                 return;
 
+            // Only subscribe once the fortress has been initialized
+            Publisher.self.Subscribe(Event.FortressHealthChanged, OnFortressValueChanged);
+
             OnInit(fortress);
         }
         private void OnUnitInit(Event a_Event, params object[] a_Params)
@@ -304,6 +297,16 @@ namespace UI
 
             if (unit == null || unit != m_StatParent)
                 return;
+
+            // Only subscribe once the unit has been initialized
+            Publisher.self.Subscribe(Event.UnitMaxHealthChanged, OnUnitValueChanged);
+            Publisher.self.Subscribe(Event.UnitMaxHealthChanged, OnUnitValueChanged);
+
+            Publisher.self.Subscribe(Event.UnitEXPChanged, OnUnitValueChanged);
+
+            Publisher.self.Subscribe(Event.UnitHealthChanged, OnUnitValueChanged);
+            Publisher.self.Subscribe(Event.UnitManaChanged, OnUnitValueChanged);
+            Publisher.self.Subscribe(Event.UnitLevelChanged, OnUnitValueChanged);
 
             OnInit(unit);
         }
@@ -336,22 +339,26 @@ namespace UI
             if (unit == null || unit != m_StatParent)
                 return;
 
-            if (m_HideWhenNotTargeted)
+            if (m_HideWhenInactive)
             {
                 if (!gameObject.activeInHierarchy)
                 {
-                    gameObject.SetActive(true);
                     SetAlpha(0f);
+                    gameObject.SetActive(true);
                 }
-
-                Fade(1, 0.5f);
-                m_FadeCoroutines.Add(
-                    StartCoroutine(WaitAndDoThis(3f,
-                        delegate
-                        {
-                            if (!m_CurrentlyTargeted)
-                                Fade(0f, 0.5f);
-                        })));
+                if (a_Event != Event.UnitInitialized)
+                {
+                    Fade(1, 0.5f);
+                    m_FadeCoroutines.Add(
+                        StartCoroutine(
+                            WaitAndDoThis(
+                                2f,
+                                delegate
+                                {
+                                    if (!m_CurrentlyTargeted)
+                                        Fade(0f, 0.5f);
+                                })));
+                }
             }
 
             switch (a_Event)

@@ -288,7 +288,7 @@ namespace Units.Controller
 
                     m_Enemies.Add(goblinMage.GetComponent<IStats>());
                     m_Enemies.Add(goblin.GetComponent<IStats>());
-                    yield return new WaitForSeconds(2);
+                    yield return new WaitForSeconds(0.75f);
                 }
             }
 
