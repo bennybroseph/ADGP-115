@@ -3,23 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using Define;
 using Interfaces;
+using Library;
 using UI;
 using Units.Skills;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using Event = Define.Event;
 
 public class ToolTip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     [SerializeField]
     private IUsesSkills m_Player;
+
+    private void Awake()
+    {
+        Publisher.self.Subscribe(Event.UpgradeSkill, OnUnitUpgradeSkill);
+    }
     // Use this for initialization
-    void Start ()
-    {// Grab the player object in the scene
+    private void Start ()
+    {
+        // Grab the player object in the scene
         m_Player = GameObject.FindGameObjectWithTag("Player").GetComponent<IUsesSkills>();
+        
     }
 	// When the mouse enters the gameobject this object is attached to and its an event trigger
     public void OnPointerEnter(PointerEventData a_EventData)
-    {// Grab the proper components
+    {
+        // Grab the proper components
         int skillindex = gameObject.GetComponentInParent<SkillButton>().skillIndex;
         Text skillDataText = UIManager.self.toolTip.GetComponentInChildren<Text>();
         // Activate the tooltip menu
@@ -48,7 +58,18 @@ public class ToolTip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     }
     // When the mouse exits the gameobject this object is attached to and its an event trigger
     public void OnPointerExit(PointerEventData a_EventData)
-    {// Deactivate the tooltip menu
+    {
+        // Deactivate the tooltip menu
+        UIManager.self.toolTip.gameObject.SetActive(false);
+    }
+
+    private void OnUnitUpgradeSkill(Event a_Event, params object[] a_Params)
+    {
+        IUsesSkills unit = a_Params[0] as IUsesSkills;
+        
+        if(unit == null || unit != m_Player)
+            return;
+        
         UIManager.self.toolTip.gameObject.SetActive(false);
     }
 }
