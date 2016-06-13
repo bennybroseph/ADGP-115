@@ -80,7 +80,8 @@ namespace Units.Skills
 
         [SerializeField]
         private int m_Level;
-
+        [SerializeField]
+        private static int m_maxLevel = 10;
         [SerializeField]
         private GameObject m_SkillPrefab;
 
@@ -106,6 +107,11 @@ namespace Units.Skills
         {
             get { return m_Level; }
             set { m_Level = value; }
+        }
+
+        public static int maxlevel
+        {
+            get { return m_maxLevel; }
         }
 
         public GameObject skillPrefab
