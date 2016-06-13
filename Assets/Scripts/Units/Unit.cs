@@ -449,6 +449,9 @@ namespace Units
 
             skill.skillData = m_SkillPrefabs[skillIndex].GetComponent<BaseSkill>().GetSkillData(skill.level);
 
+            if (skill.level == Skill.maxlevel)
+                UIAnnouncer.self.Announce(skill.skillData.name + " skill is now maxed!");
+
             --m_StoredSkillUpgrades;
             if (m_StoredSkillUpgrades != 0)
                 Publisher.self.DelayedBroadcast(Event.UnitCanUpgradeSkill, this);

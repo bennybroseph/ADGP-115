@@ -1,6 +1,7 @@
 ﻿using System;
 using Interfaces;
 using Library;
+using UI;
 using Units.Controller;
 using Units.Skills;
 using UnityEngine;
@@ -185,7 +186,7 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
     {
         IUsesSkills unit = a_Params[0] as IUsesSkills;
 
-        if (unit == null || unit != m_Parent)
+        if (unit == null || unit != m_Parent || unit.skills[m_SkillIndex].level >= Skill.maxlevel)
             return;
 
         m_UpgradeButton.gameObject.SetActive(true);
@@ -215,7 +216,6 @@ public class SkillButton : MonoBehaviour, IChildable<IUsesSkills>
         m_UpgradeButton.gameObject.SetActive(false);
         Publisher.self.Broadcast(Event.UpgradeSkill, m_Parent, m_SkillIndex);
         
-        //m_Icon.sprite = SpriteManager.self.SetLevelUpSprite(m_Parent.skills[m_SkillIndex]);
         SetIndicators();
     }
 
