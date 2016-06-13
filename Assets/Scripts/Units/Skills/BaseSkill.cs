@@ -1,10 +1,11 @@
 ﻿using System.Collections;
+using System.Net;
 using UnityEngine;
 using Interfaces;
 
 namespace Units.Skills
 {
-    public abstract class BaseSkills : MonoBehaviour, ICastable<IUsesSkills>
+    public abstract class BaseSkill : MonoBehaviour, ICastable<IUsesSkills>
     {
         #region -- VARIABLES --
         [SerializeField]
@@ -96,7 +97,23 @@ namespace Units.Skills
         }
         #endregion
 
-        public abstract string UpdateDescription(Skill a_Skill);
+        public abstract string UpdateDescription(SkillData a_SkillData);
+
+        public virtual SkillData GetSkillData(int a_Level)
+        {
+            a_Level--;
+            if (a_Level < 0)
+                a_Level = 0;
+
+            SkillData newSkillData = new SkillData();
+            newSkillData.name = m_SkillData.name;
+            newSkillData.currentSprite = m_SkillData.sprites[a_Level <= 2 ? a_Level : 2];
+            newSkillData.damage = m_BaseDamage + m_DamageGrowth * a_Level;
+            newSkillData.cost = m_BaseCost + m_CostGrowth * a_Level;
+            newSkillData.maxCooldown = m_BaseMaxCooldown + m_MaxCooldownGrowth * a_Level;
+            newSkillData.description = UpdateDescription(newSkillData);
+            return newSkillData;
+        }
 
         protected virtual void Awake()
         {

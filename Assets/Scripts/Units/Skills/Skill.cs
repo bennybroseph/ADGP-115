@@ -1,7 +1,7 @@
 ﻿using System;
 using Interfaces;
 using UnityEngine;
-
+using System.Collections.Generic;
 using Library;
 
 using Event = Define.Event;
@@ -29,7 +29,8 @@ namespace Units.Skills
         public string name;
         public string description;
 
-        public Sprite sprite;
+        public Sprite currentSprite;
+        public List<Sprite> sprites;
 
         public int skillIndex;
         public float maxCooldown;
@@ -42,20 +43,22 @@ namespace Units.Skills
 
         public SkillData Clone()
         {
-            SkillData clone = new SkillData();
+            SkillData clone = new SkillData
+            {
+                name = name,
+                description = description,
 
-            clone.name = name;
-            clone.description = description;
+                currentSprite = currentSprite,
 
-            clone.sprite = sprite;
+                skillIndex = skillIndex,
+                maxCooldown = maxCooldown,
 
-            clone.maxCooldown = maxCooldown;
+                damage = damage,
+                cost = cost,
 
-            clone.damage = damage;
-            clone.cost = cost;
-
-            clone.buffType = buffType;
-            clone.damageType = damageType;
+                buffType = buffType,
+                damageType = damageType
+            };
 
             return clone;
         }

@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Units.Skills
 {
-    public class Lightning : BaseSkills
+    public class Lightning : BaseSkill
     {
         [SerializeField]
 
@@ -67,10 +67,9 @@ namespace Units.Skills
             }
         }
 
-        public override string UpdateDescription(Skill a_Skill)
+        public override string UpdateDescription(SkillData a_SkillData)
         {
-            string description = skillData.name + " is a magical skill" + "\nLevel: " + a_Skill.level + "\nDamage: " + a_Skill.skillData.damage +
-            "\nCost: " + a_Skill.skillData.cost + "\nMaxCooldown: " + a_Skill.skillData.maxCooldown;
+            string description = "Does " + a_SkillData.damage + " magic damage";
             return description;
         }
     }

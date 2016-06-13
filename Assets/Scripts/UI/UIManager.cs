@@ -156,7 +156,7 @@ namespace UI
                     skillButton.gameObject.GetComponent<Button>().name += " " + j;
                     skillButton.parent = skillUsers[i];
                     skillButton.skillIndex = j;
-                    skillButton.sprite = skillUsers[i].skills[j].skillData.sprite;
+                    skillButton.sprite = skillUsers[i].skills[j].skillData.currentSprite;
                     skillButton.gameObject.AddComponent<EventTrigger>();
                     m_SkillButtons.Add(skillButton);
 
@@ -272,7 +272,7 @@ namespace UI
                             Button closeButton = m_OptionsMenu.GetComponentsInChildren<Button>()[2];
                             Slider volumeSlider = m_OptionsMenu.GetComponentsInChildren<Slider>()[0];
                             // Set volumeSlider value to a default value
-                            volumeSlider.value = AudioManager.self.Sounds[0].Volume;
+                            volumeSlider.value = 0.1f;
 
                             applyButton.onClick.AddListener(delegate { OnOptionsApplyClick(volumeSlider); });
                             cancelButton.onClick.AddListener(OnOptionsCancelClick);
@@ -311,7 +311,7 @@ namespace UI
                                 continue;
                             }
 
-                            m_NewGame.onClick.AddListener(delegate { SceneManager.LoadScene("Andrew"); });
+                            m_NewGame.onClick.AddListener(delegate { SceneManager.LoadScene(1); });
                         }
                         break;
                     case "Load Game":

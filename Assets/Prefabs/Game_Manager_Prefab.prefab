@@ -10,6 +10,7 @@ GameObject:
   - 4: {fileID: 463932}
   - 114: {fileID: 11418778}
   - 114: {fileID: 11468218}
+  - 114: {fileID: 11464198}
   m_Layer: 0
   m_Name: Game_Manager_Prefab
   m_TagString: Game Manager
@@ -44,6 +45,27 @@ MonoBehaviour:
   m_UIManager: {fileID: 11432312, guid: 759adda1d136a054eb1fed226093f08b, type: 2}
   m_PreviousTimeScale: 0
   m_PlayerIndices: 
+--- !u!114 &11464198
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 170072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0436bc21dc518424ab19d2c1c699c257, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Sprites:
+  - {fileID: 21300000, guid: cbc23304bc8926d48bf28fe5e43beea6, type: 3}
+  - {fileID: 21300000, guid: d56f7dfc884d2d54ca19f3fc00847419, type: 3}
+  - {fileID: 21300000, guid: 3759c29f8b2bcb84aaad86d679df1708, type: 3}
+  - {fileID: 21300000, guid: 60d71d90c8e53f041b9058e083062cf5, type: 3}
+  - {fileID: 21300000, guid: 82ba689db752c74458baffc1d21fb876, type: 3}
+  - {fileID: 21300000, guid: c776bd63548050e44bcb2ed2c82c3781, type: 3}
+  - {fileID: 21300000, guid: aff23a89a790cb94f82f78d248850935, type: 3}
+  - {fileID: 21300000, guid: 5d0743bcc37a1d940b984e2ddc6bdb6a, type: 3}
+  - {fileID: 21300000, guid: 5b313404476bb8449b4700b59928bd2b, type: 3}
 --- !u!114 &11468218
 MonoBehaviour:
   m_ObjectHideFlags: 1

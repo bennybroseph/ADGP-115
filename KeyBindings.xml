@@ -22,6 +22,11 @@
         <description>Second Skill</description>
         <keyCode>E</keyCode>
       </KeyOfKeyCode>
+      <KeyOfKeyCode>
+        <name>Skill 3</name>
+        <description>Third Skill</description>
+        <keyCode>R</keyCode>
+      </KeyOfKeyCode>
     </skillKeys>
     <skillButtons>
       <KeyOfButtonCode>
@@ -34,12 +39,27 @@
         <description>First Skill</description>
         <keyCode>A</keyCode>
       </KeyOfButtonCode>
+      <KeyOfButtonCode>
+        <name>Skill 3</name>
+        <description>Third Skill</description>
+        <keyCode>B</keyCode>
+      </KeyOfButtonCode>
     </skillButtons>
-    <strafeKey>
-      <name>Strafe</name>
-      <description>Strafe Key</description>
-      <keyCode>LeftShift</keyCode>
-    </strafeKey>
+    <targetModeKey>
+      <name>Target</name>
+      <description>Target Mode Toggle</description>
+      <keyCode>F</keyCode>
+    </targetModeKey>
+    <switchTargetKey>
+      <name>Target</name>
+      <description>Target Mode Toggle</description>
+      <keyCode>Tab</keyCode>
+    </switchTargetKey>
+    <targetModeButton>
+      <name>Target</name>
+      <description>Target Mode Toggle</description>
+      <keyCode>RStick</keyCode>
+    </targetModeButton>
     <verticalKeyAxis>
       <positive>
         <name>Up</name>
@@ -109,7 +129,12 @@
       <KeyOfKeyCode>
         <name>Skill 2</name>
         <description>Second SKill</description>
-        <keyCode>Keypad0</keyCode>
+        <keyCode>Keypad2</keyCode>
+      </KeyOfKeyCode>
+      <KeyOfKeyCode>
+        <name>Skill 3</name>
+        <description>Third Skill</description>
+        <keyCode>Keypad3</keyCode>
       </KeyOfKeyCode>
     </skillKeys>
     <skillButtons>
@@ -123,12 +148,27 @@
         <description>First Skill</description>
         <keyCode>A</keyCode>
       </KeyOfButtonCode>
+      <KeyOfButtonCode>
+        <name>Skill 3</name>
+        <description>Third Skill</description>
+        <keyCode>B</keyCode>
+      </KeyOfButtonCode>
     </skillButtons>
-    <strafeKey>
-      <name>Strafe</name>
-      <description>Strafe Key</description>
+    <targetModeKey>
+      <name>Target</name>
+      <description>Target Mode Toggle</description>
+      <keyCode>KeypadPeriod</keyCode>
+    </targetModeKey>
+    <switchTargetKey>
+      <name>Target</name>
+      <description>Target Mode Toggle</description>
       <keyCode>RightShift</keyCode>
-    </strafeKey>
+    </switchTargetKey>
+    <targetModeButton>
+      <name>Target</name>
+      <description>Target Mode Toggle</description>
+      <keyCode>RStick</keyCode>
+    </targetModeButton>
     <verticalKeyAxis>
       <positive>
         <name>Up</name>

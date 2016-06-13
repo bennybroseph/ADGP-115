@@ -5,7 +5,7 @@ using Units.Controller;
 
 namespace Units.Skills
 {
-    public class Fireball : BaseSkills, IMovable
+    public class Fireball : BaseSkill, IMovable
     {
         #region -- VARIABLES --
         private Vector3 m_TotalVelocity;
@@ -112,12 +112,21 @@ namespace Units.Skills
             transform.position += (m_Velocity + m_TotalVelocity) * Time.deltaTime;
         }
 
-        public override string UpdateDescription(Skill a_Skill)
+        public override string UpdateDescription(SkillData a_SkillData)
         {
-            string description = skillData.name + " is a magical skill" + "\nLevel: " + a_Skill.level + "\nDamage: " + a_Skill.skillData.damage +
-            "\nCost: " + a_Skill.skillData.cost + "\nMaxCooldown: " + a_Skill.skillData.maxCooldown;
+            string description = "Does " + a_SkillData.damage + " magic damage";
             return description;
         }
+
+        //public override SkillData GetSkillData(int a_Level)
+        //{
+        //    SkillData newSkillData = new SkillData();
+        //    newSkillData.damage = m_BaseDamage + m_DamageGrowth * a_Level;
+        //    newSkillData.cost = m_BaseCost + m_CostGrowth * a_Level;
+        //    newSkillData.maxCooldown = m_BaseMaxCooldown + m_MaxCooldownGrowth * a_Level;
+
+        //    return newSkillData;
+        //}
         #endregion
     }
 }

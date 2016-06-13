@@ -29,6 +29,6 @@ namespace Interfaces
 
         SkillData skillData { get; set; }
 
-        string UpdateDescription(Skill a_Skill);
+        string UpdateDescription(SkillData a_SkillData);
     }
 }

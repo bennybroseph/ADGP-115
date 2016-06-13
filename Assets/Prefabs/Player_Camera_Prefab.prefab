@@ -121,6 +121,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcf00fb8c09a6e446b86a848ec44e1dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Camera: {fileID: 2047866}
   m_Following: {fileID: 0}
   m_Target: {fileID: 0}
   m_Offset: {x: 0, y: 0, z: -20}

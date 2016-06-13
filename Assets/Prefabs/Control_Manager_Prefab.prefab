@@ -42,9 +42,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_SpawnPoints: []
   m_EnemyBases: []
-  m_GoblinMagePrefab: {fileID: 155792, guid: d8949c9d58a2d684ea071c58cf2cc2af, type: 2}
+  m_GoblinMagePrefab: {fileID: 140678, guid: 708b4df969e058646bce9432f4b7580a, type: 2}
   m_GoblinPrefab: {fileID: 140678, guid: 7e00f56026b371e4bbdf7dd2e52e3d90, type: 2}
-  m_WaveCounter: 0
+  m_MaxWaveCount: 10
   m_ManaPickupPrefab: {fileID: 113702, guid: dc8efd8c47981a846ada4fff81b980fc, type: 2}
   m_HealthPickupPrefab: {fileID: 106706, guid: 6542f39da4feb4f468a1355ba0ff2e27, type: 2}
   m_MaxCountdownTimer: 15

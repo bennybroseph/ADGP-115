@@ -81,7 +81,11 @@ MonoBehaviour:
   m_SkillData:
     name: Lightning
     description: 
-    sprite: {fileID: 21300000, guid: aff23a89a790cb94f82f78d248850935, type: 3}
+    currentSprite: {fileID: 21300000, guid: aff23a89a790cb94f82f78d248850935, type: 3}
+    sprites:
+    - {fileID: 21300000, guid: aff23a89a790cb94f82f78d248850935, type: 3}
+    - {fileID: 21300000, guid: 5d0743bcc37a1d940b984e2ddc6bdb6a, type: 3}
+    - {fileID: 21300000, guid: 5b313404476bb8449b4700b59928bd2b, type: 3}
     skillIndex: 0
     maxCooldown: 0
     damage: 0

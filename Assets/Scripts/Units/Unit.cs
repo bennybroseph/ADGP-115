@@ -232,6 +232,11 @@ namespace Units
             get { return m_CanMoveWithInput; }
             set { m_CanMoveWithInput = value; }
         }
+
+        public List<GameObject> baseSkills
+        {
+            get { return m_SkillPrefabs; }
+        }
         #endregion
 
         #region -- UNITY FUNCTIONS --
@@ -264,7 +269,6 @@ namespace Units
                     m_Skills[j].skillPrefab = m_SkillPrefabs[i].gameObject;
                     m_Skills[j].parent = this;
                     ICastable<IUsesSkills> castable = m_SkillPrefabs[j].GetComponent<ICastable<IUsesSkills>>();
-                    m_Skills[j].skillData.description = castable.UpdateDescription(m_Skills[j]);
                     ++j;
                 }
             }
@@ -317,7 +321,7 @@ namespace Units
 
         protected virtual void OnDestroy()
         {
-            if(m_Controller != null)
+            if (m_Controller != null)
                 m_Controller.UnRegister(this);
 
             Publisher.self.UnSubscribe(Event.UseSkill, OnUseSkill);
@@ -332,18 +336,14 @@ namespace Units
             a_LastLevel = ReverseLevelAlgorithm(m_Level);
             a_NextLevel = ReverseLevelAlgorithm(m_Level + 1);
         }
-        /// <summary>
-        /// Use this function to set the unit's level. Do NOT set it manually
-        /// </summary>
+        /// <summary> Use this function to set the unit's level. Do NOT set it manually </summary>
         /// <param name="a_Level"></param>
         private void SetLevel(int a_Level)
         {
             m_Experience = ReverseLevelAlgorithm(a_Level);
             SetLevel();
         }
-        /// <summary>
-        /// Gets called automatically whenever 'experience' gets changed
-        /// </summary>
+        /// <summary> Gets called automatically whenever 'experience' gets changed </summary>
         private void SetLevel()
         {
             int oldLevel = m_Level;
@@ -427,7 +427,8 @@ namespace Units
             newSkill.parent = this;
             newSkill.skillData = m_Skills[skillIndex].skillData.Clone();
 
-            mana -= m_Skills[skillIndex].skillData.cost;
+            if (m_Skills[skillIndex].skillData.cost != 0f)
+                mana -= m_Skills[skillIndex].skillData.cost;
 
             m_Skills[skillIndex].PutOnCooldown();
         }
@@ -445,12 +446,8 @@ namespace Units
             ICastable<IUsesSkills> castable = m_SkillPrefabs[skillIndex].GetComponent<ICastable<IUsesSkills>>();
 
             ++skill.level;
-            skill.skillData.cost = castable.baseCost + (skill.level - 1) * castable.costGrowth;
 
-            skill.skillData.damage = castable.baseDamage + (skill.level - 1) * castable.damageGrowth;
-            skill.skillData.maxCooldown = castable.baseMaxCooldown - (skill.level - 1) * castable.maxCooldownGrowth;
-
-            skill.skillData.description = castable.UpdateDescription(skill);
+            skill.skillData = m_SkillPrefabs[skillIndex].GetComponent<BaseSkill>().GetSkillData(skill.level);
 
             --m_StoredSkillUpgrades;
             if (m_StoredSkillUpgrades != 0)

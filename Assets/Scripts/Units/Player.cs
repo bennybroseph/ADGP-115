@@ -16,7 +16,7 @@ namespace Units
         [SerializeField]
         private ThirdPersonCamera m_CameraPrefab;
         [SerializeField]
-        private UserController m_UserController;
+        private UserControllerInput m_UserControllerInput;
 
         [Space]
         [SerializeField]
@@ -48,7 +48,7 @@ namespace Units
             m_PlayerCamera = Instantiate(m_CameraPrefab);
             m_PlayerCamera.following = m_Unit.gameObject;
 
-            m_Controller = Instantiate(m_UserController);
+            m_Controller = Instantiate(m_UserControllerInput);
             m_Controller.Register(this);
 
             UIAnnouncer.self.DelayedAnnouncement(m_Unit.unitNickname + ", Pick a skill below!", 1.0f);
