@@ -222,7 +222,7 @@ MonoBehaviour:
     damageType: 0
   m_CurrentLifetime: 0
   m_MaxLifetime: 0.25
-  m_BaseMaxCooldown: 1
+  m_BaseMaxCooldown: 1.5
   m_MaxCooldownGrowth: 0.005
   m_BaseDamage: 1
   m_DamageGrowth: 0.25
