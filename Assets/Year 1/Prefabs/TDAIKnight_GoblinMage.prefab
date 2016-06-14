@@ -2242,7 +2242,7 @@ MonoBehaviour:
   m_BaseDefense: 2
   m_DefenseGrowth: 1
   m_BaseLevel: 1
-  m_BaseSpeed: 5
+  m_BaseSpeed: 2
   m_SpeedGrowth: 0.2
   m_Taunt: I burn them ok?
 --- !u!114 &11435792

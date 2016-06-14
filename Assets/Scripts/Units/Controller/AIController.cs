@@ -92,7 +92,7 @@ namespace Units.Controller
                 if (controlable.following != null)
                 {
                     IUsesSkills skillUser = controlable as IUsesSkills;
-
+                    controlable.navMashAgent.speed = controlable.speed;
                     controlable.navMashAgent.SetDestination(controlable.following.transform.position);
 
                     float distanceFromEnemyToTarget = 
