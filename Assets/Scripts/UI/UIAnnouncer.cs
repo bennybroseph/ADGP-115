@@ -247,7 +247,7 @@ namespace UI
                 m_LogItems[i].transform.position =
                     new Vector3(
                         m_Anchor.x,
-                        m_Anchor.y + j * m_SpaceBetweenLogItems);
+                        m_Anchor.y - i * m_SpaceBetweenLogItems);
             }
         }
 

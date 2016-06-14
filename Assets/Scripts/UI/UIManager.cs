@@ -119,7 +119,7 @@ namespace UI
             if (m_HUDPrefab != null)
             {
                 m_HUD = Instantiate(m_HUDPrefab);
-                m_HUD.transform.SetParent(m_BackgroundUI.transform, false);
+                m_HUD.transform.SetParent(transform, false);
                 m_HUD.transform.SetAsLastSibling();
                 m_HUD.parent = FindObjectOfType<Player>().unit;
             }
@@ -150,9 +150,8 @@ namespace UI
                     SkillButton skillButton = InstantiateRectTransform(
                         m_SkillButtonPrefab,
                         new Vector3(
-                            k * 70 + i * 100 - (numOfSkills * 70 + (skillUsers.Count - 1) * 100) / 2,
-                            0,
-                            0));
+                            k * 70 + i * 100 - (numOfSkills * 70 + (skillUsers.Count - 1) * 100) / 2, 0f));
+
                     skillButton.gameObject.GetComponent<Button>().name += " " + j;
                     skillButton.parent = skillUsers[i];
                     skillButton.skillIndex = j;
@@ -379,7 +378,7 @@ namespace UI
 
         private void OnUnitInitialized(Event a_Event, params object[] a_Params)
         {
-                
+
         }
 
         private void OnMainMenu(Event a_Event, params object[] a_Params)
@@ -500,7 +499,7 @@ namespace UI
         private SkillButton InstantiateRectTransform(SkillButton a_RectTransform, Vector3 a_Position)
         {
             SkillButton skillButton = Instantiate(a_RectTransform);
-            skillButton.GetComponent<RectTransform>().SetParent(transform, false);
+            skillButton.GetComponent<RectTransform>().SetParent(m_HUD.transform, false);
             skillButton.transform.SetAsFirstSibling();
 
             skillButton.transform.localPosition += a_Position;

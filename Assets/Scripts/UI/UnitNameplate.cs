@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,6 +34,8 @@ namespace UI
         private Image m_NegativeHealthBar;
         [SerializeField]
         private Image m_HealthBar;
+        [SerializeField]
+        private Collider2D m_Collider;
 
         [Space]
         [SerializeField]
@@ -120,6 +123,42 @@ namespace UI
                 SetAlpha(0.0f);
         }
 
+        private void Update()
+        {
+            if (!m_IsStationary || m_Collider == null)
+                return;
+
+            bool foundCollision = false;
+            foreach (Unit unit in FindObjectsOfType<Unit>())
+            {
+                Collider otherCollider = unit.GetComponent<Collider>();
+                Vector2 otherBoundsMin = Camera.main.WorldToScreenPoint(otherCollider.bounds.min);
+                Vector2 otherBoundsMax = Camera.main.WorldToScreenPoint(otherCollider.bounds.max);
+
+                Vector2 penetration1 =
+                    new Vector2(
+                        m_Collider.bounds.min.x - otherBoundsMax.x,
+                        m_Collider.bounds.min.y - otherBoundsMax.y);
+                Vector2 penetration2 =
+                    new Vector2(
+                        otherBoundsMin.x - m_Collider.bounds.max.x,
+                        otherBoundsMin.y - m_Collider.bounds.max.y);
+
+                if (penetration1.x >= 0.0f || penetration1.y >= 0.0f)
+                    continue;
+                if (penetration2.x >= 0.0f || penetration2.y >= 0.0f)
+                    continue;
+                
+                Debug.Log(unit.name);
+                Debug.Log(penetration1);
+                Debug.Log(penetration2);
+                Fade(0.25f, 0.5f);
+                foundCollision = true;
+            }
+
+            if(!foundCollision)
+                Fade(1f, 0.5f);
+        }
         private void LateUpdate()
         {
             if (m_IsStationary)
