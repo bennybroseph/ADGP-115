@@ -310,7 +310,7 @@ namespace UI
                                 continue;
                             }
 
-                            m_NewGame.onClick.AddListener(delegate { SceneManager.LoadScene(1); });
+                            m_NewGame.onClick.AddListener(delegate { SceneManager.LoadScene(1);});
                         }
                         break;
                     case "Load Game":
@@ -468,7 +468,6 @@ namespace UI
 
         private void OnMainMenuClick()
         {
-            Publisher.self.Broadcast(Event.UnPauseGame);
             Publisher.self.Broadcast(Event.MainMenu);
 
         }
@@ -510,8 +509,6 @@ namespace UI
         private void OnGameOver(Event a_Event, params object[] a_Params)
         {
             m_GameOverMenu.gameObject.SetActive(true);
-
-            Publisher.self.Broadcast(Event.PauseGame);
         }
 
         private void OnGameWin(Event a_Event, params object[] a_Params)

@@ -27,9 +27,13 @@ namespace Units.Controller
         #region -- UNITY FUNCTIONS --
         private void FixedUpdate()
         {
-            m_Controllable.gameObject.GetComponent<UserControllerMotion>().Move(
-                m_Controllable.velocity + m_Controllable.totalVelocity, 
-                m_Player.playerCamera.isTargeting || Input.GetMouseButton(1));
+            if (m_Controllable != null)
+            {
+                m_Controllable.gameObject.GetComponent<UserControllerMotion>().Move(
+               m_Controllable.velocity + m_Controllable.totalVelocity,
+               m_Player.playerCamera.isTargeting || Input.GetMouseButton(1));
+            }
+           
         }
 
         private void Update()
