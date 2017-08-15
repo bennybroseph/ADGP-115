@@ -35,7 +35,7 @@ namespace Interfaces
 
         ControllerType controllerType { get; set; }
         IController controller { get; set; }
-        NavMeshAgent navMashAgent { get; }
+        UnityEngine.AI.NavMeshAgent navMashAgent { get; }
         GameObject following { get; set; }
     }
 

@@ -20,7 +20,7 @@ namespace Units
         [SerializeField]
         protected ControllerType m_ControllerType;
         protected IController m_Controller;
-        protected NavMeshAgent m_NavMeshAgent;
+        protected UnityEngine.AI.NavMeshAgent m_NavMeshAgent;
         protected GameObject m_Following;
 
         protected FiniteStateMachine<DamageState> m_DamageFSM;
@@ -81,7 +81,7 @@ namespace Units
         #endregion
 
         #region -- PROPERTIES --
-        public NavMeshAgent navMashAgent
+        public UnityEngine.AI.NavMeshAgent navMashAgent
         {
             get { return m_NavMeshAgent; }
             set { m_NavMeshAgent = value; }
@@ -243,7 +243,7 @@ namespace Units
         protected virtual void Awake()
         {
             if (m_NavMeshAgent == null)
-                m_NavMeshAgent = GetComponent<NavMeshAgent>();
+                m_NavMeshAgent = GetComponent<UnityEngine.AI.NavMeshAgent>();
 
             if (m_Nameplate != null)
             {
